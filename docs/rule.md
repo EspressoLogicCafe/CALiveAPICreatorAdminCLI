@@ -56,6 +56,7 @@ The `create` command creates a new rule in the current project. If a name is not
 one will be generated.
 
 The `ruletype` parameter must be one of the following values, with the corresponding parameters:
+Visit the documentation site for expanded [details](http://docs.espressologic.com/docs/reference#TOC-Live-Logic)
 
 ### `sum`
 A sum must specify an `attribute_name` to hold the value of the sum, a `role_name` and a 
