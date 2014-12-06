@@ -1,6 +1,6 @@
 # Rule
 
-This suite of commands allows you to manipulate the rules in your projects.
+This suite of commands allows you to list,add, or remove business rules in your current project. [Learn about Rules](http://docs.espressologic.com/docs/logic-designer/business-logic/learning-rules).  
 
 ## Usage
 ```sh
@@ -93,4 +93,6 @@ A managed parent must specify a `role_name` to the parent table. It may also spe
 
 	espressoadmin rule delete [--ident <ident> | --rule_name <name>]
 
-The `delete` command deletes the specified rule. You can specify the rule either by its ident or its name.
+The `delete` command deletes the specified rule. You can specify the rule either by its ident or its name.  
+
+Visit our documentation page for more [details.](http://docs.espressologic.com/docs/logic-designer/business-logic)
