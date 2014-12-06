@@ -2,6 +2,29 @@
 
 This suite of commands allows you to manipulate the rules in your projects.
 
+## Usage
+```sh
+Usage: rule [options] <list|create|delete>
+
+  Options:
+
+    -h, --help                    output usage information
+    --ruletype [type]             The type of the rule, can be: sum,formula,validation,parentcopy
+    --entity_name [prefix:table]  The table, qualified with a prefix, for the rule
+    --attribute_name [name]       The name of the attribute whose value is computed by the rule. Required for sum, count, formula, minimum, maximum.
+    --role_name [name]            The role name - required for sum, count, minimum, maximum
+    --clause [clause]             The clause - required for sum, count, minimum, maximum
+    --child_attribute [name]      The name of the child attribute - required for sum, minimum, maximum
+    --parent_attribute [name]     The name of the parent attribute - required for parent copy
+    --expression [code]           The code for the rule - required for formula,events and validations
+    --error_message [message]     The error mesaage for the rule - required for validations
+    --rule_name [name]            Optional: a name for the rule. If not specified, a name will be generated.
+    --comments [comments]         Optional: a comment for the rule
+    --active [true|false]         Optional: whether the rule should be active, true by default
+    --project_ident               The ident of a project, if other than the current project
+    --ident [ident]               For delete, the ident of the rule to delete
+```
+
 ***
 ## Rule list
     espressoadmin rule list
