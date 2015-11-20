@@ -1,6 +1,6 @@
 # Rule
 
-This suite of commands allows you to list,add, or remove business rules in your current project. [Learn about Rules](http://docs.espressologic.com/docs/logic-designer/business-logic/learning-rules).  
+This suite of commands allows you to list,add, or remove business rules in your current project. [Learn about Rules](http://ca-doc.espressologic.com/docs/logic-designer/business-logic/learning-rules).  
 
 ## Usage
 ```sh
@@ -27,7 +27,7 @@ Usage: rule [options] <list|create|delete>
 
 ***
 ## Rule list
-    espressoadmin rule list
+    liveapicreatoradmin rule list
 
 The `list` command shows all rules for the current project.
 
@@ -46,7 +46,7 @@ The `list` command shows all rules for the current project.
 
 ***
 ## Rule create
-    espressoadmin rule create --ruletype <type> --entity_name <prefix:name> 
+    liveapicreatoradmin rule create --ruletype <type> --entity_name <prefix:name> 
     	[--attribute_name <name>] [--role_name <name>] [--child_attribute <attribute>]
     	[--clause <clause>] [--expression <expression>] [--error_message <message>]
     	[--role_name <name>] [--parent_attribute <attribute>] [--active <true|false>]
@@ -92,8 +92,8 @@ A managed parent must specify a `role_name` to the parent table. It may also spe
 ***
 ## Rule delete
 
-	espressoadmin rule delete [--ident <ident> | --rule_name <name>]
+	liveapicreatoradmin rule delete [--ident <ident> | --rule_name <name>]
 
 The `delete` command deletes the specified rule. You can specify the rule either by its ident or its name.  
 
-Visit our documentation page for more [details.](http://docs.espressologic.com/docs/logic-designer/business-logic)
+Visit our documentation page for more [details.](http://ca-doc.espressologic.com/docs/logic-designer/business-logic)

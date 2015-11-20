@@ -8,7 +8,7 @@ module.exports = {
 	
 	// Get the name of the dot directory.
 	getDotDirectory: function(createIfNotExists) {
-		var dotDirName = osenv.home() + "/.espresso";
+		var dotDirName = osenv.home() + "/.liveapicreatoradmin";
 		if ( ! fs.existsSync(dotDirName)) {
 			if (createIfNotExists) {
 				fs.mkdirSync(dotDirName, 0700);

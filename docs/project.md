@@ -1,10 +1,10 @@
 # Project
 
-This suite of commands allows you to manipulate your Espresso Logic projects.
+This suite of commands allows you to manipulate your CA Live API Creator API projects.
 
 ***
 ## Project list
-    espressoadmin project list
+    liveapicreatoradmin project list
 
 The `list` command shows all projects in the current server.
 
@@ -12,8 +12,8 @@ The `list` command shows all projects in the current server.
     All projects
     Ident  Name                   URL      Comments
     -----  ---------------------  -------  --------
-    1000   Espresso Logic Demo    demo
-    1002   Espresso Logic Sample  sample
+    1000   Logic Demo             demo
+    1002   Logic Sample           sample
     1003   My Project             myproj
     1005   My Project2            myproj2
     1001   Your Database          data
@@ -24,7 +24,7 @@ The `list` command shows all projects in the current server.
 ***
 ## Project create
 
-    espressoadmin project create --project_name <name> --url_name <url_name> [--status <A|I>] 
+    liveapicreatoradmin project create --project_name <name> --url_name <url_name> [--status <A|I>] 
         [--comments <comments>] [--verbose]
 
 The create command creates a new project with the given values. Status is active by default, it can be specified
@@ -46,7 +46,7 @@ Once the project is created, it becomes the current project.
 ***
 ## Project update
 
-    espressoadmin project update [--project_name <name> | --url_name <url_name>] 
+    liveapicreatoradmin project update [--project_name <name> | --url_name <url_name>] 
         [--status <A-I>] [--comments <comments>]
 
 The update command updates one or more attribute of the specified project.
@@ -55,7 +55,7 @@ The project can be specified either by its name or by its URL name.
 ***
 ## Project delete
 
-    espressoadmin project delete [--project_name <name> | --url_name <url_name>] [--verbose]
+    liveapicreatoradmin project delete [--project_name <name> | --url_name <url_name>] [--verbose]
 
 The delete command deletes the specified project and everything it contains.
 The project can be specified either by its name or by its URL name.
@@ -65,7 +65,7 @@ If the `--verbose` option is specified, the output will include all deleted obje
 ***
 ## Project use
 
-    espressoadmin project use [--project_name <name> | --url_name <url_name>]
+    liveapicreatoradmin project use [--project_name <name> | --url_name <url_name>]
 
 The use command makes the specified project the current project.
 The project can be specified either by its name or by its URL name.
@@ -73,7 +73,7 @@ The project can be specified either by its name or by its URL name.
 ***
 ## Project import
 
-    espressoadmin project import [--file <filename>] [--project_name <name> | --url_name <url_name>]
+    liveapicreatoradmin project import [--file <filename>] [--project_name <name> | --url_name <url_name>]
          [--verbose]
 
 The import command imports a project from the specified JSON export file.
@@ -87,7 +87,7 @@ If the `--verbose` option is specified, the output will include all created obje
 ***
 ## Project export
 
-    espressoadmin project export --file <filename> [--project_name <name> | --url_name <url_name>]
+    liveapicreatoradmin project export --file <filename> [--project_name <name> | --url_name <url_name>]
          [--verbose]
     
 The export project exports the specified project into a JSON file.

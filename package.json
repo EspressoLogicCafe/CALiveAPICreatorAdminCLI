@@ -1,13 +1,13 @@
 {
-  "name": "espresso-admin-cli",
-  "version": "1.0.1",
-  "description": "The command line utility for Espresso Logic administration",
-  "main": "espressoadmin.js",
+  "name": "liveapicreator-admin-cli",
+  "version": "2.0.0",
+  "description": "The command line utility for CA Live Creator administration from CA Technologies",
+  "main": "liveapicreatoradmin.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
-    "espresso",
+    "liveapicreator",
     "logic",
     "command",
     "line",
@@ -25,9 +25,9 @@
   ],
   "preferGlobal": "true",
   "bin": {
-    "espressoadmin" : "espressoadmin.js"
+    "espressoadmin" : "liveapicreatoradmin.js"
   },
-  "author": "Espresso Logic",
+  "author": "CA Technologies APIM",
   "license": "Apache",
   "dependencies": {
     "colors": "^1.0.3",
@@ -42,10 +42,10 @@
   "devDependencies": {},
   "repository": {
     "type": "git",
-    "url": "https://github.com/EspressoLogicCafe/EspressoLogicAdminCLI.git"
+    "url": "https://github.com/EspressoLogicCafe/CALiveAPICreatorAdminCLI"
   },
   "bugs": {
-    "url": "https://espressologic.zendesk.com"
+    "url": "https://github.com/EspressoLogicCafe/CALiveAPICreatorAdminCLI/issues"
   },
-  "homepage": "https://github.com/EspressoLogicCafe/EspressoLogicAdminCLI"
+  "homepage": "https://github.com/EspressoLogicCafe/CALiveAPICreatorAdminCLI"
 }

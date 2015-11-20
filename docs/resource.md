@@ -1,6 +1,6 @@
 # Resource
 
-This suite of commands allows you to manipulate the resources (custom endpoints) in your project. For more details visit the [documentation page](http://docs.espressologic.com/docs/logic-designer/rest-resources).
+This suite of commands allows you to manipulate the resources (custom endpoints) in your project. For more details visit the [documentation page](http://ca-doc.espressologic.com/docs/logic-designer/rest-resources).
 
 ## Usage
 ```sh
@@ -26,7 +26,7 @@ han one
 
 ***
 ## Resource list
-    espressoadmin resource list
+    liveapicreatoradmin resource list
 
 The `list` command shows all resources for the current project.
 
@@ -44,7 +44,7 @@ The `list` command shows all resources for the current project.
 
 ***
 ## Resource create
-    espressoadmin resource create --resource_name <name> --table_name <table-name>
+    liveapicreatoradmin resource create --resource_name <name> --table_name <table-name>
     	[--prefix <table-prefix>] [--type <type>] [--is_collection <true|false>]
     	[--description <text>] [--container_ident <ident>] [--apiversion <apiversion>]
 
@@ -63,7 +63,7 @@ The `type` parameter is `normal` if unspecified, otherwise it must be one of:
 Your server has many kinds of resources (also called "End Points"):
 Base Table Resources - these are automatically created for each Base Table for the active Database
 
-	Custom Resources - created in the Espresso Designer to provide  include related data (joined tables), project / alias attributes, define filters etc.
+	Custom Resources - created in the Live API Creator to provide  include related data (joined tables), project / alias attributes, define filters etc.
 
 	View Resources - automatically created for each View Table
 
@@ -78,7 +78,7 @@ parameter.
 
 ***
 ## Resource delete
-    espressoadmin resource delete --resource_name <name>
+    liveapicreatoradmin resource delete --resource_name <name>
 
 The `delete` command deletes the specified resource.
 

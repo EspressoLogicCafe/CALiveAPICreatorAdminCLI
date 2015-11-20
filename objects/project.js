@@ -50,7 +50,7 @@ module.exports = {
 
 		client.get(url + "/projects", {
 			headers: {
-				Authorization: "Espresso " + apiKey + ":1"
+				Authorization: "CALiveAPICreator " + apiKey + ":1"
 			}
 		}, function(data) {
 			if (data.errorMessage) {

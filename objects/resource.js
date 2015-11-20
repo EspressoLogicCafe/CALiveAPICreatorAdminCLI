@@ -52,7 +52,7 @@ module.exports = {
 			
 			client.get(url + "/resources?filter=container_ident is null and apiversion_ident=" + apiversion_ident, {
 				headers: {
-					Authorization: "Espresso " + apiKey + ":1"
+					Authorization: "CALiveAPICreator " + apiKey + ":1"
 				}
 			}, function(data) {
 				if (data.errorMessage) {

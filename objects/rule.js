@@ -48,7 +48,7 @@ module.exports = {
 
 		client.get(url + "/rules?filter=project_ident=" + projIdent, {
 			headers: {
-				Authorization: "Espresso " + apiKey + ":1"
+				Authorization: "CALiveAPICreator " + apiKey + ":1"
 			}
 		}, function(data) {
 			if (data.errorMessage) {
