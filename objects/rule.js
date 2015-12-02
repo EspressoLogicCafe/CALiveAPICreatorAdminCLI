@@ -167,11 +167,11 @@ module.exports = {
 		// Sum
 		if (cmd.ruletype == 1) {
 			if ( ! cmd.role_name) {
-				console.log('Missing parameter: role_name'.red);
+				console.log('Sum Rule is Missing parameter: role_name'.red);
 				return;
 			}
 			if ( ! cmd.child_attribute) {
-				console.log('Missing parameter: child_attribute'.red);
+				console.log('Sum Rule is Missing parameter: child_attribute'.red);
 				return;
 			}
 			rule_text1 = cmd.role_name;
@@ -179,11 +179,22 @@ module.exports = {
 			rule_text3 = cmd.child_attribute;
 		}
 		
+		// Count
+		if (cmd.ruletype == 2) {
+			if ( ! cmd.role_name) {
+				console.log('Count Rule is Missing parameter: role_name'.red);
+				return;
+			}
+			
+			rule_text1 = cmd.role_name;
+			rule_text2 = cmd.clause;
+			
+		}
 		// Formula
 		var prop4 = null;
 		if (cmd.ruletype === 3) {
 			if ( ! cmd.expression) {
-				console.log('Missing parameter: expression'.red);
+				console.log('Formula Rule is Missing parameter: expression'.red);
 				return;
 			}
 			rule_text1 = cmd.expression;
@@ -193,28 +204,58 @@ module.exports = {
 		// Validation
 		if (cmd.ruletype === 5 || cmd.ruletype === 6) {
 			if ( ! cmd.expression) {
-				console.log('Missing parameter: expression'.red);
+				console.log('Validation is Missing parameter: expression'.red);
 				return;
 			}
 			rule_text1 = cmd.expression;
 			prop4 = 'javascript';
 			rule_text2 = cmd.error_message;
 		}
-		
+		// Events
+		if (cmd.ruletype === 7 || cmd.ruletype === 8 || cmd.ruletype === 9) {
+			if ( ! cmd.expression) {
+				console.log('Event is Missing parameter: expression'.red);
+				return;
+			}
+			rule_text1 = cmd.expression;
+			prop4 = 'javascript';
+		}
 		// Parent copy
 		if (cmd.ruletype == 4) {
 			if ( ! cmd.role_name) {
-				console.log('Missing parameter: role_name'.red);
+				console.log('Parent Copy Missing parameter: role_name'.red);
 				return;
 			}
 			if ( ! cmd.parent_attribute) {
-				console.log('Missing parameter: parent_attribute'.red);
+				console.log('Parent Copy is Missing parameter: parent_attribute'.red);
 				return;
 			}
 			rule_text1 = cmd.role_name;
 			rule_text2 = cmd.parent_attribute;
 		}
-
+		// Min/Max
+		if (cmd.ruletype == 11 || cmd/ruletpe == 12) {
+			if ( ! cmd.role_name) {
+				console.log('Min/Max is Missing parameter: role_name'.red);
+				return;
+			}
+			if ( ! cmd.child_attribute) {
+				console.log('Min/Max Rule is Missing parameter: child_attribute'.red);
+				return;
+			}
+			rule_text1 = cmd.role_name;
+			rule_text2 = cmd.clause;
+			rule_text3 = cmd.child_attribute;
+		}
+		// managed parent (insert parent if none)
+		if (cmd.ruletype == 13) {
+			if ( ! cmd.role_name) {
+				console.log('Manage Parent Rule is Missing parameter Role to Parent: role_name'.red);
+				return;
+			}
+			rule_text1 = cmd.role_name;
+		
+		}
 		var curProj = cmd.project_ident;
 		if ( ! curProj) {
 			curProj = dotfile.getCurrentProject();

@@ -102,7 +102,7 @@ module.exports = {
 				name: cmd.project_name,
 				url_name: cmd.url_name,
 				status: 'A',
-				authprovider: cmd.authprovider,
+				authprovider_ident: cmd.authprovider,
 				account_ident: context.account.ident,
 				comments: cmd.comments
 			};

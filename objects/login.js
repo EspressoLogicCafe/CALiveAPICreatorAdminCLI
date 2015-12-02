@@ -15,7 +15,7 @@ module.exports = {
 		var client = new Client();
 		
 		if ( ! url) {
-			console.log('You must specify the URL to the Espresso Logic server'.red);
+			console.log('You must specify the URL to the Live API Creator server'.red);
 			return;
 		}
 		if ( ! cmd.username) {
