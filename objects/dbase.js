@@ -46,7 +46,7 @@ module.exports = {
 			}
 		}
 
-		client.get(url + "/dbaseschemas?filter=project_ident=" + projIdent, {
+		client.get(url + "/dbaseschemas?sysfilter=equal(project_ident:" + projIdent+")", {
 			headers: {
 				Authorization: "CALiveAPICreator " + apiKey + ":1"
 			}
@@ -146,6 +146,7 @@ module.exports = {
 			case "nuodb": dbasetype = 7; break;
 			case "postgres": dbasetype = 8; break;
 			case "postgresql": dbasetype = 8; break;
+			case "derby": dbasetype = 17; break;
 			default : console.log('Unknown database type: ' + dbasetype); return;
 		}
 
@@ -170,7 +171,7 @@ module.exports = {
 			client.post(loginInfo.url + "/dbaseschemas", {
 				data: newDbase,
 				headers: {
-					Authorization: "Espresso " + loginInfo.apiKey + ":1"
+					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
 				}
 			}, function(data) {
 				var endTime = new Date();
@@ -203,25 +204,25 @@ module.exports = {
 		var client = new Client();
 		var loginInfo = login.login(cmd);
 		if ( ! loginInfo) {
-			console.log('You are not currently logged into any Espresso Logic server.'.red);
+			console.log('You are not currently logged into any API Creator server.'.red);
 			return;
 		}
 
 		var filt = null;
 		if (cmd.prefix) {
-			filt = "prefix='" + cmd.prefix + "'";
+			filt = "equal(prefix:'" + cmd.prefix + "')";
 		}
 		else if (cmd.db_name) {
-			filt = "name='" + cmd.db_name + "'";
+			filt = "equal(name:'" + cmd.db_name + "')";
 		}
 		else {
 			console.log('Missing parameter: please specify either db_name or prefix'.red);
 			return;
 		}
 		
-		client.get(loginInfo.url + "/dbaseschemas?filter=" + filt, {
+		client.get(loginInfo.url + "/dbaseschemas?sysfilter=" + filt, {
 			headers: {
-				Authorization: "Espresso " + loginInfo.apiKey + ":1"
+				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
 			}
 		}, function(data) {
 			//console.log('get result: ' + JSON.stringify(data, null, 2));
@@ -241,7 +242,7 @@ module.exports = {
 			var startTime = new Date();
 			client['delete'](db['@metadata'].href + "?checksum=" + db['@metadata'].checksum, {
 				headers: {
-					Authorization: "Espresso " + loginInfo.apiKey + ":1"
+					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
 				}
 			}, function(data2) {
 				var endTime = new Date();

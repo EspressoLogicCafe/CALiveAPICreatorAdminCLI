@@ -8,7 +8,7 @@ module.exports = {
 	
 	// Get the name of the dot directory.
 	getDotDirectory: function(createIfNotExists) {
-		var dotDirName = osenv.home() + "/.liveapicreatoradmin";
+		var dotDirName = osenv.home() + "/.liveapicreator";
 		if ( ! fs.existsSync(dotDirName)) {
 			if (createIfNotExists) {
 				fs.mkdirSync(dotDirName, 0700);
@@ -120,7 +120,7 @@ module.exports = {
 		return null;
 	},
 	
-	// Write the given URL to ~/.espresso/currentServer.txt
+	// Write the given URL to ~/.calivecreatoradmin/currentServer.txt
 	setCurrentServer: function(url, login) {
 		var dotDirName = this.getDotDirectory();
 		var dotFileName = dotDirName + "/currentServer.txt";
@@ -132,7 +132,7 @@ module.exports = {
 		fs.writeSync(dotFile, JSON.stringify(record));
 	},
 	
-	// If there is a ~/.espresso/currentServer.txt, return its content, otherwise null
+	// If there is a ~/currentServer.txt, return its content, otherwise null
 	getCurrentServer: function() {
 		var dotDirName = this.getDotDirectory();
 		var dotFileName = dotDirName + "/currentServer.txt";

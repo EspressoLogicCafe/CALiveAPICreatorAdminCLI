@@ -46,7 +46,7 @@ module.exports = {
 			}
 		}
 
-		client.get(url + "/rules?filter=project_ident=" + projIdent, {
+		client.get(url + "/rules?sysfilter=equal(project_ident:" + projIdent +")", {
 			headers: {
 				Authorization: "CALiveAPICreator " + apiKey + ":1"
 			}
@@ -241,7 +241,7 @@ module.exports = {
 		client.post(loginInfo.url + "/rules", {
 			data: newRule,
 			headers: {
-				Authorization: "Espresso " + loginInfo.apiKey + ":1"
+				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
 			}
 		}, function(data) {
 			var endTime = new Date();
@@ -273,25 +273,25 @@ module.exports = {
 		var client = new Client();
 		var loginInfo = login.login(cmd);
 		if ( ! loginInfo) {
-			console.log('You are not currently logged into any Espresso Logic server.'.red);
+			console.log('You are not currently logged into any API Creator server.'.red);
 			return;
 		}
 
 		var filt = null;
 		if (cmd.ident) {
-			filt = "ident='" + cmd.ident + "'";
+			filt = "equal(ident:'" + cmd.ident + "')";
 		}
 		else if (cmd.rule_name) {
-			filt = "name='" + cmd.rule_name + "'";
+			filt = "equal(name:'" + cmd.rule_name + "')";
 		}
 		else {
 			console.log('Missing parameter: please specify either name or ident'.red);
 			return;
 		}
 		
-		client.get(loginInfo.url + "/rules?filter=" + filt, {
+		client.get(loginInfo.url + "/rules?sysfilter=" + filt, {
 			headers: {
-				Authorization: "Espresso " + loginInfo.apiKey + ":1"
+				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
 			}
 		}, function(data) {
 			//console.log('get result: ' + JSON.stringify(data, null, 2));
@@ -311,7 +311,7 @@ module.exports = {
 			var startTime = new Date();
 			client['delete'](db['@metadata'].href + "?checksum=" + db['@metadata'].checksum, {
 				headers: {
-					Authorization: "Espresso " + loginInfo.apiKey + ":1"
+					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
 				}
 			}, function(data2) {
 				var endTime = new Date();

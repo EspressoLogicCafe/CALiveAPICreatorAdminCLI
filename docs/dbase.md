@@ -33,7 +33,7 @@ The `url` parameter should be a valid JDBC URL, such as:
                 jdbc:oracle:thin:@<TNSName> - see Oracle for details
     Microsoft SQL Server	jdbc:sqlserver://<server-name>[instance-name][:port-number]][;property=value[;property=value]]
     Postgres	jdbc:postgresql://<server-name>[:port-number (default 5432)]/<database-name>	
-    NuoDB	    jdbc:com.nuodb://<server-name>[:port-number (default 48004)]/<database-name>	
+    Derby	    jdbc:derby://<server-dirname>[/<database-name>;create=true	
     
 The server-name is the address of your database server. It can be either an IP address like 12.34.56.78, or (more likely) a name that ends with .com, .net. or something like that. This server must of course be accessible from the Espresso Logic server in the cloud. The port-number can typically be left unspecified, unless your database server uses a non-standard port.
 
@@ -46,6 +46,7 @@ The `type` parameter must have one of the following values:
 * `sqlserverazure` (for Azure SQL)
 * `nuodb`
 * `postgres`
+* `derby`
 
 If the `prefix` parameter is not specified, it will default to "main".
 

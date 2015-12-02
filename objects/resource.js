@@ -50,7 +50,7 @@ module.exports = {
 		// This gets called once we have figured out which API version to use
 		function listResources(apiversion_ident) {
 			
-			client.get(url + "/resources?filter=container_ident is null and apiversion_ident=" + apiversion_ident, {
+			client.get(url + "/resources?sysfilter=equal(container_ident:  null, apiversion_ident:" + apiversion_ident +")", {
 				headers: {
 					Authorization: "CALiveAPICreator " + apiKey + ":1"
 				}
@@ -163,7 +163,7 @@ module.exports = {
 			client.post(loginInfo.url + "/resources", {
 				data: newResource,
 				headers: {
-					Authorization: "Espresso " + loginInfo.apiKey + ":1"
+					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
 				}
 			}, function(data) {
 				var endTime = new Date();
@@ -188,7 +188,7 @@ module.exports = {
 					client.post(loginInfo.url + "/resourceattributes", {
 						data: newAtt,
 						headers: {
-							Authorization: "Espresso " + loginInfo.apiKey + ":1"
+							Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
 						}
 					}, function(data2) {
 						if (data2.errorMessage) {
@@ -267,7 +267,7 @@ module.exports = {
 		var client = new Client();
 		var loginInfo = login.login(cmd);
 		if ( ! loginInfo) {
-			console.log('You are not currently logged into any Espresso Logic server.'.red);
+			console.log('You are not currently logged into any API Creator server.'.red);
 			return;
 		}
 		
@@ -276,9 +276,9 @@ module.exports = {
 			return;
 		}
 
-		client.get(loginInfo.url + "/resources?filter=container_ident is null and name='" + cmd.resource_name + "'", {
+		client.get(loginInfo.url + "/resources?sysfilter=equal(container_ident: null, name:'" + cmd.resource_name + "')", {
 			headers: {
-				Authorization: "Espresso " + loginInfo.apiKey + ":1"
+				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
 			}
 		}, function(data) {
 			//console.log('get result: ' + JSON.stringify(data, null, 2));
@@ -298,7 +298,7 @@ module.exports = {
 			var startTime = new Date();
 			client['delete'](db['@metadata'].href + "?checksum=" + db['@metadata'].checksum, {
 				headers: {
-					Authorization: "Espresso " + loginInfo.apiKey + ":1"
+					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
 				}
 			}, function(data2) {
 				var endTime = new Date();
@@ -344,9 +344,9 @@ module.exports = {
 
 		// Now figure out which API version to use
 		if (cmd.apiversion) {
-			client.get(url + "/apiversions?filter=project_ident=" + curProj + " and name='" + cmd.apiversion + "'", {
+			client.get(url + "/apiversions?sysfilter=equal(project_ident:" + curProj + " , name:'" + cmd.apiversion + "')", {
 				headers: {
-					Authorization: "Espresso " + apiKey + ":1"
+					Authorization: "CALiveAPICreator " + apiKey + ":1"
 				}
 			}, function(data) {
 				if (data.errorMessage) {
@@ -366,9 +366,9 @@ module.exports = {
 
 		}
 		else {
-			client.get(url + "/apiversions?filter=project_ident=" + curProj, {
+			client.get(url + "/apiversions?sysfilter=equal(project_ident:" + curProj +")", {
 				headers: {
-					Authorization: "Espresso " + apiKey + ":1"
+					Authorization: "CALiveAPICreator " + apiKey + ":1"
 				}
 			}, function(data) {
 				if (data.errorMessage) {

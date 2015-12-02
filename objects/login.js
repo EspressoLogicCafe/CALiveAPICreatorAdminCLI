@@ -54,7 +54,9 @@ module.exports = {
 				console.log(data.errorMessage.red);
 				return;
 			}
-			console.log("This server licensed to: " + data.company.red);
+			console.log("This server licensed to: " + data);
+			console.log("This server licensed to: " + data.company);
+			//console.log("This server licensed to: " + data.company.red);
 
 			client.post(url + "/@authentication",
 				{
@@ -177,7 +179,7 @@ module.exports = {
 		var client = new Client();
 		client.get(loginInfo.url + "/projects/" + curProj, {
 			headers: {
-				Authorization: "Espresso " + loginInfo.apiKey + ":1"
+				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
 			}
 		}, function(data) {
 			if (data.errorMessage) {

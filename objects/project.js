@@ -119,7 +119,7 @@ module.exports = {
 			client.post(loginInfo.url + "/projects", {
 				data: newProject,
 				headers: {
-					Authorization: "Espresso " + loginInfo.apiKey + ":1"
+					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
 				}
 			}, function(data) {
 				var endTime = new Date();
@@ -165,21 +165,27 @@ module.exports = {
 		if ( ! loginInfo)
 			return;
 
+		var apiKey = loginInfo.apiKey;
+		if ( ! apiKey){
+			console.log(("Error: Login apiKey is missing or empty").red);
+			return;
+		}
+			
 		var filter = null;
 		if (cmd.project_name) {
-			filter = "name='" + cmd.project_name + "'";
+			filter = "equal(name:'" + cmd.project_name + "')";
 		}
 		else if (cmd.url_name) {
-			filter = "url_name='" + cmd.url_name + "'";
+			filter = "equal(url_name:'" + cmd.url_name + "')";
 		}
 		else {
 			console.log('Missing parameter: please specify either project_name or url_name'.red);
 			return;
 		}
 		
-		client.get(loginInfo.url + "/projects?filter=" + filter, {
+		client.get(loginInfo.url + "/projects?sysfilter=" + filter, {
 			headers: {
-				Authorization: "Espresso " + loginInfo.apiKey + ":1"
+				Authorization: "CALiveAPICreator " + apiKey + ":1"
 			}
 		}, function(data) {
 			//console.log('get result: ' + JSON.stringify(data, null, 2));
@@ -221,7 +227,7 @@ module.exports = {
 			client.put(project['@metadata'].href, {
 				data: project,
 				headers: {
-					Authorization: "Espresso " + loginInfo.apiKey + ":1"
+					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
 				}
 			}, function(data) {
 				var endTime = new Date();
@@ -250,25 +256,25 @@ module.exports = {
 		var client = new Client();
 		var loginInfo = login.login(cmd);
 		if ( ! loginInfo) {
-			console.log('You are not currently logged into any Espresso Logic server.'.red);
+			console.log('You are not currently logged into any API Creator server.'.red);
 			return;
 		}
 
 		var filt = null;
 		if (cmd.url_name) {
-			filt = "url_name='" + cmd.url_name + "'";
+			filt = "equal(url_name:'" + cmd.url_name + "')";
 		}
 		else if (cmd.project_name) {
-			filt = "name='" + cmd.project_name + "'";
+			filt = "equal(name:'" + cmd.project_name + "')";
 		}
 		else {
 			console.log('Missing parameter: please specify either project_name or url_name'.red);
 			return;
 		}
 		
-		client.get(loginInfo.url + "/projects?filter=" + filt, {
+		client.get(loginInfo.url + "/projects?sysfilter=" + filt, {
 			headers: {
-				Authorization: "Espresso " + loginInfo.apiKey + ":1"
+				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
 			}
 		}, function(data) {
 			//console.log('get result: ' + JSON.stringify(data, null, 2));
@@ -288,7 +294,7 @@ module.exports = {
 			var startTime = new Date();
 			client['delete'](project['@metadata'].href + "?checksum=" + project['@metadata'].checksum, {
 				headers: {
-					Authorization: "Espresso " + loginInfo.apiKey + ":1"
+					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
 				}
 			}, function(data2) {
 				var endTime = new Date();
@@ -337,19 +343,19 @@ module.exports = {
 
 		var filter = null;
 		if (cmd.url_name) {
-			filter = "url_name='" + cmd.url_name + "'";
+			filter = "equal(url_name:'" + cmd.url_name + "')";
 		}
 		else if (cmd.project_name) {
-			filter = "name='" + cmd.project_name + "'";
+			filter = "equal(name:'" + cmd.project_name + "')";
 		}
 		else {
 			console.log('Missing parameter: please specify either project_name or url_name'.red);
 			return;
 		}
 		
-		client.get(loginInfo.url + "/projects?filter=" + filter, {
+		client.get(loginInfo.url + "/projects?sysfilter=" + filter, {
 			headers: {
-				Authorization: "Espresso " + loginInfo.apiKey + ":1"
+				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
 			}
 		}, function(data) {
 			//console.log('get result: ' + JSON.stringify(data, null, 2));
@@ -378,10 +384,10 @@ module.exports = {
 
 		var filter = null;
 		if (cmd.url_name) {
-			filter = "url_name='" + cmd.url_name + "'";
+			filter = "equal(url_name:'" + cmd.url_name + "')";
 		}
 		else if (cmd.project_name) {
-			filter = "name='" + cmd.project_name + "'";
+			filter = "equal(name:" + cmd.project_name + "')";
 		}
 		else {
 			console.log('Missing parameter: please specify either project_name or url_name'.red);
@@ -393,9 +399,9 @@ module.exports = {
 			toStdout = true;
 		}
 		
-		client.get(loginInfo.url + "/ProjectExport?filter=" + filter, {
+		client.get(loginInfo.url + "/ProjectExport?sysfilter=" + filter, {
 			headers: {
-				Authorization: "Espresso " + loginInfo.apiKey + ":1"
+				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
 			}
 		}, function(data) {
 			//console.log('get result: ' + JSON.stringify(data, null, 2));
@@ -442,7 +448,7 @@ module.exports = {
 		client.post(loginInfo.url + "/ProjectExport", {
 			data: fileContent,
 			headers: {
-				Authorization: "Espresso " + loginInfo.apiKey + ":1"
+				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
 			}
 		}, function(data) {
 			var endTime = new Date();
