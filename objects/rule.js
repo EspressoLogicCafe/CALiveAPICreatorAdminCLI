@@ -73,7 +73,7 @@ module.exports = {
 					adminCmd += " --rule_name "+p.name;
 					adminCmd += " --role_name "+p.rule_text1;
 					adminCmd += " --child_attribute "+p.rule_text3;
-					adminCmd += " --clause "+p.rule_text2;
+					adminCmd += " --expression "+p.rule_text2;
 					adminCmd += " --active "+((p.active == 1)?"A":"I");
 					adminCmd += " --comments '"+p.comments +"'";	
 					adminCmd += "\n\n";
@@ -83,7 +83,7 @@ module.exports = {
 					adminCmd += " --rule_name "+p.name;
 					adminCmd += " --role_name "+p.rule_text1;
 					adminCmd += " --attribute_name "+p.attribute_name;
-					adminCmd += " --clause "+p.rule_text2;
+					adminCmd += " --expression "+p.rule_text2;
 					adminCmd += " --active "+((p.active == 1)?"A":"I");
 					adminCmd += " --comments '"+p.comments +"'";	
 					adminCmd += "\n\n";
@@ -92,7 +92,7 @@ module.exports = {
 					adminCmd += "liveapicreatoradmin rule create --ruletype formula --entity_name "+p.entity_name;
 					adminCmd += " --rule_name "+p.name;
 					adminCmd += " --attribute_name "+p.attribute_name;
-					adminCmd += " --clause "+p.rule_text2;
+					adminCmd += " --expression '"+p.rule_text1 + "'";;
 					adminCmd += " --active "+((p.active == 1)?"A":"I");
 					adminCmd += " --comments '"+p.comments +"'";	
 					adminCmd += "\n\n";
@@ -102,7 +102,7 @@ module.exports = {
 					adminCmd += " --rule_name "+p.name;
 					adminCmd += " --attribute_name "+p.attribute_name;
 					adminCmd += " --role_name "+p.rule_text1;
-					adminCmd += " --clause "+p.rule_text2;
+					adminCmd += " --parent_attribute "+p.rule_text2;
 					adminCmd += " --active "+((p.active == 1)?"A":"I");
 					adminCmd += " --comments '"+p.comments +"'";	
 					adminCmd += "\n\n";
@@ -110,15 +110,16 @@ module.exports = {
 					case 5: type = "validation"; 
 					adminCmd += "liveapicreatoradmin rule create --ruletype validation --entity_name "+p.entity_name;
 					adminCmd += " --rule_name "+p.name;
-					adminCmd += " --clause "+p.rule_text2;
+					adminCmd += " --expression '"+p.rule_text1 + "'";
+					adminCmd += " --error_message "+p.rule_text2;
 					adminCmd += " --active "+((p.active == 1)?"A":"I");
 					adminCmd += " --comments '"+p.comments +"'";	
 					adminCmd += "\n\n";
 					break;
 					case 6: type = "commit validation"; 
 					adminCmd += "liveapicreatoradmin rule create --ruletype commitvalidation --entity_name "+p.entity_name;
-					adminCmd += " --rule_name "+p.name;
-					adminCmd += " --clause "+p.rule_text2;
+					adminCmd += " --rule_name "+p.name + "'";
+					adminCmd += " --expression '"+p.rule_text1 + "'";;
 					adminCmd += " --active "+((p.active == 1)?"A":"I");
 					adminCmd += " --comments '"+p.comments +"'";	
 					adminCmd += "\n\n";
@@ -126,7 +127,7 @@ module.exports = {
 					case 7: type = "event"; 
 					adminCmd += "liveapicreatoradmin rule create --ruletype event --entity_name "+p.entity_name;
 					adminCmd += " --rule_name "+p.name;
-					adminCmd += " --clause "+p.rule_text2;
+					adminCmd += " --expression '"+p.rule_text1 +"'";
 					adminCmd += " --active "+((p.active == 1)?"A":"I");
 					adminCmd += " --comments '"+p.comments +"'";	
 					adminCmd += "\n\n";
@@ -134,7 +135,7 @@ module.exports = {
 					case 8: type = "early event"; 
 					adminCmd += "liveapicreatoradmin rule create --ruletype earlyevent --entity_name "+p.entity_name;
 					adminCmd += " --rule_name "+p.name;
-					adminCmd += " --clause "+p.rule_text2;
+					adminCmd += " --expression '"+p.rule_text1 + "'";;
 					adminCmd += " --active "+((p.active == 1)?"A":"I");
 					adminCmd += " --comments '"+p.comments +"'";	
 					adminCmd += "\n\n";
@@ -142,7 +143,7 @@ module.exports = {
 					case 9: type = "commit event"; 
 					adminCmd += "liveapicreatoradmin rule create --ruletype commitevent --entity_name "+p.entity_name;
 					adminCmd += " --rule_name "+p.name;
-					adminCmd += " --clause "+p.rule_text2;
+					adminCmd += " --expression '"+p.rule_text1 + "'";;
 					adminCmd += " --active "+((p.active == 1)?"A":"I");
 					adminCmd += " --comments '"+p.comments +"'";	
 					adminCmd += "\n\n";
@@ -153,7 +154,7 @@ module.exports = {
 					adminCmd += " --attribute_name "+p.attribute_name;
 					adminCmd += " --role_name "+p.rule_text1;
 					adminCmd += " --child_attribute "+p.rule_text3;
-					adminCmd += " --clause "+p.rule_text2;
+					adminCmd += " --expression "+p.rule_text2;
 					adminCmd += " --active "+((p.active == 1)?"A":"I");
 					adminCmd += " --comments '"+p.comments +"'";	
 					adminCmd += "\n\n";
@@ -164,7 +165,7 @@ module.exports = {
 					adminCmd += " --attribute_name "+p.attribute_name;
 					adminCmd += " --role_name "+p.rule_text1;
 					adminCmd += " --child_attribute "+p.rule_text3;
-					adminCmd += " --clause "+p.rule_text2;
+					adminCmd += " --expression "+p.rule_text2;
 					adminCmd += " --active "+((p.active == 1)?"A":"I");
 					adminCmd += " --comments '"+p.comments +"'";	
 					adminCmd += "\n\n";
@@ -173,6 +174,7 @@ module.exports = {
 					adminCmd += "liveapicreatoradmin rule create --ruletype managedparent --entity_name "+p.entity_name;
 					adminCmd += " --rule_name "+p.name;
 					adminCmd += " --role_name "+p.rule_text1;
+					adminCmd += " --expression '"+p.rule_text1 + "'";;
 					adminCmd += " --active "+((p.active == 1)?"A":"I");
 					adminCmd += " --comments '"+p.comments +"'";	
 					adminCmd += "\n\n";
