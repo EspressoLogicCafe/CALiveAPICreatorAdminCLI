@@ -57,6 +57,7 @@ module.exports = {
 			}
 			printObject.printHeader('Rules');
 			var table = new Table();
+			var adminCmd = "";
 			var tblWidth = 0;
 			var typeWidth = 0;
 			_.each(data, function(p) {
@@ -64,19 +65,118 @@ module.exports = {
 				table.cell("Table", p.entity_name);
 				tblWidth = p.entity_name.length > tblWidth ? p.entity_name.length : tblWidth;
 				var type = "";
+				
 				switch(p.ruletype_ident) {
-					case 1: type = "sum"; break;
-					case 2: type = "count"; break;
-					case 3: type = "formula"; break;
-					case 4: type = "parent copy"; break;
-					case 5: type = "validation"; break;
-					case 6: type = "commit validation"; break;
-					case 7: type = "event"; break;
-					case 8: type = "early event"; break;
-					case 9: type = "commit event"; break;
-					case 11: type = "minimum"; break;
-					case 12: type = "maximum"; break;
-					case 13: type = "managed parent"; break;
+					case 1: type = "sum"; 
+					adminCmd += "liveapicreatoradmin rule create --ruletype sum --entity_name "+p.entity_name;
+					adminCmd += " --attribute_name "+p.attribute_name;
+					adminCmd += " --rule_name "+p.name;
+					adminCmd += " --role_name "+p.rule_text1;
+					adminCmd += " --child_attribute "+p.rule_text3;
+					adminCmd += " --clause "+p.rule_text2;
+					adminCmd += " --active "+((p.active == 1)?"A":"I");
+					adminCmd += " --comments '"+p.comments +"'";	
+					adminCmd += "\n\n";
+					break;
+					case 2: type = "count"; 
+					adminCmd += "liveapicreatoradmin rule create --ruletype count --entity_name "+p.entity_name;
+					adminCmd += " --rule_name "+p.name;
+					adminCmd += " --role_name "+p.rule_text1;
+					adminCmd += " --attribute_name "+p.attribute_name;
+					adminCmd += " --clause "+p.rule_text2;
+					adminCmd += " --active "+((p.active == 1)?"A":"I");
+					adminCmd += " --comments '"+p.comments +"'";	
+					adminCmd += "\n\n";
+					break;
+					case 3: type = "formula"; 
+					adminCmd += "liveapicreatoradmin rule create --ruletype formula --entity_name "+p.entity_name;
+					adminCmd += " --rule_name "+p.name;
+					adminCmd += " --attribute_name "+p.attribute_name;
+					adminCmd += " --clause "+p.rule_text2;
+					adminCmd += " --active "+((p.active == 1)?"A":"I");
+					adminCmd += " --comments '"+p.comments +"'";	
+					adminCmd += "\n\n";
+					break;
+					case 4: type = "parent copy"; 
+					adminCmd += "liveapicreatoradmin rule create --ruletype parentcopy --entity_name "+p.entity_name;
+					adminCmd += " --rule_name "+p.name;
+					adminCmd += " --attribute_name "+p.attribute_name;
+					adminCmd += " --role_name "+p.rule_text1;
+					adminCmd += " --clause "+p.rule_text2;
+					adminCmd += " --active "+((p.active == 1)?"A":"I");
+					adminCmd += " --comments '"+p.comments +"'";	
+					adminCmd += "\n\n";
+					break;
+					case 5: type = "validation"; 
+					adminCmd += "liveapicreatoradmin rule create --ruletype validation --entity_name "+p.entity_name;
+					adminCmd += " --rule_name "+p.name;
+					adminCmd += " --clause "+p.rule_text2;
+					adminCmd += " --active "+((p.active == 1)?"A":"I");
+					adminCmd += " --comments '"+p.comments +"'";	
+					adminCmd += "\n\n";
+					break;
+					case 6: type = "commit validation"; 
+					adminCmd += "liveapicreatoradmin rule create --ruletype commitvalidation --entity_name "+p.entity_name;
+					adminCmd += " --rule_name "+p.name;
+					adminCmd += " --clause "+p.rule_text2;
+					adminCmd += " --active "+((p.active == 1)?"A":"I");
+					adminCmd += " --comments '"+p.comments +"'";	
+					adminCmd += "\n\n";
+					break;
+					case 7: type = "event"; 
+					adminCmd += "liveapicreatoradmin rule create --ruletype event --entity_name "+p.entity_name;
+					adminCmd += " --rule_name "+p.name;
+					adminCmd += " --clause "+p.rule_text2;
+					adminCmd += " --active "+((p.active == 1)?"A":"I");
+					adminCmd += " --comments '"+p.comments +"'";	
+					adminCmd += "\n\n";
+					break;
+					case 8: type = "early event"; 
+					adminCmd += "liveapicreatoradmin rule create --ruletype earlyevent --entity_name "+p.entity_name;
+					adminCmd += " --rule_name "+p.name;
+					adminCmd += " --clause "+p.rule_text2;
+					adminCmd += " --active "+((p.active == 1)?"A":"I");
+					adminCmd += " --comments '"+p.comments +"'";	
+					adminCmd += "\n\n";
+					break;
+					case 9: type = "commit event"; 
+					adminCmd += "liveapicreatoradmin rule create --ruletype commitevent --entity_name "+p.entity_name;
+					adminCmd += " --rule_name "+p.name;
+					adminCmd += " --clause "+p.rule_text2;
+					adminCmd += " --active "+((p.active == 1)?"A":"I");
+					adminCmd += " --comments '"+p.comments +"'";	
+					adminCmd += "\n\n";
+					break;
+					case 11: type = "minimum"; 
+					adminCmd += "liveapicreatoradmin rule create --ruletype minimum --entity_name "+p.entity_name;
+					adminCmd += " --rule_name "+p.name;
+					adminCmd += " --attribute_name "+p.attribute_name;
+					adminCmd += " --role_name "+p.rule_text1;
+					adminCmd += " --child_attribute "+p.rule_text3;
+					adminCmd += " --clause "+p.rule_text2;
+					adminCmd += " --active "+((p.active == 1)?"A":"I");
+					adminCmd += " --comments '"+p.comments +"'";	
+					adminCmd += "\n\n";
+					break;
+					case 12: type = "maximum"; 
+					adminCmd += "liveapicreatoradmin rule create --ruletype maximum --entity_name "+p.entity_name;
+					adminCmd += " --rule_name "+p.name;
+					adminCmd += " --attribute_name "+p.attribute_name;
+					adminCmd += " --role_name "+p.rule_text1;
+					adminCmd += " --child_attribute "+p.rule_text3;
+					adminCmd += " --clause "+p.rule_text2;
+					adminCmd += " --active "+((p.active == 1)?"A":"I");
+					adminCmd += " --comments '"+p.comments +"'";	
+					adminCmd += "\n\n";
+					break;
+					case 13: type = "managed parent"; 
+					adminCmd += "liveapicreatoradmin rule create --ruletype managedparent --entity_name "+p.entity_name;
+					adminCmd += " --rule_name "+p.name;
+					adminCmd += " --role_name "+p.rule_text1;
+					adminCmd += " --active "+((p.active == 1)?"A":"I");
+					adminCmd += " --comments '"+p.comments +"'";	
+					adminCmd += "\n\n";
+					break;
 					default: type = "unknown";
 				}
 				typeWidth = type.length > typeWidth ? type.length : typeWidth;
@@ -109,6 +209,7 @@ module.exports = {
 			else {
 				table.sort(['Table', 'Type', 'Description']);
 				console.log(table.toString());
+				console.log(adminCmd);
 			}
 			printObject.printHeader("# rules: " + data.length);
 		});
@@ -234,7 +335,7 @@ module.exports = {
 			rule_text2 = cmd.parent_attribute;
 		}
 		// Min/Max
-		if (cmd.ruletype == 11 || cmd/ruletpe == 12) {
+		if (cmd.ruletype == 11 || cmd.ruletpe == 12) {
 			if ( ! cmd.role_name) {
 				console.log('Min/Max is Missing parameter: role_name'.red);
 				return;
