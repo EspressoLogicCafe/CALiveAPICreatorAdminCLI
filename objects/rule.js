@@ -211,7 +211,7 @@ module.exports = {
 			else {
 				table.sort(['Table', 'Type', 'Description']);
 				console.log(table.toString());
-				console.log(adminCmd);
+				if (cmd.verbose){ console.log(adminCmd) };
 			}
 			printObject.printHeader("# rules: " + data.length);
 		});
@@ -367,7 +367,7 @@ module.exports = {
 			console.log('There is no current project.'.yellow);
 			return;
 		}
-		
+		var rule_name = (cmd.rule_name == 'null')?null:cmd.rule_name;
 		var newRule = {
 			entity_name: cmd.entity_name,
 			attribute_name: cmd.attribute_name,
@@ -375,7 +375,7 @@ module.exports = {
 			rule_text1: rule_text1,
 			rule_text2: rule_text2,
 			rule_text3: rule_text3,
-			name: cmd.rule_name,
+			name: rule_name,
 			comments: cmd.comments,
 			active: cmd.active,
 			ruletype_ident: cmd.ruletype,

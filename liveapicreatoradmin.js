@@ -103,6 +103,7 @@ program
 	.option('--active [true|false]', 'Optional: whether the rule should be active, true by default')
 	.option('--project_ident', 'The ident of a project, if other than the current project')
 	.option('--ident [ident]', 'For delete, the ident of the rule to delete')
+	.option('--verbose', 'Optional: whether to display list of rules in detailed format that can be used to recreate line by line')
 	.action(rule.doRule);
 
 program
