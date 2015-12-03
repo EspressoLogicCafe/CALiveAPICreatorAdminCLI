@@ -22,6 +22,7 @@ Usage: rule [options] <list|create|delete>
     --comments [comments]         Optional: a comment for the rule
     --active [true|false]         Optional: whether the rule should be active, true by default
     --project_ident               The ident of a project, if other than the current project
+    --verbose                     Used with (rule list --verbose) will give a detailed create script for each rule
     --ident [ident]               For delete, the ident of the rule to delete
 ```
 
@@ -61,7 +62,7 @@ Visit the documentation site for expanded [details](http://docs.espressologic.co
 ### `sum`
 A sum must specify an `attribute_name` to hold the value of the sum, a `role_name` and a 
 `child_attribute`. It may also specify a `clause` to qualify the sum.
-
+```
 liveapicreatoradmin rule create --ruletype sum 
 	--rule_name balance= SUM PurchaseOrder.amountTotal where paid=false'
 	--entity_name demo:customer 
@@ -70,34 +71,34 @@ liveapicreatoradmin rule create --ruletype sum
 	--child_attribute amount_total
 	--clause paid=false
 	--active true	
-
+```
 ### `count`
 A count must specify an `attribute_name` to hold the value of the sum, and a `role_name`.
 It may also specify a `clause` to qualify the count.
-
+```
 liveapicreatoradmin rule create --ruletype count 
 	--rule_name 'item_count = count sample:orders'
 	--entity_name sample:orders 
 	--attribute_name item_count 
 	--role_name lineitemsList 
 	--active true	
-
+```
 ### `formula`
 A formula must specify an `attribute_name` to hold the value of the formula, and an `expression`
 with the code.
-
+```
  liveapicreatoradmin rule create --ruletype formula 
  	--rule_name 'Formula Test' 
  	--entity_name sample:lineitems 
  	--attribute_name amount 
  	--expression '//this is a test' 
  	--active true	
-	
+```	
 
 ### `parentcopy`
 A parent copy must specify an `attribute_name` to hold the value, a `role_name` pointing to the
 parent table, and a `parent_attribute` in that parent table.
-
+```
 liveapicreatoradmin rule create --ruletype parentcopy 
 	--rule_name 'Copy Parent Product Price' 
 	--entity_name demo:LineItem 
@@ -106,36 +107,36 @@ liveapicreatoradmin rule create --ruletype parentcopy
 	--parent_attribute price 
 	--comments 'test' 
 	--active true
-
+```
 ### `validation` and `commitvalidation`
 A validation must specify an `expression` with the code for the validation. It may also specify
 an `error_message`.
-
+```
 liveapicreatoradmin rule create --ruletype validation 
 	--rule_name 'Validation Test' 
 	--entity_name demo:customer 
 	--expression 'return true;'  
 	--error_message 'This is an error Message'
 	--active true
-
+```
 ### `event`, `earlyevent` and `commitevent`
 An event must specify an `expression` with the code.
-
+```
 liveapicreatoradmin rule create --ruletype event 
 	--rule_name 'Event'
 	- entity_name demo:customer
 	--expression '//My JavaScript here'
 	--active true
-
+```
 ### `minimum` and `maximum`
 A minimum or maximum must specify an `attribute_name` to hold the value of the minimum/maximum,
 a `role_name` and a `child_attribute` to be watched. It may also specify a `clause` to qualify the sum.
-
+```
 liveapicreatoradmin rule create --ruletype [min|max] 
 	--rule_name 'Max/Min'
 	--entity_name sample:orders
 	--role_name customer 
-
+```
 ### `managedparent`
 A managed parent must specify a `role_name` to the parent table. It may also specify an
 `expression`, whose code will be executed when the managed parent is executed.
