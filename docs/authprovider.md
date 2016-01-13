@@ -53,12 +53,15 @@ Provide the ident of the auth provider and the export file name.
 ```
 liveapicreatoradmin authprovider export  --ident 2008 --exportFile myauthprovider.json
 ```
+The export auth provider exports the specified provider into a JSON file. If the filename parameter is not specified, stdout is used.
 
+The project can be specified either by its name or by its URL name.
 ## Authentication Provider import
 Provide the name of the json file for the auth provider you wish to import.
 ```
 liveapicreatoradmin authprovider import  --importtFile myauthprovider.json
 ```
+The import project imports the specified auth provider into a JSON file. If the filename parameter is not specified, stdin is used.
 
 
 
