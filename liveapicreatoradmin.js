@@ -107,9 +107,17 @@ program
 	.action(rule.doRule);
 
 program
-	.command('authprovider <list>')
+	.command('authprovider <list|create|delete|export|import>')
 	.description('Administer authentication providers for an account.')
+	.option('--ident [ident]','The ident of the auth provider')
+	.option('--name [name]', 'Name of auth provider')
+	.option('--createFunction [bootstrap]', 'Name for Create Function')
+	.option('--paramMap [map]', 'Map of auth provider settings')
+	.option('--comments [comment]', 'Comment on auth provider')
+	.option('--exportFile [fileName]', 'Name of file to Export auth provider')
+	.option('--importFile [fileName]', 'Name of file to Import auth provider')
 	.action(authprovider.doAuthProvider);
+	 
 
 program.parse(process.argv);
 

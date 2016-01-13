@@ -1,0 +1,37 @@
+[
+  {
+    
+    "name": "foo2",
+    "comments": "none",
+    "auth_type_ident": 2,
+    "class_name": "com.kahuna.server.auth.JavaScriptAuthProvider",
+    "bootstrap_config_value": "foo",
+    "class_location": "",
+    "param_map": "{}",
+    "account_ident": 1000,
+    "@metadata": {
+      "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/admin:authproviders/2008",
+      "checksum": "A:8faaa2b4a0c4e97e",
+      "links": [
+        {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/admin:projects?sysfilter=equal(authprovider_ident:2008)",
+          "rel": "children",
+          "role": "projectsList",
+          "type": "urn:caliveapicreator:model:admin:projects"
+        },
+        {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/admin:accounts?sysfilter=equal(ident:1000)",
+          "rel": "parent",
+          "role": "fk_authprovider_accounts",
+          "type": "urn:caliveapicreator:model:admin:accounts"
+        },
+        {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/admin:auth_types?sysfilter=equal(ident:2)",
+          "rel": "parent",
+          "role": "fk_authprovider_authtype",
+          "type": "urn:caliveapicreator:model:admin:auth_types"
+        }
+      ]
+    }
+  }
+]
