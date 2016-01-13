@@ -60,7 +60,7 @@ Provide the name of the json file for the auth provider you wish to import.
 ```
 liveapicreatoradmin authprovider import  --importtFile myauthprovider.json
 ```
-The import project imports the specified auth provider into a JSON file. If the filename parameter is not specified, stdin is used. (you can pipe the json file to the import)
+The import auth provider imports the specified auth provider JSON file. If the filename parameter is not specified, stdin is used. (you can pipe the json file to the import)
 
 
 
