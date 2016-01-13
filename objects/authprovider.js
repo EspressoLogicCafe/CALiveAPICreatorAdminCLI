@@ -56,7 +56,7 @@ module.exports = {
 			_.each(data, function(p) {
 				table.cell("Ident", p.ident);
 				table.cell("Name", p.name);
-				table.cell("Bootstrap", p.bootstrap_config_value);
+				table.cell("createFunction", p.bootstrap_config_value);
 				table.cell("ParamMap", p.param_map);
 				var comments = p.comments;
 				if ( ! comments) {
@@ -202,9 +202,9 @@ module.exports = {
 				}
 				printObject.printHeader('Auth Provider was deleted: '+data2.txsummary);
 				
-				/*
+				
 				var delProj = _.find(data2.txsummary, function(p) {
-					return p['@metadata'].resource === 'admin:projects';
+					return p['@metadata'].resource === 'admin:authproviders';
 				});
 				if ( ! delProj) {
 					console.log('ERROR: unable to find deleted project'.red);
@@ -219,7 +219,7 @@ module.exports = {
 					printObject.printObject(delProj, delProj['@metadata'].entity, 0, delProj['@metadata'].verb);
 					console.log(('and ' + (data2.txsummary.length - 1) + ' other objects').grey);
 				}
-				*/
+				
 				var trailer = "Request took: " + (endTime - startTime) + "ms";
 				trailer += " - # objects touched: ";
 				if (data2.txsummary.length == 0) {
@@ -241,11 +241,6 @@ module.exports = {
 		var url = loginInfo.url;
 		var apiKey = loginInfo.apiKey;
 		
-		
-		if ( ! cmd.exportFile) {
-			console.log('Missing parameter: exportFile'.red);
-			return;
-		}
 		
 		var filter = null;
 		if (cmd.ident) {
@@ -276,7 +271,7 @@ module.exports = {
 			
 			if (toStdout) {
 				console.log(JSON.stringify(data, null, 2));
-			
+			} else {
 				var exportFile = fs.openSync(cmd.exportFile, 'w', 0600);
 				fs.writeSync(exportFile, JSON.stringify(data, null, 2));
 				console.log(('Auth Provider has been exported to file: ' + cmd.exportFile).green);
@@ -293,8 +288,7 @@ module.exports = {
 		var apiKey = loginInfo.apiKey;
 		
 		if ( ! cmd.importFile) {
-			console.log('Missing parameter: importFile'.red);
-			return;
+			cmd.importFile = '/dev/stdin';
 		}
 		
 		context.getContext(cmd, function() {
