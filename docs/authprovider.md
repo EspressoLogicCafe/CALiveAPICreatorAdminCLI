@@ -27,11 +27,38 @@ The `list` command shows all authentication providers for the current account.
 
 #### Output
     All authentication providers
-    Ident  Name                                                       Comments
-    -----  ---------------------------------------------------------  --------
-    1000   Built-in authentication (dblocal_admin - dblocal_usrtbls)
+    Ident  Name                     createFunction  ParamMap            Comments
+    -----  -----------------------  --------------  ------------------  --------
+    1000   Built-in authentication  null            datasource=AdminDB          
     
     # authentication providers: 1
 
 The `list` command is currently the only one available from the command line for
 authentication providers. For details on how to create a [custom authentication provider](http://ca-doc.espressologic.com/docs/logic-designer/security/authentication/custom-authentication-provider).
+
+## Authentication Provider Create
+Create needs a name, comment, the create function name and a list of parameters in JSON format 
+```
+liveapicreatoradmin authprovider create --createFunction myAuthProviderCreate --paramMap {} --comments none --name customAuth
+```
+
+## Authentication Provider delete
+Simply provide the ident of the auth provider you wish to delete.
+```
+liveapicreatoradmin authprovider delete --ident 2007
+```
+
+## Authentication Provider export
+Provide the ident of the auth provider and the export file name.
+```
+liveapicreatoradmin authprovider export  --ident 2008 --exportFile myauthprovider.json
+```
+
+## Authentication Provider import
+Provide the name of the json file for the auth provider you wish to import.
+```
+liveapicreatoradmin authprovider import  --importtFile myauthprovider.json
+```
+
+
+
