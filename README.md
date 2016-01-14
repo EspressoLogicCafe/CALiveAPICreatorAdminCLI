@@ -61,6 +61,7 @@ $ liveapicreatoradmin --help
     rule [options] <list|create|delete>                              Administer rules within a project.
     authprovider [options] <list|create|delete|export|import>        Administer authentication providers for an account.
     libraries [options] <list|create|update|delete|export>           Administer user libraries for an account.
+    settings [options] <list|update|import|export>                   Administer project settings for an account.
 
   Options:
 
@@ -109,4 +110,5 @@ Follow the links below for detailed documentation on specific administrator comm
 * [Resources](docs/resource.md)
 * [Rules](docs/rule.md)
 * [Libraries](docs/libraries.md)
+* [Settings](docs/settings.md)
 
