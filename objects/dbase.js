@@ -61,7 +61,7 @@ module.exports = {
 				console.log(data.errorMessage.red);
 				return;
 			}
-			printObject.printHeader('Databases');
+			printObject.printHeader('Datasources');
 			var table = new Table();
 			_.each(data, function(p) {
 				table.cell("Name", p.name);
@@ -100,7 +100,7 @@ module.exports = {
 			else {
 				console.log(table.toString());
 			}
-			printObject.printHeader("# databases: " + data.length);
+			printObject.printHeader("# datasources: " + data.length);
 		});
 	},
 	

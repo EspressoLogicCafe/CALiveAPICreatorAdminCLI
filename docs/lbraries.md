@@ -1,0 +1,79 @@
+# Libraries
+
+```
+ Usage: libraries [options] <list|create|delete|export|import>
+
+  Administer authentication providers for an account.
+
+  Options:
+
+    -h, --help                    output usage information
+    --ident [ident]               The ident of the auth provider
+    --name [name]                 Name of auth provider
+    --comments [comment]          Comment on auth provider
+    --file [fileName]       	  [optional] Name of file to Import/Export library (stdin/stdout used if not provided)
+```
+
+
+***
+## Libraries list
+List of commands allows you to list your CA Live API Creator authentication providers. Please see our [Wiki] (https://github.com/EspressoLogicCafe/StormpathAuthProvider/wiki/Installation-of-a-Custom-Authentication-Provider) for details on how to create and install a custom authentication provider (e.g. Active Directory, LDAP, SQL, LDAP, Stormpath, etc.). All communication with the Espresso Logic server is done by API calls using JSON/REST.  The authentication provider is the way to talk to an Espresso Logic server.  User Authentication results in a new API key, which is passed on all subsequent requests, and associates a set of security roles that define what the API key is authorized to do.
+
+```
+    liveapicreatoradmin libraries list
+```
+
+The `list` command shows all libraries for the current account.
+
+#### Output
+```
+All Libraries                                                                                                                                          
+Ident  Name                        Version   Short Name                  Type        Comments                                          
+-----  --------------------------  --------  --------------------------  ----------  --------------------------------------------------
+3      Apache Commons Codec        1.10      commons-codec               java        Apache Commons Codec                              
+5      Apache Commons Math         3.5       commons-math                java        The Apache Commons Mathematics Library            
+6      Joda-Time                   2.9       joda-time                   java        Joda-Time provides a quality replacement for th...
+2007   LdapAuth2                   2.1       ldapjs2                     javascript  This is an ldap test                              
+500    Moment.js (with Locales)    2.10.6    moment                      javascript  A JavaScript date library for parsing, validati...
+508    MongoUtility.js             0.9.0     MongoUtility.js             javascript  A JavaScript utility for using MongoDB within C...
+507    Numeral.js                  1.5.3     Numeral.js                  javascript  A JavaScript library for formatting and manipul...
+503    ParsedURL - URL parser      1.0       ParsedURL                   javascript  A simple JavaScript class/library for parsing/m...
+506    Stormpath-CALiveAPICreator  0.2.1     Stormpath-CALiveAPICreator  javascript  Stormpath-CALiveAPICreator contains stormpathAu...
+504    Underscore.js Library       1.8.3     underscore                  javascript  Underscore is a JavaScript library that provide...
+502    jkl XML parser              0.22      jkl                         javascript  A pure-JS XML parser.                             
+501    json2                       20150503  json2                       javascript  A pure-JS implementation of the JSON interchang...
+
+# libraries: 12                                                                                                                           
+```
+
+The `list` command is currently the only one available from the command line for
+libraries. For details on how to create a [custom authentication provider](http://ca-doc.espressologic.com/docs/logic-designer/security/authentication/custom-authentication-provider).
+
+## Library Create
+Create needs a name, comment, the create function name and a list of parameters in JSON format 
+```
+liveapicreatoradmin libraries create --name customJSLib --comments my js lib --shortName mylib --libtype [javascript | java]  --ver 2.1 --file mycustomjslib.js
+```
+
+## Authentication libraries delete
+Simply provide the ident of the library you wish to delete.
+```
+liveapicreatoradmin libraries delete --ident 2007
+```
+
+## Library export
+Provide the ident of the library and (optional) the export file name. If not provided - it will be sent to stdout.
+```
+liveapicreatoradmin libraries export  --ident 2008 --file mylibrary.json
+```
+The export libraries exports the specified library into a JSON file. If the filename parameter is not specified, stdout is used.
+
+## Library import
+Provide the name of the json file for the library you wish to import.
+```
+liveapicreatoradmin libraries import  --file mylibrary.json
+```
+The import library imports the specified JSON file. If the filename parameter is not specified, stdin is used. (you can pipe the json file to the import)
+
+
+

@@ -13,8 +13,7 @@
     --createFunction [bootstrap]  Name for Create Function
     --paramMap [map]              Map of auth provider settings
     --comments [comment]          Comment on auth provider
-    --exportFile [fileName]       Name of file to Export auth provider
-    --importFile [fileName]       Name of file to Import auth provider
+    --file [fileName]       	  [optional] Name of file to import/export auth provider (stdin/stdout used if not provided)
 ```
 
 
@@ -54,14 +53,14 @@ liveapicreatoradmin authprovider delete --ident 2007
 ## Authentication Provider export
 Provide the ident of the auth provider and the export file name.
 ```
-liveapicreatoradmin authprovider export  --ident 2008 --exportFile myauthprovider.json
+liveapicreatoradmin authprovider export  --ident 2008 --file myauthprovider.json
 ```
 The export auth provider exports the specified provider into a JSON file. If the filename parameter is not specified, stdout is used.
 
 ## Authentication Provider import
 Provide the name of the json file for the auth provider you wish to import.
 ```
-liveapicreatoradmin authprovider import  --importtFile myauthprovider.json
+liveapicreatoradmin authprovider import  --file myauthprovider.json
 ```
 The import auth provider imports the specified auth provider JSON file. If the filename parameter is not specified, stdin is used. (you can pipe the json file to the import)
 
