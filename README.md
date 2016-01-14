@@ -56,10 +56,11 @@ $ liveapicreatoradmin --help
     use <alias>                                                      Use the specified server by default
     status                                                           Show the current server, and any defined server aliases
     project [options] <list|create|update|delete|use|import|export>  Administer projects. Actions are: list, create, update, delete, use, export
-    database [options] <list|create|update|delete>                   Administer databases within a project.
+    datasources [options] <list|create|update|delete>                Administer datasources within a project.
     resource [options] <list>                                        Administer resources within a project.
     rule [options] <list|create|delete>                              Administer rules within a project.
-    authprovider <list>                                              Administer authentication providers for an account.
+    authprovider [options] <list|create|delete|export|import>        Administer authentication providers for an account.
+    libraries [options] <list|create|update|delete|export>           Administer user libraries for an account.
 
   Options:
 
@@ -104,7 +105,8 @@ Prints which server is the current server (if any) and project, and what aliases
 Follow the links below for detailed documentation on specific administrator commands.
 * [Projects](docs/project.md)
 * [Authentication providers](docs/authprovider.md)
-* [Databases](docs/dbase.md)
+* [Datasources](docs/dbase.md)
 * [Resources](docs/resource.md)
 * [Rules](docs/rule.md)
+* [Libraries](docs/libraries.md)
 
