@@ -9,6 +9,7 @@
 
     -h, --help                    output usage information
     --ident [ident]          The ident of the library
+    --project_ident [ident]  The project ident of the library that will be marked as used in the project.
     --name [name]            Name of library
     --libtype [type]         Type of Library [javascript | java]
     --ver [version]          Version of Library JS or Java
@@ -56,7 +57,7 @@ libraries. For details on how to create a [custom authentication provider](http:
 ## Library Create
 Create needs a name, comment, the create function name and a list of parameters in JSON format 
 ```
-liveapicreatoradmin libraries create --name customJSLib --comments my js lib --shortName mylib --libtype [javascript | java]  --ver 2.1 --file mycustomjslib.js
+liveapicreatoradmin libraries create --name customJSLib [--project_ident 1005] --comments my js lib --shortName mylib --libtype [javascript | java]  --ver 2.1 --file mycustomjslib.js
 ```
 
 ## libraries delete
@@ -75,7 +76,7 @@ The export libraries exports the specified library into a JSON file. If the file
 ## Library import
 Provide the name of the json file for the library you wish to import.
 ```
-liveapicreatoradmin libraries import  --file mylibrary.json
+liveapicreatoradmin libraries import [--project_ident 1005] --file mylibrary.json
 ```
 The import library imports the specified JSON file. If the filename parameter is not specified, stdin is used. (you can pipe the json file to the import)
 

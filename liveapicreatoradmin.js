@@ -15,6 +15,7 @@ var resource = require('./objects/resource.js');
 var rule = require('./objects/rule.js');
 var authprovider = require('./objects/authprovider.js');
 var library = require('./objects/library.js');
+var settings = require('./objects/settings.js');
 var dotfile = require('./util/dotfile.js');
 
 program
@@ -120,9 +121,10 @@ program
 	.action(authprovider.doAuthProvider);
 	
 program
-	.command('libraries <list|create|update|delete|export>')
-	.description('Administer user libraries for an account.')
+	.command('libraries <list|create|update|delete|export|import>')
+	.description('Administer java and javascript libraries for an account.')
 	.option('--ident [ident]','The ident of the library')
+	.option('--project_ident [projectId]','The project ident that this library will be marked as used' )
 	.option('--name [name]', 'Name of library')
 	.option('--libtype [type]', 'Type of Library JS or Java')
 	.option('--ver [version]', 'Version of Library JS or Java')
@@ -130,9 +132,18 @@ program
 	.option('--docUrl [docurl]', 'Documentation URL')
 	.option('--refUrl [refurl]', 'Reference URL')
 	.option('--comments [comment]', 'Comment on Library')
-	.option('--file [fileName]', 'Name of file to library JAR or JS (if not provided stdin/stdout used for export)')
+	.option('--file [fileName]', 'Name of file to import/export library JAR or JS (if not provided stdin/stdout used for export)')
 	.action(library.doLibrary);
 	 
+	 
+program
+	.command('settings <list|update|import|export>')
+	.description('Administer project settings for an account.')
+	.option('--ident [ident]','The ident of the specific project settings object')
+	.option('--option_value [value]','This is the value for the specific setting for the ident')
+	.option('--project_ident [project_ident]','The project ident that will be marked as used' )
+	.option('--file [fileName]', 'Name of file to settings for import/export (if not provided stdin/stdout used for export)')
+	.action(settings.doSettings);
 
 program.parse(process.argv);
 

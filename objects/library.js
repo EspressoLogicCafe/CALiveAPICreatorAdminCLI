@@ -327,7 +327,7 @@ module.exports = {
 			toStdout = true;
 		}
 		
-		client.get(loginInfo.url + "/logic_libraries?sysfilter=" + filter, {
+		client.get(loginInfo.url + "/logic_libraries?sysfilter=" + filter +"&pagesize=100", {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
 			}

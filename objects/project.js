@@ -48,7 +48,7 @@ module.exports = {
 		var url = loginInfo.url;
 		var apiKey = loginInfo.apiKey;
 
-		client.get(url + "/projects", {
+		client.get(url + "/projects"+"?pagesize=100", {
 			headers: {
 				Authorization: "CALiveAPICreator " + apiKey + ":1"
 			}

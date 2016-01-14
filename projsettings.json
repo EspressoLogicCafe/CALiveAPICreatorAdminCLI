@@ -1,0 +1,142 @@
+[
+  {
+    "ts": "2016-01-11T16:28:51.234548Z",
+    "option_value": "false",
+    "project_ident": null,
+    "projectoptiontype_ident": 1,
+    "@metadata": {
+      "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectOptions/2000",
+      "checksum": "override"
+    }
+  },
+  {
+    "ts": "2016-01-11T16:28:51.235669Z",
+    "option_value": "urn:caliveapicreator:demo:",
+    "project_ident": null,
+    "projectoptiontype_ident": 2,
+    "@metadata": {
+      "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectOptions/2001",
+      "checksum": "override"
+    }
+  },
+  {
+    "ts": "2016-01-11T16:28:51.236749Z",
+    "option_value": "false",
+    "project_ident": null,
+    "projectoptiontype_ident": 3,
+    "@metadata": {
+      "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectOptions/2002",
+      "checksum": "override"
+    }
+  },
+  {
+    "ts": "2016-01-11T16:28:51.237734Z",
+    "option_value": "@metadata",
+    "project_ident": null,
+    "projectoptiontype_ident": 4,
+    "@metadata": {
+      "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectOptions/2003",
+      "checksum": "override"
+    }
+  },
+  {
+    "ts": "2016-01-11T16:28:51.238722Z",
+    "option_value": "2002",
+    "project_ident": null,
+    "projectoptiontype_ident": 5,
+    "@metadata": {
+      "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectOptions/2004",
+      "checksum": "override"
+    }
+  },
+  {
+    "ts": "2016-01-11T16:28:51.239764Z",
+    "option_value": "6001",
+    "project_ident": null,
+    "projectoptiontype_ident": 6,
+    "@metadata": {
+      "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectOptions/2005",
+      "checksum": "override"
+    }
+  },
+  {
+    "ts": "2016-01-11T16:28:51.240875Z",
+    "option_value": "20",
+    "project_ident": null,
+    "projectoptiontype_ident": 7,
+    "@metadata": {
+      "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectOptions/2006",
+      "checksum": "override"
+    }
+  },
+  {
+    "ts": "2016-01-11T16:28:51.24188Z",
+    "option_value": "5000",
+    "project_ident": null,
+    "projectoptiontype_ident": 8,
+    "@metadata": {
+      "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectOptions/2007",
+      "checksum": "override"
+    }
+  },
+  {
+    "ts": "2016-01-11T16:28:51.242878Z",
+    "option_value": "20",
+    "project_ident": null,
+    "projectoptiontype_ident": 9,
+    "@metadata": {
+      "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectOptions/2008",
+      "checksum": "override"
+    }
+  },
+  {
+    "ts": "2016-01-11T16:28:51.243866Z",
+    "option_value": "100",
+    "project_ident": null,
+    "projectoptiontype_ident": 10,
+    "@metadata": {
+      "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectOptions/2009",
+      "checksum": "override"
+    }
+  },
+  {
+    "ts": "2016-01-11T16:28:51.244903Z",
+    "option_value": "2000",
+    "project_ident": null,
+    "projectoptiontype_ident": 11,
+    "@metadata": {
+      "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectOptions/2010",
+      "checksum": "override"
+    }
+  },
+  {
+    "ts": "2016-01-11T16:28:51.246227Z",
+    "option_value": "true",
+    "project_ident": null,
+    "projectoptiontype_ident": 12,
+    "@metadata": {
+      "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectOptions/2011",
+      "checksum": "override"
+    }
+  },
+  {
+    "ts": "2016-01-11T16:28:51.247794Z",
+    "option_value": "http://ca-doc.espressologic.com/docs/tutorial/business-logic-demo",
+    "project_ident": null,
+    "projectoptiontype_ident": 13,
+    "@metadata": {
+      "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectOptions/2012",
+      "checksum": "override"
+    }
+  },
+  {
+    "ts": "2016-01-11T16:28:51.249308Z",
+    "option_value": null,
+    "project_ident": null,
+    "projectoptiontype_ident": 14,
+    "@metadata": {
+      "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectOptions/2013",
+      "checksum": "override"
+    }
+  }
+]
