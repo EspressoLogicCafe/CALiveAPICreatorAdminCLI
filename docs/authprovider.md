@@ -17,11 +17,14 @@
     --importFile [fileName]       Name of file to Import auth provider
 ```
 
-List of commands allows you to list your CA Live API Creator authentication providers. Please see our [Wiki] (https://github.com/EspressoLogicCafe/StormpathAuthProvider/wiki/Installation-of-a-Custom-Authentication-Provider) for details on how to create and install a custom authentication provider (e.g. Active Directory, LDAP, SQL, LDAP, Stormpath, etc.). All communication with the Espresso Logic server is done by API calls using JSON/REST.  The authentication provider is the way to talk to an Espresso Logic server.  User Authentication results in a new API key, which is passed on all subsequent requests, and associates a set of security roles that define what the API key is authorized to do.
 
 ***
 ## Authentication Provider list
+List of commands allows you to list your CA Live API Creator authentication providers. Please see our [Wiki] (https://github.com/EspressoLogicCafe/StormpathAuthProvider/wiki/Installation-of-a-Custom-Authentication-Provider) for details on how to create and install a custom authentication provider (e.g. Active Directory, LDAP, SQL, LDAP, Stormpath, etc.). All communication with the Espresso Logic server is done by API calls using JSON/REST.  The authentication provider is the way to talk to an Espresso Logic server.  User Authentication results in a new API key, which is passed on all subsequent requests, and associates a set of security roles that define what the API key is authorized to do.
+
+```
     liveapicreatoradmin authprovider list
+```
 
 The `list` command shows all authentication providers for the current account.
 
@@ -60,7 +63,7 @@ Provide the name of the json file for the auth provider you wish to import.
 ```
 liveapicreatoradmin authprovider import  --importtFile myauthprovider.json
 ```
-The import project imports the specified auth provider into a JSON file. If the filename parameter is not specified, stdin is used. (you can pipe the json file to the import)
+The import auth provider imports the specified auth provider JSON file. If the filename parameter is not specified, stdin is used. (you can pipe the json file to the import)
 
 
 
