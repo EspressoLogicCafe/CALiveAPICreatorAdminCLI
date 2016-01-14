@@ -102,6 +102,33 @@ Prints which server is the current server (if any) and project, and what aliases
     Current project is: Acme Sales [1234] - url_name: sales
 
 ***
+
+
+### Sample Export Script
+You can combine each command to export parts of your system into components that can later be used in source control and then promoted to different servers.
+```
+#! /bin/bash
+liveapicreatoradmin logout -a local
+liveapicreatoradmin login -u admin -p Password1 http://localhost:8080/APIServer -a local
+# Projects
+liveapicreatoradmin project list
+liveapicreatoradmin project use --url_name demo_mysql
+liveapicreatoradmin project export --url_name demo_mysql --file demo/demo_mysql.json
+#API Settings
+liveapicreatoradmin settings list
+liveapicreatoradmin settings export --project_ident 2000 --file demo/demo_settings.json
+# Data Sources
+liveapicreatoradmin datasource list
+liveapicreatoradmin datasource export --prefix demo --file demo/demo_ds.json
+liveapicreatoradmin datasource export --prefix demo2 --file demo/demo2_ds.json
+liveapicreatoradmin datasource export --prefix finance --file demo/finance_ds.json
+#Libraries
+liveapicreatoradmin libraries list
+liveapicreatoradmin libraries export --ident 2007 --file demo/demo_libraries.json
+#Auth Providers
+liveapicreatoradmin authprovider list
+liveapicreatoradmin authprovider export --ident 2010 --file demo/demo_authprovider.js
+```
 ## Object-specific commands
 Follow the links below for detailed documentation on specific administrator commands.
 * [Projects](docs/project.md)
