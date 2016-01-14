@@ -36,8 +36,15 @@ module.exports = {
 			return;
 		var url = loginInfo.url;
 		var apiKey = loginInfo.apiKey;
-
-		client.get(url + "/ProjectOptions", {
+		var projIdent = cmd.project_ident;
+		if ( ! projIdent) {
+			projIdent = dotfile.getCurrentProject();
+			if ( ! projIdent) {
+				console.log('There is no current project.'.yellow);
+				return;
+			}
+		}
+		client.get(url + "/ProjectOptions?sysfilter=equal(project_ident:" + projIdent +")&pagesize=100", {
 			headers: {
 				Authorization: "CALiveAPICreator " + apiKey + ":1"
 			}
@@ -161,15 +168,20 @@ module.exports = {
 		if ( ! cmd.file) {
 			cmd.file = '/dev/stdin';
 		}
-		if ( ! cmd.project_ident) {
-			console.log('Missing parameter: project_ident'.red);
-			return;
+		
+		var projIdent = cmd.project_ident;
+		if ( ! projIdent) {
+			projIdent = dotfile.getCurrentProject();
+			if ( ! projIdent) {
+				console.log('There is no current project.'.yellow);
+				return;
+			}
 		}
 		context.getContext(cmd, function() {
 			var fileContent = JSON.parse(fs.readFileSync(cmd.file));
 			var row = null;
 			for(var i = 0; i < fileContent.length ; i++){
-			      fileContent[i].project_ident = cmd.project_ident;
+			      fileContent[i].project_ident = projIdent;
 			      fileContent[i]['@metadata'].checksum = "override";
 			row = fileContent[i];
 			var startTime = new Date();
@@ -223,14 +235,18 @@ module.exports = {
 			
 		var url = loginInfo.url;
 		var apiKey = loginInfo.apiKey;
-		if ( ! cmd.project_ident) {
-			console.log('Missing parameter: project_ident'.red);
-			return;
+		var projIdent = cmd.project_ident;
+		if ( ! projIdent) {
+			projIdent = dotfile.getCurrentProject();
+			if ( ! projIdent) {
+				console.log('There is no current project.'.yellow);
+				return;
+			}
 		}
 		
 		var filter = null;
 		if (cmd.project_ident) {
-			filter = "equal(project_ident:" + cmd.project_ident + ")";
+			filter = "equal(project_ident:" + projIdent + ")";
 		} else {
 			console.log('Missing parameter: please specify project settings (use list) project_ident '.red);
 			return;

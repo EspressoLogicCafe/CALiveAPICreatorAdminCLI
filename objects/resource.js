@@ -23,8 +23,11 @@ module.exports = {
 		else if (action === 'delete') {
 			module.exports.del(cmd);
 		}
+		else if (action === 'export') {
+			module.exports.export(cmd);
+		}
 		else {
-			console.log('You must specify an action: list, create, update or delete');
+			console.log('You must specify an action: list, create, export, update or delete');
 			//program.help();
 		}
 	},
@@ -392,5 +395,61 @@ module.exports = {
 				callback(data[0].ident);
 			});
 		}		
+	},
+	export: function(cmd) {
+		var client = new Client();
+		var loginInfo = login.login(cmd);
+		if ( ! loginInfo)
+			return;
+			
+		var url = loginInfo.url;
+		var apiKey = loginInfo.apiKey;
+		
+		
+		var projIdent = cmd.project_ident;
+		if ( ! projIdent) {
+			projIdent = dotfile.getCurrentProject();
+			if ( ! projIdent) {
+				console.log('There is no current project.'.yellow);
+				return;
+			}
+		}
+		//to do - this is not right - need specific version
+		client.get(url + "/AllResources?sysfilter=equal(apiversion_ident:" + projIdent +")&pagesize=100", {
+			headers: {
+				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
+			}
+		}, function(data) {
+			//console.log('get result: ' + JSON.stringify(data, null, 2));
+			if (data.errorMessage) {
+				console.log(("Error: " + data.errorMessage).red);
+				return;
+			}
+			var toStdout = false;
+			if ( ! cmd.file) {
+				toStdout = true;
+			}
+			if (data.length === 0) {
+				console.log(("Error: no such project").red);
+				return;
+			}
+			for(var i = 0; i < data.length ; i++){
+			      delete data[i].ident;
+			      data[i].project_ident = null;
+			      data[i]['@metadata'].checksum = "override";
+			      delete data[i]['@metadata'].links;
+			}
+			if (toStdout) {
+				console.log(JSON.stringify(data, null, 2));
+				
+			} else {
+				var exportFile = fs.openSync(cmd.file, 'w', 0600);
+				fs.writeSync(exportFile, JSON.stringify(data, null, 2));
+				console.log(('Rules have been exported to file: ' + cmd.file).green);
+			}
+		});	
+	},
+	import: function(cmd) {
+		console.log("Sorry not implemented");
 	}
 };

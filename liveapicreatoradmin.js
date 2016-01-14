@@ -89,7 +89,7 @@ program
 	.action(resource.doResource);
 
 program
-	.command('rule <list|create|delete>')
+	.command('rule <list|create|delete|export>')
 	.description('Administer rules within a project.')
 	.option('--ruletype [type]', 'The type of the rule, can be: sum,formula,validation,parentcopy')
 	.option('--entity_name [prefix:table]', 'The table, qualified with a prefix, for the rule')
@@ -106,6 +106,7 @@ program
 	.option('--active [true|false]', 'Optional: whether the rule should be active, true by default')
 	.option('--project_ident', 'The ident of a project, if other than the current project')
 	.option('--ident [ident]', 'For delete, the ident of the rule to delete')
+	.option('--file [file]', 'Optional: for import/export, the name of a file to read from/save to, if unspecified, use stdin/stdout')
 	.option('--verbose', 'Optional: whether to display list of rules in detailed format that can be used to recreate line by line')
 	.action(rule.doRule);
 
