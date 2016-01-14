@@ -451,6 +451,7 @@ module.exports = {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
 			}
 		}, function(data) {
+		
 			var endTime = new Date();
 			if (data.errorMessage) {
 				console.log(data.errorMessage.red);
@@ -458,7 +459,7 @@ module.exports = {
 			}
 			printObject.printHeader('Project was created, including:');
 				
-			var newProj = _.find(data.txsummary, function(p) {
+			var newProj = _.find( data.txsummary, function(p) {
 				return p['@metadata'].resource === 'ProjectExport';
 			});
 			if ( ! newProj) {
@@ -483,6 +484,9 @@ module.exports = {
 			else {
 				trailer += data.txsummary.length;
 			}
+			
+			//set the imported project to be the current selected project
+			dotfile.setCurrentProject(newProj.ident, newProj.name);
 			printObject.printHeader(trailer);
 		});
 	}

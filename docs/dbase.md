@@ -1,7 +1,24 @@
 # datasource
-
 This suite of commands allows you to manipulate the datasource connection(s) in your projects.
+```
+Usage: datasource [options] <list|create|update|delete|import|export>
 
+  Administer datasources within a project.
+
+  Options:
+
+    -h, --help                     output usage information
+    --db_name [name]               The name of the datasource connection
+    --prefix [prefix]              The prefix of the datasource connection
+    --dbasetype [dbasetype]        The type of the datasource connection, can be mysql, oracle, sqlserver,derby, postgres
+    --catalog_name [catalog_name]  The catalog in the datasource
+    --schema_name [schema_name]    The schema in the datasource
+    --user_name [user_name]        The name of the datasource user
+    --password [password]          The password of the datasource user
+    --url [url]                    The JDBC URL for the datasource
+    --project_ident                The ident of a project, if other than the current project
+    --file [file]                  Optional: for import/export, the name of a file to read from/save to, if unspecified, use stdin/stdout
+```
 ***
 ## datasource list
     liveapicreatoradmin datasource list
@@ -50,6 +67,19 @@ The `type` parameter must have one of the following values:
 
 If the `prefix` parameter is not specified, it will default to "main".
 
+## datasource update
+
+```
+liveapicreatoradmin datasource [--prefix <name> | --name <name> ]
+		[--user_name <db-user-name>] 
+		[--password <db-password>]
+    	[--url <db-url>] 
+    	[--catalog_name <catalog>] 
+    	[--schema_name <schema>] 
+    	[--port_num <port>]
+    	[--comments <comments>]
+```
+
 ***
 ## datasource delete
     liveapicreatoradmin datasource delete [--db_name <name> | --prefix <prefix>]
@@ -58,3 +88,19 @@ The `delete` command deletes a datasource connection from the current project.
 Either the name of the datasource connection, or its prefix, must be specified.
 
 Visit the Documentation page on [datasources](http://ca-doc.espressologic.com/docs/logic-designer/datasource)
+
+
+## datasource export
+Provide the name or prefix of the datasource and (optional) the export file name. If not provided - it will be sent to stdout.
+```
+liveapicreatoradmin datasource export  [--prefix <name> | --name <name> ] --file datasource.json
+```
+The export datasource exports the specified datasource into a JSON file. If the filename parameter is not specified, stdout is used.
+
+## datasource import
+Import a datasource to the current project (or one specified) using the name of the json file for the datasource you wish to import.
+```
+liveapicreatoradmin datasource import [--project_ident <ident>] --file datasource.json
+```
+The import datasource imports the specified JSON file. If the filename parameter is not specified, stdin is used. (you can pipe the json file to the import)
+

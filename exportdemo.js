@@ -35,9 +35,11 @@ liveapicreatoradmin use target
 #Import Project
 #liveapicreatoradmin project import --file demo/demo_mysql.json
 liveapicreatoradmin project list
-liveapicreatoradmin project use --url_name demo_mysql-20160114-173500.832p0000
+## should automatically use imported project --url_name demo_mysql-20160114-173500.832p0000
 #Fixup Datasources
 liveapicreatoradmin datasource list
+liveapicreatoradmin datasource update --url_name demo --password password1
+liveapicreatoradmin datasource update --url_name finance --password password1
 #Update Settings
 liveapicreatoradmin settings list
 liveapicreatoradmin settings import --file demo/demo_settings.json

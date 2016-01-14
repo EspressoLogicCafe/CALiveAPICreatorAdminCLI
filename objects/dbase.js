@@ -204,7 +204,98 @@ module.exports = {
 	},
 	
 	update: function(cmd) {
-		console.log('Sorry, this function is not yet implemented');
+		var client = new Client();
+		var loginInfo = login.login(cmd);
+		if ( ! loginInfo) {
+			console.log('You are not currently logged into any API Creator server.'.red);
+			return;
+		}
+
+		var filt = null;
+		if (cmd.prefix) {
+			filt = "equal(prefix:'" + cmd.prefix + "')";
+		}
+		else if (cmd.db_name) {
+			filt = "equal(name:'" + cmd.db_name + "')";
+		}
+		else {
+			console.log('Missing parameter: please specify either db_name or prefix'.red);
+			return;
+		}
+		
+		client.get(loginInfo.url + "/dbaseschemas?sysfilter=" + filt, {
+			headers: {
+				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
+			}
+		}, function(data) {
+			//console.log('get result: ' + JSON.stringify(data, null, 2));
+			if (data.errorMessage) {
+				console.log(("Error: " + data.errorMessage).red);
+				return;
+			}
+			if (data.length === 0) {
+				console.log(("Error: no such database").red);
+				return;
+			}
+			if (data.length > 1) {
+				console.log(("Error: more than one database for the given condition: " + filter).red);
+				return;
+			}
+			var db = data[0];
+			if( ! cmd.password) {
+				db.password = cmd.password;
+			}
+			if( ! cmd.user_name){
+				db.user_name = cmd.user_name;
+			}
+			if( ! cmd.name ){
+				db.name = cmd.name;
+			}
+			if (! cmd.url ){
+				db.url = cmd.url;
+			}
+			if( ! cmd.prefix ) {
+				db.prefix = cmd.prefix;
+			}
+			if( ! cmd.port ) {
+				db.port = cmd.port;
+			}
+			if( ! cmd.schema_name ){
+				db.schema_name = cmd.schema_name;
+			}
+			if( ! cmd.catalog_name ){
+			 	db.catalog_name = cmd.catalog_name;
+			}
+			if( ! cmd.comments ){
+			 	db.comments = cmd.comments;
+			}
+			var startTime = new Date();
+			client.put(db['@metadata'].href, {
+				data: db,
+				headers: {
+					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
+				}
+			}, function(data2) {
+				var endTime = new Date();
+				if (data2.errorMessage) {
+					console.log(data2.errorMessage.red);
+					return;
+				}
+				printObject.printHeader('Database connection was updated, including the following objects:');
+				_.each(data2.txsummary, function(obj) {
+					printObject.printObject(obj, obj['@metadata'].entity, 0, obj['@metadata'].verb);
+				});
+				var trailer = "Request took: " + (endTime - startTime) + "ms";
+				trailer += " - # objects touched: ";
+				if (data2.txsummary.length == 0) {
+					console.log('No data returned'.yellow);
+				}
+				else {
+					trailer += data2.txsummary.length;
+				}
+				printObject.printHeader(trailer);
+			});
+		});
 	},
 	
 	del : function(cmd) {
