@@ -27,7 +27,30 @@ The `list` command shows all libraries for the current account.
 
 #### Output
 ```
-                                                                                                                     
+Project Option Settings                                                                                                                                
+Ident  Project  Name                                            Value                                                            
+-----  -------  ----------------------------------------------  -----------------------------------------------------------------
+2000   2000     Aggregate Default Override                      false                                                            
+2015   2000     Allow Swagger without authentication            false                                                            
+2018   2000     Audit User Transactions                         false                                                            
+2004   2000     Checksum Size Limit                             2002                                                             
+2008   2000     Chunk Size Default                              20                                                               
+2014   2000     Default response format                         json                                                             
+2016   2000     Disallow free-form filters and sorts            false                                                            
+2002   2000     HTTPS only                                      false                                                            
+2005   2000     Inline Limit Default                            6001                                                             
+2007   2000     Maximum Page Size                               5000                                                             
+2017   2000     Maximum size of connection pool (per database)  20                                                               
+2003   2000     Metadata name                                   @metadata                                                        
+2006   2000     Page Size Default                               20                                                               
+2011   2000     Permit Authorization parameter in URL           true                                                             
+2010   2000     Stored Procedure Inline Limit                   2000                                                             
+2009   2000     Stored Procedure Row Limit                      100                                                              
+2012   2000     Tech docs URL                                   http://ca-doc.espressologic.com/docs/tutorial/business-logic-demo
+2001   2000     Type base URI                                   urn:caliveapicreator:demo:                                       
+2013   2000     User docs URL                                   null                                                             
+
+# settings: 19                                                                                                                           
 ```
 
 The `list` command is currently the only one available from the command line for
