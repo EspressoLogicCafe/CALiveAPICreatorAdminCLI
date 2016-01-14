@@ -8,16 +8,21 @@
   Options:
 
     -h, --help                    output usage information
-    --ident [ident]               The ident of the auth provider
-    --name [name]                 Name of auth provider
-    --comments [comment]          Comment on auth provider
-    --file [fileName]       	  [optional] Name of file to Import/Export library (stdin/stdout used if not provided)
+    --ident [ident]          The ident of the library
+    --name [name]            Name of library
+    --libtype [type]         Type of Library JS or Java
+    --ver [version]          Version of Library JS or Java
+    --shortName [shortName]  Short Name
+    --docUrl [docurl]        Documentation URL
+    --refUrl [refurl]        Reference URL
+    --comments [comment]     Comment on Library
+    --file [fileName]        Name of file to library JAR or JS (if not provided stdin/stdout used for export)
 ```
 
 
 ***
 ## Libraries list
-List of commands allows you to list your CA Live API Creator authentication providers. Please see our [Wiki] (https://github.com/EspressoLogicCafe/StormpathAuthProvider/wiki/Installation-of-a-Custom-Authentication-Provider) for details on how to create and install a custom authentication provider (e.g. Active Directory, LDAP, SQL, LDAP, Stormpath, etc.). All communication with the Espresso Logic server is done by API calls using JSON/REST.  The authentication provider is the way to talk to an Espresso Logic server.  User Authentication results in a new API key, which is passed on all subsequent requests, and associates a set of security roles that define what the API key is authorized to do.
+List of commands allows you to list your CA Live API Creator libraries. 
 
 ```
     liveapicreatoradmin libraries list
@@ -33,7 +38,6 @@ Ident  Name                        Version   Short Name                  Type   
 3      Apache Commons Codec        1.10      commons-codec               java        Apache Commons Codec                              
 5      Apache Commons Math         3.5       commons-math                java        The Apache Commons Mathematics Library            
 6      Joda-Time                   2.9       joda-time                   java        Joda-Time provides a quality replacement for th...
-2007   LdapAuth2                   2.1       ldapjs2                     javascript  This is an ldap test                              
 500    Moment.js (with Locales)    2.10.6    moment                      javascript  A JavaScript date library for parsing, validati...
 508    MongoUtility.js             0.9.0     MongoUtility.js             javascript  A JavaScript utility for using MongoDB within C...
 507    Numeral.js                  1.5.3     Numeral.js                  javascript  A JavaScript library for formatting and manipul...
@@ -43,7 +47,7 @@ Ident  Name                        Version   Short Name                  Type   
 502    jkl XML parser              0.22      jkl                         javascript  A pure-JS XML parser.                             
 501    json2                       20150503  json2                       javascript  A pure-JS implementation of the JSON interchang...
 
-# libraries: 12                                                                                                                           
+# libraries: 11                                                                                                                           
 ```
 
 The `list` command is currently the only one available from the command line for
