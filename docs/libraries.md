@@ -59,7 +59,7 @@ Create needs a name, comment, the create function name and a list of parameters 
 liveapicreatoradmin libraries create --name customJSLib --comments my js lib --shortName mylib --libtype [javascript | java]  --ver 2.1 --file mycustomjslib.js
 ```
 
-## Authentication libraries delete
+## libraries delete
 Simply provide the ident of the library you wish to delete.
 ```
 liveapicreatoradmin libraries delete --ident 2007
