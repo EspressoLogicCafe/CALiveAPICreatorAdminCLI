@@ -3,7 +3,7 @@
 ```
  Usage: libraries [options] <list|create|delete|export|import>
 
-  Administer authentication providers for an account.
+  Administer java and javascript libraries for an account.
 
   Options:
 
