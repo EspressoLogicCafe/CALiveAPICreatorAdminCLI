@@ -10,7 +10,7 @@
     -h, --help                    output usage information
     --ident [ident]          The ident of the library
     --name [name]            Name of library
-    --libtype [type]         Type of Library JS or Java
+    --libtype [type]         Type of Library [javascript | java]
     --ver [version]          Version of Library JS or Java
     --shortName [shortName]  Short Name
     --docUrl [docurl]        Documentation URL
