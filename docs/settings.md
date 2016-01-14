@@ -20,7 +20,7 @@
 List of commands allows you to list your CA Live API Creator project specific settings. 
 
 ```
-    liveapicreatoradmin libraries list
+    liveapicreatoradmin settings list
 ```
 
 The `list` command shows all libraries for the current account.
