@@ -1,0 +1,60 @@
+[
+  {
+    "ts": "2016-01-13T16:18:40.65894Z",
+    "conn_type": null,
+    "prefix": "demo2",
+    "name": "Demo2",
+    "comments": null,
+    "datasource_name": null,
+    "url": "jdbc:mysql://localhost:3306/dblocal_demo",
+    "catalog_name": "dblocal_demo",
+    "schema_name": null,
+    "user_name": "dblocal_demo",
+    "password": null,
+    "salt": null,
+    "port_num": null,
+    "read_only": false,
+    "schema_editable": false,
+    "admin_url": null,
+    "active": true,
+    "status": "OK 103",
+    "project_ident": 2000,
+    "dbasetype_ident": 1,
+    "@metadata": {
+      "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/admin:dbaseschemas/2003",
+      "checksum": "A:1ee70548c810e044",
+      "links": [
+        {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/admin:table_infos?sysfilter=equal(dbaseschema_ident:2003)",
+          "rel": "children",
+          "role": "table_infosList",
+          "type": "urn:caliveapicreator:model:admin:table_infos"
+        },
+        {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/admin:dbaseschema_metacache?sysfilter=equal(dbaseschema_ident:2003)",
+          "rel": "children",
+          "role": "dbaseschema_metacacheList",
+          "type": "urn:caliveapicreator:model:admin:dbaseschema_metacache"
+        },
+        {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/admin:dbaseschema_metascaninfo?sysfilter=equal(dbaseschema_ident:2003)",
+          "rel": "children",
+          "role": "dbaseschema_metascaninfoList",
+          "type": "urn:caliveapicreator:model:admin:dbaseschema_metascaninfo"
+        },
+        {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/admin:dbasetypes?sysfilter=equal(ident:1)",
+          "rel": "parent",
+          "role": "fk_dbaseschemas_dbasetypes",
+          "type": "urn:caliveapicreator:model:admin:dbasetypes"
+        },
+        {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/admin:projects?sysfilter=equal(ident:2000)",
+          "rel": "parent",
+          "role": "fk_dbaseschemas_projects",
+          "type": "urn:caliveapicreator:model:admin:projects"
+        }
+      ]
+    }
+  }
+]

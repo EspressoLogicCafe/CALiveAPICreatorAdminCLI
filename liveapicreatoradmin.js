@@ -14,6 +14,7 @@ var dbase = require('./objects/dbase.js');
 var resource = require('./objects/resource.js');
 var rule = require('./objects/rule.js');
 var authprovider = require('./objects/authprovider.js');
+var library = require('./objects/library.js');
 var dotfile = require('./util/dotfile.js');
 
 program
@@ -56,17 +57,18 @@ program
 	.action(project.doProject);
 
 program
-	.command('database <list|create|update|delete>')
-	.description('Administer databases within a project.')
-	.option('--db_name [name]', 'The name of the database connection')
-	.option('--prefix [prefix]', 'The prefix of the database connection')
-	.option('--dbasetype [dbasetype]', 'The type of the database connection, can be mysql, oracle, sqlserver, nuodb, postgres')
-	.option('--catalog_name [catalog_name]', 'The catalog in the database')
-	.option('--schema_name [schema_name]', 'The schema in the database')
-	.option('--user_name [user_name]', 'The name of the database user')
-	.option('--password [password]', 'The password of the database user')
-	.option('--url [url]', 'The JDBC URL for the database')
+	.command('datasource <list|create|update|delete|import|export>')
+	.description('Administer datasources within a project.')
+	.option('--db_name [name]', 'The name of the datasource connection')
+	.option('--prefix [prefix]', 'The prefix of the datasource connection')
+	.option('--dbasetype [dbasetype]', 'The type of the datasource connection, can be mysql, oracle, sqlserver,derby, postgres')
+	.option('--catalog_name [catalog_name]', 'The catalog in the datasource')
+	.option('--schema_name [schema_name]', 'The schema in the datasource')
+	.option('--user_name [user_name]', 'The name of the datasource user')
+	.option('--password [password]', 'The password of the datasource user')
+	.option('--url [url]', 'The JDBC URL for the datasource')
 	.option('--project_ident', 'The ident of a project, if other than the current project')
+	.option('--file [file]', 'Optional: for import/export, the name of a file to read from/save to, if unspecified, use stdin/stdout')
 	.action(dbase.doDbase);
 
 program
@@ -114,9 +116,22 @@ program
 	.option('--createFunction [bootstrap]', 'Name for Create Function')
 	.option('--paramMap [map]', 'Map of auth provider settings')
 	.option('--comments [comment]', 'Comment on auth provider')
-	.option('--exportFile [fileName]', 'Name of file to Export auth provider')
-	.option('--importFile [fileName]', 'Name of file to Import auth provider')
+	.option('--file [fileName]', '[Optional] Name of file to Import/Export auth provider (if not provided stdin/stdout used)')
 	.action(authprovider.doAuthProvider);
+	
+program
+	.command('libraries <list|create|update|delete|export>')
+	.description('Administer user libraries for an account.')
+	.option('--ident [ident]','The ident of the library')
+	.option('--name [name]', 'Name of library')
+	.option('--libtype [type]', 'Type of Library JS or Java')
+	.option('--ver [version]', 'Version of Library JS or Java')
+	.option('--shortName [shortName]', 'Short Name')
+	.option('--docUrl [docurl]', 'Documentation URL')
+	.option('--refUrl [refurl]', 'Reference URL')
+	.option('--comments [comment]', 'Comment on Library')
+	.option('--file [fileName]', 'Name of file to library JAR or JS (if not provided stdin/stdout used for export)')
+	.action(library.doLibrary);
 	 
 
 program.parse(process.argv);

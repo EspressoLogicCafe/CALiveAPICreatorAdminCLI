@@ -250,7 +250,7 @@ module.exports = {
 			return;
 		}
 		var toStdout = false;
-		if ( ! cmd.exprotFile) {
+		if ( ! cmd.file) {
 			toStdout = true;
 		}
 		
@@ -272,9 +272,9 @@ module.exports = {
 			if (toStdout) {
 				console.log(JSON.stringify(data, null, 2));
 			} else {
-				var exportFile = fs.openSync(cmd.exportFile, 'w', 0600);
+				var exportFile = fs.openSync(cmd.file, 'w', 0600);
 				fs.writeSync(exportFile, JSON.stringify(data, null, 2));
-				console.log(('Auth Provider has been exported to file: ' + cmd.exportFile).green);
+				console.log(('Auth Provider has been exported to file: ' + cmd.file).green);
 			}
 		});
 	},
@@ -287,12 +287,12 @@ module.exports = {
 		var url = loginInfo.url;
 		var apiKey = loginInfo.apiKey;
 		
-		if ( ! cmd.importFile) {
-			cmd.importFile = '/dev/stdin';
+		if ( ! cmd.file) {
+			cmd.file = '/dev/stdin';
 		}
 		
 		context.getContext(cmd, function() {
-			var fileContent = JSON.parse(fs.readFileSync(cmd.importFile));
+			var fileContent = JSON.parse(fs.readFileSync(cmd.file));
 			fileContent.account_ident = context.account_ident;
 			fileContent.ident = null;
 			var startTime = new Date();

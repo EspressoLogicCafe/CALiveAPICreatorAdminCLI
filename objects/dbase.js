@@ -2,7 +2,7 @@ var Client = require('node-rest-client').Client;
 var colors = require('colors');
 var _ = require('underscore');
 var Table = require('easy-table');
-
+var fs = require('fs');
 var context = require('./context.js');
 var login = require('../util/login.js');
 var printObject = require('../util/printObject.js');
@@ -21,6 +21,12 @@ module.exports = {
 		}
 		else if (action === 'delete') {
 			module.exports.del(cmd);
+		}
+		else if (action === 'import') {
+			module.exports.import(cmd);
+		}
+		else if (action === 'export') {
+			module.exports.export(cmd);
 		}
 		else {
 			console.log('You must specify an action: list, create, update or delete');
@@ -69,6 +75,7 @@ module.exports = {
 					case 5: type = "SQL Server (Azure)"; break;
 					case 6: type = "NuoDB"; break;
 					case 7: type = "PostgreSQL"; break;
+					case 8: type = "Derby"; break;
 					default: type = "unknown";
 				}
 				table.cell("Type", type);
@@ -264,6 +271,124 @@ module.exports = {
 				}
 				printObject.printHeader(trailer);
 			});
+		});
+	},
+	export: function(cmd) {
+		var client = new Client();
+		
+		var loginInfo = login.login(cmd);
+		if ( ! loginInfo)
+			return;
+		var url = loginInfo.url;
+		var apiKey = loginInfo.apiKey;
+		
+		
+		var filter = null;
+		if (cmd.prefix) {
+			filter = "equal(prefix:'" + cmd.prefix + "')";
+		} else if (cmd.db_name) {
+			filter = "equal(name:'" + cmd.db_name + "')";
+		} else {
+			console.log('Missing parameter: please specify datasource db_name '.red);
+			return;
+		}
+		var toStdout = false;
+		if ( ! cmd.file) {
+			toStdout = true;
+		}
+		
+		client.get(loginInfo.url + "/dbaseschemas?sysfilter=" + filter, {
+			headers: {
+				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
+			}
+		}, function(data) {
+			//Sconsole.log('get result: ' + JSON.stringify(data, null, 2));
+			if (data.errorMessage) {
+				console.log(("Error: " + data.errorMessage).red);
+				return;
+			}
+			if (data.length === 0) {
+				console.log(("Error: no such datasource").red);
+				return;
+			}
+			//do not export passwords
+			data[0].password = null;
+			data[0].salt = null;
+			data[0].ident = null;
+			delete data[0]["ident"];
+			
+			if (toStdout) {
+				console.log(JSON.stringify(data, null, 2));
+			} else {
+				var exportFile = fs.openSync(cmd.file, 'w', 0600);
+				fs.writeSync(exportFile, JSON.stringify(data, null, 2));
+				console.log(('Data Source has been exported to file: ' + cmd.file).green);
+			}
+		});
+	},
+	import: function(cmd) {
+		var client = new Client();
+		
+		var loginInfo = login.login(cmd);
+		if ( ! loginInfo)
+			return;
+		var url = loginInfo.url;
+		var apiKey = loginInfo.apiKey;
+		
+		if ( ! cmd.file) {
+			cmd.file = '/dev/stdin';
+		}
+		var curProj = cmd.project_ident;
+		if ( ! curProj) {
+			curProj = dotfile.getCurrentProject();
+		}
+		if ( ! curProj) {
+			console.log('There is no current project.'.yellow);
+			return;
+		}
+		context.getContext(cmd, function() {
+			var fileContent = JSON.parse(fs.readFileSync(cmd.importFile));
+			fileContent.project_ident = curProj;
+			fileContent.ident = null;
+			var startTime = new Date();
+			client.post(loginInfo.url + "/dbaseschemas", {
+				data: fileContent,
+				headers: {Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1" }
+				}, function(data) {
+				var endTime = new Date();
+				if (data.errorMessage) {
+					console.log(data.errorMessage.red);
+					return;
+				}
+				printObject.printHeader('Datasource was imported, including:');
+				
+				var newAuth = _.find(data.txsummary, function(p) {
+					return p['@metadata'].resource === 'admin:dbaseschemas';
+				});
+				if ( ! newAuth) {
+					console.log('ERROR: unable to find imported data source'.red);
+					return;
+				}
+				if (cmd.verbose) {
+					_.each(data.txsummary, function(obj) {
+						printObject.printObject(obj, obj['@metadata'].entity, 0, obj['@metadata'].verb);
+					});
+				}
+				else {
+					printObject.printObject(newAuth, newAuth['@metadata'].entity, 0, newAuth['@metadata'].verb);
+					console.log(('and ' + (data.txsummary.length - 1) + ' other objects').grey);
+				}
+			
+				var trailer = "Request took: " + (endTime - startTime) + "ms";
+				trailer += " - # objects touched: ";
+				if (data.txsummary.length === 0) {
+					console.log('No data returned'.yellow);
+				}
+				else {
+					trailer += data.txsummary.length;
+				}
+				printObject.printHeader(trailer);
+			})
 		});
 	}
 };
