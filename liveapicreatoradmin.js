@@ -68,7 +68,7 @@ program
 	.option('--user_name [user_name]', 'The name of the datasource user')
 	.option('--password [password]', 'The password of the datasource user')
 	.option('--url [url]', 'The JDBC URL for the datasource')
-	.option('--project_ident', 'The ident of a project, if other than the current project')
+	.option('--project_ident [ident]', 'The ident of a project, (if other than the current project')
 	.option('--file [file]', 'Optional: for import/export, the name of a file to read from/save to, if unspecified, use stdin/stdout')
 	.action(dbase.doDbase);
 
@@ -85,7 +85,8 @@ program
 	.option('--container_ident [ident]', 'The ident of the parent resource, if any')
 	.option('--attributes [attributes]', 'The columns t oadd to the resource, in the form {colname: alias, colname:alias}, all if not specified')
 	.option('--apiversion [apiversion]', 'The name of an API version, if there is more than one')
-	.option('--project_ident', 'The ident of a project, if other than the current project')
+	.option('--project_ident [ident]', 'The ident of a project, (if other than the current project')
+	.option('--file [file]', 'Optional: for import/export, the name of a file to read from/save to, if unspecified, use stdin/stdout')
 	.action(resource.doResource);
 
 program
@@ -127,13 +128,14 @@ program
 	.option('--ident [ident]','The ident of the library')
 	.option('--project_ident [projectId]','The project ident that this library will be marked as used' )
 	.option('--name [name]', 'Name of library')
-	.option('--libtype [type]', 'Type of Library JS or Java')
+	.option('--libtype [type]', 'Type of Library javascript ! java')
 	.option('--ver [version]', 'Version of Library JS or Java')
-	.option('--shortName [shortName]', 'Short Name')
+	.option('--short_name [shortname]', 'Short Name')
 	.option('--docUrl [docurl]', 'Documentation URL')
 	.option('--refUrl [refurl]', 'Reference URL')
+	.option('--linkProject','Link the imported library to the current project')
 	.option('--comments [comment]', 'Comment on Library')
-	.option('--file [fileName]', 'Name of file to import/export library JAR or JS (if not provided stdin/stdout used for export)')
+	.option('--file [fileName]', '[Optional] Name of file to import/export library JAR or JS (if not provided stdin/stdout used for export)')
 	.action(library.doLibrary);
 	 
 	 
@@ -143,7 +145,7 @@ program
 	.option('--ident [ident]','The ident of the specific project settings object')
 	.option('--option_value [value]','This is the value for the specific setting for the ident')
 	.option('--project_ident [project_ident]','The project ident that will be marked as used' )
-	.option('--file [fileName]', 'Name of file to settings for import/export (if not provided stdin/stdout used for export)')
+	.option('--file [fileName]', '[Optional] Name of file to settings for import/export (if not provided stdin/stdout used for export)')
 	.action(settings.doSettings);
 
 program.parse(process.argv);

@@ -3,7 +3,7 @@ var colors = require('colors');
 var _ = require('underscore');
 var Table = require('easy-table');
 var sync = require('synchronize');
-
+var fs = require('fs');
 var context = require('./context.js');
 var login = require('../util/login.js');
 var printObject = require('../util/printObject.js');
@@ -443,7 +443,7 @@ module.exports = {
 				console.log(JSON.stringify(data, null, 2));
 				
 			} else {
-				var exportFile = fs.openSync(cmd.file, 'w', 0600);
+				var exportFile = fs.openSync(cmd.file, 'w+', 0600);
 				fs.writeSync(exportFile, JSON.stringify(data, null, 2));
 				console.log(('Rules have been exported to file: ' + cmd.file).green);
 			}

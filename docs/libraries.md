@@ -13,7 +13,7 @@
     --name [name]            Name of library
     --libtype [type]         Type of Library [javascript | java]
     --ver [version]          Version of Library JS or Java
-    --shortName [shortName]  Short Name
+    --short_name [shortname]  Short Name
     --docUrl [docurl]        Documentation URL
     --refUrl [refurl]        Reference URL
     --comments [comment]     Comment on Library
@@ -76,7 +76,7 @@ The export libraries exports the specified library into a JSON file. If the file
 ## Library import
 Provide the name of the json file for the library you wish to import.
 ```
-liveapicreatoradmin libraries import [--project_ident 1005] --file mylibrary.json
+liveapicreatoradmin libraries import [--project_ident 1005 | --short_name <name>] --link_project true --file mylibrary.json
 ```
 The import library imports the specified JSON file. If the filename parameter is not specified, stdin is used. (you can pipe the json file to the import)
 

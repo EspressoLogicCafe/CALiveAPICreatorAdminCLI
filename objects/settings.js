@@ -76,10 +76,7 @@ module.exports = {
 			printObject.printHeader("# settings: " + data.length);
 		});
 	},
-	
-	
-	
-	
+		
 	update: function(cmd) {
 		var client = new Client();
 		var loginInfo = login.login(cmd);
@@ -245,7 +242,7 @@ module.exports = {
 		}
 		
 		var filter = null;
-		if (cmd.project_ident) {
+		if (projIdent) {
 			filter = "equal(project_ident:" + projIdent + ")";
 		} else {
 			console.log('Missing parameter: please specify project settings (use list) project_ident '.red);
@@ -261,7 +258,6 @@ module.exports = {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
 			}
 		}, function(data) {
-			//console.log('get result: ' + JSON.stringify(data, null, 2));
 			if (data.errorMessage) {
 				console.log(("Error: " + data.errorMessage).red);
 				return;
@@ -281,7 +277,7 @@ module.exports = {
 				var libcode = data[0].code;
 				//console.log("libcode "+new Buffer(libcode.value.toString(), 'base64').toString('ascii'));
 			} else {
-				var exportFile = fs.openSync(cmd.file, 'w', 0600);
+				var exportFile = fs.openSync(cmd.file, 'w+', 0600);
 				fs.writeSync(exportFile, JSON.stringify(data, null, 2));
 				console.log(('Logic project settings has been exported to file: ' + cmd.file).green);
 			}

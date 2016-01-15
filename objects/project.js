@@ -418,7 +418,7 @@ module.exports = {
 				console.log(JSON.stringify(data, null, 2));
 			}
 			else {
-				var exportFile = fs.openSync(cmd.file, 'w', 0600);
+				var exportFile = fs.openSync(cmd.file, 'w+', 0600);
 				fs.writeSync(exportFile, JSON.stringify(data, null, 2));
 				console.log(('Project has been exported to file: ' + cmd.file).green);
 			}

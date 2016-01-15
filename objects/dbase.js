@@ -372,13 +372,28 @@ module.exports = {
 			return;
 		var url = loginInfo.url;
 		var apiKey = loginInfo.apiKey;
-		
+		var projIdent = cmd.project_ident;
+		if ( ! projIdent) {
+			projIdent = dotfile.getCurrentProject();
+			if ( ! projIdent) {
+				console.log('There is no current project.'.yellow);
+				return;
+			}
+		}
 		
 		var filter = null;
+		if (projIdent) {
+			filter = "equal(project_ident:" + projIdent + ",";
+		} else {
+			console.log('Missing parameter: please specify project settings (use list) project_ident '.red);
+			return;
+		}
+		
+		
 		if (cmd.prefix) {
-			filter = "equal(prefix:'" + cmd.prefix + "')";
+			filter += "prefix:'" + cmd.prefix + "')";
 		} else if (cmd.db_name) {
-			filter = "equal(name:'" + cmd.db_name + "')";
+			filter += "name:'" + cmd.db_name + "')";
 		} else {
 			console.log('Missing parameter: please specify datasource db_name '.red);
 			return;
@@ -403,15 +418,17 @@ module.exports = {
 				return;
 			}
 			//do not export passwords
-			data[0].password = null;
-			data[0].salt = null;
-			data[0].ident = null;
-			delete data[0]["ident"];
-			
+			for(var i = 0; i < data.length ; i++){
+				data[i].password = null;
+				data[i].salt = null;
+				data[i].project_ident = null;
+				delete data[i]["ident"];
+				delete data[i]["@metadata"].links;
+			}
 			if (toStdout) {
 				console.log(JSON.stringify(data, null, 2));
 			} else {
-				var exportFile = fs.openSync(cmd.file, 'w', 0600);
+				var exportFile = fs.openSync(cmd.file, 'w+', 0600);
 				fs.writeSync(exportFile, JSON.stringify(data, null, 2));
 				console.log(('Data Source has been exported to file: ' + cmd.file).green);
 			}

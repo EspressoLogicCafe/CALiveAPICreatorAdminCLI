@@ -245,8 +245,10 @@ module.exports = {
 		var filter = null;
 		if (cmd.ident) {
 			filter = "equal(ident:" + cmd.ident + ")";
+		} else if (cmd.name) {
+			filter = "equal(name:'" + cmd.name + "')";
 		} else {
-			console.log('Missing parameter: please specify auth provider (use list) ident '.red);
+			console.log('Missing parameter: please specify auth provider (use list) ident or name '.red);
 			return;
 		}
 		var toStdout = false;
@@ -268,11 +270,13 @@ module.exports = {
 				console.log(("Error: no such project").red);
 				return;
 			}
-			
+			delete data[0].ident;
+			data[0].account_ident = null;
+			delete data[0]['@metadata'].links;
 			if (toStdout) {
 				console.log(JSON.stringify(data, null, 2));
 			} else {
-				var exportFile = fs.openSync(cmd.file, 'w', 0600);
+				var exportFile = fs.openSync(cmd.file, 'w+', 0600);
 				fs.writeSync(exportFile, JSON.stringify(data, null, 2));
 				console.log(('Auth Provider has been exported to file: ' + cmd.file).green);
 			}
@@ -293,7 +297,7 @@ module.exports = {
 		
 		context.getContext(cmd, function() {
 			var fileContent = JSON.parse(fs.readFileSync(cmd.file));
-			fileContent.account_ident = context.account_ident;
+			fileContent.account_ident = context.account.ident;
 			fileContent.ident = null;
 			var startTime = new Date();
 			client.post(loginInfo.url + "/authproviders", {

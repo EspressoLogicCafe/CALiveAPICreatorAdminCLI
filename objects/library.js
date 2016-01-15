@@ -40,7 +40,7 @@ module.exports = {
 		var url = loginInfo.url;
 		var apiKey = loginInfo.apiKey;
 
-		client.get(url + "/logic_libraries", {
+		client.get(url + "/logic_libraries?pagesize=100&sysorder=(name:asc_uc,name:desc)", {
 			headers: {
 				Authorization: "CALiveAPICreator " + apiKey + ":1"
 			}
@@ -72,14 +72,6 @@ module.exports = {
 			console.log(table.toString());
 			printObject.printHeader("# libraries: " + data.length);
 		});
-	},
-	
-	add: function(cmd) {
-		var client = new Client();
-		var loginInfo = login.login(cmd);
-		if ( ! loginInfo)
-			return;
-			
 	},
 	
 	delete: function(cmd) {
@@ -169,8 +161,8 @@ module.exports = {
 			console.log('Missing parameter: name'.red);
 			return;
 		}
-		if ( ! cmd.shortName) {
-			console.log('Missing parameter: shortName'.red);
+		if ( ! cmd.short_name) {
+			console.log('Missing parameter: short_name'.red);
 			return;
 		}
 		if ( ! cmd.libtype) {
@@ -181,13 +173,13 @@ module.exports = {
 		if( ! cmd.ver ) {
 			ver = "1.0";
 		}
-		console.log(cmd.version);
+	
 		context.getContext(cmd, function() {
 			
 			var newLibrary = {
 				name: cmd.name,
-				group_name: cmd.shortName ,
-				lib_name: cmd.shortName ,
+				group_name: cmd.short_name ,
+				lib_name: cmd.short_name ,
 				version: ver  ,
 				description:  cmd.comments ,
 				doc_url: cmd.docurl || null,
@@ -260,9 +252,12 @@ module.exports = {
 		}
 		
 		context.getContext(cmd, function() {
+		
 			var fileContent = JSON.parse(fs.readFileSync(cmd.file));
-			fileContent.account_ident = context.account_ident;
-			fileContent.ident = null;
+			fileContent[0].account_ident = context.account.ident;
+			fileContent[0].ident = null;
+			var account_ident = context.account.ident;
+			console.log(JSON.stringify(fileContent,null,2));
 			var startTime = new Date();
 			client.post(loginInfo.url + "/logic_libraries", {
 				data: fileContent,
@@ -301,6 +296,30 @@ module.exports = {
 					trailer += data.txsummary.length;
 				}
 				printObject.printHeader(trailer);
+				
+				if(cmd.linkProject){
+					var linkproject = { 
+						//@metadata: {action: 'INSERT'}, 
+						logic_library_ident: data.txsummary[0].ident , 
+						project_ident: dotfile.getCurrentProject() 
+					};
+					client.post(loginInfo.url + "/admin:project_libraries", {
+						data: linkproject,
+						headers: { Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"}
+						}, function(data) {
+						console.log('get result: ' + JSON.stringify(data, null, 2));
+						if (data.errorMessage) {
+							console.log(("Error: " + data.errorMessage).red);
+							return;
+						}
+						if (data.length === 0) {
+							console.log(("Error: no such project for library to link").red);
+							return;
+						}
+						printObject.printHeader(trailer);
+				  });	
+				}
+			
 			})
 		});	
 	},
@@ -318,8 +337,10 @@ module.exports = {
 		var filter = null;
 		if (cmd.ident) {
 			filter = "equal(ident:" + cmd.ident + ")";
+		} else if (cmd.short_name) {
+			filter = "equal(lib_name:'" + cmd.short_name + "')";
 		} else {
-			console.log('Missing parameter: please specify library (use list) ident '.red);
+			console.log('Missing parameter: please specify library (use list) by ident | short_name '.red);
 			return;
 		}
 		var toStdout = false;
@@ -327,7 +348,7 @@ module.exports = {
 			toStdout = true;
 		}
 		
-		client.get(loginInfo.url + "/logic_libraries?sysfilter=" + filter +"&pagesize=100", {
+		client.get(loginInfo.url + "/logic_libraries?sysfilter=" + filter, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
 			}
@@ -341,16 +362,21 @@ module.exports = {
 				console.log(("Error: no such project").red);
 				return;
 			}
+			delete data[0].ident;
+			data[0].account_ident = null;
+			delete data[0]['@metadata'].links;
+			data[0]['@metadata'].checksum = 'override';
 			
 			if (toStdout) {
 				console.log(JSON.stringify(data, null, 2));
 				var libcode = data[0].code;
 				//console.log("libcode "+new Buffer(libcode.value.toString(), 'base64').toString('ascii'));
 			} else {
-				var exportFile = fs.openSync(cmd.file, 'w', 0600);
+				var exportFile = fs.openSync(cmd.file, 'w+', 0600);
 				fs.writeSync(exportFile, JSON.stringify(data, null, 2));
 				console.log(('Logic Library has been exported to file: ' + cmd.file).green);
 			}
+			
 		});	
 			
 	}
