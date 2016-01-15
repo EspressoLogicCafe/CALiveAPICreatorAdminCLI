@@ -69,7 +69,7 @@ module.exports = {
 				tblWidth = p.entity_name.length > tblWidth ? p.entity_name.length : tblWidth;
 				var type = "";
 				
-				adminCmd += show(p);
+				adminCmd += module.exports.show(p);
 				typeWidth = type.length > typeWidth ? type.length : typeWidth;
 				
 				var maxWidth = printObject.getScreenWidth() - (tblWidth + typeWidth + 11+ 2);

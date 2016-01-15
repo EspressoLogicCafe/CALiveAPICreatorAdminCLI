@@ -22,8 +22,8 @@ liveapicreatoradmin authprovider list
 liveapicreatoradmin authprovider export --ident 2010 --file demo/demo_authprovider.json
 #liveapicreatoradmin authprovider export --name sampleAuthProvider --file demo/demo_authprovider.json
 #Rules
-liveapicreatoradmin rules list --verbose
-liveapicreatoradmin rules export --file demo/rules.json
+liveapicreatoradmin rule list --verbose
+liveapicreatoradmin rule export --file demo/rules.json
 #Resources
 liveapicreatoradmin resource list
 liveapicreatoradmin resource export --file demo/resources.json
