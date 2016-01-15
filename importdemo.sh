@@ -16,7 +16,7 @@ liveapicreatoradmin project list
 ## should automatically use imported project use --url_name demo_mysql-20160114-173500.832p0000
 #
 #Import Libraries and link to current project - should automatically mark as used
-#liveapicreatoradmin libraries import --file demo/demo_libraries.json
+liveapicreatoradmin libraries list
 
 #Fixup Datasources Passwords - can update any of the parameters
 liveapicreatoradmin datasource list
@@ -40,6 +40,5 @@ liveapicreatoradmin rule list
 
 
 
-#Wrapup and close connects
-liveapicreatoradmin logout -a local
+#Wrapup and close connections
 liveapicreatoradmin logout -a target

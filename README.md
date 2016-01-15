@@ -10,13 +10,15 @@ resources and rules.
 
 ## Installation
 
-    npm install liveapicreator-admin-cli
+    npm install liveapicreator-admin-cli -g
+    
+    note: MAC users may need to use $sudo npm install ...
 
 Please note that, on Windows (and sometimes Mac), `npm install` will create an executable 
 called `liveapicreatoradmin` in your
-`<node_modules>/.bin` directory. If this directory is not in your `PATH`, you will probably
+{userhome}/`<node_modules>/.bin` directory. If this directory is not in your `PATH`, you will probably
 want to fix that, otherwise you'll have to specify the full path to the executable.  You can also try 
-npm install -g liveapicreator-admin-cli
+npm install liveapicreator-admin-cli -g
 
 ***
 ## Login
@@ -51,9 +53,9 @@ $ liveapicreatoradmin --help
 
   Commands:
 
-    login [options] <url>                                            Login to an API Creator server
-    logout [options] [url]                                           Logout from the current server, or a specific server
-    use <alias>                                                      Use the specified server by default
+    login [options] <url>  -alias [name]                             Login to an API Creator server using an alias name (multiple connections can be active)
+    logout [options] [url] -alias [name]                             Logout from the current server, or an alias specific server 
+    use <alias>                                                      Use the specified login aliasserver by default
     status                                                           Show the current server, and any defined server aliases
     project [options] <list|create|update|delete|use|import|export>  Administer projects. Actions are: list, create, update, delete, use, export
     datasources [options] <list|create|update|delete>                Administer datasources within a project.
@@ -108,26 +110,43 @@ Prints which server is the current server (if any) and project, and what aliases
 You can combine each command to export parts of your system into components that can later be used in source control and then promoted to different servers.
 ```
 #! /bin/bash
+# Export Script for Northwind Jetty
+
+## Export from local server
 liveapicreatoradmin logout -a local
-liveapicreatoradmin login -u admin -p Password1 http://localhost:8080/APIServer -a local
+liveapicreatoradmin login -u admin -p Password1 http://localhost:8080 -a local
+liveapicreatoradmin use local
+
 # Projects
 liveapicreatoradmin project list
-liveapicreatoradmin project use --url_name demo_mysql
-liveapicreatoradmin project export --url_name demo_mysql --file demo/demo_mysql.json
+liveapicreatoradmin project use --url_name nwind
+liveapicreatoradmin project export --url_name nwind --file nw/nwind.json
+
 #API Settings
 liveapicreatoradmin settings list
-liveapicreatoradmin settings export --project_ident 2000 --file demo/demo_settings.json
+liveapicreatoradmin settings export --file nw/nw_settings.json
+
 # Data Sources
 liveapicreatoradmin datasource list
-liveapicreatoradmin datasource export --prefix demo --file demo/demo_ds.json
-liveapicreatoradmin datasource export --prefix demo2 --file demo/demo2_ds.json
-liveapicreatoradmin datasource export --prefix finance --file demo/finance_ds.json
+liveapicreatoradmin datasource export --prefix nw --file nw/derby_ds.json
+
 #Libraries
 liveapicreatoradmin libraries list
-liveapicreatoradmin libraries export --ident 2007 --file demo/demo_libraries.json
+liveapicreatoradmin libraries export --ident 2000 --file nw/auth_libraries.json
+
 #Auth Providers
 liveapicreatoradmin authprovider list
-liveapicreatoradmin authprovider export --ident 2010 --file demo/demo_authprovider.js
+liveapicreatoradmin authprovider export --ident 2000 --file nw/nw_authprovider.json
+
+#Rules
+liveapicreatoradmin rule list --verbose
+liveapicreatoradmin rule export --file nw/rules.json
+
+#Resources
+liveapicreatoradmin resource list
+liveapicreatoradmin resource export --file nw/resources.json
+
+liveapicreatoradmin logout -a local
 ```
 ## Object-specific commands
 Follow the links below for detailed documentation on specific administrator commands.

@@ -1,7 +1,7 @@
 # Settings
 
 ```
- Usage: settings [options] <list|create|delete|export|import>
+ Usage: settings [options] <list|update|delete|export|import>
 
   Administer project settings for an account.
 

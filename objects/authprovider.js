@@ -297,8 +297,8 @@ module.exports = {
 		
 		context.getContext(cmd, function() {
 			var fileContent = JSON.parse(fs.readFileSync(cmd.file));
-			fileContent.account_ident = context.account.ident;
-			fileContent.ident = null;
+			fileContent[0].account_ident = context.account.ident;
+			fileContent[0].ident = null;
 			var startTime = new Date();
 			client.post(loginInfo.url + "/authproviders", {
 				data: fileContent,

@@ -13,7 +13,7 @@
     --name [name]            Name of library
     --libtype [type]         Type of Library [javascript | java]
     --ver [version]          Version of Library JS or Java
-    --short_name [shortname]  Short Name
+    --short_name [shortname] Short Name
     --docUrl [docurl]        Documentation URL
     --refUrl [refurl]        Reference URL
     --comments [comment]     Comment on Library
