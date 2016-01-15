@@ -488,6 +488,7 @@ module.exports = {
 			//set the imported project to be the current selected project
 			dotfile.setCurrentProject(newProj.ident, newProj.name);
 			printObject.printHeader(trailer);
+			console.log("You are now using project ident: "+newProj.ident +" name: "+ newProj.name);
 		});
 	}
 };

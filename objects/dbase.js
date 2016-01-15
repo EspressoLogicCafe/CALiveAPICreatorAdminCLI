@@ -211,24 +211,33 @@ module.exports = {
 			return;
 		}
 
-		var filt = null;
+		var filter = null;
+		var projIdent = cmd.project_ident;
+		if ( ! projIdent) {
+			projIdent = dotfile.getCurrentProject();
+			if ( ! projIdent) {
+				console.log('There is no current project.'.yellow);
+				return;
+			}
+			filter = "equal(project_ident: "+ projIdent ;
+		}
 		if (cmd.prefix) {
-			filt = "equal(prefix:'" + cmd.prefix + "')";
+			filter += ", prefix:'" + cmd.prefix + "')";
 		}
 		else if (cmd.db_name) {
-			filt = "equal(name:'" + cmd.db_name + "')";
+			filter += ", name:'" + cmd.db_name + "')";
 		}
 		else {
 			console.log('Missing parameter: please specify either db_name or prefix'.red);
 			return;
 		}
 		
-		client.get(loginInfo.url + "/dbaseschemas?sysfilter=" + filt, {
+		client.get(loginInfo.url + "/dbaseschemas?sysfilter=" + filter, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
 			}
 		}, function(data) {
-			//console.log('get result: ' + JSON.stringify(data, null, 2));
+			
 			if (data.errorMessage) {
 				console.log(("Error: " + data.errorMessage).red);
 				return;
@@ -244,6 +253,7 @@ module.exports = {
 			var db = data[0];
 			if( ! cmd.password) {
 				db.password = cmd.password;
+				delete db.salt;
 			}
 			if( ! cmd.user_name){
 				db.user_name = cmd.user_name;
@@ -270,6 +280,7 @@ module.exports = {
 			 	db.comments = cmd.comments;
 			}
 			var startTime = new Date();
+			console.log('get result: ' + JSON.stringify(db, null, 2));
 			client.put(db['@metadata'].href, {
 				data: db,
 				headers: {

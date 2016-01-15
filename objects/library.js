@@ -257,7 +257,7 @@ module.exports = {
 			fileContent[0].account_ident = context.account.ident;
 			fileContent[0].ident = null;
 			var account_ident = context.account.ident;
-			console.log(JSON.stringify(fileContent,null,2));
+			
 			var startTime = new Date();
 			client.post(loginInfo.url + "/logic_libraries", {
 				data: fileContent,
