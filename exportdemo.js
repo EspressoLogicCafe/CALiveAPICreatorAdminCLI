@@ -20,6 +20,7 @@ liveapicreatoradmin libraries export --ident 2030 --file demo/demo_libraries.jso
 #Auth Providers
 liveapicreatoradmin authprovider list
 liveapicreatoradmin authprovider export --ident 2010 --file demo/demo_authprovider.json
+#liveapicreatoradmin authprovider export --name sampleAuthProvider --file demo/demo_authprovider.json
 #Rules
 liveapicreatoradmin rules list --verbose
 liveapicreatoradmin rules export --file demo/rules.json
