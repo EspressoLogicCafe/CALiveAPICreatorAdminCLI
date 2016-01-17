@@ -64,5 +64,9 @@ liveapicreatoradmin authprovider import --file myauthprovider.json
 ```
 The import auth provider imports the specified auth provider JSON file. If the filename parameter is not specified, stdin is used. (you can pipe the json file to the import)
 
-
+## Authentication Provider linkProject
+Provide the name or auth provider ident and this will  set the authprovider as used for the active project.
+```
+liveapicreatoradmin authprovider linkProject --name MyCustomAuthProviderLib
+```
 
