@@ -21,6 +21,9 @@ module.exports = {
 		else if (action === 'delete') {
 			module.exports.delete(cmd);
 		}
+		else if (action === 'linkProject') {
+			module.exports.linkProject(cmd);
+		}
 		else if (action === 'import') {
 			module.exports.import(cmd);
 		}
@@ -32,7 +35,85 @@ module.exports = {
 			//program.help();
 		}
 	},
+	linkProject: function(cmd){
 	
+		var client = new Client();
+		
+		var loginInfo = login.login(cmd);
+		if ( ! loginInfo)
+			return;
+		var url = loginInfo.url;
+		var apiKey = loginInfo.apiKey;
+		if ( ! cmd.ident) {
+			console.log('Missing parameter: ident'.red);
+			return;
+		}
+		var projIdent = cmd.project_ident;
+		if ( ! projIdent) {
+			projIdent = dotfile.getCurrentProject();
+			if ( ! projIdent) {
+				console.log('There is no current project.'.yellow);
+				return;
+			}
+		}
+		context.getContext(cmd, function() {
+			var filter = 'sysfilter=equal(ident:'+cmd.ident+')';
+			client.get(url + "/authproviders?"+filter, {
+				headers: {Authorization: "CALiveAPICreator " + apiKey + ":1"}
+			}, function(data_auth) {
+				if (data_auth.errorMessage ) {
+					console.log(data.errorMessage.red);
+					return;
+				} else if (data_auth.length === 0){
+					console.log("Ident not found".red);
+					return;
+				}
+				client.get(url + '/AllProjects/'+projIdent, {
+					headers: {Authorization: "CALiveAPICreator " + apiKey + ":1"}
+				}, function(data) {
+					if (data.errorMessage ) {
+						console.log(data.errorMessage.red);
+						return;
+					} else if (data.length === 0){
+						console.log("Ident not found".red);
+						return;
+					}
+					auth = {};
+					var startTime = new Date();
+					auth.ident = data[0].ident;
+					auth.authprovider_ident = cmd.ident;
+					auth.account_ident = context.account.ident;
+					auth['@metadata'] = data[0]['@metadata'];
+					client.put(url + '/AllProjects/'+projIdent, {
+						data: auth,
+						headers: {
+							Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
+						}
+					}, function(data2) {
+						var endTime = new Date();
+						if (data2.errorMessage) {
+							console.log(data2.errorMessage.red);
+							return;
+						}
+						printObject.printHeader('Auth Provider was updated, including the following objects:');
+						_.each(data2.txsummary, function(obj) {
+							printObject.printObject(obj, obj['@metadata'].entity, 0, obj['@metadata'].verb);
+						});
+						var trailer = "Request took: " + (endTime - startTime) + "ms";
+						trailer += " - # objects touched: ";
+						if (data2.txsummary.length == 0) {
+							console.log('No data returned'.yellow);
+						}
+						else {
+							trailer += data2.txsummary.length;
+						}
+						printObject.printHeader(trailer);
+					});
+					printObject.printHeader("Link authentication provider to current project ");
+				});
+			});
+	  });
+	},
 	list: function(cmd) {
 		var client = new Client();
 		

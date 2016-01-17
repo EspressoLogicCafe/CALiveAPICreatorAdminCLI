@@ -112,7 +112,7 @@ program
 	.action(rule.doRule);
 
 program
-	.command('authprovider <list|create|delete|export|import>')
+	.command('authprovider <list|create|linkProject|delete|export|import>')
 	.description('Administer authentication providers for an account.')
 	.option('--ident [ident]','The ident of the auth provider')
 	.option('--name [name]', 'Name of auth provider')

@@ -1,7 +1,7 @@
 # Authentication provider
 
 ```
- Usage: authprovider [options] <list|create|delete|export|import>
+ Usage: authprovider [options] <list|create|delete|export|import|linkProject>
 
   Administer authentication providers for an account.
 

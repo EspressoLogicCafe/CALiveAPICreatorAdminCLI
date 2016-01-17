@@ -280,7 +280,7 @@ module.exports = {
 			 	db.comments = cmd.comments;
 			}
 			var startTime = new Date();
-			console.log('get result: ' + JSON.stringify(db, null, 2));
+			
 			client.put(db['@metadata'].href, {
 				data: db,
 				headers: {
