@@ -44,8 +44,15 @@ module.exports = {
 			return;
 		var url = loginInfo.url;
 		var apiKey = loginInfo.apiKey;
-		if ( ! cmd.ident) {
-			console.log('Missing parameter: ident'.red);
+		
+		context.getContext(cmd, function() {
+		var filter = null;
+		if ( cmd.ident) {
+		   filter = 'sysfilter=equal(ident:'+cmd.ident+')';
+		} else if(cmd.name){
+			filter = "sysfilter=equal(name:'"+cmd.name+"')";
+		} else {
+			console.log('Missing parameter: ident or name'.red);
 			return;
 		}
 		var projIdent = cmd.project_ident;
@@ -56,18 +63,19 @@ module.exports = {
 				return;
 			}
 		}
-		context.getContext(cmd, function() {
-			var filter = 'sysfilter=equal(ident:'+cmd.ident+')';
+		
+			//var filter = 'sysfilter=equal(ident:'+cmd.ident+')';
 			client.get(url + "/authproviders?"+filter, {
 				headers: {Authorization: "CALiveAPICreator " + apiKey + ":1"}
 			}, function(data_auth) {
 				if (data_auth.errorMessage ) {
-					console.log(data.errorMessage.red);
+					console.log(data_auth.errorMessage.red);
 					return;
 				} else if (data_auth.length === 0){
-					console.log("Ident not found".red);
+					console.log("Ident or name not found for auth provider" .red);
 					return;
 				}
+				
 				client.get(url + '/AllProjects/'+projIdent, {
 					headers: {Authorization: "CALiveAPICreator " + apiKey + ":1"}
 				}, function(data) {
@@ -78,17 +86,14 @@ module.exports = {
 						console.log("Ident not found".red);
 						return;
 					}
-					auth = {};
+					
+					auth = data[0];
 					var startTime = new Date();
-					auth.ident = data[0].ident;
-					auth.authprovider_ident = cmd.ident;
-					auth.account_ident = context.account.ident;
-					auth['@metadata'] = data[0]['@metadata'];
+					//auth.ident = data[0].ident;
+					auth.authprovider_ident = data_auth[0].ident;
 					client.put(url + '/AllProjects/'+projIdent, {
 						data: auth,
-						headers: {
-							Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
-						}
+						headers: { Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1" }
 					}, function(data2) {
 						var endTime = new Date();
 						if (data2.errorMessage) {
