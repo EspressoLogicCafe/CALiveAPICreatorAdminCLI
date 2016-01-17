@@ -57,7 +57,7 @@ libraries. For details on how to create a [custom authentication provider](http:
 ## Library Create
 Create needs a name, comment, the create function name and a list of parameters in JSON format 
 ```
-liveapicreatoradmin libraries create --name customJSLib [--project_ident 1005] --comments my js lib --shortName mylib --libtype [javascript | java]  --ver 2.1 --file mycustomjslib.js
+liveapicreatoradmin libraries create --name customJSLib [--project_ident 1005] --comments my js lib --short_name mylib --libtype [javascript | java]  --ver 2.1 --file mycustomjslib.js
 ```
 
 ## libraries delete

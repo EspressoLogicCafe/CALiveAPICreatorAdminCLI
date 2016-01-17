@@ -21,11 +21,11 @@ liveapicreatoradmin datasource export --prefix nw --file nw/derby_ds.json
 
 #Libraries
 liveapicreatoradmin libraries list
-liveapicreatoradmin libraries export --ident 2000 --file nw/auth_libraries.json
+liveapicreatoradmin libraries export --ident 2101 --file nw/auth_libraries.json
 
 #Auth Providers
 liveapicreatoradmin authprovider list
-liveapicreatoradmin authprovider export --ident 2000 --file nw/nw_authprovider.json
+liveapicreatoradmin authprovider export --ident 2102 --file nw/nw_authprovider.json
 
 #Rules
 liveapicreatoradmin rule list --verbose
