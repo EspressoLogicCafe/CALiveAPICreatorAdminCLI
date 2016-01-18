@@ -35,9 +35,15 @@ The `list` command shows all datasource connections for the current project.
 
 ***
 ## datasource create
-    liveapicreatoradmin datasource create --name <name> --user_name <db-user-name> --password <db-password>
-    	--url <db-url> --dbasetype <type>
-    	[--prefix <prefix>] [--catalog_name <catalog>] [--schema_name <schema>] [--port_num <port>]
+    liveapicreatoradmin datasource create --name <name> 
+    	--user_name <db-user-name> 
+    	--password <db-password>
+    	[--url <db-url> ]
+    	--dbasetype <type>
+    	[--prefix <prefix>] 
+    	[--catalog_name <catalog>] 
+    	[--schema_name <schema>] 
+    	[--port_num <port>]
     	[--comments <comments>]
 
 The `create` command creates a new connection to a datasource.
@@ -70,7 +76,7 @@ If the `prefix` parameter is not specified, it will default to "main".
 ## datasource update
 
 ```
-liveapicreatoradmin datasource [--prefix <name> | --name <name> ]
+liveapicreatoradmin datasource update [--prefix <name> | --name <name> ]
 		[--user_name <db-user-name>] 
 		[--password <db-password>]
     	[--url <db-url>] 

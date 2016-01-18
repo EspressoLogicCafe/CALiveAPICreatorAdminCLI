@@ -73,7 +73,7 @@ program
 	.action(dbase.doDbase);
 
 program
-	.command('resource <list>')
+	.command('resource <list|create|delete|import|export>')
 	.description('Administer resources within a project.')
 	.option('--resource_name [name]', 'The name of the resource')
 	.option('--type [type]', 'The type of the resource: normal, sql, javascript, storedproc, mongo')
@@ -115,6 +115,7 @@ program
 	.command('authprovider <list|create|linkProject|delete|export|import>')
 	.description('Administer authentication providers for an account.')
 	.option('--ident [ident]','The ident of the auth provider')
+	.option('--project_ident [ident]','The project ident used to link this auth provider')
 	.option('--name [name]', 'Name of auth provider')
 	.option('--createFunction [bootstrap]', 'Name for Create Function')
 	.option('--paramMap [map]', 'Map of auth provider settings')

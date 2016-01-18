@@ -235,7 +235,7 @@ module.exports = {
 		});
 	},
 	delete: function(cmd) {
-	console.log("delete");
+	
 		var client = new Client();
 		
 		var loginInfo = login.login(cmd);

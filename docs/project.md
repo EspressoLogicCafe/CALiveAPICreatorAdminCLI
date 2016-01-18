@@ -1,7 +1,25 @@
 # Project
 
 This suite of commands allows you to manipulate your CA Live API Creator API projects.
+## Project Options
 
+```
+Usage: project [options] <list|create|update|delete|use|import|export>
+
+  Administer projects. Actions are: list, create, update, delete, use, import, export
+
+  Options:
+
+    -h, --help              output usage information
+    --project_name [name]   The name of the project
+    --url_name [name]       The name of the project
+    --status [status]       Optional: the status of the project, can be A (for Active) or I for (Inactive)
+    --authprovider [ident]  Optional: the ident of the authentication provider for the project
+    --comments [comments]   Optional: a description of the project
+    --file [file]           Optional: for import/export, the name of a file to read from/save to, if unspecified, use stdin/stdout
+    --verbose               Optional: whether to display detailed results, or just a summary
+
+```
 ***
 ## Project list
     liveapicreatoradmin project list
@@ -24,7 +42,7 @@ The `list` command shows all projects in the current server.
 ***
 ## Project create
 
-    liveapicreatoradmin project create --project_name <name> --url_name <url_name> [--status <A|I>] 
+    liveapicreatoradmin project create --project_name <name> --url_name <url_name> [--status <A|I>] [--authprovider <ident>]
         [--comments <comments>] [--verbose]
 
 The create command creates a new project with the given values. Status is active by default, it can be specified
@@ -47,7 +65,7 @@ Once the project is created, it becomes the current project.
 ## Project update
 
     liveapicreatoradmin project update [--project_name <name> | --url_name <url_name>] 
-        [--status <A-I>] [--comments <comments>]
+        [--status <A-I>] [--authprovider <ident>] [--comments <comments>]
 
 The update command updates one or more attribute of the specified project.
 The project can be specified either by its name or by its URL name.
@@ -73,12 +91,11 @@ The project can be specified either by its name or by its URL name.
 ***
 ## Project import
 
-    liveapicreatoradmin project import [--file <filename>] [--project_name <name> | --url_name <url_name>]
+    liveapicreatoradmin project import [--project_name <name> | --url_name <url_name>] --file <filename>
          [--verbose]
 
 The import command imports a project from the specified JSON export file.
-If the `filename` parameter is not specified, stdin is used. This allows you
-to pipe in content from another command.
+If the `filename` parameter is not specified, stdin is used. This allows you to pipe in content from another command.
 
 You can optionally give the new project a different name or URL name.
 
@@ -87,7 +104,7 @@ If the `--verbose` option is specified, the output will include all created obje
 ***
 ## Project export
 
-    liveapicreatoradmin project export --file <filename> [--project_name <name> | --url_name <url_name>]
+    liveapicreatoradmin project export  [--project_name <name> | --url_name <url_name>] --file <filename>
          [--verbose]
     
 The export project exports the specified project into a JSON file.

@@ -92,12 +92,22 @@ module.exports = {
 			console.log(("Error: Login apiKey is missing or empty").red);
 			return;
 		}
-			
 		var filter = null;
 		if (cmd.ident) {
-			filter = "equal(ident:'" + cmd.ident + "')";
+			filter = "equal(ident:" + cmd.ident + ")";
+		} else {
+			console.log('There is no setting ident.'.yellow);
+			eturn;
 		}
-		
+		var projIdent = cmd.project_ident;
+		if ( ! projIdent) {
+			projIdent = dotfile.getCurrentProject();
+			if ( ! projIdent) {
+				console.log('There is no current project.'.yellow);
+				return;
+			}
+			filter += "&sysfilter=equal(project_ident:" + projIdent + ")";
+		}	
 		
 		client.get(loginInfo.url + "/ProjectOptions?sysfilter=" + filter, {
 			headers: {
@@ -248,11 +258,14 @@ module.exports = {
 			console.log('Missing parameter: please specify project settings (use list) project_ident '.red);
 			return;
 		}
+		if(cmd.ident){
+			filter += "&sysfilter=equal(ident:" + cmd.ident + ")";
+		}
 		var toStdout = false;
 		if ( ! cmd.file) {
 			toStdout = true;
 		}
-		
+		//console.log(filter);
 		client.get(loginInfo.url + "/ProjectOptions?sysfilter=" + filter +"&pagesize=100", {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"

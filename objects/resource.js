@@ -26,6 +26,9 @@ module.exports = {
 		else if (action === 'export') {
 			module.exports.export(cmd);
 		}
+		else if (action === 'import') {
+			module.exports.import(cmd);
+		}
 		else {
 			console.log('You must specify an action: list, create, export, update or delete');
 			//program.help();
@@ -405,17 +408,25 @@ module.exports = {
 		var url = loginInfo.url;
 		var apiKey = loginInfo.apiKey;
 		
-		
+		var filter = "";
 		var projIdent = cmd.project_ident;
+		if ( cmd.ident) {
+			filter = "equal(ident:" + cmd.ident +")";
+		}
 		if ( ! projIdent) {
 			projIdent = dotfile.getCurrentProject();
 			if ( ! projIdent) {
 				console.log('There is no current project.'.yellow);
 				return;
 			}
+			if(cmd.ident) {
+				filter += "&";
+			}
+			filter += "equal(apiversion_ident:" + projIdent +")";
 		}
+		
 		//to do - this is not right - need specific version
-		client.get(url + "/AllResources?sysfilter=equal(apiversion_ident:" + projIdent +")&pagesize=100", {
+		client.get(url + "/AllResources?sysfilter="+filter+"&pagesize=100", {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
 			}

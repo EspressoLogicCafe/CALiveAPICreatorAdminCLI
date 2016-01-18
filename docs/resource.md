@@ -13,14 +13,14 @@ This suite of commands allows you to manipulate the resources (custom endpoints)
     --type [type]                 The type of the resource: normal, sql, javascript, storedproc, mongo
     --prefix [prefix]             The prefix of the table
     --table_name [name]           The name of the table
-    --description [description]   A description of the resource
-    --is_collection [true|false]  Whether the resource is for a single value ormore than one
+    --description [description]   A Comment for the resource
+    --is_collection [true|false]  Whether the resource is for a single value or more than one [true|false]
     --join_condition [join]       How to join this resource to its parent resource
     --container_ident [ident]     The ident of the parent resource, if any
-    --attributes [attributes]     The columns t oadd to the resource, in the form {colname: alias, colname:alias}, all if not specified
-    --apiversion [apiversion]     The name of an API version, if there is more t
-han one
-    --project_ident               The ident of a project, if other than the current project
+    --attributes [attributes]     The columns to add to the resource, in the form {colname: alias, colname:alias}, all if not specified
+    --apiversion [apiversion]     The name of an API version, if there is more than one
+    --project_ident [ident]       The ident of a resource, (if other than the current project)
+    --file [file]                 Optional: for import/export, the name of a file to read from/save to, if unspecified, use stdin/stdout
 
 ```
 
@@ -45,8 +45,12 @@ The `list` command shows all resources for the current project.
 ***
 ## Resource create
     liveapicreatoradmin resource create --resource_name <name> --table_name <table-name>
-    	[--prefix <table-prefix>] [--type <type>] [--is_collection <true|false>]
-    	[--description <text>] [--container_ident <ident>] [--apiversion <apiversion>]
+    	[--prefix <table-prefix>] 
+    	[--type <type>] 
+    	[--is_collection <true|false>]
+    	[--description <text>] 
+    	[--container_ident <ident>] 
+    	[--apiversion <apiversion>]
 
 The `create` command creates a new resource in the current project.
 
@@ -82,4 +86,18 @@ parameter.
 
 The `delete` command deletes the specified resource.
 
+## Resource export
+Provide the ident of the resource and the export file name. If the project_ident is not provided it will use the current one.
+```
+liveapicreatoradmin resource export  [--project_ident <ident>] [--ident <ident>] --file resources.json
+```
+The export resource exports to the specified JSON file. If the filename parameter is not specified, stdout is used.
+
+
+## Resource import
+Provide the file name of the json file for the resource you wish to import.
+```
+liveapicreatoradmin resource import --file resources.json
+```
+The import resource imports the specified JSON file. If the filename parameter is not specified, stdin is used. (you can pipe the json file to the import)
 

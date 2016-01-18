@@ -53,17 +53,17 @@ $ liveapicreatoradmin --help
 
   Commands:
 
-    login [options] <url>  -alias [name]                             Login to an API Creator server using an alias name (multiple connections can be active)
-    logout [options] [url] -alias [name]                             Logout from the current server, or an alias specific server 
-    use <alias>                                                      Use the specified login aliasserver by default
+    login [options] <url>  -alias [alias name]                       Login to an API Creator server using an alias name (multiple connections can be active)
+    logout [options] [url] -alias [alias name]                       Logout from the current server, or an alias specific server 
+    use <alias name>                                                 Use the specified login aliasserver by default
     status                                                           Show the current server, and any defined server aliases
-    project [options] <list|create|update|delete|use|import|export>  Administer projects. Actions are: list, create, update, delete, use, export
-    datasources [options] <list|create|update|delete>                Administer datasources within a project.
-    resource [options] <list>                                        Administer resources within a project.
-    rule [options] <list|create|delete>                              Administer rules within a project.
-    authprovider [options] <list|create|delete|export|import>        Administer authentication providers for an account.
-    libraries [options] <list|create|update|delete|export>           Administer user libraries for an account.
-    settings [options] <list|update|import|export>                   Administer project settings for an account.
+    project <list|create|update|delete|use|import|export>            Administer API Projects
+    datasources <list|create|update|delete|import|export>  			 Administer datasources (database connections) within a project.
+    resource <list|create|delete|import|export>                      Administer resources within a project.
+    rule  <list|create|delete|import|export>                		 Administer rules within a project.
+    authprovider <list|create|delete|import|export>        			 Administer authentication providers for an account.
+    libraries <list|create|update|delete|import|export|linkProject>  Administer user libraries for an account and link to project.
+    settings <list|update|import|export>                   			 Administer API project settings for an API Project.
 
   Options:
 
@@ -112,6 +112,7 @@ You can combine each command to export parts of your system into components that
 #! /bin/bash
 # Export Script for Northwind Jetty
 
+mkdir nw
 ## Export from local server
 liveapicreatoradmin logout -a local
 liveapicreatoradmin login -u admin -p Password1 http://localhost:8080 -a local

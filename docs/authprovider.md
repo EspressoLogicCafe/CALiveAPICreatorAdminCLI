@@ -11,8 +11,9 @@
     --ident [ident]               The ident of the auth provider
     --name [name]                 Name of auth provider
     --createFunction [bootstrap]  Name for Create Function
-    --paramMap [map]              Map of auth provider settings
+    --paramMap [map]              Map of auth provider settings (comma separated list of required config values)
     --comments [comment]          Comment on auth provider
+    --linkProject                 Link this auth provider to the current project or project specified
     --file [fileName]       	  [optional] Name of file to import/export auth provider (stdin/stdout used if not provided)
 ```
 
@@ -41,7 +42,7 @@ authentication providers. For details on how to create a [custom authentication 
 ## Authentication Provider Create
 Create needs a name, comment, the create function name and a list of parameters in JSON format 
 ```
-liveapicreatoradmin authprovider create --createFunction myAuthProviderCreate --paramMap {} --comments none --name customAuth
+liveapicreatoradmin authprovider create --createFunction myAuthProviderCreate --paramMap foo=1,bar=2 --comments none --name <name>
 ```
 
 ## Authentication Provider delete
@@ -65,8 +66,8 @@ liveapicreatoradmin authprovider import --file myauthprovider.json
 The import auth provider imports the specified auth provider JSON file. If the filename parameter is not specified, stdin is used. (you can pipe the json file to the import)
 
 ## Authentication Provider linkProject
-Provide the name or auth provider ident and this will  set the authprovider as used for the active project.
+Provide the name or auth provider ident and this will set the authprovider in API Project/Settings for the active project. (or project ident)
 ```
-liveapicreatoradmin authprovider linkProject --name MyCustomAuthProviderLib
+liveapicreatoradmin authprovider linkProject [--name <name> | --ident <ident>]  [--project_ident <ident>] 
 ```
 
