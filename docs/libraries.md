@@ -17,6 +17,7 @@
     --docUrl [docurl]        Documentation URL
     --refUrl [refurl]        Reference URL
     --comments [comment]     Comment on Library
+    --linkProject            Mark this library as used in the current project (or --project_ident selected)
     --file [fileName]        Name of file to library JAR or JS (if not provided stdin/stdout used for export)
 ```
 
@@ -69,7 +70,7 @@ liveapicreatoradmin libraries delete --ident 2007
 ## Library export
 Provide the ident of the library and (optional) the export file name. If not provided - it will be sent to stdout.
 ```
-liveapicreatoradmin libraries export  --ident 2008 --file mylibrary.json
+liveapicreatoradmin libraries export  [--ident <ident> | --short_name <name> | --name <name>] --file mylibrary.json
 ```
 The export libraries exports the specified library into a JSON file. If the filename parameter is not specified, stdout is used.
 

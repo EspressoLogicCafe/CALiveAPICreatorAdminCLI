@@ -9,8 +9,8 @@ liveapicreatoradmin status
 liveapicreatoradmin project use --url_name nwind
 #Libraries - need to import these before import of JSON project
 #We can create the Library and use an existing JS library.  To update / delete and recreate.
-liveapicreatoradmin libraries create --name RESTAuthSecurityProviderCreateJS project --short_name restauth --libtype javascript --ver 1.0 --file nw/RESTAuthSecurityProvider.js  --comments RESTAuthProvider js Demo 
-#liveapicreatoradmin libraries import --file nw/auth_libraries.json
+#liveapicreatoradmin libraries create --name RESTAuthSecurityProviderCreateJS project --short_name restauth --libtype javascript --ver 1.0 --file nw/RESTAuthSecurityProvider.js  --comments RESTAuthProvider js Demo 
+liveapicreatoradmin libraries import --linkProject --file nw/auth_libraries.json
 liveapicreatoradmin libraries list
 
 # Projects - this is the default NorthWind JSON project - if you import - load libraries first

@@ -307,7 +307,6 @@ module.exports = {
 						data: linkproject,
 						headers: { Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"}
 						}, function(data) {
-						console.log('get result: ' + JSON.stringify(data, null, 2));
 						if (data.errorMessage) {
 							console.log(("Error: " + data.errorMessage).red);
 							return;
@@ -339,8 +338,10 @@ module.exports = {
 			filter = "equal(ident:" + cmd.ident + ")";
 		} else if (cmd.short_name) {
 			filter = "equal(lib_name:'" + cmd.short_name + "')";
+		} else if (cmd.name) {
+			filter = "equal(name:'" + cmd.name + "')";
 		} else {
-			console.log('Missing parameter: please specify library (use list) by ident | short_name '.red);
+			console.log('Missing parameter: please specify library (use list) by ident | short_name | name '.red);
 			return;
 		}
 		var toStdout = false;
@@ -359,7 +360,7 @@ module.exports = {
 				return;
 			}
 			if (data.length === 0) {
-				console.log(("Error: no such project").red);
+				console.log(("Error: no such library found").red);
 				return;
 			}
 			delete data[0].ident;
