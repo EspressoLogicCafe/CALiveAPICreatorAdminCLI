@@ -4,7 +4,7 @@ This suite of commands allows you to manipulate the resources (custom endpoints)
 
 ## Usage
 ```sh
-  Usage: resource [options] <list|create|delete|import|expor>
+  Usage: resource [options] <list|create|delete|import|export>
 
   Options:
 
