@@ -234,6 +234,27 @@ module.exports = {
 					trailer += data.txsummary.length;
 				}
 				printObject.printHeader(trailer);
+				if(cmd.linkProject){
+					var linkproject = { 
+						//@metadata: {action: 'INSERT'}, 
+						logic_library_ident: data.txsummary[0].ident , 
+						project_ident: dotfile.getCurrentProject() 
+					};
+					client.post(loginInfo.url + "/admin:project_libraries", {
+						data: linkproject,
+						headers: { Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"}
+						}, function(data) {
+						if (data.errorMessage) {
+							console.log(("Error: " + data.errorMessage).red);
+							return;
+						}
+						if (data.length === 0) {
+							console.log(("Error: no such project for library to link").red);
+							return;
+						}
+						printObject.printHeader(trailer);
+				  });	
+				}
 				
 			});
 		});

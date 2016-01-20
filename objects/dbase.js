@@ -219,20 +219,28 @@ module.exports = {
 				console.log('There is no current project.'.yellow);
 				return;
 			}
-			filter = "equal(project_ident: "+ projIdent ;
+			filter = "equal(project_ident: "+ projIdent +")" ;
 		}
-		if (cmd.prefix) {
-			filter += ", prefix:'" + cmd.prefix + "')";
+		if(cmd.ident){
+			filter += "&sysfilter=equal(ident: "+ cmd.ident +")" ;
+		} else {
+			if (cmd.prefix) {
+				filter += "&sysfilter=equal(prefix:'" + cmd.prefix + "')";
+			}
+			else if (cmd.db_name) {
+				filter += "&sysfilter=equal(name:'" + cmd.db_name + "')";
+			} else {
+				console.log('Missing parameter: please specify either db_name or prefix'.red);
+				return;
+			}
 		}
-		else if (cmd.db_name) {
-			filter += ", name:'" + cmd.db_name + "')";
+		if( cmd.active ){
+			filter += "&sysfilter=equal(active: "+ cmd.active + ")";
+		} else {
+			filter += "&sysfilter=equal(active: true)";
 		}
-		else {
-			console.log('Missing parameter: please specify either db_name or prefix'.red);
-			return;
-		}
-		
-		client.get(loginInfo.url + "/dbaseschemas?sysfilter=" + filter, {
+		console.log(filter);
+		client.get(loginInfo.url + "/DbSchemas?sysfilter=" + filter, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
 			}
@@ -251,33 +259,36 @@ module.exports = {
 				return;
 			}
 			var db = data[0];
-			if( ! cmd.password) {
+			if( cmd.password) {
 				db.password = cmd.password;
 				delete db.salt;
 			}
-			if( ! cmd.user_name){
+			if( cmd.user_name){
 				db.user_name = cmd.user_name;
 			}
-			if( ! cmd.name ){
+			if( cmd.name ){
 				db.name = cmd.name;
 			}
-			if (! cmd.url ){
+			if ( cmd.url ){
 				db.url = cmd.url;
 			}
-			if( ! cmd.prefix ) {
+			if( !cmd.prefix ) {
 				db.prefix = cmd.prefix;
 			}
-			if( ! cmd.port ) {
+			if( cmd.port ) {
 				db.port = cmd.port;
 			}
-			if( ! cmd.schema_name ){
+			if( cmd.schema_name ){
 				db.schema_name = cmd.schema_name;
 			}
-			if( ! cmd.catalog_name ){
+			if( cmd.catalog_name ){
 			 	db.catalog_name = cmd.catalog_name;
 			}
-			if( ! cmd.comments ){
+			if( cmd.comments ){
 			 	db.comments = cmd.comments;
+			}
+			if( cmd.active ){
+			 	db.active = (cmd.active == "true");
 			}
 			var startTime = new Date();
 			
@@ -288,6 +299,7 @@ module.exports = {
 				}
 			}, function(data2) {
 				var endTime = new Date();
+				console.log(JSON.stringify(data2,null,2));
 				if (data2.errorMessage) {
 					console.log(data2.errorMessage.red);
 					return;

@@ -68,6 +68,7 @@ program
 	.option('--user_name [user_name]', 'The name of the datasource user')
 	.option('--password [password]', 'The password of the datasource user')
 	.option('--url [url]', 'The JDBC URL for the datasource')
+	.option('--active [true|false]', 'This marks the datasource active or inactive')
 	.option('--project_ident [ident]', 'The ident of a project, (if other than the current project')
 	.option('--file [file]', 'Optional: for import/export, the name of a file to read from/save to, if unspecified, use stdin/stdout')
 	.action(dbase.doDbase);
@@ -101,7 +102,6 @@ program
 	.option('--parent_attribute [name]', 'The name of the parent attribute - required for parent copy')
 	.option('--expression [code]', 'The code for the rule - required for formula, events and validations')
 	.option('--error_message [message]', 'The error mesaage for the rule - required for validations')
-	
 	.option('--rule_name [name]', 'Optional: a name for the rule. If not specified, a name will be generated.')
 	.option('--comments [comments]', 'Optional: a comment for the rule')
 	.option('--active [true|false]', 'Optional: whether the rule should be active, true by default')

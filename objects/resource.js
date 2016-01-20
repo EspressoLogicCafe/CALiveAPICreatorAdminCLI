@@ -2,7 +2,7 @@ var Client = require('node-rest-client').Client;
 var colors = require('colors');
 var _ = require('underscore');
 var Table = require('easy-table');
-var sync = require('synchronize');
+//var sync = require('synchronize');
 var fs = require('fs');
 var context = require('./context.js');
 var login = require('../util/login.js');
@@ -249,14 +249,14 @@ module.exports = {
 					}
 					
 					var newAtts = [];
-					sync.fiber(function(){
+					//sync.fiber(function(){
 						for (var colName in atts) {
-							var newAtt = sync.await(addAttribute(atts[colName], colName, sync.defer()));
+							//var newAtt = sync.await(addAttribute(atts[colName], colName, sync.defer()));
 							//console.log('Attribute created');
 							newAtts.push(newAtt);
 						}
 						showSummary(newAtts);
-					});
+					//});
 				}
 				else {
 					showSummary();

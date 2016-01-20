@@ -42,7 +42,7 @@ authentication providers. For details on how to create a [custom authentication 
 ## Authentication Provider Create
 Create needs a name, comment, the create function name and a list of parameters in JSON format 
 ```
-liveapicreatoradmin authprovider create --createFunction myAuthProviderCreate --paramMap foo=1,bar=2 --comments none --name <name>
+liveapicreatoradmin authprovider create --createFunction myAuthProviderCreate --paramMap foo=1,bar=2 --comments 'some comment' --name <name>
 ```
 
 ## Authentication Provider delete

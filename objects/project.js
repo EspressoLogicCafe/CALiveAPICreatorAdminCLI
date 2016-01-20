@@ -209,6 +209,9 @@ module.exports = {
 			if (cmd.url_name) {
 				project.url_name = cmd.url_name;
 			}
+			if (cmd.url) {
+				project.url = cmd.url;
+			}
 			if (cmd.comments) {
 				project.comments = cmd.comments;
 			}
