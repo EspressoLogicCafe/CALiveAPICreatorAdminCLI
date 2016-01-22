@@ -1,6 +1,6 @@
 {
   "name": "liveapicreator-admin-cli",
-  "version": "2.0.58",
+  "version": "2.0.59",
   "description": "The command line utility for CA Live Creator administration from CA Technologies",
   "main": "liveapicreatoradmin.js",
   "scripts": {
@@ -26,7 +26,8 @@
   ],
   "preferGlobal": "true",
   "bin": {
-    "liveapicreatoradmin" : "liveapicreatoradmin.js"
+    "liveapicreatoradmin" : "liveapicreatoradmin.js",
+    "lacadmin" : "liveapicreatoradmin.js"
   },
   "author": "CA Technologies APIM",
   "license": "Apache",

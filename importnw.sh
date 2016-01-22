@@ -19,8 +19,8 @@ liveapicreatoradmin project use --url_name nwind
 liveapicreatoradmin project list
 
 #API Settings [Optional]
-liveapicreatoradmin settings list
-liveapicreatoradmin settings import --file nw/nw_settings.json
+liveapicreatoradmin apioptions list
+liveapicreatoradmin apioptions import --file nw/apioptionsjson
 
 # Data Sources [optional] for other databases - set the password
 liveapicreatoradmin datasource list

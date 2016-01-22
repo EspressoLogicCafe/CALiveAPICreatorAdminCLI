@@ -20,13 +20,13 @@ liveapicreatoradmin libraries list
 
 #Fixup Datasources Passwords - can update any of the parameters
 liveapicreatoradmin datasource list
-liveapicreatoradmin datasource update --url_name demo --password passw!
-liveapicreatoradmin datasource update --url_name finance --password passw!
+liveapicreatoradmin datasource update --url_name demo --password password!
+liveapicreatoradmin datasource update --url_name finance --password password!
 
 #Update Settings
-liveapicreatoradmin settings list
-liveapicreatoradmin settings import --file demo/demo_settings.json
-#liveapicreatoradmin settings update ??
+liveapicreatoradmin apioptions list
+liveapicreatoradmin apioptions import --file demo/apioptions.json
+#liveapicreatoradmin apioptions update --ident <ident> --option_value <true|false>
 
 #Import Authprovider into current project
 liveapicreatoradmin authprovider import --file demo/demo_authprovider.js
