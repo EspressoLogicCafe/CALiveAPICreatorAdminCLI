@@ -239,7 +239,7 @@ module.exports = {
 		} else {
 			filter += "&sysfilter=equal(active: true)";
 		}
-		console.log(filter);
+		//console.log(filter);
 		client.get(loginInfo.url + "/DbSchemas?sysfilter=" + filter, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
@@ -299,7 +299,7 @@ module.exports = {
 				}
 			}, function(data2) {
 				var endTime = new Date();
-				console.log(JSON.stringify(data2,null,2));
+				//console.log(JSON.stringify(data2,null,2));
 				if (data2.errorMessage) {
 					console.log(data2.errorMessage.red);
 					return;

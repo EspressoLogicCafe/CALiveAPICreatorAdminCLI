@@ -15,7 +15,7 @@ var resource = require('./objects/resource.js');
 var rule = require('./objects/rule.js');
 var authprovider = require('./objects/authprovider.js');
 var library = require('./objects/library.js');
-var settings = require('./objects/settings.js');
+var apioptions = require('./objects/apioptions.js');
 var dotfile = require('./util/dotfile.js');
 
 program
@@ -141,13 +141,13 @@ program
 	 
 	 
 program
-	.command('settings <list|update|import|export>')
-	.description('Administer project settings for an account.')
+	.command('apioptions <list|update|import|export>')
+	.description('Administer API project options for an account.')
 	.option('--ident [ident]','The ident of the specific project settings object')
 	.option('--option_value [value]','This is the value for the specific setting for the ident')
 	.option('--project_ident [project_ident]','The project ident that will be marked as used' )
 	.option('--file [fileName]', '[Optional] Name of file to settings for import/export (if not provided stdin/stdout used for export)')
-	.action(settings.doSettings);
+	.action(apioptions.doSettings);
 
 program.parse(process.argv);
 

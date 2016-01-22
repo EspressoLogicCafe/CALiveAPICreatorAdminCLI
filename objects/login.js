@@ -36,8 +36,10 @@ module.exports = {
 		}
 		
 		client.get(url + "/@license", function(data) {
+		
 			if (typeof data === "string") {
 				try {
+					
 					data = JSON.parse(data);
 				}
 				catch(e) {
@@ -54,8 +56,7 @@ module.exports = {
 				console.log(data.errorMessage.red);
 				return;
 			}
-			console.log("This server licensed to: " + data);
-			console.log("This server licensed to: " + data.company);
+			console.log(("This server licensed to: " + data.company + " license_type: "+ data.license_type).red);
 			//console.log("This server licensed to: " + data.company.red);
 
 			client.post(url + "/@authentication",

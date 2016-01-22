@@ -53,7 +53,7 @@ module.exports = {
 				console.log(data.errorMessage.red);
 				return;
 			}
-			printObject.printHeader('Project Option Settings');
+			printObject.printHeader('API Project Option Settings');
 			var table = new Table();
 			_.each(data, function(p) {
 				table.cell("Ident", p.ident);

@@ -63,7 +63,7 @@ $ liveapicreatoradmin --help
     rule  <list|create|delete|import|export>                		 Administer rules within a project.
     authprovider <list|create|delete|import|export>        			 Administer authentication providers for an account.
     libraries <list|create|update|delete|import|export|linkProject>  Administer user libraries for an account and link to project.
-    settings <list|update|import|export>                   			 Administer API project settings for an API Project.
+    apioptions <list|update|import|export>                   		 Administer API project options for an API Project.
 
   Options:
 
@@ -123,9 +123,9 @@ liveapicreatoradmin project list
 liveapicreatoradmin project use --url_name nwind
 liveapicreatoradmin project export --url_name nwind --file nw/nwind.json
 
-#API Settings
-liveapicreatoradmin settings list
-liveapicreatoradmin settings export --file nw/nw_settings.json
+#API Optins
+liveapicreatoradmin apioptions list
+liveapicreatoradmin apioptions export --file nw/apioptions.json
 
 # Data Sources
 liveapicreatoradmin datasource list
@@ -171,9 +171,9 @@ liveapicreatoradmin libraries list
 liveapicreatoradmin project import --file nw/nwind.json
 liveapicreatoradmin project list
 
-#API Settings [Optional]
-liveapicreatoradmin settings list
-liveapicreatoradmin settings import --file nw/nw_settings.json
+#API API Options [Optional]
+liveapicreatoradmin apioptions list
+liveapicreatoradmin apioptions import --file nw/apioptions.json
 
 # Data Sources [optional] for other databases - set the password
 liveapicreatoradmin datasource list
@@ -202,10 +202,10 @@ liveapicreatoradmin logout -a local
 ## Object-specific commands
 Follow the links below for detailed documentation on specific administrator commands.
 * [Projects](docs/project.md)
-* [Authentication providers](docs/authprovider.md)
+* [Authentication Providers](docs/authprovider.md)
 * [Datasources](docs/dbase.md)
 * [Resources](docs/resource.md)
 * [Rules](docs/rule.md)
 * [Libraries](docs/libraries.md)
-* [Settings](docs/settings.md)
+* [API Options](docs/apioptions.md)
 

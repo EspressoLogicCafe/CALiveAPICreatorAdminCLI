@@ -1,5 +1,6 @@
 #! /bin/bash
 # Export Script for Northwind Jetty
+
 mkdir nw
 
 ## Export from local server (use localhost:8080/APIServer for WAR install)
@@ -12,9 +13,9 @@ liveapicreatoradmin project list
 liveapicreatoradmin project use --url_name nwind
 liveapicreatoradmin project export --url_name nwind --file nw/nwind.json
 
-#API Settings
-liveapicreatoradmin settings list
-liveapicreatoradmin settings export --file nw/nw_settings.json
+#API Option Settings
+liveapicreatoradmin apioptions list
+liveapicreatoradmin apioptions export --file nw/nw_apioptions.json
 
 # Data Sources
 liveapicreatoradmin datasource list
@@ -36,5 +37,5 @@ liveapicreatoradmin rule export --file nw/rules.json
 liveapicreatoradmin resource list
 liveapicreatoradmin resource export --file nw/resources.json
 
-#liveapicreatoradmin logout -a local
+liveapicreatoradmin logout -a local
 

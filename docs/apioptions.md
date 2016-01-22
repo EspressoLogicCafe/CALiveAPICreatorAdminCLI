@@ -1,17 +1,17 @@
 # Settings
 
 ```
- Usage: settings [options] <list|update|delete|export|import>
+ Usage: apioptions [options] <list|update|delete|export|import>
 
-  Administer project settings for an account.
+  Administer API project options for an account.
 
   Options:
 
     -h, --help                       output usage information
-    --ident [ident]                   The ident of the specific project settings object
-    --option_value [value]           This is the value for the specific setting for the ident
+    --ident [ident]                  The ident of the specific project option object
+    --option_value [value]           This is the value for the specific option for the ident
     --project_ident [project_ident]  The project ident that will be marked as used
-    --file [fileName]                Name of file to settings for import/export (if not provided stdin/stdout used for export)
+    --file [fileName]                Name of file to api options for import/export (if not provided stdin/stdout used for export)
 ```
 
 
@@ -20,14 +20,14 @@
 List of commands allows you to list your CA Live API Creator project specific settings. 
 
 ```
-    liveapicreatoradmin settings list
+    liveapicreatoradmin apioptions list
 ```
 
-The `list` command shows all libraries for the current account.
+The `list` command shows all api options for the current account.
 
 #### Output
 ```
-Project Option Settings                                                                                                                                
+API Option Settings                                                                                                                                
 Ident  Project  Name                                            Value                                                            
 -----  -------  ----------------------------------------------  -----------------------------------------------------------------
 2000   2000     Aggregate Default Override                      false                                                            
@@ -59,22 +59,22 @@ settings. For details on how to create a [API Project Settings](http://ca-doc.es
 ## Settings update
 Create needs a name, comment, the create function name and a list of parameters in JSON format 
 ```
-liveapicreatoradmin settings update --ident <ident> [--project_ident <ident>] --option_value <somevalue>
+liveapicreatoradmin apioptions update --ident <ident> [--project_ident <ident>] --option_value <somevalue>
 ```
 
 ## Library export
-Provide the ident of the settings and (optional) the export file name. If not provided - it will be sent to stdout.
+Provide the ident of the apioptions and (optional) the export file name. If not provided - it will be sent to stdout.
 ```
-liveapicreatoradmin settings export  [--project_ident <ident>] [--ident <ident>] --file settings.json
+liveapicreatoradmin apioptions export  [--project_ident <ident>] [--ident <ident>] --file apioptions.json
 ```
-The export project settings exports the specified project settings optins into a JSON file. If the filename parameter is not specified, stdout is used.
+The export project apioptions exports the specified project settings optins into a JSON file. If the filename parameter is not specified, stdout is used.
 
 ## Library import
-Provide the name of the json file for the settings you wish to import.
+Provide the name of the json file for the api options you wish to import.
 ```
-liveapicreatoradmin settings import [--project_ident <ident>] --file settings.json
+liveapicreatoradmin apioptions import [--project_ident <ident>] --file apioptions.json
 ```
-The import settings imports the specified JSON file. If the filename parameter is not specified, stdin is used. (you can pipe the json file to the import)
+The import apioptions imports the specified JSON file. If the filename parameter is not specified, stdin is used. (you can pipe the json file to the import)
 
 
 
