@@ -172,18 +172,26 @@ module.exports = {
 		}
 			
 		var filter = null;
+		var projIdent = cmd.project_ident;
 		if (cmd.project_name) {
-			filter = "equal(name:'" + cmd.project_name + "')";
+			filter = "?sysfilter=equal(name:'" + cmd.project_name + "')";
 		}
 		else if (cmd.url_name) {
-			filter = "equal(url_name:'" + cmd.url_name + "')";
+			filter = "?sysfilter=equal(url_name:'" + cmd.url_name + "')";
+		} else if ( ! projIdent) {
+				projIdent = dotfile.getCurrentProject();
+				if ( ! projIdent) {
+					console.log('There is no current project.'.yellow);
+					return;
+				}
+				filter = "/" + projIdent;
 		}
-		else {
-			console.log('Missing parameter: please specify either project_name or url_name'.red);
+		if( ! filter) {
+			console.log('Missing parameter: please specify either project_name or url_name or use a specific project'.red);
 			return;
 		}
-		
-		client.get(loginInfo.url + "/projects?sysfilter=" + filter, {
+
+		client.get(loginInfo.url + "/AllProjects" + filter, {
 			headers: {
 				Authorization: "CALiveAPICreator " + apiKey + ":1"
 			}
