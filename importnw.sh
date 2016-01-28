@@ -6,16 +6,16 @@ liveapicreatoradmin logout -a local
 liveapicreatoradmin login -u admin -p Password1 http://localhost:8080/APIServer -a local
 liveapicreatoradmin use local
 liveapicreatoradmin status
-liveapicreatoradmin project use --url_name nwind
+liveapicreatoradmin project use --url_name nwindb2b
 #Libraries - need to import these before import of JSON project
 #We can create the Library and use an existing JS library.  To update / delete and recreate.
-#liveapicreatoradmin libraries create --name RESTAuthSecurityProviderCreateJS project --short_name restauth --libtype javascript --ver 1.0 --file nw/RESTAuthSecurityProvider.js  --comments RESTAuthProvider js Demo 
+liveapicreatoradmin libraries create --name RESTAuthSecurityProviderCreateJS project --short_name restauth --libtype javascript --ver 1.0 --file nw/RESTAuthSecurityProvider.js  --comments 'RESTAuthProvider js Demo '
 liveapicreatoradmin libraries import --linkProject --file nw/auth_libraries.json
 liveapicreatoradmin libraries list
 
 # Projects - this is the default NorthWind JSON project - if you import - load libraries first
 #liveapicreatoradmin project import --file nw/nwind.json
-liveapicreatoradmin project use --url_name nwind
+liveapicreatoradmin project use --url_name nwindb2b
 liveapicreatoradmin project list
 
 #API Settings [Optional]

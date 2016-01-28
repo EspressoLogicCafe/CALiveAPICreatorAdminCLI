@@ -1,29 +1,31 @@
 #! /bin/bash
 # Export Script for Northwind Jetty
 
+#npm install liveapicreator-admin-cli -g
+echo "Create export directory nw"
 mkdir nw
 
-## Export from local server (use localhost:8080/APIServer for WAR install)
+ehco' Export from local server (use localhost:8080/APIServer for WAR install)'
 liveapicreatoradmin logout -a local
 liveapicreatoradmin login -u admin -p Password1 http://localhost:8080/APIServer -a local
 liveapicreatoradmin use local
 
-# Projects
+echo 'Export NW Project by name'
 liveapicreatoradmin project list
-liveapicreatoradmin project use --url_name nwind
-liveapicreatoradmin project export --url_name nwind --file nw/nwind.json
+liveapicreatoradmin project use --url_name nwindb2b
+liveapicreatoradmin project export --url_name nwindb2b --file nw/nwind.json
 
-#API Option Settings
+echo 'API Option Settings'
 liveapicreatoradmin apioptions list
 liveapicreatoradmin apioptions export --file nw/nw_apioptions.json
 
-# Data Sources
+echo 'Export Data Sources'
 liveapicreatoradmin datasource list
 liveapicreatoradmin datasource export --prefix nw --file nw/derby_ds.json
 
 #Libraries
 liveapicreatoradmin libraries list
-liveapicreatoradmin libraries export --short_name restjs --file nw/auth_libraries.json
+liveapicreatoradmin libraries export --name RESTAuthSecurityProviderCreate --file nw/auth_libraries.json
 
 #Auth Providers
 liveapicreatoradmin authprovider list

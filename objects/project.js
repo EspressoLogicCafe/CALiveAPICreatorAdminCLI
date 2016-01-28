@@ -233,7 +233,7 @@ module.exports = {
 				}
 				project.status = cmd.status;
 			}
-			
+			//{"@metadata" : {"action":"MERGE_INSERT", "key":"ident"}
 			var startTime = new Date();
 			client.put(project['@metadata'].href, {
 				data: project,

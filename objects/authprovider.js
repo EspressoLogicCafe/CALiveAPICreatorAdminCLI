@@ -200,9 +200,10 @@ module.exports = {
 				comments: cmd.comments
 			};
 			
-			
+			authProvider["@metadata"] = {action:"MERGE_INSERT", key: "name"} ;
+			console.log(authProvider);
 			var startTime = new Date();
-			client.post(loginInfo.url + "/authproviders", {
+			client.put(loginInfo.url + "/authproviders", {
 				data: authProvider,
 				headers: {
 					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
@@ -250,10 +251,11 @@ module.exports = {
 		}
 		var filt = null;
 		if (cmd.ident) {
-			filt = "equal(ident:'" + cmd.ident + "')";
-		}
-		else {
-			console.log('Missing parameter: please specify auth provider ident '.red);
+			filt = "equal(ident:" + cmd.ident + ")";
+		} else if (cmd.name) {
+			filt = "equal(name:'" + cmd.name + "')";
+		} else {
+			console.log('Missing parameter: please specify auth provider name or ident '.red);
 			return;
 		}
 		
@@ -271,7 +273,7 @@ module.exports = {
 				return;
 			}
 			if (data.length > 1) {
-				console.log(("Error: more than one auth provider for the given ident: " + filter).red);
+				console.log(("Error: more than one auth provider for the given name or ident: " + filter).red);
 				return;
 			}
 			var provider = data[0];
@@ -385,8 +387,9 @@ module.exports = {
 			var fileContent = JSON.parse(fs.readFileSync(cmd.file));
 			fileContent[0].account_ident = context.account.ident;
 			fileContent[0].ident = null;
+			fileContent[0]["@metadata"] = {action:"MERGE_INSERT", key: "name"} ;
 			var startTime = new Date();
-			client.post(loginInfo.url + "/authproviders", {
+			client.put(loginInfo.url + "/authproviders", {
 				data: fileContent,
 				headers: {Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1" }
 				}, function(data) {

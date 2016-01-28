@@ -173,7 +173,10 @@ module.exports = {
 		if( ! cmd.ver ) {
 			ver = "1.0";
 		}
-	
+		if (( cmd.libtype !== 'java') && ( cmd.libtype !== 'javascript')) {
+			console.log('You did not specify a library type of [javascript | java])'.red);
+			return;
+		}
 		context.getContext(cmd, function() {
 			
 			var newLibrary = {
@@ -197,7 +200,8 @@ module.exports = {
 			//base64 endcode this first
 			newLibrary.code  = { type: "base64", length: data.length , value: data};
 			var startTime = new Date();
-			client.post(loginInfo.url + "/logic_libraries", {
+			newLibrary["@metadata"] = {action:"MERGE_INSERT", key: "name"} ;
+			client.put(loginInfo.url + "/logic_libraries", {
 				data: newLibrary,
 				headers: {
 					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
@@ -213,7 +217,7 @@ module.exports = {
 					return p['@metadata'].resource === 'admin:logic_libraries';
 				});
 				if ( ! newLib) {
-					console.log('ERROR: unable to find newly created library'.red);
+					console.log('CREATE PROJECT ERROR: unable to find newly created library'.red);
 					return;
 				}
 				if (cmd.verbose) {
@@ -234,18 +238,23 @@ module.exports = {
 					trailer += data.txsummary.length;
 				}
 				printObject.printHeader(trailer);
-				if(cmd.linkProject){
+				var projIdent = cmd.project_ident;
+				if ( ! projIdent) {
+					projIdent = dotfile.getCurrentProject();
+				}
+				if(cmd.linkProject && projIdent !== null){
 					var linkproject = { 
 						//@metadata: {action: 'INSERT'}, 
 						logic_library_ident: data.txsummary[0].ident , 
-						project_ident: dotfile.getCurrentProject() 
+						project_ident: projIdent 
 					};
-					client.post(loginInfo.url + "/admin:project_libraries", {
+					linkproject["@metadata"] = {action:"MERGE_INSERT"} ;
+					client.put(loginInfo.url + "/admin:project_libraries", {
 						data: linkproject,
 						headers: { Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"}
 						}, function(data) {
 						if (data.errorMessage) {
-							console.log(("Error: " + data.errorMessage).red);
+							console.log(("LinkProject Error: " + data.errorMessage).red);
 							return;
 						}
 						if (data.length === 0) {
@@ -278,9 +287,9 @@ module.exports = {
 			fileContent[0].account_ident = context.account.ident;
 			fileContent[0].ident = null;
 			var account_ident = context.account.ident;
-			
+			fileContent[0]["@metadata"] = {action:"MERGE_INSERT", key: "name"} ;
 			var startTime = new Date();
-			client.post(loginInfo.url + "/logic_libraries", {
+			client.put(loginInfo.url + "/logic_libraries", {
 				data: fileContent,
 				headers: {Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1" }
 				}, function(data) {
@@ -317,13 +326,17 @@ module.exports = {
 					trailer += data.txsummary.length;
 				}
 				printObject.printHeader(trailer);
-				
+				var projIdent = cmd.project_ident;
+				if ( ! projIdent) {
+					projIdent = dotfile.getCurrentProject();
+				}
 				if(cmd.linkProject){
 					var linkproject = { 
 						//@metadata: {action: 'INSERT'}, 
 						logic_library_ident: data.txsummary[0].ident , 
-						project_ident: dotfile.getCurrentProject() 
+						project_ident: projIdent
 					};
+					linkproject["@metadata"] = {action:"MERGE_INSERT"} ;
 					client.post(loginInfo.url + "/admin:project_libraries", {
 						data: linkproject,
 						headers: { Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"}
