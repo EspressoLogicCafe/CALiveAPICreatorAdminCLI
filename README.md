@@ -53,18 +53,28 @@ $ liveapicreatoradmin --help
 
   Commands:
 
-    login [options] <url>  -alias [alias name]                       Login to an API Creator server using an alias name (multiple connections can be active)
-    logout [options] [url] -alias [alias name]                       Logout from the current server, or an alias specific server 
-    use <alias name>                                                 Use the specified login aliasserver by default
-    status                                                           Show the current server, and any defined server aliases
-    project <list|create|update|delete|use|import|export>            Administer API Projects
-    datasources <list|create|update|delete|import|export>  			 Administer datasources (database connections) within a project.
-    resource <list|create|delete|import|export>                      Administer resources within a project.
-    rule  <list|create|delete|import|export>                		 Administer rules within a project.
-    authprovider <list|create|delete|import|export>        			 Administer authentication providers for an account.
-    libraries <list|create|update|delete|import|export|linkProject>  Administer user libraries for an account and link to project.
-    apioptions <list|update|import|export>                   		 Administer API project options for an API Project.
-
+    login [options] <url>                                                  Login to an API server
+    logout [options] [url]                                                 Logout from the current server, or a specific server
+    use <alias>                                                            Use the specified server by default
+    status                                                                 Show the current server, and any defined server aliases
+    project [options] <list|create|update|delete|use|import|export>        Administer projects. Actions are: list, create, update, delete, use, export
+    datasource [options] <list|create|update|delete|import|export>         Administer datasources within a project.
+    resource [options] <list|create|delete|import|export>                  Administer resources within a project.
+    rule [options] <list|create|delete|export>                             Administer rules within a project.
+    authprovider [options] <list|create|linkProject|delete|export|import>  Administer authentication providers for an account.
+    libraries [options] <list|create|update|delete|export|import>          Administer java and javascript libraries for an account.
+    apioptions [options] <list|update|import|export>                       Administer API project options for an account.
+    namedsort [options] <list|create|update|delete|import|export>          Administer Named Sorts for the active API Project.
+    namedfilter [options] <list|create|delete|update|import|export>        Administer Named filter for the active API Project.
+    token [options] <list|export|import>                                   Administer Auth Tokens for current project.
+    role [options] <list|export|import>                                    Administer Roles for current project.
+    user [options] <list|export|import>                                    Administer Users for current project.
+    topic [options] <list|export|import>                                   Administer Topics for current project.
+    event [options] <list|export|import>                                   Administer Request & Response Events for current project.
+    handler [options] <list|export|import>                                 Administer Custom Endpoints (Handlers) for current project.
+    apiversion [options] <list|export|import>                              Administer API Versions for Resources for current project.
+    relationship [options] <list|export|import>                            Administer Relationships (Virtual Keys) for current project.
+    
   Options:
 
     -h, --help     output usage information
@@ -197,7 +207,35 @@ liveapicreatoradmin logout -a local
 
 ```
 
+#Sample Repository Report Script
+```
+liveapicreatoradmin logout -a local
+liveapicreatoradmin login -u admin -p Password1 http://localhost:8080/APIServer -a local
+liveapicreatoradmin use local
+liveapicreatoradmin status
 
+# Select A Project
+liveapicreatoradmin project use --url_name demo
+liveapicreatoradmin project list
+liveapicreatoradmin apioptions list
+liveapicreatoradmin datasource list
+liveapicreatoradmin libraries list
+liveapicreatoradmin authprovider list
+liveapicreatoradmin rule list --verbose
+liveapicreatoradmin resource list
+liveapicreatoradmin relationship list
+liveapicreatoradmin token list
+liveapicreatoradmin role list
+liveapicreatoradmin user list
+liveapicreatoradmin namedsort list
+liveapicreatoradmin namedfilter list
+liveapicreatoradmin apiversion list
+liveapicreatoradmin event list
+liveapicreatoradmin handler list
+liveapicreatoradmin topic list
+liveapicreatoradmin apiversion list
+liveapicreatoradmin logout -a local
+```
 
 ## Object-specific commands
 Follow the links below for detailed documentation on specific administrator commands.
@@ -208,4 +246,7 @@ Follow the links below for detailed documentation on specific administrator comm
 * [Rules](docs/rule.md)
 * [Libraries](docs/libraries.md)
 * [API Options](docs/apioptions.md)
+* [Auth Tokens](docs/token.md)
+* [Named Sorts](docs/sort.md)
+* [Named Filter](docs/filter.md)
 
