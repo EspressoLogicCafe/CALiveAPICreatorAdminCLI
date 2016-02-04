@@ -17,6 +17,22 @@ var authprovider = require('./objects/authprovider.js');
 var library = require('./objects/library.js');
 var apioptions = require('./objects/apioptions.js');
 var dotfile = require('./util/dotfile.js');
+// new feature since 2.0.65 
+var sorts = require('./objects/sorts.js');
+var filters = require('./objects/filters.js');
+var token = require('./objects/token.js');
+var role = require('./objects/role.js');
+var user = require('./objects/user.js');
+var topic = require('./objects/topic.js');
+var event = require('./objects/event.js');
+var reln = require('./objects/reln.js');
+var handler = require('./objects/handler.js');
+var apiversion = require('./objects/version.js');
+//var sequence = require('./objects/sequence.js'); //Oracle
+//var apps = require('./objects/applicaitons.js'); //export | import
+// 2.1 features
+//var snapshot = require('./objects/snapshot.js');//list | start  --name | restore --name  
+//var npa = require('./objects/nonpersistattrs.js');// list | create | delete | update | import |export
 
 program
 	.version(pkg.version);
@@ -149,6 +165,90 @@ program
 	.option('--file [fileName]', '[Optional] Name of file to settings for import/export (if not provided stdin/stdout used for export)')
 	.action(apioptions.doSettings);
 
+
+program
+	.command('namedsort <list|create|update|delete|import|export>')
+	.description('Administer Named Sorts for the active API Project.')
+	.option('--ident [ident]', 'The ident of the specific named sort object')
+	.option('--name [name]', 'Name of named sort')
+	.option('--sort_text [sorttext]', 'Sort Text to define named sort')
+	.option('--resource_names [name]', '[Optional] Comma seperated list of Resource Names in quotes')
+	.option('--comments [comment]', '[Optional] Comment on named sort')
+	.option('--project_ident [project_ident]', '[Optional] The project ident if not the active project')
+	.option('--file [fileName]', '[Optional] Name of file for import/export (if not provided stdin/stdout used for export)')
+	.option('--verbose', '[Optional]  whether to display list of named sorts in detailed format')
+	.action(sorts.doSort);
+	
+program
+	.command('namedfilter <list|create|delete|update|import|export>')
+	.description('Administer Named filter for the active API Project.')
+	.option('--ident [ident]', 'The ident of the specific named filter object')
+	.option('--name [name]', 'Name of named filter')
+	.option('--filter_text [text]', 'Text to define named filter')
+	.option('--resource_names [name]', '[Optional] Comma seperated list of Resource Names in quotes')
+	.option('--comments [comment]', '[Optional] omment on named filter')
+	.option('--project_ident [project_ident]', '[Optional] The project ident if not the active project')
+	.option('--file [fileName]', '[Optional] Name of file for import/export (if not provided stdin/stdout used for export)')
+	.option('--verbose', '[Optional] whether to display list of named filter in detailed format')
+	.action(filters.doFilter);
+
+program
+	.command('token <list|export|import>')
+	.description('Administer Auth Tokens for current project.')
+	.option('--project_ident [project_ident]','The project ident that will be marked as used' )
+	.option('--file [fileName]', '[Optional] Name of file to import/export (if not provided stdin/stdout used for export)')
+	.action(token.doToken);	
+
+program
+	.command('role <list|export|import>')
+	.description('Administer Roles for current project.')
+	.option('--project_ident [project_ident]','The project ident that will be marked as used' )
+	.option('--file [fileName]', '[Optional] Name of file to import/export (if not provided stdin/stdout used for export)')
+	.action(role.doRole);	
+	
+program
+	.command('user <list|export|import>')
+	.description('Administer Users for current project.')
+	.option('--project_ident [project_ident]','The project ident that will be marked as used' )
+	.option('--file [fileName]', '[Optional] Name of file to import/export (if not provided stdin/stdout used for export)')
+	.action(user.doUser);	
+	
+program
+	.command('topic <list|export|import>')
+	.description('Administer Topics for current project.')
+	.option('--project_ident [project_ident]','The project ident that will be marked as used' )
+	.option('--file [fileName]', '[Optional] Name of file to import/export (if not provided stdin/stdout used for export)')
+	.action(topic.doTopic);	
+	
+program
+	.command('event <list|export|import>')
+	.description('Administer Request & Response Events for current project.')
+	.option('--project_ident [project_ident]','The project ident that will be marked as used' )
+	.option('--file [fileName]', '[Optional] Name of file to import/export (if not provided stdin/stdout used for export)')
+	.action(event.doEvent);	
+	
+program
+	.command('handler <list|export|import>')
+	.description('Administer Custom Endpoints (Handlers) for current project.')
+	.option('--project_ident [project_ident]','The project ident that will be marked as used' )
+	.option('--file [fileName]', '[Optional] Name of file to import/export (if not provided stdin/stdout used for export)')
+	.action(handler.doHandler);	
+
+program
+	.command('apiversion <list|export|import>')
+	.description('Administer API Versions for Resources for current project.')
+	.option('--project_ident [project_ident]','The project ident that will be marked as used' )
+	.option('--file [fileName]', '[Optional] Name of file to import/export (if not provided stdin/stdout used for export)')
+	.action(apiversion.doVersion);	
+	
+program
+	.command('relationship <list|export|import>')
+	.description('Administer Relationships (Virtual Keys) for current project.')
+	.option('--project_ident [project_ident]','The project ident that will be marked as used' )
+	.option('--file [fileName]', '[Optional] Name of file to import/export (if not provided stdin/stdout used for export)')
+	.action(reln.doReln);	
+	
+	
 program.parse(process.argv);
 
 if (process.argv.length < 3) {

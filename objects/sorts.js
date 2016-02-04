@@ -9,7 +9,7 @@ var printObject = require('../util/printObject.js');
 var dotfile = require('../util/dotfile.js');
 
 module.exports = {
-	doDbase: function(action, cmd) {
+	doSort: function(action, cmd) {
 		if (action === 'list') {
 			module.exports.list(cmd);
 		}
@@ -52,7 +52,7 @@ module.exports = {
 			}
 		}
 
-		client.get(url + "/dbaseschemas?sysfilter=equal(project_ident:" + projIdent+")", {
+		client.get(url + "/admin:named_sorts?sysfilter=equal(project_ident:" + projIdent+")&sysorder=(name:asc_uc,name:desc)&pagesize=100", {
 			headers: {
 				Authorization: "CALiveAPICreator " + apiKey + ":1"
 			}
@@ -61,29 +61,14 @@ module.exports = {
 				console.log(data.errorMessage.red);
 				return;
 			}
-			printObject.printHeader('Datasources');
+			printObject.printHeader('Named Sort');
 			var table = new Table();
 			_.each(data, function(p) {
+				table.cell("Ident", p.ident);
 				table.cell("Name", p.name);
-				table.cell("Prefix", p.prefix);
-				var type = "";
-				switch(p.dbasetype_ident) {
-					case 1: type = "MySQL"; break;
-					case 2: type = "Oracle"; break;
-					case 3: type = "SQL Server (jTDS)"; break;
-					case 4: type = "SQL Server"; break;
-					case 5: type = "SQL Server (Azure)"; break;
-					case 6: type = "NuoDB"; break;
-					case 7: type = "PostgreSQL"; break;
-					case 8: type = "Derby"; break;
-					default: type = "unknown";
-				}
-				table.cell("Type", type);
-				table.cell("Active", p.active);
-				table.cell("Catalog", p.catalog_name);
-				table.cell("Schema", p.schema_name);
-				table.cell("User", p.user_name);
-				var comments = p.comments;
+				table.cell("Resource", p.resource_names);
+				table.cell("Sort Text", p.sort_text);
+				var comments = p.description;
 				if ( ! comments) {
 					comments = "";
 				}
@@ -93,14 +78,14 @@ module.exports = {
 				table.cell("Comments", comments);
 				table.newRow();
 			});
-			table.sort(['Active', 'Name']);
+			table.sort(['Name', 'name']);
 			if (data.length === 0) {
-				console.log('There is no database defined for this project'.yellow);
+				console.log('There are no named sorts defined for this project'.yellow);
 			}
 			else {
 				console.log(table.toString());
 			}
-			printObject.printHeader("# datasources: " + data.length);
+			printObject.printHeader("# named sorts: " + data.length);
 		});
 	},
 	
@@ -109,74 +94,34 @@ module.exports = {
 		var loginInfo = login.login(cmd);
 		if ( ! loginInfo)
 			return;
-		if ( ! cmd.db_name) {
+		if ( ! cmd.name) {
 			console.log('Missing parameter: name'.red);
 			return;
 		}
-		if ( ! cmd.prefix) {
-			prefix = "main";
+		if ( ! cmd.sort_text) {
+			console.log('Missing parameter: sort_text'.red);
+			return;
 		}
 		var curProj = cmd.project_ident;
 		if ( ! curProj) {
 			curProj = dotfile.getCurrentProject();
 		}
-		if ( ! curProj) {
-			console.log('There is no current project.'.yellow);
-			return;
-		}
-		if ( ! cmd.user_name) {
-			console.log('Missing parameter: user_name'.red);
-			return;
-		}
-		if ( ! cmd.password) {
-			console.log('Missing parameter: password'.red);
-			return;
-		}
-		if ( ! cmd.url) {
-			console.log('Missing parameter: url'.red);
-			return;
-		}
 		
-		var dbasetype = cmd.dbasetype;
-		if ( ! dbasetype) {
-			console.log('You must specify a database type.'.red);
-			return;
-		}
-		dbasetype = dbasetype.toLowerCase();
-		switch(dbasetype) {
-			case "mysql": dbasetype = 1; break;
-			case "oracle": dbasetype = 2; break;
-			case "sqlserver": dbasetype = 5; break;
-			case "sql server": dbasetype = 5; break;
-			case "sqlserverazure": dbasetype = 6; break;
-			case "sql server azure": dbasetype = 6; break;
-			case "nuodb": dbasetype = 7; break;
-			case "postgres": dbasetype = 8; break;
-			case "postgresql": dbasetype = 8; break;
-			case "derby": dbasetype = 17; break;
-			default : console.log('Unknown database type: ' + dbasetype); return;
-		}
-
+		
 		context.getContext(cmd, function() {
 			//console.log('Current account: ' + JSON.stringify(context.account));
 			
-			var newDbase = {
-				name: cmd.db_name,
-				prefix: cmd.prefix,
-				url: cmd.url,
-				catalog_name: cmd.catalog_name,
-				schema_name: cmd.schema_name,
-				user_name: cmd.user_name,
-				password: cmd.password,
-				port_num: cmd.port_num,
-				active: true,
-				comments: cmd.comments,
-				dbasetype_ident: dbasetype,
+			var newSort = {
+				name: cmd.name,
+				description: cmd.comments,
+				resource_names: cmd.resource_names,
+				sort_text: cmd.sort_text,
 				project_ident: curProj
 			};
+			newSort["@metadata"] = {action:"MERGE_INSERT", key: "name"};
 			var startTime = new Date();
-			client.post(loginInfo.url + "/dbaseschemas", {
-				data: newDbase,
+			client.put(loginInfo.url + "/admin:named_sorts", {
+				data: newSort,
 				headers: {
 					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
 				}
@@ -186,7 +131,7 @@ module.exports = {
 					console.log(data.errorMessage.red);
 					return;
 				}
-				printObject.printHeader('Database connection was created');
+				printObject.printHeader('New Named Sort was created');
 				_.each(data.txsummary, function(obj) {
 					printObject.printObject(obj, obj['@metadata'].entity, 0, obj['@metadata'].verb);
 				});
@@ -224,23 +169,16 @@ module.exports = {
 		if(cmd.ident){
 			filter += "&sysfilter=equal(ident: "+ cmd.ident +")" ;
 		} else {
-			if (cmd.prefix) {
-				filter += "&sysfilter=equal(prefix:'" + cmd.prefix + "')";
-			}
-			else if (cmd.db_name) {
-				filter += "&sysfilter=equal(name:'" + cmd.db_name + "')";
+			if (cmd.name) {
+				filter += "&sysfilter=equal(name:'" + cmd.name + "')";
 			} else {
-				console.log('Missing parameter: please specify either db_name or prefix'.red);
+				console.log('Missing parameter: please specify either name or ident'.red);
 				return;
 			}
 		}
-		if( cmd.active ){
-			filter += "&sysfilter=equal(active: "+ cmd.active + ")";
-		} else {
-			filter += "&sysfilter=equal(active: true)";
-		}
+		
 		//console.log(filter);
-		client.get(loginInfo.url + "/DbSchemas?sysfilter=" + filter, {
+		client.get(loginInfo.url + "/admin:named_sorts?sysfilter=" + filter, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
 			}
@@ -251,47 +189,29 @@ module.exports = {
 				return;
 			}
 			if (data.length === 0) {
-				console.log(("Error: no such database").red);
+				console.log(("Error: no such named sort").red);
 				return;
 			}
 			if (data.length > 1) {
-				console.log(("Error: more than one database for the given condition: " + filter).red);
+				console.log(("Error: more than one named sort for the given condition: " + filter).red);
 				return;
 			}
 			var db = data[0];
-			if( cmd.password) {
-				db.password = cmd.password;
-				delete db.salt;
-			}
-			if( cmd.user_name){
-				db.user_name = cmd.user_name;
-			}
-			if( cmd.name ){
+			if( cmd.name) {
 				db.name = cmd.name;
 			}
-			if ( cmd.url ){
-				db.url = cmd.url;
+			if( cmd.comments){
+				db.description = cmd.comments;
 			}
-			if( !cmd.prefix ) {
-				db.prefix = cmd.prefix;
+			if( cmd.resource_names ){
+				db.resource_names = cmd.resource_names;
 			}
-			if( cmd.port ) {
-				db.port = cmd.port;
+			if ( cmd.sort_text ){
+				db.sort_text = cmd.sort_text;
 			}
-			if( cmd.schema_name ){
-				db.schema_name = cmd.schema_name;
-			}
-			if( cmd.catalog_name ){
-			 	db.catalog_name = cmd.catalog_name;
-			}
-			if( cmd.comments ){
-			 	db.comments = cmd.comments;
-			}
-			if( cmd.active ){
-			 	db.active = (cmd.active == "true");
-			}
+		
 			var startTime = new Date();
-			
+			db["@metadata"] = {action:"MERGE_INSERT", key: "name"} ;
 			client.put(db['@metadata'].href, {
 				data: db,
 				headers: {
@@ -304,7 +224,7 @@ module.exports = {
 					console.log(data2.errorMessage.red);
 					return;
 				}
-				printObject.printHeader('Database connection was updated, including the following objects:');
+				printObject.printHeader('Named sort was updated, including the following objects:');
 				_.each(data2.txsummary, function(obj) {
 					printObject.printObject(obj, obj['@metadata'].entity, 0, obj['@metadata'].verb);
 				});
@@ -330,18 +250,18 @@ module.exports = {
 		}
 
 		var filt = null;
-		if (cmd.prefix) {
-			filt = "equal(prefix:'" + cmd.prefix + "')";
+		if (cmd.ident) {
+			filt = "equal(ident:'" + cmd.ident + "')";
 		}
-		else if (cmd.db_name) {
-			filt = "equal(name:'" + cmd.db_name + "')";
+		else if (cmd.name) {
+			filt = "equal(name:'" + cmd.name + "')";
 		}
 		else {
-			console.log('Missing parameter: please specify either db_name or prefix'.red);
+			console.log('Missing parameter: please specify either name or ident'.red);
 			return;
 		}
 		
-		client.get(loginInfo.url + "/dbaseschemas?sysfilter=" + filt, {
+		client.get(loginInfo.url + "/admin:named_sorts?sysfilter=" + filt, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
 			}
@@ -352,11 +272,11 @@ module.exports = {
 				return;
 			}
 			if (data.length === 0) {
-				console.log(("Error: no such database").red);
+				console.log(("Error: no such named sort").red);
 				return;
 			}
 			if (data.length > 1) {
-				console.log(("Error: more than one database for the given condition: " + filter).red);
+				console.log(("Error: more than one named sort for the given condition: " + filter).red);
 				return;
 			}
 			var db = data[0];
@@ -371,7 +291,7 @@ module.exports = {
 					console.log(data2.errorMessage.red);
 					return;
 				}
-				printObject.printHeader('Database connection was deleted, including the following objects:');
+				printObject.printHeader('Named sort was deleted, including the following objects:');
 				_.each(data2.txsummary, function(obj) {
 					printObject.printObject(obj, obj['@metadata'].entity, 0, obj['@metadata'].verb);
 				});
@@ -413,12 +333,12 @@ module.exports = {
 		}
 		
 		
-		if (cmd.prefix) {
-			filter += "prefix:'" + cmd.prefix + "')";
-		} else if (cmd.db_name) {
-			filter += "name:'" + cmd.db_name + "')";
+		if (cmd.ident) {
+			filter += "ident:" + cmd.ident + ")";
+		} else if (cmd.name) {
+			filter += "name:'" + cmd.name + "')";
 		} else {
-			console.log('Missing parameter: please specify datasource db_name '.red);
+			console.log('Missing parameter: please specify named sort name or ident '.red);
 			return;
 		}
 		var toStdout = false;
@@ -426,7 +346,7 @@ module.exports = {
 			toStdout = true;
 		}
 		
-		client.get(loginInfo.url + "/dbaseschemas?sysfilter=" + filter, {
+		client.get(loginInfo.url + "/admin:named_sorts?sysfilter=" + filter, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
 			}
@@ -437,23 +357,21 @@ module.exports = {
 				return;
 			}
 			if (data.length === 0) {
-				console.log(("Error: no such datasource").red);
+				console.log(("Error: no such named sort").red);
 				return;
 			}
 			//do not export passwords
 			for(var i = 0; i < data.length ; i++){
-				data[i].password = null;
-				data[i].salt = null;
 				data[i].project_ident = null;
 				delete data[i]["ident"];
-				delete data[i]["@metadata"].links;
+				delete data[i]["@metadata"];
 			}
 			if (toStdout) {
 				console.log(JSON.stringify(data, null, 2));
 			} else {
 				var exportFile = fs.openSync(cmd.file, 'w+', 0600);
 				fs.writeSync(exportFile, JSON.stringify(data, null, 2));
-				console.log(('Data Source has been exported to file: ' + cmd.file).green);
+				console.log(('Named Sort has been exported to file: ' + cmd.file).green);
 			}
 		});
 	},
@@ -478,11 +396,20 @@ module.exports = {
 			return;
 		}
 		context.getContext(cmd, function() {
-			var fileContent = JSON.parse(fs.readFileSync(cmd.importFile));
-			fileContent.project_ident = curProj;
-			fileContent.ident = null;
+			var fileContent = JSON.parse(fs.readFileSync(cmd.file));
+			if(Array.isArray(fileContent)){
+				for(var i = 0 ; i < fileContent.length; i++){
+					fileContent[i].project_ident = curProj;
+					fileContent[i].ident = null;
+					fileContent[i]["@metadata"] = {action:"MERGE_INSERT", key: "name"} ;
+				} 
+			} else {
+				fileContent.project_ident = curProj;
+				fileContent.ident = null;
+				fileContent["@metadata"] = {action:"MERGE_INSERT", key: "name"} ;
+			}
 			var startTime = new Date();
-			client.post(loginInfo.url + "/dbaseschemas", {
+			client.post(loginInfo.url + "/admin:named_sorts", {
 				data: fileContent,
 				headers: {Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1" }
 				}, function(data) {
@@ -491,13 +418,13 @@ module.exports = {
 					console.log(data.errorMessage.red);
 					return;
 				}
-				printObject.printHeader('Datasource was imported, including:');
+				printObject.printHeader('Named Sort was imported, including:');
 				
-				var newAuth = _.find(data.txsummary, function(p) {
-					return p['@metadata'].resource === 'admin:dbaseschemas';
+				var newSort = _.find(data.txsummary, function(p) {
+					return p['@metadata'].resource === 'admin:named_sorts';
 				});
-				if ( ! newAuth) {
-					console.log('ERROR: unable to find imported data source'.red);
+				if ( ! newSort) {
+					console.log('ERROR: unable to find imported named sort'.red);
 					return;
 				}
 				if (cmd.verbose) {
@@ -506,7 +433,7 @@ module.exports = {
 					});
 				}
 				else {
-					printObject.printObject(newAuth, newAuth['@metadata'].entity, 0, newAuth['@metadata'].verb);
+					printObject.printObject(newSort, newSort['@metadata'].entity, 0, newSort['@metadata'].verb);
 					console.log(('and ' + (data.txsummary.length - 1) + ' other objects').grey);
 				}
 			
