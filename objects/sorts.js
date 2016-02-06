@@ -318,35 +318,25 @@ module.exports = {
 		var projIdent = cmd.project_ident;
 		if ( ! projIdent) {
 			projIdent = dotfile.getCurrentProject();
-			if ( ! projIdent) {
-				console.log('There is no current project.'.yellow);
-				return;
-			}
 		}
-		
-		var filter = null;
-		if (projIdent) {
-			filter = "equal(project_ident:" + projIdent + ",";
-		} else {
-			console.log('Missing parameter: please specify project settings (use list) project_ident '.red);
-			return;
-		}
-		
-		
+		var filter = "";
+		var sep = "";
 		if (cmd.ident) {
-			filter += "ident:" + cmd.ident + ")";
-		} else if (cmd.name) {
-			filter += "name:'" + cmd.name + "')";
-		} else {
-			console.log('Missing parameter: please specify named sort name or ident '.red);
-			return;
+			filter += sep + "sysfilter=equal(ident:" + cmd.ident + ")";
+			sep = "&";
+		} else if (cmd.filtername) {
+			filter += sep + "sysfilter=equal(name:'" + cmd.filtername + "')";
+			sep = "&";
+		} else if (projIdent) {
+				filter += sep + "sysfilter=equal(project_ident:" + projIdent + ")";
 		}
+		
 		var toStdout = false;
 		if ( ! cmd.file) {
 			toStdout = true;
 		}
 		
-		client.get(loginInfo.url + "/admin:named_sorts?sysfilter=" + filter, {
+		client.get(loginInfo.url + "/admin:named_sorts?" + filter, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
 			}
@@ -357,7 +347,7 @@ module.exports = {
 				return;
 			}
 			if (data.length === 0) {
-				console.log(("Error: no such named sort").red);
+				console.log(("No named sort(s) found").red);
 				return;
 			}
 			//do not export passwords

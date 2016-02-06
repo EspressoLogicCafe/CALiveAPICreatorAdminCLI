@@ -456,7 +456,7 @@ module.exports = {
 			} else {
 				var exportFile = fs.openSync(cmd.file, 'w+', 0600);
 				fs.writeSync(exportFile, JSON.stringify(data, null, 2));
-				console.log(('Rules have been exported to file: ' + cmd.file).green);
+				console.log(('Resources have been exported to file: ' + cmd.file).green);
 			}
 		});	
 	},

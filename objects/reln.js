@@ -101,8 +101,10 @@ module.exports = {
 		var filter = null;
 		if (projIdent) {
 			filter = "sysfilter=equal(project_ident:" + projIdent + ")";
+		} else if (cmd.ident) {
+			filter = "sysfilter=equal(ident:" + cmd.ident + ")";
 		} else {
-			console.log('Missing parameter: please specify project settings (use list) project_ident '.red);
+			console.log('Missing parameter: please specify project settings (use list) project_ident or ident '.red);
 			return;
 		}
 		

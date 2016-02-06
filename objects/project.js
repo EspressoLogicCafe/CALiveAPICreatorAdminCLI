@@ -394,13 +394,20 @@ module.exports = {
 			return;
 
 		var filter = null;
+		var projIdent = cmd.project_ident;
+		filter = "equal(ident:" + projIdent + ")";
 		if (cmd.url_name) {
 			filter = "equal(url_name:'" + cmd.url_name + "')";
-		}
-		else if (cmd.project_name) {
-			filter = "equal(name:" + cmd.project_name + "')";
-		}
-		else {
+		} else if (cmd.project_name) {
+			filter = "equal(name:'" + cmd.project_name + "')";
+		} else if ( ! projIdent) {
+			projIdent = dotfile.getCurrentProject();
+			 if(! projIdent){
+				console.log('No current project selected'.red);
+				return;
+			 }
+			 filter = "equal(ident:" + projIdent + ")";
+		} else {
 			console.log('Missing parameter: please specify either project_name or url_name'.red);
 			return;
 		}

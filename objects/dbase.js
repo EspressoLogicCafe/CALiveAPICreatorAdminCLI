@@ -406,27 +406,25 @@ module.exports = {
 		
 		var filter = null;
 		if (projIdent) {
-			filter = "equal(project_ident:" + projIdent + ",";
+			filter = "sysfilter=equal(project_ident:" + projIdent + ")";
 		} else {
-			console.log('Missing parameter: please specify project settings (use list) project_ident '.red);
+			console.log('No current Project found - please specify project settings (use list) project_ident '.red);
 			return;
 		}
 		
 		
 		if (cmd.prefix) {
-			filter += "prefix:'" + cmd.prefix + "')";
+			filter += "&sysfilter(prefix:'" + cmd.prefix + "')";
 		} else if (cmd.db_name) {
-			filter += "name:'" + cmd.db_name + "')";
-		} else {
-			console.log('Missing parameter: please specify datasource db_name '.red);
-			return;
-		}
+			filter += "&sysfilter=(name:'" + cmd.db_name + "')";
+		} 
+		
 		var toStdout = false;
 		if ( ! cmd.file) {
 			toStdout = true;
 		}
 		
-		client.get(loginInfo.url + "/dbaseschemas?sysfilter=" + filter, {
+		client.get(loginInfo.url + "/dbaseschemas?" + filter, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
 			}
@@ -441,12 +439,20 @@ module.exports = {
 				return;
 			}
 			//do not export passwords
-			for(var i = 0; i < data.length ; i++){
-				data[i].password = null;
-				data[i].salt = null;
-				data[i].project_ident = null;
-				delete data[i]["ident"];
-				delete data[i]["@metadata"].links;
+			if(Array.isArray(data) && data.length > 0){
+				for(var i = 0; i < data.length ; i++){
+					data[i].password = null;
+					data[i].salt = null;
+					data[i].project_ident = null;
+					delete data[i]["ident"];
+					delete data[i]["@metadata"];
+				} 
+			} else {
+				data.password = null;
+				data.salt = null;
+				data.project_ident = null;
+				delete data["ident"];
+				delete data["@metadata"];
 			}
 			if (toStdout) {
 				console.log(JSON.stringify(data, null, 2));

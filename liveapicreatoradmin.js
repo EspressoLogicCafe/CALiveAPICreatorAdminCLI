@@ -132,7 +132,7 @@ program
 	.description('Administer authentication providers for an account.')
 	.option('--ident [ident]','The ident of the auth provider')
 	.option('--project_ident [ident]','The project ident used to link this auth provider')
-	.option('--name [name]', 'Name of auth provider')
+	.option('--authname [name]', 'Name of auth provider')
 	.option('--createFunction [bootstrap]', 'Name for Create Function')
 	.option('--paramMap [map]', 'Map of auth provider settings')
 	.option('--comments [comment]', 'Comment on auth provider')
@@ -144,7 +144,7 @@ program
 	.description('Administer java and javascript libraries for an account.')
 	.option('--ident [ident]','The ident of the library')
 	.option('--project_ident [projectId]','The project ident that this library will be marked as used' )
-	.option('--name [name]', 'Name of library')
+	.option('--libname [name]', 'Name of library')
 	.option('--libtype [type]', 'Type of Library javascript ! java')
 	.option('--ver [version]', 'Version of Library JS or Java')
 	.option('--short_name [shortname]', 'Short Name')
@@ -170,7 +170,7 @@ program
 	.command('namedsort <list|create|update|delete|import|export>')
 	.description('Administer Named Sorts for the active API Project.')
 	.option('--ident [ident]', 'The ident of the specific named sort object')
-	.option('--name [name]', 'Name of named sort')
+	.option('--sortname [name]', 'The Name of named sort')
 	.option('--sort_text [sorttext]', 'Sort Text to define named sort')
 	.option('--resource_names [name]', '[Optional] Comma seperated list of Resource Names in quotes')
 	.option('--comments [comment]', '[Optional] Comment on named sort')
@@ -183,7 +183,7 @@ program
 	.command('namedfilter <list|create|delete|update|import|export>')
 	.description('Administer Named filter for the active API Project.')
 	.option('--ident [ident]', 'The ident of the specific named filter object')
-	.option('--name [name]', 'Name of named filter')
+	.option('--filtername [name]', 'The Name of named filter')
 	.option('--filter_text [text]', 'Text to define named filter')
 	.option('--resource_names [name]', '[Optional] Comma seperated list of Resource Names in quotes')
 	.option('--comments [comment]', '[Optional] omment on named filter')
@@ -223,6 +223,7 @@ program
 program
 	.command('event <list|export|import>')
 	.description('Administer Request & Response Events for current project.')
+	.option('--eventname [name]', 'The request or response Name')
 	.option('--project_ident [project_ident]','The project ident that will be marked as used' )
 	.option('--file [fileName]', '[Optional] Name of file to import/export (if not provided stdin/stdout used for export)')
 	.action(event.doEvent);	
@@ -244,6 +245,7 @@ program
 program
 	.command('relationship <list|export|import>')
 	.description('Administer Relationships (Virtual Keys) for current project.')
+	.option('--ident [ident]', 'This is the ident of the relationship')
 	.option('--project_ident [project_ident]','The project ident that will be marked as used' )
 	.option('--file [fileName]', '[Optional] Name of file to import/export (if not provided stdin/stdout used for export)')
 	.action(reln.doReln);	

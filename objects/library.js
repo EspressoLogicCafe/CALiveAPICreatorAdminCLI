@@ -157,8 +157,8 @@ module.exports = {
 		if ( ! loginInfo)
 			return;
 
-		if ( ! cmd.name) {
-			console.log('Missing parameter: name'.red);
+		if ( ! cmd.libname) {
+			console.log('Missing parameter: libname'.red);
 			return;
 		}
 		if ( ! cmd.short_name) {
@@ -180,7 +180,7 @@ module.exports = {
 		context.getContext(cmd, function() {
 			
 			var newLibrary = {
-				name: cmd.name,
+				name: cmd.libname,
 				group_name: cmd.short_name ,
 				lib_name: cmd.short_name ,
 				version: ver  ,
@@ -368,22 +368,23 @@ module.exports = {
 		
 		
 		var filter = null;
+		
+		filter = "sysfilter=greater(ident: 1999 )";
+		
 		if (cmd.ident) {
-			filter = "equal(ident:" + cmd.ident + ")";
+			filter += "&sysfilter=equal(ident:" + cmd.ident + ")";
 		} else if (cmd.short_name) {
-			filter = "equal(lib_name:'" + cmd.short_name + "')";
-		} else if (cmd.name) {
-			filter = "equal(name:'" + cmd.name + "')";
-		} else {
-			console.log('Missing parameter: please specify library (use list) by ident | short_name | name '.red);
-			return;
-		}
+			filter += "&sysfilter=equal(short_name:'" + cmd.short_name + "')";
+		} else if (cmd.libname) {
+			filter += "&sysfilter=equal(name:'" + cmd.libname + "')";
+		} 
+		
 		var toStdout = false;
 		if ( ! cmd.file) {
 			toStdout = true;
 		}
-		
-		client.get(loginInfo.url + "/logic_libraries?sysfilter=" + filter, {
+
+		client.get(loginInfo.url + "/logic_libraries?" + filter, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
 			}

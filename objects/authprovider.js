@@ -49,10 +49,10 @@ module.exports = {
 		var filter = null;
 		if ( cmd.ident) {
 		   filter = 'sysfilter=equal(ident:'+cmd.ident+')';
-		} else if(cmd.name){
-			filter = "sysfilter=equal(name:'"+cmd.name+"')";
+		} else if(cmd.authname){
+			filter = "sysfilter=equal(name:'"+cmd.authname+"')";
 		} else {
-			console.log('Missing parameter: ident or name'.red);
+			console.log('Missing parameter: ident or authname'.red);
 			return;
 		}
 		var projIdent = cmd.project_ident;
@@ -168,8 +168,8 @@ module.exports = {
 		var url = loginInfo.url;
 		var apiKey = loginInfo.apiKey;
 		
-		if ( ! cmd.name) {
-			console.log('Missing parameter: name'.red);
+		if ( ! cmd.authname) {
+			console.log('Missing parameter: authname'.red);
 			return;
 		}
 		
@@ -190,7 +190,7 @@ module.exports = {
 			//console.log('Current account: ' + JSON.stringify(context.account));
 			
 			var authProvider = {
-				name: cmd.name,
+				name: cmd.authname,
 				bootstrap_config_value: cmd.createFunction,
 				param_map: cmd.paramMap,
 				auth_type_ident:2,
@@ -252,10 +252,10 @@ module.exports = {
 		var filt = null;
 		if (cmd.ident) {
 			filt = "equal(ident:" + cmd.ident + ")";
-		} else if (cmd.name) {
-			filt = "equal(name:'" + cmd.name + "')";
+		} else if (cmd.authname) {
+			filt = "equal(name:'" + cmd.authname + "')";
 		} else {
-			console.log('Missing parameter: please specify auth provider name or ident '.red);
+			console.log('Missing parameter: please specify auth provider authname or ident '.red);
 			return;
 		}
 		
@@ -273,7 +273,7 @@ module.exports = {
 				return;
 			}
 			if (data.length > 1) {
-				console.log(("Error: more than one auth provider for the given name or ident: " + filter).red);
+				console.log(("Error: more than one auth provider for the given authname or ident: " + filter).red);
 				return;
 			}
 			var provider = data[0];
@@ -330,21 +330,24 @@ module.exports = {
 		var apiKey = loginInfo.apiKey;
 		
 		
-		var filter = null;
-		if (cmd.ident) {
-			filter = "equal(ident:" + cmd.ident + ")";
-		} else if (cmd.name) {
-			filter = "equal(name:'" + cmd.name + "')";
-		} else {
-			console.log('Missing parameter: please specify auth provider (use list) ident or name '.red);
-			return;
+		var filter = "";
+		var projIdent = cmd.project_ident;
+		if ( ! projIdent) {
+			projIdent = dotfile.getCurrentProject();
 		}
+		filter = "sysfilter=greater(ident:1000)";
+		if (cmd.ident) {
+			filter += "&sysfilter=equal(ident:" + cmd.ident + ")";
+		} else if (cmd.authname) {
+			filter += "&sysfilter=equal(name:'" + cmd.authname + "')";
+		} 
+		
 		var toStdout = false;
 		if ( ! cmd.file) {
 			toStdout = true;
 		}
 		
-		client.get(loginInfo.url + "/authproviders?sysfilter=" + filter, {
+		client.get(loginInfo.url + "/authproviders?" + filter, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
 			}
@@ -358,9 +361,11 @@ module.exports = {
 				console.log(("Error: no such project").red);
 				return;
 			}
-			delete data[0].ident;
-			data[0].account_ident = null;
-			delete data[0]['@metadata'].links;
+			for(var i = 0; i < data.length ; i++){
+				delete data[i].ident;
+				data[i].account_ident = null;
+				delete data[i]['@metadata'];
+			}
 			if (toStdout) {
 				console.log(JSON.stringify(data, null, 2));
 			} else {

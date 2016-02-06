@@ -91,20 +91,18 @@ module.exports = {
 		var projIdent = cmd.project_ident;
 		if ( ! projIdent) {
 			projIdent = dotfile.getCurrentProject();
-			if ( ! projIdent) {
-				console.log('There is no current project.'.yellow);
-				return;
-			}
 		}
-		
-		var filter = null;
-		if (projIdent) {
-			filter = "sysfilter=equal(project_ident:" + projIdent + ")";
-		} else {
-			console.log('Missing parameter: please specify project settings (use list) project_ident '.red);
-			return;
+		var sep = "";
+		var filter = "";
+		if (cmd.ident) {
+			filter += sep + "sysfilter=equal(ident:" + cmd.ident + ")";
+			sep = "&";
+		} else if (cmd.eventname) {
+			filter += sep + "sysfilter=equal(name:'" + cmd.eventname + "')";
+			sep = "&";
+		} else if (projIdent) {
+			filter += sep + "sysfilter=equal(project_ident:" + projIdent + ")";
 		}
-		
 	
 		var toStdout = false;
 		if ( ! cmd.file) {
@@ -122,7 +120,7 @@ module.exports = {
 				return;
 			}
 			if (data.length === 0) {
-				console.log(("Error: no such project").red);
+				console.log(("No custom handler(s) found").red);
 				return;
 			}
 			for(var idx = 0; idx < data.length ; idx++){
