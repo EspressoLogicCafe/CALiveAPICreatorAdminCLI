@@ -378,7 +378,7 @@ module.exports = {
 		} else if (cmd.short_name) {
 			filter += "&sysfilter=equal(short_name:'" + cmd.short_name + "')";
 		} else if (cmd.name) {
-			filter += "&sysfilter=equal(name:'" + cmd.name + "')";
+			//filter += "&sysfilter=equal(name:'" + cmd.name + "')";
 		} 
 		
 		var toStdout = false;

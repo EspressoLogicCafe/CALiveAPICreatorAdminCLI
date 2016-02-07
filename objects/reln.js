@@ -113,7 +113,7 @@ module.exports = {
 		if ( ! cmd.file) {
 			toStdout = true;
 		}
-		
+	
 		client.get(loginInfo.url + "/admin:relationships?pagesize=1000&"+filter, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
@@ -125,7 +125,7 @@ module.exports = {
 				return;
 			}
 			if (data.length === 0) {
-				console.log(("Error: no such project").red);
+				console.log(("No relationship(s) found").red);
 				return;
 			}
 			for(var idx = 0; idx < data.length ; idx++){

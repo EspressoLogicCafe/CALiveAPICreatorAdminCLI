@@ -17,7 +17,7 @@ module.exports = {
 			module.exports.export(cmd);
 		}
 		else if (action === 'reload') {
-			module.exports.relaod(cmd);
+			module.exports.reload(cmd);
 		}
 		else {
 			console.log('You must specify an action: list or  export');
@@ -207,7 +207,8 @@ module.exports = {
 			}
 		});
 	},
-	list: function (cmd) {
+	reload: function (cmd) {
 		console.log("Reload not yet implemented");
+		//get list of each schema (dbschema) and post it back - this should force a reload
 	}
 };

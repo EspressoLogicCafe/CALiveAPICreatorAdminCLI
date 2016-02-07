@@ -338,7 +338,7 @@ module.exports = {
 		if (cmd.ident) {
 			filter += "&sysfilter=equal(ident:" + cmd.ident + ")";
 		} else if (cmd.name) {
-			filter += "&sysfilter=equal(name:'" + cmd.name + "')";
+			//filter += "&sysfilter=equal(name:'" + cmd.name + "')";
 		} 
 		
 		var toStdout = false;

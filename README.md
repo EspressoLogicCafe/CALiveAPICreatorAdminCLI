@@ -74,6 +74,7 @@ $ liveapicreatoradmin --help
     handler [options] <list|export|import>                                 Administer Custom Endpoints (Handlers) for current project.
     apiversion [options] <list|export|import>                              Administer API Versions for Resources for current project.
     relationship [options] <list|export|import>                            Administer Relationships (Virtual Keys) for current project.
+    snapshot [options] <list|start>                                        List or start a project snapshot (backup) for current project.
     
   Options:
 

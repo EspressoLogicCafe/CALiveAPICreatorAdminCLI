@@ -421,7 +421,7 @@ module.exports = {
 			}
 			//filter += "&sysfilter=equal(apiversion_ident:" + projIdent +")"; TO DO
 		}
-		console.log(filter);
+
 		//to do - this is not right - need specific version
 		client.get(url + "/AllResources?"+filter+"&pagesize=100", {
 			headers: {

@@ -2,7 +2,7 @@
 
 
 ## Connect to a local server
-lacadmin logout -a local
+lacadmin logout -a nwind
 lacadmin login -u admin -p Password1 http://localhost:8080 -a nwind
 lacadmin use nwind s
 lacadmin status
@@ -11,7 +11,7 @@ lacadmin status
 lacadmin project use --url_name nwindb2b
 
 ## Export everything
-mkdir nwind
+mkdir -p nwind
 lacadmin project export --file nwind/nwind.json
 lacadmin apioptions export --file nwind/apioptions.json
 lacadmin datasource export --file nwind/datasource.json

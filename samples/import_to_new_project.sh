@@ -17,10 +17,9 @@ lacadmin authprovider import --file nwind/authprovider.json
 lacadmin apioptions import --file nwind/apioptions.json
 lacadmin datasource import --file nwind/datasource.json
 lacadmin relationship import --file nwind/relationships.json
-
 lacadmin topic import --file nwind/topic.json
 lacadmin rule import --file nwind/rules.json 
-#lacadmin resource import --file nwind/resources.json
+lacadmin resource import --file nwind/resources.json
 
 lacadmin role import --file nwind/roles.json
 lacadmin token import --file nwind/tokens.json
