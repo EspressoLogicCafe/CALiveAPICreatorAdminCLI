@@ -201,9 +201,8 @@ module.exports = {
 			};
 			
 			authProvider["@metadata"] = {action:"MERGE_INSERT", key: "name"} ;
-			console.log(authProvider);
 			var startTime = new Date();
-			client.put(loginInfo.url + "/authproviders", {
+			client.put(loginInfo.url + "/admin:authproviders", {
 				data: authProvider,
 				headers: {
 					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
