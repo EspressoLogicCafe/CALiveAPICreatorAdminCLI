@@ -26,7 +26,7 @@ lacadmin apiversion list
 lacadmin event list
 lacadmin handler list
 lacadmin topic list
-
+lacadmin snapshot list
 
 lacadmin logout -a nwind
 

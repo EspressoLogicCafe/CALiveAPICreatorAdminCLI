@@ -16,6 +16,9 @@ module.exports = {
 		else if (action === 'export') {
 			module.exports.export(cmd);
 		}
+		else if (action === 'reload') {
+			module.exports.relaod(cmd);
+		}
 		else {
 			console.log('You must specify an action: list or  export');
 			//program.help();
@@ -203,5 +206,8 @@ module.exports = {
 				console.log(('Tables has been exported to file: ' + cmd.file).green);
 			}
 		});
+	},
+	list: function (cmd) {
+		console.log("Reload not yet implemented");
 	}
 };

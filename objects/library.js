@@ -157,8 +157,8 @@ module.exports = {
 		if ( ! loginInfo)
 			return;
 
-		if ( ! cmd.libname) {
-			console.log('Missing parameter: libname'.red);
+		if ( ! cmd.name) {
+			console.log('Missing parameter: name'.red);
 			return;
 		}
 		if ( ! cmd.short_name) {
@@ -180,7 +180,7 @@ module.exports = {
 		context.getContext(cmd, function() {
 			
 			var newLibrary = {
-				name: cmd.libname,
+				name: cmd.name,
 				group_name: cmd.short_name ,
 				lib_name: cmd.short_name ,
 				version: ver  ,
@@ -377,8 +377,8 @@ module.exports = {
 			filter += "&sysfilter=equal(ident:" + cmd.ident + ")";
 		} else if (cmd.short_name) {
 			filter += "&sysfilter=equal(short_name:'" + cmd.short_name + "')";
-		} else if (cmd.libname) {
-			filter += "&sysfilter=equal(name:'" + cmd.libname + "')";
+		} else if (cmd.name) {
+			filter += "&sysfilter=equal(name:'" + cmd.name + "')";
 		} 
 		
 		var toStdout = false;

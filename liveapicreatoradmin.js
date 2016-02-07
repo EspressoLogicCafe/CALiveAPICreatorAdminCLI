@@ -29,9 +29,9 @@ var reln = require('./objects/reln.js');
 var handler = require('./objects/handler.js');
 var apiversion = require('./objects/version.js');
 //var sequence = require('./objects/sequence.js'); //Oracle
-//var apps = require('./objects/applicaitons.js'); //export | import
+//var apps = require('./objects/applicaitons.js'); //list | export | import
 // 2.1 features
-//var snapshot = require('./objects/snapshot.js');//list | start  --name | restore --name  
+var snapshot = require('./objects/snapshot.js');//list | start  | restore --name  
 //var npa = require('./objects/nonpersistattrs.js');// list | create | delete | update | import |export
 
 program
@@ -132,7 +132,7 @@ program
 	.description('Administer authentication providers for an account.')
 	.option('--ident [ident]','The ident of the auth provider')
 	.option('--project_ident [ident]','The project ident used to link this auth provider')
-	.option('--authname [name]', 'Name of auth provider')
+	.option('--name [name]', 'Name of auth provider')
 	.option('--createFunction [bootstrap]', 'Name for Create Function')
 	.option('--paramMap [map]', 'Map of auth provider settings')
 	.option('--comments [comment]', 'Comment on auth provider')
@@ -144,7 +144,7 @@ program
 	.description('Administer java and javascript libraries for an account.')
 	.option('--ident [ident]','The ident of the library')
 	.option('--project_ident [projectId]','The project ident that this library will be marked as used' )
-	.option('--libname [name]', 'Name of library')
+	.option('--name [name]', 'Name of library')
 	.option('--libtype [type]', 'Type of Library javascript ! java')
 	.option('--ver [version]', 'Version of Library JS or Java')
 	.option('--short_name [shortname]', 'Short Name')
@@ -224,21 +224,21 @@ program
 	.command('event <list|export|import>')
 	.description('Administer Request & Response Events for current project.')
 	.option('--eventname [name]', 'The request or response Name')
-	.option('--project_ident [project_ident]','The project ident that will be marked as used' )
+	.option('--project_ident [project_ident]','The project ident that will be used' )
 	.option('--file [fileName]', '[Optional] Name of file to import/export (if not provided stdin/stdout used for export)')
 	.action(event.doEvent);	
 	
 program
 	.command('handler <list|export|import>')
 	.description('Administer Custom Endpoints (Handlers) for current project.')
-	.option('--project_ident [project_ident]','The project ident that will be marked as used' )
+	.option('--project_ident [project_ident]','The project ident that will be used' )
 	.option('--file [fileName]', '[Optional] Name of file to import/export (if not provided stdin/stdout used for export)')
 	.action(handler.doHandler);	
 
 program
 	.command('apiversion <list|export|import>')
 	.description('Administer API Versions for Resources for current project.')
-	.option('--project_ident [project_ident]','The project ident that will be marked as used' )
+	.option('--project_ident [project_ident]','The project ident that will be used' )
 	.option('--file [fileName]', '[Optional] Name of file to import/export (if not provided stdin/stdout used for export)')
 	.action(apiversion.doVersion);	
 	
@@ -246,10 +246,16 @@ program
 	.command('relationship <list|export|import>')
 	.description('Administer Relationships (Virtual Keys) for current project.')
 	.option('--ident [ident]', 'This is the ident of the relationship')
-	.option('--project_ident [project_ident]','The project ident that will be marked as used' )
+	.option('--project_ident [project_ident]','The project ident that will be used' )
 	.option('--file [fileName]', '[Optional] Name of file to import/export (if not provided stdin/stdout used for export)')
 	.action(reln.doReln);	
-	
+
+program
+	.command('snapshot <list|start>')
+	.description('List or start a project snapshot (backup) for current project.')
+	.option('--name [name]', 'The snapshot Name')
+	.option('--project_ident [project_ident]','[optional] The project ident that will be used' )
+	.action(snapshot.doSnapshot);	
 	
 program.parse(process.argv);
 
