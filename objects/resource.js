@@ -408,10 +408,10 @@ module.exports = {
 		var url = loginInfo.url;
 		var apiKey = loginInfo.apiKey;
 		
-		var filter = "";
+		var filter = "sysfilter=equal(root_ident: null)"; //only get root objects
 		var projIdent = cmd.project_ident;
 		if ( cmd.ident) {
-			filter = "equal(ident:" + cmd.ident +")";
+			filter = "sysfilter=equal(ident:" + cmd.ident +")";
 		}
 		if ( ! projIdent) {
 			projIdent = dotfile.getCurrentProject();
@@ -419,14 +419,11 @@ module.exports = {
 				console.log('There is no current project.'.yellow);
 				return;
 			}
-			if(cmd.ident) {
-				filter += "&";
-			}
-			filter += "equal(apiversion_ident:" + projIdent +")";
+			//filter += "&sysfilter=equal(apiversion_ident:" + projIdent +")"; TO DO
 		}
-		
+		console.log(filter);
 		//to do - this is not right - need specific version
-		client.get(url + "/AllResources?sysfilter="+filter+"&pagesize=100", {
+		client.get(url + "/AllResources?"+filter+"&pagesize=100", {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
 			}
@@ -461,6 +458,85 @@ module.exports = {
 		});	
 	},
 	import: function(cmd) {
-		console.log("Sorry not implemented - use Live API Creator to import a resource");
+		var client = new Client();
+		//need to decompose both export and import
+		if(true){
+			console.log("Import of Resources not completed - use Live API Creator GUI");
+			return;
+		}
+		
+		var loginInfo = login.login(cmd);
+		if ( ! loginInfo)
+			return;
+		var url = loginInfo.url;
+		var apiKey = loginInfo.apiKey;
+		var projIdent = cmd.project_ident;
+		if ( ! projIdent) {
+			projIdent = dotfile.getCurrentProject();
+			if ( ! projIdent) {
+				console.log('There is no current project.'.yellow);
+				return;
+			}
+		}
+		
+		if ( ! cmd.file) {
+			cmd.file = '/dev/stdin';
+		}
+		
+		context.getContext(cmd, function() {
+			var fileContent = JSON.parse(fs.readFileSync(cmd.file));
+			var attrbiutes;
+			if(Array.isArray(fileContent)){
+				for(var i = 0 ; i < fileContent.length; i++){
+					//fileContent[i].project_ident = projIdent;
+					delete fileContent[i].ident;
+					delete fileContent[i].entity_name;
+					delete fileContent[i].project_ident;
+					delete fileContent[i]["@metadata"];
+					//fileContent[i]["@metadata"] = {action:"MERGE_INSERT", key: ["apiversion_ident","name"]} ;
+					attrbiutes = fileContent[i].Attributes;//post {AllResources.Attributes}
+					delete fileContent[i].Attributes;
+				} 
+			}
+			var startTime = new Date();
+			client.post(loginInfo.url + "/AllResources", {
+				data: fileContent,
+				headers: {Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1" }
+				}, function(data) {
+				var endTime = new Date();
+				if (data.errorMessage) {
+					console.log(data.errorMessage.red);
+					return;
+				}
+				printObject.printHeader('Resourcer was created, including:');
+				
+				var newResource = _.find(data.txsummary, function(p) {
+					return p['@metadata'].resource === 'AllResources';
+				});
+				if ( ! newResource) {
+					console.log('ERROR: unable to find imported auth provider'.red);
+					return;
+				}
+				if (cmd.verbose) {
+					_.each(data.txsummary, function(obj) {
+						printObject.printObject(obj, obj['@metadata'].entity, 0, obj['@metadata'].verb);
+					});
+				}
+				else {
+					printObject.printObject(newResource, newResource['@metadata'].entity, 0, newResource['@metadata'].verb);
+					console.log(('and ' + (data.txsummary.length - 1) + ' other objects').grey);
+				}
+			
+				var trailer = "Request took: " + (endTime - startTime) + "ms";
+				trailer += " - # objects touched: ";
+				if (data.txsummary.length === 0) {
+					console.log('No data returned'.yellow);
+				}
+				else {
+					trailer += data.txsummary.length;
+				}
+				printObject.printHeader(trailer);
+			})
+		});
 	}
 };
