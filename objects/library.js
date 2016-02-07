@@ -283,11 +283,13 @@ module.exports = {
 		
 		context.getContext(cmd, function() {
 		
-			var fileContent = JSON.parse(fs.readFileSync(cmd.file));
-			fileContent[0].account_ident = context.account.ident;
-			fileContent[0].ident = null;
+			var fileContent = JSON.parse(fs.readFileSync(cmd.file));	
 			var account_ident = context.account.ident;
-			fileContent[0]["@metadata"] = {action:"MERGE_INSERT", key: "name"} ;
+			for(var i = 0 ; i < fileContent.length ; i++ ){
+				delete fileContent[i].ident;
+				fileContent[i].account_ident = account_ident;
+				fileContent[i]["@metadata"] = {action:"MERGE_INSERT", key: ["name","account_ident"]} ;
+			}
 			var startTime = new Date();
 			client.put(loginInfo.url + "/logic_libraries", {
 				data: fileContent,
@@ -398,10 +400,12 @@ module.exports = {
 				console.log(("Error: no such library found").red);
 				return;
 			}
-			delete data[0].ident;
-			data[0].account_ident = null;
-			delete data[0]['@metadata'].links;
-			data[0]['@metadata'].checksum = 'override';
+			for(var i = 0; i < data.length ; i++){
+				delete data[i].ident;
+				data[i].account_ident = null;
+				delete data[i]['@metadata'].links;
+				delete data[i]['@metadata'];
+			}
 			
 			if (toStdout) {
 				console.log(JSON.stringify(data, null, 2));

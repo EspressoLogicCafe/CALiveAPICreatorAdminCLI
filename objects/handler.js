@@ -167,7 +167,7 @@ module.exports = {
 			fileContent.project_ident = projIdent;
 			//fileContent["@metadata"] = {action:"MERGE_INSERT", key: "name"} ;
 		}
-		console.log(fileContent);
+		
 		var startTime = new Date();
 		client.post(loginInfo.url + "/admin:handlers", {
 			data: fileContent,

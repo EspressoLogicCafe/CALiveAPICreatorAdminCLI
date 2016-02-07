@@ -187,9 +187,10 @@ module.exports = {
 		context.getContext(cmd, function() {
 			var fileContent = JSON.parse(fs.readFileSync(cmd.file));
 			var row = null;
-			for(var i = 0; i < fileContent.length ; i++){
-			      fileContent[i].project_ident = projIdent;
-			      fileContent[i]['@metadata'].checksum = "override";
+			for(var i = 0 ; i < fileContent.length ; i++ ){
+				fileContent[i].project_ident = projIdent;
+				fileContent[i]["@metadata"] = {action:"MERGE_INSERT", key: ["projectoptiontype_ident","project_ident"]} ;
+
 			row = fileContent[i];
 			var startTime = new Date();
 			client.put(loginInfo.url + "/ProjectOptions", {
@@ -202,7 +203,7 @@ module.exports = {
 					return;
 				}
 				printObject.printHeader('Logic project settings was created, including:');
-				console.log(data);
+				
 				var newSettings = _.find(data.txsummary, function(p) {
 					return p['@metadata'].resource === 'ProjectOptions';
 				});
@@ -282,7 +283,7 @@ module.exports = {
 			for(var i = 0; i < data.length ; i++){
 			      delete data[i].ident;
 			      data[i].project_ident = null;
-			      data[i]['@metadata'].checksum = "override";
+			      delete data[i]['@metadata'];
 			      delete data[i].ProjectOptionTypes;
 			}
 			if (toStdout) {
@@ -292,7 +293,7 @@ module.exports = {
 			} else {
 				var exportFile = fs.openSync(cmd.file, 'w+', 0600);
 				fs.writeSync(exportFile, JSON.stringify(data, null, 2));
-				console.log(('Logic project settings has been exported to file: ' + cmd.file).green);
+				console.log(('API Project settings has been exported to file: ' + cmd.file).green);
 			}
 		});	
 			

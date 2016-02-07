@@ -390,7 +390,7 @@ module.exports = {
 			if(Array.isArray(fileContent)){
 				for(var i = 0 ; i < fileContent.length; i++){
 					fileContent[i].project_ident = curProj;
-					fileContent[i].ident = null;
+					delete fileContent[i].ident;
 					fileContent[i]["@metadata"] = {action:"MERGE_INSERT", key: "name"} ;
 				} 
 			} else {
@@ -399,7 +399,7 @@ module.exports = {
 				fileContent["@metadata"] = {action:"MERGE_INSERT", key: "name"} ;
 			}
 			var startTime = new Date();
-			client.post(loginInfo.url + "/admin:named_sorts", {
+			client.put(loginInfo.url + "/admin:named_sorts", {
 				data: fileContent,
 				headers: {Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1" }
 				}, function(data) {

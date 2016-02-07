@@ -461,6 +461,6 @@ module.exports = {
 		});	
 	},
 	import: function(cmd) {
-		console.log("Sorry not implemented");
+		console.log("Sorry not implemented - use Live API Creator to import a resource");
 	}
 };

@@ -17,10 +17,10 @@ module.exports = {
 			module.exports.export(cmd);
 		}
 		else if (action === 'import') {
-			module.import.export(cmd);
+			module.exports.import(cmd);
 		}
 		else {
-			console.log('You must specify an action: list or  export');
+			console.log('You must specify an action: list, import, or  export');
 			//program.help();
 		}
 	},
@@ -43,33 +43,33 @@ module.exports = {
 			}
 		}
 		client.get(url + "/admin:apiversions?sysfilter=equal(project_ident:" + projIdent+")&pagesize=100&&sysorder=(name:asc_uc,name:desc)", {
-						headers: {
-							Authorization: "CALiveAPICreator " + apiKey + ":1"
-						}
-					}, function(data) {
-						if (data.errorMessage) {
-							console.log(data.errorMessage.red);
-							return;
-						}
-						printObject.printHeader('API Version(s)');
-						var table = new Table();
-						var type = "";
-						_.each(data, function(p) {
-						type = p.eventtype_ident == 1 ? "Request":"Response";
-							table.cell("Ident", p.ident);
-							table.cell("Name", p.name);
-							var comments = p.comments;
-							if ( ! comments) {
-								comments = "";
-							}
-							else if (comments.length > 50){
-								//replace \n
-								comments = comments.substring(0, 47) + "...";
-							}
-							comments = comments.replace("\n"," ");
-							table.cell("Comments",comments);
-							table.newRow();
-				});
+			headers: {
+				Authorization: "CALiveAPICreator " + apiKey + ":1"
+			}
+		}, function(data) {
+			if (data.errorMessage) {
+				console.log(data.errorMessage.red);
+				return;
+			}
+			printObject.printHeader('API Version(s)');
+			var table = new Table();
+			var type = "";
+			_.each(data, function(p) {
+			type = p.eventtype_ident == 1 ? "Request":"Response";
+				table.cell("Ident", p.ident);
+				table.cell("Name", p.name);
+				var comments = p.comments;
+				if ( ! comments) {
+					comments = "";
+				}
+				else if (comments.length > 50){
+					//replace \n
+					comments = comments.substring(0, 47) + "...";
+				}
+				comments = comments.replace("\n"," ");
+				table.cell("Comments",comments);
+				table.newRow();
+			});
 			table.sort(['Name']);
 			console.log(table.toString());
 			printObject.printHeader("# events: " + data.length);
@@ -160,14 +160,14 @@ module.exports = {
 		var fileContent = JSON.parse(fs.readFileSync(cmd.file));
 		if(Array.isArray(fileContent) && fileContent.length > 0){
 			fileContent[0].project_ident = projIdent;
-			//fileContent[0]["@metadata"] = {action:"MERGE_INSERT", key: "name"} ;
+			fileContent[0]["@metadata"] = {action:"MERGE_INSERT", key: ["project_ident","name"]} ;
 		} else {
 			fileContent.project_ident = projIdent;
-			//fileContent["@metadata"] = {action:"MERGE_INSERT", key: "name"} ;
+			fileContent["@metadata"] = {action:"MERGE_INSERT", key: ["project_ident","name"]} ;
 		}
-		console.log(fileContent);
+		
 		var startTime = new Date();
-		client.post(loginInfo.url + "/admin:apiversions", {
+		client.put(loginInfo.url + "/admin:apiversions", {
 			data: fileContent,
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"

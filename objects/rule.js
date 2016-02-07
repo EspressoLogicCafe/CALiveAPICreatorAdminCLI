@@ -22,11 +22,14 @@ module.exports = {
 		else if (action === 'export') {
 			module.exports.export(cmd);
 		}
+		else if (action === 'import') {
+			module.exports.import(cmd);
+		}
 		else if (action === 'delete') {
 			module.exports.del(cmd);
 		}
 		else {
-			console.log('You must specify an action: list, create, export, update or delete');
+			console.log('You must specify an action: list, create, import, export, update or delete');
 			//program.help();
 		}
 	},
@@ -526,8 +529,7 @@ module.exports = {
 			}
 			for(var i = 0; i < data.length ; i++){
 			      delete data[i].ident;
-			      data[i].project_ident = null;
-			      data[i]['@metadata'].checksum = "override";
+			      delete data[i].project_ident;
 			      delete data[i]['@metadata'].links;
 			}
 			if (toStdout) {
@@ -543,11 +545,74 @@ module.exports = {
 	import: function(cmd) {
 		var client = new Client();
 		var loginInfo = login.login(cmd);
-		if ( ! loginInfo)
+		if ( ! loginInfo) {
 			return;
+		}
+
+		var projIdent = cmd.project_ident;
+		if ( ! projIdent) {
+			projIdent = dotfile.getCurrentProject();
+			if ( ! projIdent) {
+				console.log('There is no current project.'.yellow);
+				return;
+			}
+		}
+		if ( ! cmd.file) {
+			cmd.file = '/dev/stdin';
+		}
+		
+		var fileContent = JSON.parse(fs.readFileSync(cmd.file));
+		if(Array.isArray(fileContent) && fileContent.length > 0){
+			for(var i = 0 ; i < fileContent.length ; i++ ){
+				fileContent[i].project_ident = projIdent;
+				//fileContent[i]["@metadata"] = {action:"MERGE_INSERT"} ;
+			}
+		} else {
+			fileContent.project_ident = projIdent;
+			//fileContent["@metadata"] = {action:"MERGE_INSERT"} ;
+		}
+		
+		var startTime = new Date();
+		client.post(loginInfo.url + "/AllRules", {
+			data: fileContent,
+			headers: {
+				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
+			}
+		}, function(data) {
+		
+			var endTime = new Date();
+			if (data.errorMessage) {
+				console.log(data.errorMessage.red);
+				return;
+			}
+			printObject.printHeader('Rule(s) created, including:');
+				
+			var newRule = _.find( data.txsummary, function(p) {
+				return p['@metadata'].resource === 'AllRules';
+			});
+			if ( ! newRule) {
+				console.log('ERROR: unable to find imported rules'.red);
+				return;
+			}
+			if (cmd.verbose) {
+				_.each(data.txsummary, function(obj) {
+					printObject.printObject(obj, obj['@metadata'].entity, 0, obj['@metadata'].verb);
+				});
+			}
+			else {
+				printObject.printObject(newRule, newRule['@metadata'].entity, 0, newRule['@metadata'].verb);
+				console.log(('and ' + (data.txsummary.length - 1) + ' other objects').grey);
+			}
 			
-		var url = loginInfo.url;
-		var apiKey = loginInfo.apiKey;
-		console.log("Sorry not implemented");
+			var trailer = "Request took: " + (endTime - startTime) + "ms";
+			trailer += " - # objects touched: ";
+			if (data.txsummary.length === 0) {
+				console.log('No data returned'.yellow);
+			}
+			else {
+				trailer += data.txsummary.length;
+			}
+			printObject.printHeader(trailer);
+		});
 	}
 };

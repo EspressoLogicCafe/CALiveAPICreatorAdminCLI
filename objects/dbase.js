@@ -484,11 +484,15 @@ module.exports = {
 			return;
 		}
 		context.getContext(cmd, function() {
-			var fileContent = JSON.parse(fs.readFileSync(cmd.importFile));
-			fileContent.project_ident = curProj;
-			fileContent.ident = null;
+			var fileContent = JSON.parse(fs.readFileSync(cmd.file));
+			if(Array.isArray(fileContent) && fileContent.length > 0){
+				for(var i = 0; i < fileContent.length ; i++ ){
+					fileContent[i].project_ident = curProj;
+					fileContent[i].ident = null;
+				}
+			}
 			var startTime = new Date();
-			client.post(loginInfo.url + "/dbaseschemas", {
+			client.post(loginInfo.url + "/admin:dbaseschemas", {
 				data: fileContent,
 				headers: {Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1" }
 				}, function(data) {
@@ -499,10 +503,10 @@ module.exports = {
 				}
 				printObject.printHeader('Datasource was imported, including:');
 				
-				var newAuth = _.find(data.txsummary, function(p) {
+				var newDataSource = _.find(data.txsummary, function(p) {
 					return p['@metadata'].resource === 'admin:dbaseschemas';
 				});
-				if ( ! newAuth) {
+				if ( ! newDataSource) {
 					console.log('ERROR: unable to find imported data source'.red);
 					return;
 				}
@@ -512,7 +516,7 @@ module.exports = {
 					});
 				}
 				else {
-					printObject.printObject(newAuth, newAuth['@metadata'].entity, 0, newAuth['@metadata'].verb);
+					printObject.printObject(newDataSource, newDataSource['@metadata'].entity, 0, newDataSource['@metadata'].verb);
 					console.log(('and ' + (data.txsummary.length - 1) + ' other objects').grey);
 				}
 			

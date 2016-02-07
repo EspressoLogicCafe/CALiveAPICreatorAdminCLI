@@ -383,6 +383,14 @@ module.exports = {
 			return;
 		var url = loginInfo.url;
 		var apiKey = loginInfo.apiKey;
+		var projIdent = cmd.project_ident;
+		if ( ! projIdent) {
+			projIdent = dotfile.getCurrentProject();
+			if ( ! projIdent) {
+				console.log('There is no current project.'.yellow);
+				return;
+			}
+		}
 		
 		if ( ! cmd.file) {
 			cmd.file = '/dev/stdin';
@@ -390,11 +398,15 @@ module.exports = {
 		
 		context.getContext(cmd, function() {
 			var fileContent = JSON.parse(fs.readFileSync(cmd.file));
-			fileContent[0].account_ident = context.account.ident;
-			fileContent[0].ident = null;
-			fileContent[0]["@metadata"] = {action:"MERGE_INSERT", key: "name"} ;
+			if(Array.isArray(fileContent)){
+				for(var i = 0 ; i < fileContent.length; i++){
+					fileContent[i].account_ident = context.account.ident;
+					delete fileContent[i].ident;
+					fileContent[i]["@metadata"] = {action:"MERGE_INSERT", key: ["account_ident","name"]} ;
+				} 
+			}
 			var startTime = new Date();
-			client.put(loginInfo.url + "/authproviders", {
+			client.put(loginInfo.url + "/admin:authproviders", {
 				data: fileContent,
 				headers: {Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1" }
 				}, function(data) {

@@ -20,7 +20,7 @@ module.exports = {
 			module.exports.import(cmd);
 		}
 		else {
-			console.log('You must specify an action: list or  export');
+			console.log('You must specify an action: list,import, or  export');
 			//program.help();
 		}
 	},
@@ -161,15 +161,17 @@ module.exports = {
 		
 		var fileContent = JSON.parse(fs.readFileSync(cmd.file));
 		if(Array.isArray(fileContent) && fileContent.length > 0){
-			fileContent[0].project_ident = projIdent;
-			//fileContent[0]["@metadata"] = {action:"MERGE_INSERT", key: "name"} ;
+			for(var i = 0 ; i < fileContent.length ; i++ ){
+				fileContent[i].project_ident = projIdent;
+				fileContent[i]["@metadata"] = {action:"MERGE_INSERT", key: ["name","project_ident"]} ;
+			}
 		} else {
 			fileContent.project_ident = projIdent;
-			//fileContent["@metadata"] = {action:"MERGE_INSERT", key: "name"} ;
+			fileContent["@metadata"] = {action:"MERGE_INSERT", key: ["project_ident","name"]} ;
 		}
-		console.log(fileContent);
+		
 		var startTime = new Date();
-		client.post(loginInfo.url + "/admin:users", {
+		client.put(loginInfo.url + "/admin:users", {
 			data: fileContent,
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"

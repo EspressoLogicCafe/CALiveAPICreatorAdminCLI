@@ -107,7 +107,7 @@ program
 	.action(resource.doResource);
 
 program
-	.command('rule <list|create|delete|export>')
+	.command('rule <list|create|update|delete|import|export>')
 	.description('Administer rules within a project.')
 	.option('--ruletype [type]', 'The type of the rule, can be: sum,formula,validation,parentcopy')
 	.option('--entity_name [prefix:table]', 'The table, qualified with a prefix, for the rule')

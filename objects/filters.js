@@ -385,19 +385,19 @@ module.exports = {
 		}
 		context.getContext(cmd, function() {
 			var fileContent = JSON.parse(fs.readFileSync(cmd.file));
-			if(Array.isArray(fileContent)){
+			if(Array.isArray(fileContent) && fileContent.length > 0){
 				for(var i = 0 ; i < fileContent.length; i++){
 					fileContent[i].project_ident = curProj;
-					fileContent[i].ident = null;
-					fileContent[i]["@metadata"] = {action:"MERGE_INSERT", key: "name"} ;
+					delete fileContent[i].ident;
+					fileContent[i]["@metadata"] = {action:"MERGE_INSERT", key: ["project_ident","name"]} ;
 				} 
 			} else {
 				fileContent.project_ident = curProj;
 				fileContent.ident = null;
-				fileContent["@metadata"] = {action:"MERGE_INSERT", key: "name"} ;
+				fileContent["@metadata"] = {action:"MERGE_INSERT", key: ["project_ident","name"]} ;
 			}
 			var startTime = new Date();
-			client.post(loginInfo.url + "/admin:named_filters", {
+			client.put(loginInfo.url + "/admin:named_filters", {
 				data: fileContent,
 				headers: {Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1" }
 				}, function(data) {

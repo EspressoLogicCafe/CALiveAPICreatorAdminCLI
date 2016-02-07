@@ -70,6 +70,8 @@ module.exports = {
 				else if (comments.length > 50){
 					comments = comments.substring(0, 47) + "...";
 				}
+				comments = comments.replace("\n"," ");
+				comments = comments.replace("\n"," ");
 				table.cell("Comments", comments);
 				table.newRow();
 			});
