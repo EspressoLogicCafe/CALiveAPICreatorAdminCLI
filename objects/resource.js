@@ -464,7 +464,9 @@ module.exports = {
 			console.log("Import of Resources not completed - use Live API Creator GUI");
 			return;
 		}
-		
+		//need to read all resources into memory
+		//root_ident is null
+		//then link these and post them one by one.
 		var loginInfo = login.login(cmd);
 		if ( ! loginInfo)
 			return;
@@ -489,16 +491,19 @@ module.exports = {
 			if(Array.isArray(fileContent)){
 				for(var i = 0 ; i < fileContent.length; i++){
 					//fileContent[i].project_ident = projIdent;
-					delete fileContent[i].ident;
-					delete fileContent[i].entity_name;
-					delete fileContent[i].project_ident;
-					delete fileContent[i]["@metadata"];
+					//delete fileContent[i].ident;
+					//delete fileContent[i].entity_name;
+					//delete fileContent[i].project_ident;
+					//delete fileContent[i]["@metadata"];
 					//fileContent[i]["@metadata"] = {action:"MERGE_INSERT", key: ["apiversion_ident","name"]} ;
-					attrbiutes = fileContent[i].Attributes;//post {AllResources.Attributes}
-					delete fileContent[i].Attributes;
+					//attrbiutes = fileContent[i].Attributes;//post {AllResources.Attributes}
 				} 
 			}
 			var startTime = new Date();
+			//for(var idx = 0 ; idx < fileContent.length ; idx++){
+			//_.each(fileContent , function(obj) {
+			//   if(fileContent.root_ident == null) {
+			// these must be done first - then we need to walk the tree to find (container_ident == ident)
 			client.post(loginInfo.url + "/AllResources", {
 				data: fileContent,
 				headers: {Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1" }

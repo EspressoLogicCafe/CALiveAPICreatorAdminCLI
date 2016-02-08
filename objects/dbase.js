@@ -25,6 +25,9 @@ module.exports = {
 		else if (action === 'import') {
 			module.exports.import(cmd);
 		}
+		else if (action === 'reload') {
+			module.exports.reload(cmd);
+		}
 		else if (action === 'export') {
 			module.exports.export(cmd);
 		}
@@ -320,7 +323,95 @@ module.exports = {
 			});
 		});
 	},
-	
+	reload: function(cmd) {
+		var client = new Client();
+		var loginInfo = login.login(cmd);
+		if ( ! loginInfo) {
+			console.log('You are not currently logged into any API Creator server.'.red);
+			return;
+		}
+
+		var filter = null;
+		var projIdent = cmd.project_ident;
+		if ( ! projIdent) {
+			projIdent = dotfile.getCurrentProject();
+			if ( ! projIdent) {
+				console.log('There is no current project.'.yellow);
+				return;
+			}
+			filter = "sysfilter=equal(project_ident: "+ projIdent +")" ;
+		}
+		if(cmd.ident){
+			filter += "&sysfilter=equal(ident: "+ cmd.ident +")" ;
+		} else {
+			if (cmd.prefix) {
+				filter += "&sysfilter=equal(prefix:'" + cmd.prefix + "')";
+			}
+			else if (cmd.db_name) {
+				filter += "&sysfilter=equal(name:'" + cmd.db_name + "')";
+			} else {
+				console.log('Missing parameter: please specify either --db_name, --ident or --prefix'.red);
+				return;
+			}
+		}
+		if( cmd.active ){
+			filter += "&sysfilter=equal(active: "+ cmd.active + ")";
+		} else {
+			filter += "&sysfilter=equal(active: true)";
+		}
+		
+		client.get(loginInfo.url + "/DbSchemas?" + filter, {
+			headers: {
+				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
+			}
+		}, function(data) {
+			
+			if (data.errorMessage) {
+				console.log(("Error: " + data.errorMessage).red);
+				return;
+			}
+			if (data.length === 0) {
+				console.log(("Error: no such database use --prefix, --db_name, or --ident").red);
+				return;
+			}
+			if (data.length > 1) {
+				console.log(("Error: more than one database for the given condition: " + filter).red);
+				return;
+			}
+			var db = data[0];
+			var startTime = new Date();
+			var request = {statusRequest: projIdent };
+			console.log(loginInfo.url  + "/@database_test");
+			console.log(JSON.stringify(db));
+			client.post( loginInfo.url  + "/@database_test", {
+				data: request,
+				headers: {
+					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
+				}
+			}, function(data2) {
+				var endTime = new Date();
+				console.log(data2);
+				//console.log(JSON.stringify(data2,null,2));
+				if (data2.errorMessage) {
+					console.log(data2.errorMessage.red);
+					return;
+				}
+				printObject.printHeader('Database reload completed, including the following objects:');
+				_.each(data2, function(obj) {
+					printObject.printObject(obj, obj.status);
+				});
+				var trailer = "Request took: " + (endTime - startTime) + "ms";
+				trailer += " - # objects touched: ";
+				if (data2.length == 0) {
+					console.log('No data returned'.yellow);
+				}
+				else {
+					trailer += data2.length;
+				}
+				printObject.printHeader(trailer);
+			});
+		});
+	},
 	del : function(cmd) {
 		var client = new Client();
 		var loginInfo = login.login(cmd);
@@ -336,8 +427,11 @@ module.exports = {
 		else if (cmd.db_name) {
 			filt = "equal(name:'" + cmd.db_name + "')";
 		}
+		else if (cmd.ident) {
+			filt = "equal(ident:" + cmd.ident + ")";
+		}
 		else {
-			console.log('Missing parameter: please specify either db_name or prefix'.red);
+			console.log('Missing parameter: please specify either --db_name, --ident or --prefix'.red);
 			return;
 		}
 		

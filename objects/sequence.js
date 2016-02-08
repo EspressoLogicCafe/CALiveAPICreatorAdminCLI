@@ -9,18 +9,18 @@ var printObject = require('../util/printObject.js');
 var dotfile = require('../util/dotfile.js');
 
 module.exports = {
-	doVersion: function(action, cmd) {
+	doSequence: function(action, cmd) {
 		if (action === 'list') {
 			module.exports.list(cmd);
 		}
 		else if (action === 'export') {
-			module.exports.export(cmd);
+			module.exports.start(cmd);
 		}
 		else if (action === 'import') {
-			module.exports.import(cmd);
+			module.exports.restore(cmd);
 		}
 		else {
-			console.log('You must specify an action: list, import, or  export');
+			console.log('You must specify an action: list,export, or import');
 			//program.help();
 		}
 	},
@@ -42,7 +42,8 @@ module.exports = {
 				return;
 			}
 		}
-		client.get(url + "/admin:apiversions?sysfilter=equal(project_ident:" + projIdent+")&pagesize=100&&sysorder=(name:asc_uc,name:desc)", {
+
+		client.get(url + "/admin:project_versions?sysfilter=equal(project_ident:" + projIdent+")&sysorder=(version_datetime:desc)&pagesize=1000", {
 			headers: {
 				Authorization: "CALiveAPICreator " + apiKey + ":1"
 			}
@@ -51,30 +52,32 @@ module.exports = {
 				console.log(data.errorMessage.red);
 				return;
 			}
-			printObject.printHeader('API Version(s)');
+			printObject.printHeader('Shaptshots');
 			var table = new Table();
-			var type = "";
 			_.each(data, function(p) {
-			type = p.eventtype_ident == 1 ? "Request":"Response";
-				table.cell("Ident", p.ident);
 				table.cell("Name", p.name);
-				var comments = p.comments;
+				table.cell("Date", p.version_datetime);
+				var comments = p.description;
 				if ( ! comments) {
 					comments = "";
 				}
 				else if (comments.length > 50){
-					//replace \n
 					comments = comments.substring(0, 47) + "...";
 				}
 				comments = comments.replace("\n"," ");
-				table.cell("Comments",comments);
+				comments = comments.replace("\n"," ");
+				table.cell("Comments", comments);
 				table.newRow();
 			});
-			table.sort(['Name']);
-			console.log(table.toString());
-			printObject.printHeader("# api versions: " + data.length);
+			table.sort(['Name', 'name']);
+			if (data.length === 0) {
+				console.log('There are no tables defined for this project'.yellow);
+			}
+			else {
+				console.log(table.toString());
+			}
+			printObject.printHeader("# named sorts: " + data.length);
 		});
-			
 	},
 	export: function(cmd) {
 		var client = new Client();
@@ -107,7 +110,7 @@ module.exports = {
 			toStdout = true;
 		}
 		
-		client.get(loginInfo.url + "/admin:apiversions?pagesize=1000&"+filter, {
+		client.get(loginInfo.url + "/AllApiKeys?pagesize=1000&"+filter+"&sysfilter=equal(origin:null)", {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
 			}
@@ -124,7 +127,6 @@ module.exports = {
 			for(var idx = 0; idx < data.length ; idx++){
 				delete data[idx].ident;
 				delete data[idx]['@metadata']
-				delete data[idx].project_ident;
 			}
 			
 			if (toStdout) {
@@ -133,7 +135,7 @@ module.exports = {
 			else {
 				var exportFile = fs.openSync(cmd.file, 'w+', 0600);
 				fs.writeSync(exportFile, JSON.stringify(data, null, 2));
-				console.log(('API Versions have been exported to file: ' + cmd.file).green);
+				console.log(('Auth Tokens have been exported to file: ' + cmd.file).green);
 			}
 		});
 	},
@@ -159,15 +161,17 @@ module.exports = {
 		
 		var fileContent = JSON.parse(fs.readFileSync(cmd.file));
 		if(Array.isArray(fileContent) && fileContent.length > 0){
-			fileContent[0].project_ident = projIdent;
-			fileContent[0]["@metadata"] = {action:"MERGE_INSERT", key: ["project_ident","name"]} ;
+			for(var i = 0 ; i < fileContent.length ; i++ ){
+				fileContent[i].project_ident = projIdent;
+				fileContent[i]["@metadata"] = {action:"MERGE_INSERT", key: ["name","project_ident"]} ;
+			}
 		} else {
 			fileContent.project_ident = projIdent;
 			fileContent["@metadata"] = {action:"MERGE_INSERT", key: ["project_ident","name"]} ;
 		}
 		
 		var startTime = new Date();
-		client.put(loginInfo.url + "/admin:apiversions", {
+		client.put(loginInfo.url + "/AllApiKeys", {
 			data: fileContent,
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
@@ -179,13 +183,13 @@ module.exports = {
 				console.log(data.errorMessage.red);
 				return;
 			}
-			printObject.printHeader('API Version(s) created, including:');
+			printObject.printHeader('Authentication Token(s) created, including:');
 				
-			var newAPIVersion = _.find( data.txsummary, function(p) {
-				return p['@metadata'].resource === 'admin:apiversions';
+			var newTokens = _.find( data.txsummary, function(p) {
+				return p['@metadata'].resource === 'AllApiKeys';
 			});
-			if ( ! newAPIVersion) {
-				console.log('ERROR: unable to find imported api version'.red);
+			if ( ! newTokens) {
+				console.log('ERROR: unable to find imported auth tokens'.red);
 				return;
 			}
 			if (cmd.verbose) {
@@ -194,7 +198,7 @@ module.exports = {
 				});
 			}
 			else {
-				printObject.printObject(newAPIVersion, newAPIVersion['@metadata'].entity, 0, newAPIVersion['@metadata'].verb);
+				printObject.printObject(newTokens, newTokens['@metadata'].entity, 0, newTokens['@metadata'].verb);
 				console.log(('and ' + (data.txsummary.length - 1) + ' other objects').grey);
 			}
 			

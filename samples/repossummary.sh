@@ -1,10 +1,11 @@
 #! /bin/bash
 
-
+SERVER=http://localhost:8080/APIServer
+#SERVER=http://localhost:8080 -- Jetty Only
 ## Connect to a local Jetty server
 lacadmin logout -a local
-lacadmin login -u admin -p Password1 http://localhost:8080 -a nwind
-lacadmin use nwind s
+lacadmin login -u admin -p Password1 $SERVER  -a nwind
+lacadmin use nwind
 lacadmin status
 
 # Select aNorthwind B2B Project

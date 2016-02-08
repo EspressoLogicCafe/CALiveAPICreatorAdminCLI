@@ -76,7 +76,7 @@ module.exports = {
 				});
 			table.sort(['Name']);
 			console.log(table.toString());
-			printObject.printHeader("# events: " + data.length);
+			printObject.printHeader("# hanlders: " + data.length);
 		});
 			
 	},

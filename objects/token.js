@@ -106,7 +106,7 @@ module.exports = {
 				console.log(table.toString());
 			}
 			
-			printObject.printHeader("# named auth tokens: " + data.length);
+			printObject.printHeader("# auth tokens: " + data.length);
 			});
 		});
 	},

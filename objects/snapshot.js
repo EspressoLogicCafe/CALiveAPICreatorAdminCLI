@@ -16,6 +16,9 @@ module.exports = {
 		else if (action === 'start') {
 			module.exports.start(cmd);
 		}
+		else if (action === 'restore') {
+			module.exports.restore(cmd);
+		}
 		else {
 			console.log('You must specify an action: list or start');
 			//program.help();
@@ -68,12 +71,12 @@ module.exports = {
 			});
 			table.sort(['Name', 'name']);
 			if (data.length === 0) {
-				console.log('There are no tables defined for this project'.yellow);
+				console.log('There are no snapshots defined for this project'.yellow);
 			}
 			else {
 				console.log(table.toString());
 			}
-			printObject.printHeader("# named sorts: " + data.length);
+			printObject.printHeader("# snapshots: " + data.length);
 		});
 	},
 	start: function(cmd) {
@@ -93,7 +96,7 @@ module.exports = {
 			}
 		}
 		if(! cmd.name ){
-			console.log('Missing parameter: please specify snapshot --name '.red);
+			console.log('Missing parameter: please specify snapshot --name to start'.red);
 			return;
 
 		}
@@ -122,6 +125,65 @@ module.exports = {
 					return;
 				}
 				printObject.printHeader('Snaptshot was created');
+				_.each(data.txsummary, function(obj) {
+					printObject.printObject(obj, obj['@metadata'].entity, 0, obj['@metadata'].verb);
+				});
+				var trailer = "Request took: " + (endTime - startTime) + "ms";
+				trailer += " - # objects touched: ";
+				if (data.txsummary.length == 0) {
+					console.log('No data returned'.yellow);
+				}
+				else {
+					trailer += data.txsummary.length;
+				}
+				printObject.printHeader(trailer);
+		});
+	},
+	restore: function(cmd) {
+		var client = new Client();
+		
+		var loginInfo = login.login(cmd);
+		if ( ! loginInfo)
+			return;
+		var url = loginInfo.url;
+		var apiKey = loginInfo.apiKey;
+		var projIdent = cmd.project_ident;
+		if ( ! projIdent) {
+			projIdent = dotfile.getCurrentProject();
+			if ( ! projIdent) {
+				console.log('There is no current project.'.yellow);
+				return;
+			}
+		}
+		if(! cmd.name ){
+			console.log('Missing parameter: please specify snapshot --name  to restore'.red);
+			return;
+
+		}
+		var filter = null;
+		if (projIdent) {
+			filter = "sysfilter=equal(project_ident:" + projIdent + ")";
+		} else {
+			console.log('Missing parameter: please specify project settings (use list) --project_ident '.red);
+			return;
+		}
+		var snapshot = {
+			name: cmd.name,
+			project_ident: projIdent
+		};
+		var startTime = new Date();
+		client.post(loginInfo.url + "/admin:project_version_restores", {
+				data: snapshot,
+				headers: {
+					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
+				}
+			}, function(data) {
+				var endTime = new Date();
+				if (data.errorMessage) {
+					console.log(data.errorMessage.red);
+					return;
+				}
+				printObject.printHeader('Snaptshot was restored');
 				_.each(data.txsummary, function(obj) {
 					printObject.printObject(obj, obj['@metadata'].entity, 0, obj['@metadata'].verb);
 				});

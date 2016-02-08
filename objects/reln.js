@@ -77,7 +77,7 @@ module.exports = {
 				});
 			table.sort(['Name']);
 			console.log(table.toString());
-			printObject.printHeader("# events: " + data.length);
+			printObject.printHeader("# relationships: " + data.length);
 		});
 			
 	},
@@ -104,7 +104,7 @@ module.exports = {
 		} else if (cmd.ident) {
 			filter = "sysfilter=equal(ident:" + cmd.ident + ")";
 		} else {
-			console.log('Missing parameter: please specify project settings (use list) project_ident or ident '.red);
+			console.log('Missing parameter: please specify project settings (use list) --project_ident or --ident '.red);
 			return;
 		}
 		

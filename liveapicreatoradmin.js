@@ -74,9 +74,10 @@ program
 	.action(project.doProject);
 
 program
-	.command('datasource <list|create|update|delete|import|export>')
+	.command('datasource <list|create|update|delete|import|reload|export>')
 	.description('Administer datasources within a project.')
 	.option('--db_name [name]', 'The name of the datasource connection')
+	.option('--ident [ident]', 'For delete or reload, the ident of the datasource')
 	.option('--prefix [prefix]', 'The prefix of the datasource connection')
 	.option('--dbasetype [dbasetype]', 'The type of the datasource connection, can be mysql, oracle, sqlserver,derby, postgres')
 	.option('--catalog_name [catalog_name]', 'The catalog in the datasource')
@@ -207,10 +208,16 @@ program
 	.action(role.doRole);	
 	
 program
-	.command('user <list|export|import>')
+	.command('user <list|update|export|import>')
 	.description('Administer Users for current project.')
 	.option('--project_ident [project_ident]','The project ident that will be marked as used' )
 	.option('--file [fileName]', '[Optional] Name of file to import/export (if not provided stdin/stdout used for export)')
+	.option('--password [password]','The password for this user' )
+	.option('--fullname [fullname]','User fullname' )
+	.option('--name [name]','User name' )
+	.option('--status [status]','Status active A or inactive I' )
+	.option('--roles [roles]','Comma separated list of role names' )
+	.option('--comments [comments]','User comments' )
 	.action(user.doUser);	
 	
 program
@@ -251,10 +258,10 @@ program
 	.action(reln.doReln);	
 
 program
-	.command('snapshot <list|start>')
+	.command('snapshot <list|start|restore>')
 	.description('List or start a project snapshot (backup) for current project.')
-	.option('--name [name]', 'The snapshot Name')
-	.option('--project_ident [project_ident]','[optional] The project ident that will be used' )
+	.option('--name [name]', 'The snapshot Name used by both start and restore')
+	.option('--project_ident [project_ident]','[optional] The project ident that will be used instead of current selected' )
 	.action(snapshot.doSnapshot);	
 	
 program.parse(process.argv);

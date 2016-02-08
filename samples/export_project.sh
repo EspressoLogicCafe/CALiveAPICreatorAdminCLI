@@ -1,10 +1,11 @@
 #! /bin/bash
 
-
+SERVER=http://localhost:8080/APIServer
+#SERVER=http://localhost:8080 -- Jetty Only
 ## Connect to a local server
 lacadmin logout -a nwind
-lacadmin login -u admin -p Password1 http://localhost:8080 -a nwind
-lacadmin use nwind s
+lacadmin login -u admin -p Password1 $SERVER -a nwind
+lacadmin use nwind
 lacadmin status
 
 # Select a Project
@@ -12,6 +13,8 @@ lacadmin project use --url_name nwindb2b
 
 ## Export everything
 mkdir -p nwind
+
+lacadmin snapshot start --name snapshot1
 lacadmin project export --file nwind/nwind.json
 lacadmin apioptions export --file nwind/apioptions.json
 lacadmin datasource export --file nwind/datasource.json
@@ -29,7 +32,7 @@ lacadmin apiversion export --file nwind/apiversions.json
 lacadmin event export --file nwind/events.json
 lacadmin handler export --file nwind/handlers.json
 lacadmin topic export --file nwind/topic.json
-lacadmin snapshot start --name snapshot1
+lacadmin snapshot restore --name snapshot1
 
 lacadmin logout -a nwind
 

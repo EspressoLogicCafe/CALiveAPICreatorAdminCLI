@@ -19,8 +19,11 @@ module.exports = {
 		else if (action === 'import') {
 			module.exports.import(cmd);
 		}
+		else if (action === 'update') {
+			module.exports.update(cmd);
+		}
 		else {
-			console.log('You must specify an action: list,import, or  export');
+			console.log('You must specify an action: list,update, import, or  export');
 			//program.help();
 		}
 	},
@@ -51,7 +54,7 @@ module.exports = {
 							console.log(data.errorMessage.red);
 							return;
 						}
-						printObject.printHeader('Roles');
+						printObject.printHeader('Users');
 						var table = new Table();
 						_.each(data, function(p) {
 							table.cell("Ident", p.ident);
@@ -127,6 +130,8 @@ module.exports = {
 				delete data[idx].ident;
 				delete data[idx]['@metadata']
 				delete data[idx].project_ident;
+				delete data[idx].password_hash; //do not export
+				delete data[idx].password_salt; //do not export
 			}
 			
 			if (toStdout) {
@@ -211,6 +216,102 @@ module.exports = {
 				trailer += data.txsummary.length;
 			}
 			printObject.printHeader(trailer);
+		});
+	},
+	update: function(cmd) {
+		var client = new Client();
+		var loginInfo = login.login(cmd);
+		if ( ! loginInfo) {
+			return;
+		}
+
+		var filter = null;
+		var projIdent = cmd.project_ident;
+		if ( ! projIdent) {
+			projIdent = dotfile.getCurrentProject();
+			if ( ! projIdent) {
+				console.log('There is no current project.'.yellow);
+				return;
+			}
+			filter = "sysfilter=equal(project_ident: "+ projIdent +")" ;
+		}
+		if(cmd.ident){
+			filter += "&sysfilter=equal(ident: "+ cmd.ident +")" ;
+		} else {
+			if (cmd.name) {
+				filter += "&sysfilter=equal(name:'" + cmd.name + "')";
+			} else {
+				console.log('Missing parameter: please specify either name or ident'.red);
+				return;
+			}
+		}
+		
+		//console.log(filter);
+		client.get(loginInfo.url + "/admin:users?" + filter, {
+			headers: {
+				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
+			}
+		}, function(data) {
+			
+			if (data.errorMessage) {
+				console.log(("Error: " + data.errorMessage).red);
+				return;
+			}
+			if (data.length === 0) {
+				console.log(("Error: user found").red);
+				return;
+			}
+			if (data.length > 1) {
+				console.log(("Error: more than one users for the given condition: " + filter).red);
+				return;
+			}
+			var db = data[0];
+			if( cmd.name) {
+				db.name = cmd.name;
+			}
+			if( cmd.fullname) {
+				db.fullname = cmd.fullname;
+			}
+			if( cmd.comments){
+				db.comments = cmd.comments;
+			}
+			if( cmd.password ){
+				db.password = cmd.password;
+			}
+			if( cmd.status ){
+				db.status = cmd.status;
+			}
+			if( cmd.roles ){
+				db.roles = cmd.roles;
+			}
+			var startTime = new Date();
+			db["@metadata"] = {action:"MERGE_INSERT", key: ["project_ident","name"]} ;
+			client.put(db['@metadata'].href, {
+				data: db,
+				headers: {
+					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
+				}
+			}, function(data2) {
+				var endTime = new Date();
+				//console.log(JSON.stringify(data2,null,2));
+				if (data2.errorMessage) {
+					console.log(data2.errorMessage.red);
+					return;
+				}
+				printObject.printHeader('User was updated, including the following objects:');
+				_.each(data2.txsummary, function(obj) {
+					printObject.printObject(obj, obj['@metadata'].entity, 0, obj['@metadata'].verb);
+				});
+				var trailer = "Request took: " + (endTime - startTime) + "ms";
+				trailer += " - # objects touched: ";
+				if (data2.txsummary.length == 0) {
+					console.log('No data returned'.yellow);
+				}
+				else {
+					trailer += data2.txsummary.length;
+				}
+				printObject.printHeader(trailer);
+			});
 		});
 	}
 };
