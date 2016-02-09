@@ -381,8 +381,7 @@ module.exports = {
 			var db = data[0];
 			var startTime = new Date();
 			var request = {statusRequest: projIdent };
-			console.log(loginInfo.url  + "/@database_test");
-			console.log(JSON.stringify(db));
+			
 			client.post( loginInfo.url  + "/@database_test", {
 				data: request,
 				headers: {

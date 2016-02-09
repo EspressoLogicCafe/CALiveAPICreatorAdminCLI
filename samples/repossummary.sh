@@ -1,5 +1,5 @@
 #! /bin/bash
-
+# Generate the contents of an existing repository
 SERVER=http://localhost:8080/APIServer
 #SERVER=http://localhost:8080 -- Jetty Only
 ## Connect to a local Jetty server
@@ -8,7 +8,7 @@ lacadmin login -u admin -p Password1 $SERVER  -a nwind
 lacadmin use nwind
 lacadmin status
 
-# Select aNorthwind B2B Project
+# Select Northwind B2B Project
 lacadmin project use --url_name nwindb2b
 lacadmin project list
 lacadmin apioptions list

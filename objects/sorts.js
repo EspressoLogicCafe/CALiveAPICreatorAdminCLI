@@ -391,12 +391,12 @@ module.exports = {
 				for(var i = 0 ; i < fileContent.length; i++){
 					fileContent[i].project_ident = curProj;
 					delete fileContent[i].ident;
-					fileContent[i]["@metadata"] = {action:"MERGE_INSERT", key: "name"} ;
+					fileContent[i]["@metadata"] = {action:"MERGE_INSERT", key: ["project_ident","name"]} ;
 				} 
 			} else {
 				fileContent.project_ident = curProj;
 				fileContent.ident = null;
-				fileContent["@metadata"] = {action:"MERGE_INSERT", key: "name"} ;
+				fileContent["@metadata"] = {action:"MERGE_INSERT", key: ["project_ident","name"]} ;
 			}
 			var startTime = new Date();
 			client.put(loginInfo.url + "/admin:named_sorts", {
@@ -409,31 +409,35 @@ module.exports = {
 					return;
 				}
 				printObject.printHeader('Named Sort was imported, including:');
-				
-				var newSort = _.find(data.txsummary, function(p) {
-					return p['@metadata'].resource === 'admin:named_sorts';
-				});
-				if ( ! newSort) {
-					console.log('ERROR: unable to find imported named sort'.red);
-					return;
-				}
-				if (cmd.verbose) {
-					_.each(data.txsummary, function(obj) {
-						printObject.printObject(obj, obj['@metadata'].entity, 0, obj['@metadata'].verb);
-					});
-				}
-				else {
-					printObject.printObject(newSort, newSort['@metadata'].entity, 0, newSort['@metadata'].verb);
-					console.log(('and ' + (data.txsummary.length - 1) + ' other objects').grey);
-				}
-			
 				var trailer = "Request took: " + (endTime - startTime) + "ms";
-				trailer += " - # objects touched: ";
-				if (data.txsummary.length === 0) {
-					console.log('No data returned'.yellow);
-				}
-				else {
-					trailer += data.txsummary.length;
+				if(data.statusCode == 200){
+					//nothing to do here 
+				} else { 
+					var newSort = _.find(data.txsummary, function(p) {
+						return p['@metadata'].resource === 'admin:named_sorts';
+					});
+					if ( ! newSort) {
+						console.log('ERROR: unable to find imported named sort'.red);
+						return;
+					}
+					if (cmd.verbose) {
+						_.each(data.txsummary, function(obj) {
+							printObject.printObject(obj, obj['@metadata'].entity, 0, obj['@metadata'].verb);
+						});
+					}
+					else {
+						printObject.printObject(newSort, newSort['@metadata'].entity, 0, newSort['@metadata'].verb);
+						console.log(('and ' + (data.txsummary.length - 1) + ' other objects').grey);
+					}
+			
+					
+					trailer += " - # objects touched: ";
+					if (data.txsummary.length === 0) {
+						console.log('No data returned'.yellow);
+					}
+					else {
+						trailer += data.txsummary.length;
+					}
 				}
 				printObject.printHeader(trailer);
 			})

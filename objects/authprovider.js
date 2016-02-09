@@ -414,32 +414,36 @@ module.exports = {
 					console.log(data.errorMessage.red);
 					return;
 				}
-				printObject.printHeader('Auth Provider was created, including:');
-				
-				var newAuth = _.find(data.txsummary, function(p) {
-					return p['@metadata'].resource === 'admin:authproviders';
-				});
-				if ( ! newAuth) {
-					console.log('ERROR: unable to find imported auth provider'.red);
-					return;
-				}
-				if (cmd.verbose) {
-					_.each(data.txsummary, function(obj) {
-						printObject.printObject(obj, obj['@metadata'].entity, 0, obj['@metadata'].verb);
-					});
-				}
-				else {
-					printObject.printObject(newAuth, newAuth['@metadata'].entity, 0, newAuth['@metadata'].verb);
-					console.log(('and ' + (data.txsummary.length - 1) + ' other objects').grey);
-				}
-			
+				printObject.printHeader('Auth Provider was imported:');
+
 				var trailer = "Request took: " + (endTime - startTime) + "ms";
-				trailer += " - # objects touched: ";
-				if (data.txsummary.length === 0) {
-					console.log('No data returned'.yellow);
-				}
-				else {
-					trailer += data.txsummary.length;
+				if(data.statusCode == 200 ){
+					
+				} else {		
+					var newAuth = _.find(data.txsummary, function(p) {
+						return p['@metadata'].resource === 'admin:authproviders';
+					});
+					if ( ! newAuth) {
+						console.log('ERROR: unable to find imported auth provider'.red);
+						return;
+					}
+					if (cmd.verbose) {
+						_.each(data.txsummary, function(obj) {
+							printObject.printObject(obj, obj['@metadata'].entity, 0, obj['@metadata'].verb);
+						});
+					}
+					else {
+						printObject.printObject(newAuth, newAuth['@metadata'].entity, 0, newAuth['@metadata'].verb);
+						console.log(('and ' + (data.txsummary.length - 1) + ' other objects').grey);
+					}
+				
+					trailer += " - # objects touched: ";
+					if (data.txsummary.length === 0) {
+						console.log('No data returned'.yellow);
+					}
+					else {
+						trailer += data.txsummary.length;
+					}
 				}
 				printObject.printHeader(trailer);
 			})
