@@ -1,14 +1,16 @@
-la#! /bin/bash
+#! /bin/bash
 
 # Uses NodeJS and Live API Creator command line interface
 # npm install liveapicreator-cli -g
 # Live API Creator meta @ rest endpoints
+## add  --format json for a full JSON response
 
-SERVER=http://localhost:8080/APIServer/rest/default/nwindb2b/v1
+
+SERVER=http://localhost:8080/APIServer/rest/default/demo_mysql/v1
 #echo 1
 # Note that the URL contains the entire path to the project 
-lac login -u demo -p Password1 $SERVER -a localnw
-lac use localnw
+lac login -u demo -p Password1 $SERVER -a demo
+lac use demo
 
 #Show the current license info (add --format json) for full EULA
 lac get @license

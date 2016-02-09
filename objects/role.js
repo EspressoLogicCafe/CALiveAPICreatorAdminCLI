@@ -162,6 +162,7 @@ module.exports = {
 			for(var i = 0 ; i < fileContent.length ; i++ ){
 				fileContent[i].project_ident = projIdent;
 				fileContent[i]["@metadata"] = {action:"MERGE_INSERT", key: ["name","project_ident"]} ;
+				delete fileContent[i].ident;
 			}
 		} else {
 			fileContent.project_ident = projIdent;
@@ -182,7 +183,10 @@ module.exports = {
 				return;
 			}
 			printObject.printHeader('Role(s) created, including:');
-				
+			if(data.statusCode == 200 ){
+				console.log("Request took: " + (endTime - startTime) + "ms");
+				return;
+			} 	
 			var newRole = _.find( data.txsummary, function(p) {
 				return p['@metadata'].resource === 'AllRoles';
 			});

@@ -173,7 +173,7 @@ module.exports = {
 		if(Array.isArray(fileContent) && fileContent.length > 0){
 				for(var i = 0 ; i < fileContent.length; i++){
 					fileContent[i].project_ident = projIdent;
-					fileContent[i].ident = null;
+					delete fileContent[i].ident;
 					fileContent[i]["@metadata"] = {action:"MERGE_INSERT", key:  ["project_ident","name"]};
 				} 
 		} else {
@@ -195,7 +195,10 @@ module.exports = {
 				return;
 			}
 			printObject.printHeader('Event Handler(s) created, including:');
-				
+			if(data.statusCode == 200 ){
+				console.log("Request took: " + (endTime - startTime) + "ms");
+				return;
+			} 	
 			var newHandler = _.find( data.txsummary, function(p) {
 				return p['@metadata'].resource === 'admin:eventhandlers';
 			});

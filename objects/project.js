@@ -478,7 +478,10 @@ module.exports = {
 				return;
 			}
 			printObject.printHeader('Project was created, including:');
-				
+			if(data.statusCode == 200 ){
+				console.log("Request took: " + (endTime - startTime) + "ms");
+				return;
+			} 	
 			var newProj = _.find( data.txsummary, function(p) {
 				return p['@metadata'].resource === 'ProjectExport';
 			});

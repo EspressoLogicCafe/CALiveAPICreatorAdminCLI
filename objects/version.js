@@ -180,7 +180,11 @@ module.exports = {
 				return;
 			}
 			printObject.printHeader('API Version(s) created, including:');
-				
+			if(data.statusCode == 200 ){
+				console.log("Request took: " + (endTime - startTime) + "ms");
+				return;
+			} 	
+	
 			var newAPIVersion = _.find( data.txsummary, function(p) {
 				return p['@metadata'].resource === 'admin:apiversions';
 			});

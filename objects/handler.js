@@ -182,7 +182,10 @@ module.exports = {
 				return;
 			}
 			printObject.printHeader('Handler(s) created, including:');
-				
+			if(data.statusCode == 200 ){
+				console.log("Request took: " + (endTime - startTime) + "ms");
+				return;
+			} 	
 			var newHandler = _.find( data.txsummary, function(p) {
 				return p['@metadata'].resource === 'admin:handlers';
 			});

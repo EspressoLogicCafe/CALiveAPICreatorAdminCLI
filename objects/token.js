@@ -215,7 +215,10 @@ module.exports = {
 				return;
 			}
 			printObject.printHeader('Authentication Token(s) created, including:');
-				
+			if(data.statusCode == 200 ){
+				console.log("Request took: " + (endTime - startTime) + "ms");
+				return;
+			} 	
 			var newTokens = _.find( data.txsummary, function(p) {
 				return p['@metadata'].resource === 'AllApiKeys';
 			});

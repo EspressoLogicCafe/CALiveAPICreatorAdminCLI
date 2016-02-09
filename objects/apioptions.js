@@ -203,7 +203,10 @@ module.exports = {
 					return;
 				}
 				printObject.printHeader('Logic project settings was created, including:');
-				
+				if(data.statusCode == 200 ){
+					console.log("Request took: " + (endTime - startTime) + "ms");
+					return;
+				} 
 				var newSettings = _.find(data.txsummary, function(p) {
 					return p['@metadata'].resource === 'ProjectOptions';
 				});
@@ -282,9 +285,9 @@ module.exports = {
 			}
 			for(var i = 0; i < data.length ; i++){
 			      delete data[i].ident;
-			      data[i].project_ident = null;
+			      delete data[i].project_ident;
 			      delete data[i]['@metadata'];
-			      delete data[i].ProjectOptionTypes;
+			      delete data[i].ProjectOptionTypes['@metadata'];
 			}
 			if (toStdout) {
 				console.log(JSON.stringify(data, null, 2));

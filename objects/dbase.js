@@ -389,8 +389,7 @@ module.exports = {
 				}
 			}, function(data2) {
 				var endTime = new Date();
-				console.log(data2);
-				//console.log(JSON.stringify(data2,null,2));
+	
 				if (data2.errorMessage) {
 					console.log(data2.errorMessage.red);
 					return;
@@ -581,11 +580,12 @@ module.exports = {
 			if(Array.isArray(fileContent) && fileContent.length > 0){
 				for(var i = 0; i < fileContent.length ; i++ ){
 					fileContent[i].project_ident = curProj;
-					fileContent[i].ident = null;
+					delete fileContent[i].ident;
+					fileContent[i]["@metadata"] = { action: "MERGE_INSERT" };
 				}
 			}
 			var startTime = new Date();
-			client.post(loginInfo.url + "/admin:dbaseschemas", {
+			client.put(loginInfo.url + "/admin:dbaseschemas", {
 				data: fileContent,
 				headers: {Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1" }
 				}, function(data) {
@@ -595,7 +595,10 @@ module.exports = {
 					return;
 				}
 				printObject.printHeader('Datasource was imported, including:');
-				
+				if(data.statusCode == 200 ){
+					console.log("Request took: " + (endTime - startTime) + "ms");
+					return;
+				} 
 				var newDataSource = _.find(data.txsummary, function(p) {
 					return p['@metadata'].resource === 'admin:dbaseschemas';
 				});

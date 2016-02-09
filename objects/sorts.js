@@ -395,7 +395,7 @@ module.exports = {
 				} 
 			} else {
 				fileContent.project_ident = curProj;
-				fileContent.ident = null;
+				delete fileContent.ident;
 				fileContent["@metadata"] = {action:"MERGE_INSERT", key: ["project_ident","name"]} ;
 			}
 			var startTime = new Date();

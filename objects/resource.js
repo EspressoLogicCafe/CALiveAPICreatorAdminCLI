@@ -514,7 +514,10 @@ module.exports = {
 					return;
 				}
 				printObject.printHeader('Resourcer was created, including:');
-				
+				if(data.statusCode == 200 ){
+					console.log("Request took: " + (endTime - startTime) + "ms");
+					return;
+				} 
 				var newResource = _.find(data.txsummary, function(p) {
 					return p['@metadata'].resource === 'AllResources';
 				});

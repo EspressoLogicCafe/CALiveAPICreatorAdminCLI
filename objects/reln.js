@@ -189,7 +189,10 @@ module.exports = {
 				return;
 			}
 			printObject.printHeader('Relationship(s) created, including:');
-				
+			if(data.statusCode == 200 ){
+				console.log("Request took: " + (endTime - startTime) + "ms");
+				return;
+			} 	
 			var newReln = _.find( data.txsummary, function(p) {
 				return p['@metadata'].resource === 'admin:relationships';
 			});

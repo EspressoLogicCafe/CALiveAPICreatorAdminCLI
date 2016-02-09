@@ -393,7 +393,7 @@ module.exports = {
 				} 
 			} else {
 				fileContent.project_ident = curProj;
-				fileContent.ident = null;
+				delete fileContent.ident;
 				fileContent["@metadata"] = {action:"MERGE_INSERT", key: ["project_ident","name"]} ;
 			}
 			var startTime = new Date();
@@ -407,7 +407,10 @@ module.exports = {
 					return;
 				}
 				printObject.printHeader('Named Filter was imported, including:');
-				
+				if(data.statusCode == 200 ){
+					console.log("Request took: " + (endTime - startTime) + "ms");
+					return;
+				} 
 				var newSort = _.find(data.txsummary, function(p) {
 					return p['@metadata'].resource === 'admin:named_filters';
 				});

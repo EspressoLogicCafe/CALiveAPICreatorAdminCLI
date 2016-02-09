@@ -301,7 +301,10 @@ module.exports = {
 					return;
 				}
 				printObject.printHeader('Logic Library was created, including:');
-				
+				if(data.statusCode == 200 ){
+					console.log("Request took: " + (endTime - startTime) + "ms");
+					return;
+				} 
 				var newLib = _.find(data.txsummary, function(p) {
 					return p['@metadata'].resource === 'admin:logic_libraries';
 				});
