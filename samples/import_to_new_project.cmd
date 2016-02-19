@@ -36,6 +36,7 @@ call lacadmin namedfilter import --file nwind/filters.json
 call lacadmin apiversion import --file nwind/apiversions.json
 call lacadmin event import --file nwind/events.json
 call lacadmin handler import --file nwind/handlers.json
+call lacadmin npa import --file nwind/npa.json
 call lacadmin snapshot start --name 'first project'
 
 call lacadmin project list

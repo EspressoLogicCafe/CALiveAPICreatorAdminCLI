@@ -116,7 +116,20 @@ module.exports = {
 		while (str.length < termWidth ) {
 			str += " ";
 		}
-		console.log(str.green);
+		console.log(str);//.bgWhite.blue
+	},
+	
+	printTrailer: function(str) {
+		var termWidth = 100;
+		if (process.stdout.getWindowSize) { // Does not exist if output is redirected
+			termWidth = process.stdout.getWindowSize()[0];
+		}
+		
+		while (str.length < termWidth ) {
+			str += " ";
+		}
+		console.log(str);//.bgWhite.blue
+		console.log("");
 	},
 	
 	getScreenWidth: function() {

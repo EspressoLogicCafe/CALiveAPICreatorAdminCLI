@@ -28,11 +28,13 @@ var event = require('./objects/event.js');
 var reln = require('./objects/reln.js');
 var handler = require('./objects/handler.js');
 var apiversion = require('./objects/version.js');
+
 //var sequence = require('./objects/sequence.js'); //Oracle
 //var apps = require('./objects/applicaitons.js'); //list | export | import
 // 2.1 features
 var snapshot = require('./objects/snapshot.js');//list | start  | restore --name  
-//var npa = require('./objects/nonpersistattrs.js');// list | create | delete | update | import |export
+var npa = require('./objects/npattrs.js');// list | create | delete | update | import |export
+var gateway = require('./objects/gateway.js');
 
 program
 	.version(pkg.version);
@@ -220,6 +222,16 @@ program
 	.option('--comments [comments]','User comments' )
 	.action(user.doUser);	
 	
+	
+program
+	.command('npa <list|create|import|export>')
+	.description('Administer Non Persistent Attributes for the active API Project.')
+	.option('--ident [ident]', 'The ident of the specific named sort object')
+	.option('--dbschema_ident [ident]', '[Optional] The dbschema ident if not the active project')
+	.option('--file [fileName]', '[Optional] Name of file for import/export (if not provided stdin/stdout used for export)')
+	.option('--verbose', '[Optional]  whether to display list of named sorts in detailed format')
+	.action(npa.doNPAttr);
+	
 program
 	.command('topic <list|export|import>')
 	.description('Administer Topics for current project.')
@@ -263,6 +275,17 @@ program
 	.option('--name [name]', 'The snapshot Name used by both start and restore')
 	.option('--project_ident [project_ident]','[optional] The project ident that will be used instead of current selected' )
 	.action(snapshot.doSnapshot);	
+
+program
+	.command('gateway <publish>')
+	.description('Publish Swagger document for current project to Gateway.')
+	.option('--username [name]', 'The username for the gateway')
+	.option('--password [password]','The gateway password.')
+	.option('--hostname [server]','The gateway server hostname or IP' )
+	.option('--port [port]','[Optional] The port number - default 8443' )
+	.option('--version [version]','[Optional] The version - default 1.0' )
+	.option('--file [fileName]', '[Optional] Name of file to settings for Swagger doc export')
+	.action(gateway.doGateway);	
 	
 program.parse(process.argv);
 

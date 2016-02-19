@@ -1,11 +1,13 @@
 #! /bin/bash
 
-SERVER=http://localhost:8080/APIServer
-#SERVER=http://localhost:8080 -- Jetty Only
+#LACSERVER=http://localhost:8080/APIServer
+LACSERVER=http://localhost:8080
+
 
 ## Connect to a local server
-lacadmin logout -a local
-lacadmin login -u admin -p Password1 $SERVER -a nwind
+lacadmin logout -a nwind
+lacadmin login -u admin -p Password1 $LACSERVER -a nwind
+lacadmin use nwind
 lacadmin status
 
 lacadmin project list
@@ -13,7 +15,7 @@ lacadmin project list
 ##OR create a new project
 lacadmin project use --url_name newproj
 lacadmin project delete --url_name newproj
-lacadmin project create --project_name MyNewProject --url_name newproj
+lacadmin project create --project_name NorthWindCopy --url_name newproj
 lacadmin project use --url_name newproj
 
 ## Start Import
@@ -37,7 +39,8 @@ lacadmin namedfilter import --file nwind/filters.json
 lacadmin apiversion import --file nwind/apiversions.json
 lacadmin event import --file nwind/events.json
 lacadmin handler import --file nwind/handlers.json
+#lacadmin npa import --file nwind/npa.json
 lacadmin snapshot start --name 'first project'
 
 lacadmin project list
-lacadmin logout nwind
+#lacadmin logout nwind

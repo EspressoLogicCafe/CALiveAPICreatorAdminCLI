@@ -201,7 +201,7 @@ module.exports = {
 				else {
 					trailer += data.txsummary.length;
 				}
-				printObject.printHeader(trailer);
+				printObject.printTrailer(trailer);
 			});
 		});
 	},
@@ -319,7 +319,7 @@ module.exports = {
 				else {
 					trailer += data2.txsummary.length;
 				}
-				printObject.printHeader(trailer);
+				printObject.printTrailer(trailer);
 			});
 		});
 	},
@@ -406,7 +406,7 @@ module.exports = {
 				else {
 					trailer += data2.length;
 				}
-				printObject.printHeader(trailer);
+				printObject.printTrailer(trailer);
 			});
 		});
 	},
@@ -475,7 +475,7 @@ module.exports = {
 				else {
 					trailer += data2.txsummary.length;
 				}
-				printObject.printHeader(trailer);
+				printObject.printTrailer(trailer);
 			});
 		});
 	},
@@ -581,7 +581,7 @@ module.exports = {
 				for(var i = 0; i < fileContent.length ; i++ ){
 					fileContent[i].project_ident = curProj;
 					delete fileContent[i].ident;
-					fileContent[i]["@metadata"] = { action: "MERGE_INSERT" };
+					fileContent[i]["@metadata"] = { action: "MERGE_INSERT", key:["project_ident","prefix"] };
 				}
 			}
 			var startTime = new Date();
@@ -624,7 +624,7 @@ module.exports = {
 				else {
 					trailer += data.txsummary.length;
 				}
-				printObject.printHeader(trailer);
+				printObject.printTrailer(trailer);
 			})
 		});
 	}

@@ -77,7 +77,7 @@ module.exports = {
 			});
 			table.sort(['Name']);
 			console.log(table.toString());
-			printObject.printHeader("# projects: " + data.length);
+			printObject.printTrailer("# projects: " + data.length);
 		});
 	},
 	
@@ -154,9 +154,9 @@ module.exports = {
 				else {
 					trailer += data.txsummary.length;
 				}
-				printObject.printHeader(trailer);
+				printObject.printTrailer(trailer);
 				
-				dotfile.setCurrentProject(newProj.ident, cmd.project_name);
+				dotfile.setCurrentProject(newProj.ident, cmd.project_name, data.url_name);
 			});
 		});
 	},
@@ -260,7 +260,7 @@ module.exports = {
 				else {
 					trailer += data.txsummary.length;
 				}
-				printObject.printHeader(trailer);
+				printObject.printTrailer(trailer);
 			});
 		});
 	},
@@ -385,7 +385,7 @@ module.exports = {
 				return;
 			}
 			var project = data[0];
-			dotfile.setCurrentProject(project.ident, project.name);
+			dotfile.setCurrentProject(project.ident, project.name, project.url_name);
 		});
 	},
 	
@@ -509,7 +509,7 @@ module.exports = {
 			}
 			
 			//set the imported project to be the current selected project
-			dotfile.setCurrentProject(newProj.ident, newProj.name);
+			dotfile.setCurrentProject(newProj.ident, newProj.name, newProj.url_name);
 			printObject.printHeader(trailer);
 			console.log("You are now using project ident: "+newProj.ident +" name: "+ newProj.name);
 		});

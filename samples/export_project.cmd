@@ -31,6 +31,7 @@ call lacadmin apiversion export --file nwind/apiversions.json
 call lacadmin event export --file nwind/events.json
 call lacadmin handler export --file nwind/handlers.json
 call lacadmin topic export --file nwind/topic.json
+call lacadmin npa export --file nwind/npa.json
 call lacadmin snapshot restore --name snapshot1
 
 call lacadmin logout -a nwind

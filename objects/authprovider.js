@@ -112,7 +112,7 @@ module.exports = {
 						else {
 							trailer += data2.txsummary.length;
 						}
-						printObject.printHeader(trailer);
+						printObject.printTrailer(trailer);
 					});
 					printObject.printHeader("Link authentication provider to current project ");
 				});
@@ -230,7 +230,7 @@ module.exports = {
 				else {
 					trailer += data.txsummary.length;
 				}
-				printObject.printHeader(trailer);
+				printObject.printTrailer(trailer);
 			});
 		});
 	},
@@ -315,7 +315,7 @@ module.exports = {
 				else {
 					trailer += data2.txsummary.length;
 				}
-				printObject.printHeader(trailer);
+				printObject.printTrailer(trailer);
 			});
 		});
 	},
@@ -445,7 +445,7 @@ module.exports = {
 						trailer += data.txsummary.length;
 					}
 				}
-				printObject.printHeader(trailer);
+				printObject.printTrailer(trailer);
 			})
 		});
 	}

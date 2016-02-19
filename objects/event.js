@@ -85,7 +85,7 @@ module.exports = {
 				});
 			table.sort(['Name']);
 			console.log(table.toString());
-			printObject.printHeader("# events: " + data.length);
+			printObject.printTrailer("# events: " + data.length);
 		});
 			
 	},
@@ -224,7 +224,7 @@ module.exports = {
 			else {
 				trailer += data.txsummary.length;
 			}
-			printObject.printHeader(trailer);
+			printObject.printTrailer(trailer);
 		});
 	}
 };

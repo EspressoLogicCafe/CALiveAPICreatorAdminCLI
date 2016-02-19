@@ -149,7 +149,7 @@ module.exports = {
 		fs.unlinkSync(dotFileName);
 	},
 	
-	setCurrentProject: function(projectIdent, projName) {
+	setCurrentProject: function(projectIdent, projName,url) {
 		var dotDirName = this.getDotDirectory();
 		if ( ! fs.existsSync(dotDirName)) {
 			return null;
@@ -160,6 +160,8 @@ module.exports = {
 		}
 		var record = JSON.parse(fs.readFileSync(dotFileName));
 		record.currentProject = projectIdent;
+		record.currentProjectName = projName;
+		record.currentProjectUrl = url;
 		var dotFile = fs.openSync(dotFileName, 'w', 0600);
 		fs.writeSync(dotFile, JSON.stringify(record));
 		if (projectIdent) {
@@ -179,5 +181,32 @@ module.exports = {
 		}
 		var record = JSON.parse(fs.readFileSync(dotFileName));
 		return record.currentProject;
+	},
+	
+	// Get the ident of the current project, if any
+	getCurrentProjectName: function() {
+		var dotDirName = this.getDotDirectory();
+		if ( ! fs.existsSync(dotDirName)) {
+			return null;
+		}
+		var dotFileName = dotDirName + "/currentServer.txt";
+		if ( ! fs.existsSync(dotFileName)) {
+			return null;
+		}
+		var record = JSON.parse(fs.readFileSync(dotFileName));
+		return record.currentProjectName;
+	},
+	// Get the ident of the current project, if any
+	getCurrentProjectUrl: function() {
+		var dotDirName = this.getDotDirectory();
+		if ( ! fs.existsSync(dotDirName)) {
+			return null;
+		}
+		var dotFileName = dotDirName + "/currentServer.txt";
+		if ( ! fs.existsSync(dotFileName)) {
+			return null;
+		}
+		var record = JSON.parse(fs.readFileSync(dotFileName));
+		return record.currentProjectUrl;
 	}
 };
