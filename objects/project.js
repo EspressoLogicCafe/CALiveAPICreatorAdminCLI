@@ -62,6 +62,7 @@ module.exports = {
 			_.each(data, function(p) {
 				table.cell("Ident", p.ident);
 				table.cell("Name", p.name);
+				table.cell("Enabled", p.is_active);
 				table.cell("URL", p.url_name);
 				var comments = p.comments;
 				if ( ! comments) {
@@ -103,7 +104,7 @@ module.exports = {
 			var newProject = {
 				name: cmd.project_name,
 				url_name: cmd.url_name,
-				status: 'A',
+				is_active: true,
 				authprovider_ident: cmd.authprovider,
 				account_ident: context.account.ident,
 				comments: cmd.comments
@@ -114,7 +115,7 @@ module.exports = {
 					console.log('Project status must be either A (for active) or I (for inactive). Default is A if unspecified.'.red);
 					return;
 				}
-				newProject.status = cmd.status;
+				newProject.status = cmd.status == "A";
 			}
 
 			var startTime = new Date();
@@ -233,7 +234,7 @@ module.exports = {
 					console.log('Project status must be either A (for active) or I (for inactive). Default is A if unspecified.'.red);
 					return;
 				}
-				project.status = cmd.status;
+				project.is_active = cmd.status == "A";
 			}
 			//{"@metadata" : {"action":"MERGE_INSERT", "key":"ident"}
 			var startTime = new Date();

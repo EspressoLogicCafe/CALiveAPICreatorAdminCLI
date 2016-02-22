@@ -64,7 +64,7 @@ module.exports = {
 		if ( ! dotFile) {
 			return false;
 		}
-		fs.unlinkSync(dotFile);
+		try { fs.unlinkSync(dotFile); } catch(e) {}
 		return true;
 	},
 	

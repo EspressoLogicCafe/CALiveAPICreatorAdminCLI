@@ -27,6 +27,7 @@ call lacadmin apiversion list
 call lacadmin event list
 call lacadmin handler list
 call lacadmin topic list
+call lacadmin npa list
 call lacadmin snapshot list
 
 call lacadmin logout -a nwind

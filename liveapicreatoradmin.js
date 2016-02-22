@@ -127,7 +127,7 @@ program
 	.option('--project_ident', 'The ident of a project, if other than the current project')
 	.option('--ident [ident]', 'For delete, the ident of the rule to delete')
 	.option('--file [file]', 'Optional: for import/export, the name of a file to read from/save to, if unspecified, use stdin/stdout')
-	.option('--verbose', 'Optional: whether to display list of rules in detailed format that can be used to recreate line by line')
+	.option('--verbose', 'Optional: whether to display list of rules in detailed format that can be used to recreate using command line')
 	.action(rule.doRule);
 
 program
@@ -225,7 +225,7 @@ program
 	
 program
 	.command('npa <list|create|import|export>')
-	.description('Administer Non Persistent Attributes for the active API Project.')
+	.description('Administer Non Persistent Attributes for the active API Project. New in version 2.1.x')
 	.option('--ident [ident]', 'The ident of the specific named sort object')
 	.option('--dbschema_ident [ident]', '[Optional] The dbschema ident if not the active project')
 	.option('--file [fileName]', '[Optional] Name of file for import/export (if not provided stdin/stdout used for export)')
@@ -271,19 +271,20 @@ program
 
 program
 	.command('snapshot <list|start|restore>')
-	.description('List or start a project snapshot (backup) for current project.')
+	.description('List or start a project snapshot (backup) for current project. New in version 2.1.x')
 	.option('--name [name]', 'The snapshot Name used by both start and restore')
 	.option('--project_ident [project_ident]','[optional] The project ident that will be used instead of current selected' )
 	.action(snapshot.doSnapshot);	
 
 program
 	.command('gateway <publish>')
-	.description('Publish Swagger document for current project to Gateway.')
+	.description('Publish Swagger document for current project to Gateway. New in version 2.1.x')
 	.option('--username [name]', 'The username for the gateway')
 	.option('--password [password]','The gateway password.')
 	.option('--hostname [server]','The gateway server hostname or IP' )
 	.option('--port [port]','[Optional] The port number - default 8443' )
 	.option('--version [version]','[Optional] The version - default 1.0' )
+	.option('--useAuthToken','[Optional] API Properties - set swagger to use non auth has not been set' )
 	.option('--file [fileName]', '[Optional] Name of file to settings for Swagger doc export')
 	.action(gateway.doGateway);	
 	
