@@ -1,7 +1,7 @@
 #! /bin/bash
 # Generate the contents of an existing repository
-SERVER=http://localhost:8080/APIServer
-#SERVER=http://localhost:8080 -- Jetty Only
+#SERVER=http://localhost:8080/APIServer
+SERVER=http://localhost:8080
 ## Connect to a local Jetty server
 lacadmin logout -a local
 lacadmin login -u admin -p Password1 $SERVER  -a nwind
@@ -27,6 +27,7 @@ lacadmin apiversion list
 lacadmin event list
 lacadmin handler list
 lacadmin topic list
+lacadmin npa list
 lacadmin snapshot list
 
 lacadmin logout -a nwind

@@ -291,7 +291,7 @@ module.exports = {
 			 	db.comments = cmd.comments;
 			}
 			if( cmd.active ){
-			 	db.active = (cmd.active == "true");
+			 	db.active = cmd.active;
 			}
 			var startTime = new Date();
 			
