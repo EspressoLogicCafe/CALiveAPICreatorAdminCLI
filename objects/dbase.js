@@ -86,6 +86,7 @@ module.exports = {
 				table.cell("Catalog", p.catalog_name);
 				table.cell("Schema", p.schema_name);
 				table.cell("User", p.user_name);
+				table.cell("URL", p.url);
 				var comments = p.comments;
 				if ( ! comments) {
 					comments = "";
@@ -237,11 +238,7 @@ module.exports = {
 				return;
 			}
 		}
-		if( cmd.active ){
-			filter += "&sysfilter=equal(active: "+ cmd.active + ")";
-		} else {
-			filter += "&sysfilter=equal(active: true)";
-		}
+		
 		//console.log(filter);
 		client.get(loginInfo.url + "/DbSchemas?sysfilter=" + filter, {
 			headers: {
@@ -250,6 +247,7 @@ module.exports = {
 		}, function(data) {
 			
 			if (data.errorMessage) {
+				//console.log(data);
 				console.log(("Error: " + data.errorMessage).red);
 				return;
 			}

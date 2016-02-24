@@ -58,7 +58,7 @@ module.exports = {
 			}
 			console.log(("This server licensed to: " + data.company + " license_type: "+ data.license_type).red);
 			//console.log("This server licensed to: " + data.company.red);
-
+			process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 			client.post(url + "/@authentication",
 				{
 					data: {
