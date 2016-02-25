@@ -31,7 +31,7 @@ module.exports = {
 			module.exports.create(cmd);
 		}
 		else {
-			console.log('You must specify an action: list, import,export, or publish');
+			console.log('You must specify an action: list, create, import, export, publishReadSwagger, or publish');
 			//program.help();
 		}
 	},
@@ -53,7 +53,7 @@ module.exports = {
 				console.log(data.errorMessage.red);
 				return;
 			}
-			printObject.printHeader('All Libraries');
+			printObject.printHeader('All Gateway Definitions');
 			var table = new Table();
 			_.each(data, function(p) {
 				table.cell("Ident", p.ident);

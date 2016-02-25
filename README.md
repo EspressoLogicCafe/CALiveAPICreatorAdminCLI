@@ -75,6 +75,7 @@ $ liveapicreatoradmin --help
     apiversion [options] <list|export|import>                              Administer API Versions for Resources for current project.
     relationship [options] <list|export|import>                            Administer Relationships (Virtual Keys) for current project.
     snapshot [options] <list|start>                                        List or start a project snapshot (backup) for current project.
+ 	gateway <list|create|import|export|publish|publishReadSwagger>         Publish Swagger document for current project to Gateway. New in version 2.1.x - publish requires existing swagger file   
     
   Options:
 
@@ -82,24 +83,33 @@ $ liveapicreatoradmin --help
     -V, --version  output the version number
 
 ```
+
+## login
+
+    lacadmin login -u admin -p myAdminPassword http://localhost:8080 [-a <alias>]
+
+This will log you in to one of the current servers - the alias allows multiple connections to be used at the same time (see use command)
+
+***
 ## Logout
 
-    liveapicreatoradmin logout [-a <alias>]
+    lacadmin logout [-a <alias>]
 
 This will log you out of the current server, unless you specify an alias,
 in which case you will be logged out of that server.
 
 ***
 ## Use
+The use command will switch between one or more active server connections 
 
-    liveapicreatoradmin use <alias>
+    lacadmin use <alias>
 
 This switches the current server to the specified alias.
 
 ***
 ## Status
 
-    liveapicreatoradmin status
+    lacadmin status
     
 Prints which server is the current server (if any) and project, and what aliases are defined (if any).
 
@@ -250,4 +260,5 @@ Follow the links below for detailed documentation on specific administrator comm
 * [Auth Tokens](docs/token.md)
 * [Named Sorts](docs/sort.md)
 * [Named Filter](docs/filter.md)
+* [Publish to Gateway](docs/gateway.md)
 
