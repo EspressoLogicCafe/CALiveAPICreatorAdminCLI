@@ -1,4 +1,4 @@
-# datasource
+# Publish to CA Gateway
 This suite of commands allows you to manage and publish project API Swagger documentation to the CA Gateway.
 ```
  Usage: gateway [options] <list|create|import|export|publish|publishReadSwagger>
