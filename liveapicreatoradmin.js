@@ -277,8 +277,10 @@ program
 	.action(snapshot.doSnapshot);	
 
 program
-	.command('gateway <publish>')
-	.description('Publish Swagger document for current project to Gateway. New in version 2.1.x')
+	.command('gateway <list|create|import|export|publish|publishReadSwagger>')
+	.description('Publish Swagger document for current project to Gateway. New in version 2.1.x - publish requires existing swagger file')
+	.option('--ident [ident]', 'The ident for the saved gateway definition')
+	.option('--name [name]', 'The name for the gateway definition')
 	.option('--username [name]', 'The username for the gateway')
 	.option('--password [password]','The gateway password.')
 	.option('--hostname [server]','The gateway server hostname or IP' )
@@ -286,6 +288,7 @@ program
 	.option('--version [version]','[Optional] The version - default 1.0' )
 	.option('--useAuthToken','[Optional] API Properties - set swagger to use non auth has not been set' )
 	.option('--file [fileName]', '[Optional] Name of file to settings for Swagger doc export')
+	.option('--comments [comments]','The gateway definition comments' )
 	.action(gateway.doGateway);	
 	
 program.parse(process.argv);
