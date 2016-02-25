@@ -27,6 +27,7 @@ This suite of commands allows you to manage and publish project API Swagger docu
 The `list` command shows all gateway connection definitions.
 
 #### Output
+```
 All Gateway Definitions                                                                                                                                                                     
 Ident  Name          Username  URL                                             Active  Comments      
 -----  ------------  --------  ----------------------------------------------  ------  --------------
@@ -34,17 +35,18 @@ Ident  Name          Username  URL                                             A
 3      SSG4          pmadmin   https://lacssg3.ca.com:8443/lacman/1.0/publish  true    This is a test
 
 # gateway: 2         
-
+```
 ***
 ## gateway create
-    liveapicreatoradmin gateway create --name <name> 
+```
+    liveapicreatoradmin gateway create 
     --name [name]          The name for the gateway definition
     --username [name]      The username for the gateway login
-    --hostname [server]    The gateway server full hostname (https://server/lacman/1.0/publish
+    --hostname [server]    The gateway server full hostname (https://server/lacman/1.0/publish)
     --comments [comments]  The gateway definition comments
+```
 
-
-The `create` command creates a new gateway connection definition.
+The `create` command creates a new gateway connection definition. See documentation for /@gateway_publish 
 
 
 ## gateway export
