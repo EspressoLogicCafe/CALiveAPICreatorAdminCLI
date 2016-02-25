@@ -252,14 +252,17 @@ module.exports = {
 				return;
 			}
 			if (data.length === 0) {
-				console.log(("Error: no such database").red);
+				console.log(("Error: no such datasource").red);
 				return;
 			}
 			if (data.length > 1) {
-				console.log(("Error: more than one database for the given condition: " + filter).red);
+				console.log(("Error: more than one datasource for the given condition: " + filter).red);
 				return;
 			}
 			var db = data[0];
+			delete db.salt;
+			delete db.password;
+			
 			if( cmd.password) {
 				db.password = cmd.password;
 				delete db.salt;
@@ -267,8 +270,8 @@ module.exports = {
 			if( cmd.user_name){
 				db.user_name = cmd.user_name;
 			}
-			if( cmd.name ){
-				db.name = cmd.name;
+			if( cmd.db_name ){
+				db.name = cmd.db_name;
 			}
 			if ( cmd.url ){
 				db.url = cmd.url;
