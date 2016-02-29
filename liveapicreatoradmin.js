@@ -66,6 +66,7 @@ program
 program
 	.command('project <list|create|update|delete|use|import|export>')
 	.description('Administer projects. Actions are: list, create, update, delete, use, export')
+	.option('--ident [ident]', 'The ident of the specific project (see project list)')
 	.option('--project_name [name]', 'The name of the project')
 	.option('--url_name [name]', 'The name of the project')
 	.option('--status [status]', 'Optional: the status of the project, can be A (for Active) or I for (Inactive)')

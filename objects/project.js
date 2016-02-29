@@ -176,11 +176,9 @@ module.exports = {
 			
 		var filter = null;
 		var projIdent = cmd.project_ident;
-		if (cmd.project_name) {
-			filter = "?sysfilter=equal(name:'" + cmd.project_name + "')";
-		}
-		else if (cmd.url_name) {
-			filter = "?sysfilter=equal(url_name:'" + cmd.url_name + "')";
+		
+		if (cmd.ident) {
+			filter = "?sysfilter=equal(ident:" + cmd.ident + ")";
 		} else if ( ! projIdent) {
 				projIdent = dotfile.getCurrentProject();
 				if ( ! projIdent) {
@@ -190,10 +188,10 @@ module.exports = {
 				filter = "/" + projIdent;
 		}
 		if( ! filter) {
-			console.log('Missing parameter: please specify either project_name or url_name or use a specific project'.red);
+			console.log('Missing parameter: please specify either ident or use a specific project'.red);
 			return;
 		}
-
+	console.log(filter);
 		client.get(loginInfo.url + "/AllProjects" + filter, {
 			headers: {
 				Authorization: "CALiveAPICreator " + apiKey + ":1"
@@ -201,7 +199,7 @@ module.exports = {
 		}, function(data) {
 			//console.log('get result: ' + JSON.stringify(data, null, 2));
 			if (data.errorMessage) {
-				console.log(("Error: " + data.errorMessage).red);
+				console.log(("Project Update Error: " + data.errorMessage).red);
 				return;
 			}
 			
@@ -210,7 +208,7 @@ module.exports = {
 				return;
 			}
 			if (data.length > 1) {
-				console.log(("Error: more than one project for the given condition: " + filter).red);
+				console.log(("Project Update Error: more than one project for the given condition: " + filter).red);
 				return;
 			}
 			var project = data[0];
