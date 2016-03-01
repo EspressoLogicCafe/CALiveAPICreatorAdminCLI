@@ -12,10 +12,7 @@ var https = require('https');
 
 module.exports = {
 	doGateway: function(action, cmd) {
-		if (action === 'publishReadSwagger') {
-			module.exports.publishReadSwagger(cmd);
-		}
-		else if (action === 'publish') {
+	    if (action === 'publish') {
 			module.exports.publish(cmd);
 		}
 		else if (action === 'list') {
@@ -31,7 +28,7 @@ module.exports = {
 			module.exports.create(cmd);
 		}
 		else {
-			console.log('You must specify an action: list, create, import, export, publishReadSwagger, or publish');
+			console.log('You must specify an action: list, create, import, export, or publish');
 			//program.help();
 		}
 	},
@@ -44,7 +41,7 @@ module.exports = {
 		var url = loginInfo.url;
 		var apiKey = loginInfo.apiKey;
 
-		client.get(url + "/admin:gateway?pagesize=100&sysorder=(name:asc_uc,name:desc)", {
+		client.get(url + "/admin:gateways?pagesize=100&sysorder=(name:asc_uc,name:desc)", {
 			headers: {
 				Authorization: "CALiveAPICreator " + apiKey + ":1"
 			}
@@ -77,110 +74,7 @@ module.exports = {
 		});
 	},
 	
-	publishReadSwagger: function(cmd) {
-		var client = new Client();
-		
-		var loginInfo = login.login(cmd);
-		if ( ! loginInfo)
-			return;
-		var urlname = dotfile.getCurrentProjectUrl();
-		if(! urlname ){
-			console.log("You must select and use a project. $lacadmin project use --url_name myProjectName".red);
-			return;
-		}
-		var url = loginInfo.url;
-		var apiKey = loginInfo.apiKey;
-		var idx = url.indexOf("/abl");
-		var swaggerURL = url.substring(0,idx) +"/default/"+urlname+"/v1";
 	
-		var filter = null;
-		var username = ""
-		if( cmd.username){
-			username = cmd.username;
-		}
-		var password = "";
-		if( cmd.password){
-			password = cmd.password;
-		}
-		var apiGatewayHostname  = "";
-		if( cmd.hostname){
-			apiGatewayHostname = cmd.hostname;
-		}
-		var ver = "1.0";
-		if(cmd.version){
-			ver = cmd.version;
-		}
-		var port = 8443;
-		if(cmd.port){
-			port = cmd.port;
-		}
-		var toStdout = false;
-		if ( ! cmd.file) {
-			toStdout = true;
-		}
-		console.log("GET Swagger "+swaggerURL+"/@docs");
-		var headers = {};
-		if(cmd.useAuthToken){
-		 	headers = {	Authorization: "CALiveAPICreator " + apiKey + ":1" };
-		}
-		//var fileContent = fs.readFileSync(cmd.file);
-		client.get(swaggerURL + "/@docs", {
-			headers: headers
-		}, function(data) {
-			//console.log('get result: ' + JSON.stringify(data, null, 2));
-			if (data.errorMessage) {
-				console.log(("Swagger Error: " + data.errorMessage).red);
-				return;
-			}
-			if (data.length === 0) {
-				console.log(("Error: no swagger @doc found for login. Try --useAuthToken").red);
-				return;
-			}
-			if(cmd.file){
-				var exportFile = fs.openSync(cmd.file, 'w+', 0600);
-				fs.writeSync(exportFile, JSON.stringify(data, null, 2));
-				console.log(('Swagger has been exported to file: ' + cmd.file).green);
-			}
-			//now publish to gateway.
-			process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
-			var gateway = "https://"+apiGatewayHostname+":"+port+"/lacman/1.0/publish";
-			var auth = username+":"+password; 
-			console.log("Connecting to; "+gateway);
-			
-			var options = {
-			  hostname: apiGatewayHostname,
-			  headers: {'content-type': 'application/json;charset=UTF-8'},
-			  port: port,
-			  path: '/lacman/1.0/publish',
-			  auth: auth,
-			  method: 'PUT',
-			  rejectUnauthorized: false,
-  			  agent: false,
-  			  headers: {
-				  'Content-Type': 'application/json',
-				  'Content-Length': (JSON.stringify(data).length)
-			  }
-			};
-			console.log("Swagger doc data length "+(JSON.stringify(data).length));
-			 var req = https.request(options, (res) => {
-			  console.log('statusCode: ', res.statusCode);
-			  console.log('headers: ', res.headers);
-			  	  
-			  res.on('data', function (chunk) {
-         		console.log('Response: ' + chunk);
-      		  });
-			  res.on('end', function(d) {
-    			//res.send(data)
-  			  });
-			});
-			req.write(JSON.stringify(data));		
-			req.on('error', (e) => {
-			  console.error(e);
-			});
-			
-  			req.end();
-		});
-	},
 	export: function(cmd) {
 		var client = new Client();
 		
@@ -194,9 +88,9 @@ module.exports = {
 		var filter = "";
 		
 		if (cmd.ident) {
-			filter = "sysfilter=equal(ident:" + cmd.ident + ")";
+			filter = "?sysfilter=equal(ident:" + cmd.ident + ")";
 		} else if (cmd.name) {
-			filter = "sysfilter=equal(name:'" + cmd.name + "')";
+			filter = "?sysfilter=equal(name:'" + cmd.name + "')";
 		} 
 		
 		var toStdout = false;
@@ -204,7 +98,7 @@ module.exports = {
 			toStdout = true;
 		}
 		
-		client.get(loginInfo.url + "/admin:gateway?" + filter, {
+		client.get(loginInfo.url + "/admin:gateways" + filter, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
 			}
@@ -256,7 +150,7 @@ module.exports = {
 				} 
 			}
 			var startTime = new Date();
-			client.put(loginInfo.url + "/admin:gateway", {
+			client.put(loginInfo.url + "/admin:gateways", {
 				data: fileContent,
 				headers: {Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1" }
 				}, function(data) {
@@ -321,93 +215,69 @@ module.exports = {
 		if( cmd.username){
 			username = cmd.username;
 		} else {
-			console.log("Parameter '--username' missing".red);
+			console.log("Parameter Gateway '--username' missing".red);
 			return;
 		}
 		var password = "";
 		if( cmd.password){
 			password = cmd.password;
 		}  else {
-			console.log("Parameter '--password' missing".red);
+			console.log("Parameter Gateway '--password' missing".red);
 			return;
 		}
 		var apiGatewayHostname  = "";
 		if( cmd.hostname){
 			apiGatewayHostname = cmd.hostname;
 		} else {
-			console.log("Parameter '--hostname' missing".red);
+			console.log("Parameter Gateway endpoint '--hostname' missing".red);
 			return;
 		}
 		
-		if( !cmd.file){
-			console.log("Parameter '--file' missing".red);
+		if( !cmd.url_name){
+			console.log("Parameter API Project '--url_name' missing".red);
 			return;
 		}
-		var ver = "1.0";
-		if(cmd.version){
-			ver = cmd.version;
-		}
-		var port = 8443;
-		if(cmd.port){
-			port = cmd.port;
-		}
-		var toStdout = false;
-		if ( ! cmd.file) {
-			toStdout = true;
+		
+		if( !cmd.apiversion){
+			console.log("Parameter  API Project verison '--apiversion' missing".red);
+			return;
 		}
 		
 		var headers = {};
 		if(cmd.useAuthToken){
 		 	headers = {	Authorization: "CALiveAPICreator " + apiKey + ":1" };
-		}
-		//var ;
-		
-			if(cmd.file){
-				data = fs.readFileSync(cmd.file);
-				console.log(('Swagger has been exported to file: ' + cmd.file).green);
-			}
-			//now publish to gateway.
-			process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
-			var gateway = "https://"+apiGatewayHostname+":"+port+"/lacman/1.0/publish";
-			var auth = username+":"+password; 
-			console.log("Connecting to; "+gateway);
-			
-			var options = {
-			  hostname: apiGatewayHostname,
-			  headers: {'content-type': 'application/json;charset=UTF-8'},
-			  port: port,
-			  path: '/lacman/1.0/publish',
-			  auth: auth,
-			  method: 'PUT',
-			  rejectUnauthorized: false,
-  			  agent: false,
-  			  headers: {
-				  'Content-Type': 'application/json',
-				  'Content-Length': data.length
-			  }
+		}		
+			var gateway = {
+				 url: cmd.hostname,
+   				 username: cmd.username,
+   				 password: cmd.password,
+    			 api_url_fragment: cmd.url_name,
+    			 api_version: cmd.apiversion
 			};
-			console.log("Swagger doc data length " + data.length);
-			 var req = https.request(options, (res) => {
-			  console.log('statusCode: ', res.statusCode);
-			  console.log('headers: ', res.headers);
-			  	  
-			  res.on('data', function (chunk) {
-         		console.log('Response: ' + chunk);
-      		  });
-			  res.on('end', function(d) {
-    			//res.send(data)
-  			  });
-			});
-			req.write(data);		
-			req.on('error', (e) => {
-			  console.error(e);
-			});
-			
-  			req.end();	
+			console.log(gateway);
+			var startTime = new Date();
+			client.post(loginInfo.url + "/@gateway_publish", {
+				data: gateway,
+				headers: {
+					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
+				}
+			}, function(data) {
+				var endTime = new Date();
+				if (data.errorMessage) {
+					console.log("Publish Error "+ data.errorMessage.red);
+					return;
+				}
+				printObject.printHeader('Gateway publish complete:');
+				console.log(data);
+				var trailer = "Request took: " + (endTime - startTime) + "ms";
+
+				printObject.printHeader(trailer);
+				
+		});
 	},
 	create: function(cmd) {
 	
-var client = new Client();
+		var client = new Client();
 		var loginInfo = login.login(cmd);
 		if ( ! loginInfo)
 			return;
@@ -439,7 +309,7 @@ var client = new Client();
 			
 			var startTime = new Date();
 			newGateway["@metadata"] = {action:"MERGE_INSERT", key: ["account_ident","name"]} ;
-			client.put(loginInfo.url + "/admin:gateway", {
+			client.put(loginInfo.url + "/admin:gateways", {
 				data: newGateway,
 				headers: {
 					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
@@ -452,7 +322,7 @@ var client = new Client();
 				}
 				printObject.printHeader('Gateway definition was created, including:');
 				var newgw = _.find(data.txsummary, function(p) {
-					return p['@metadata'].resource === 'admin:gateway';
+					return p['@metadata'].resource === 'admin:gateways';
 				});
 				if ( ! newgw) {
 					console.log('Create Gateway ERROR: unable to find newly created gateway'.red);

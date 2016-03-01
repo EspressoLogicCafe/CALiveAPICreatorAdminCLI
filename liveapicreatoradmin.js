@@ -278,18 +278,17 @@ program
 	.action(snapshot.doSnapshot);	
 
 program
-	.command('gateway <list|create|import|export|publish|publishReadSwagger>')
+	.command('gateway <list|create|import|export|publish>')
 	.description('Publish Swagger document for current project to Gateway. New in version 2.1.x - publish requires existing swagger file')
 	.option('--ident [ident]', 'The ident for the saved gateway definition')
 	.option('--name [name]', 'The name for the gateway definition')
 	.option('--username [name]', 'The username for the gateway')
 	.option('--password [password]','The gateway password.')
-	.option('--hostname [server]','The gateway server hostname or IP' )
-	.option('--port [port]','[Optional] The port number - default 8443' )
-	.option('--version [version]','[Optional] The version - default 1.0' )
-	.option('--useAuthToken','[Optional] API Properties - set swagger to use non auth has not been set' )
-	.option('--file [fileName]', '[Optional] Name of file to settings for Swagger doc export')
+	.option('--hostname [server]','The gateway server hostname https://myserver:8443/lacman/1.0/publish' )
+	.option('--apiversion [version]','The API version of the swagger document' )
+	.option('--url_name [name]','The API url fragment name (use project list)' )
 	.option('--comments [comments]','The gateway definition comments' )
+	.option('--file [fileName]', '[Optional] Name of file to import/export (if not provided stdin/stdout used for export)')
 	.action(gateway.doGateway);	
 	
 program.parse(process.argv);
