@@ -260,8 +260,7 @@ module.exports = {
 				return;
 			}
 			var db = data[0];
-			delete db.salt;
-			delete db.password;
+			
 			
 			if( cmd.password) {
 				db.password = cmd.password;

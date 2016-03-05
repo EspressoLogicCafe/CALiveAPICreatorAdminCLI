@@ -1,7 +1,7 @@
 # Publish to CA Gateway
 This suite of commands allows you to manage and publish project API Swagger documentation to the CA Gateway.
 ```
- Usage: gateway [options] <list|create|import|export|publish|publishReadSwagger>
+ Usage: gateway [options] <list|create|import|export|publish>
 
   Publish Swagger document for current project to Gateway. New in version 2.1.x - publish requires existing swagger file
 
@@ -13,10 +13,9 @@ This suite of commands allows you to manage and publish project API Swagger docu
     --username [name]      The username for the gateway
     --password [password]  The gateway password.
     --hostname [server]    The gateway server hostname or IP
-    --port [port]          [Optional] The port number - default 8443
-    --version [version]    [Optional] The version - default 1.0
-    --useAuthToken         [Optional] API Properties - set swagger to use non auth has not been set
-    --file [fileName]      [Optional] Name of file to settings for Swagger doc export
+    --urlname [urlname]    The name of the url fragment (see project list)
+    --apiersion [version]  The api version (e.g v1)
+    --file [filename]      [Optional] The name of the file for import/export
     --comments [comments]  The gateway definition comments
 
 ```
@@ -31,8 +30,8 @@ The `list` command shows all gateway connection definitions.
 All Gateway Definitions                                                                                                                                                                     
 Ident  Name          Username  URL                                             Active  Comments      
 -----  ------------  --------  ----------------------------------------------  ------  --------------
-1      Gateway ssg3  pmadmin   https://lacssg3.ca.com:8443/lacman/1.0/publish  true    test          
-3      SSG4          pmadmin   https://lacssg3.ca.com:8443/lacman/1.0/publish  true    This is a test
+1      Gateway Dev   pmadmin   https://myserver.ca.com:8443/lacman/1.0/publish  true    Dev Server          
+3      Gateway Test  pmadmin   https://myserver.ca.com:8443/lacman/1.0/publish  true    Test Server
 
 # gateway: 2         
 ```
@@ -63,16 +62,9 @@ liveapicreatoradmin gateway import --file gateway.json
 ```
 The import gateway imports the specified JSON file. If the filename parameter is not specified, stdin is used. (you can pipe the json file to the import)
 
-## gateway publishReadSwagger
-This command will use the current selected project and read the swagger and publish to the gateway - if the file parameter is used - the swagger file is saved to disk.
-```
-lliveapicreatoradmin gateway publishReadSwagger --username <username> --password <password> --hostname lacssg3.ca.com --file samples/banking.json 
-
-```
-
 ## gateway publish
 This command will publish to the gateway and use the file parameter to read the swagger file from disk.
 ```
-lliveapicreatoradmin gateway publish --username <username> --password <password> --hostname lacssg3.ca.com --file samples/banking.json 
+lliveapicreatoradmin gateway publish --username <username> --password <password> --hostname <somesgatewayerver> --url_name <urlfragment> --apiversion <apiversion> 
 
 ```

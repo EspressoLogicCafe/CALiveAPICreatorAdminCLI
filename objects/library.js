@@ -374,7 +374,7 @@ module.exports = {
 		
 		var filter = null;
 		
-		filter = "sysfilter=greater(ident: 599 )";
+		filter = "sysfilter=greater(ident: 508 )";
 		
 		if (cmd.ident) {
 			filter += "&sysfilter=equal(ident:" + cmd.ident + ")";
