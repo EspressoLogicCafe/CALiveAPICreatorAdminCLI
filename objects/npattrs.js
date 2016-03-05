@@ -45,41 +45,69 @@ module.exports = {
 				return;
 			}
 		}
-	
-		client.get(url + "/admin:np_attributes?sysfilter=equal(dbaseschema_ident:" + projIdent+")&sysorder=(table_name%2C+attr_name)&pagesize=100", {
+	var filter = "/DbSchemas?sysfilter=equal(project_ident:"+projIdent+")";
+	client.get(url + filter, {
 			headers: {
 				Authorization: "CALiveAPICreator " + apiKey + ":1"
 			}
-		}, function(data) {
-			if (data.errorMessage) {
-				console.log(data.errorMessage.red);
-				return;
-			}
-			printObject.printHeader('Non Persistent Attributes');
-			var table = new Table();
-			_.each(data, function(p) {
-				table.cell("Ident", p.ident);
-				table.cell("Table Name", p.table_name);
-				table.cell("Attr Name", p.attr_name);
-				table.cell("Data Type", p.data_type);
-				var comments = p.comments;
-				if ( ! comments) {
-					comments = "";
+		},function(schema) {
+			if (schema.errorMessage) {
+					console.log(schema.errorMessage.red);
+					return;
 				}
-				else if (comments.length > 50){
-					comments = comments.substring(0, 47) + "...";
+			client.get(url + "/admin:np_attributes?sysfilter=equal(dbaseschema_ident:" + schema[0].ident+")&sysorder=(table_name%2C+attr_name)&pagesize=100", {
+				headers: {
+					Authorization: "CALiveAPICreator " + apiKey + ":1"
 				}
-				table.cell("Comments", comments);
-				table.newRow();
+			}, function(data) {
+				if (data.errorMessage) {
+					console.log(data.errorMessage.red);
+					return;
+				}
+				printObject.printHeader('Non Persistent Attributes Schema Name: '+ schema[0].name );
+				
+				
+				
+				
+				var table = new Table();
+				_.each(data, function(p) {
+				
+					var datatype = "";
+					switch( p.data_type) {
+						case 1 : datatype = "Character"; break;
+						case 3 : datatype = "Decimal"; break;
+						case 4 : datatype = "Integer"; break;
+						case 7 : datatype = "Real"; break;
+						case 16 : datatype = "Boolean"; break;
+						case 12 : datatype = "String"; break;
+						case 16 : datatype = "Boolean"; break;
+						case 91 : datatype = "Datetime"; break;
+						case 92 : datatype = "Timestamp"; break;
+						default : datatype = "undefined"; 
+					}
+					table.cell("Ident", p.ident);
+					table.cell("Table Name", p.table_name);
+					table.cell("Attr Name", p.attr_name);
+					table.cell("Data Type", datatype);
+					var comments = p.comments;
+					if ( ! comments) {
+						comments = "";
+					}
+					else if (comments.length > 50){
+						comments = comments.substring(0, 47) + "...";
+					}
+					table.cell("Comments", comments);
+					table.newRow();
+				});
+				table.sort(['Name', 'name']);
+				if (data.length === 0) {
+					console.log('There are no non persistent attributes defined for this schema'.yellow);
+				}
+				else {
+					console.log(table.toString());
+				}
+				printObject.printHeader("# non persistent attrs: " + data.length);
 			});
-			table.sort(['Name', 'name']);
-			if (data.length === 0) {
-				console.log('There are no non persistent attributes defined for this schema'.yellow);
-			}
-			else {
-				console.log(table.toString());
-			}
-			printObject.printHeader("# non persistent attrs: " + data.length);
 		});
 	},
 	del : function(cmd) {
