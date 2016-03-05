@@ -89,8 +89,6 @@ module.exports = {
 		
 		if (cmd.ident) {
 			filter = "?sysfilter=equal(ident:" + cmd.ident + ")";
-		} else if (cmd.name) {
-			filter = "?sysfilter=equal(name:'" + cmd.name + "')";
 		} 
 		
 		var toStdout = false;
@@ -98,7 +96,7 @@ module.exports = {
 			toStdout = true;
 		}
 		
-		client.get(loginInfo.url + "/admin:gateways" + filter, {
+		client.get(url + "/admin:gateways" + filter, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
 			}
