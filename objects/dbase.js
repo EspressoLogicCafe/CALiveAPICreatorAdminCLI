@@ -379,32 +379,29 @@ module.exports = {
 				return;
 			}
 			var db = data[0];
+			delete db.ident;
 			var startTime = new Date();
 			var request = {statusRequest: projIdent };
-			
-			client.post( loginInfo.url  + "/@database_test", {
-				data: request,
+			client.put( loginInfo.url  + "/DbSchemas/"+db.ident, {
+				data: db,
 				headers: {
 					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
 				}
 			}, function(data2) {
 				var endTime = new Date();
-	
 				if (data2.errorMessage) {
 					console.log(data2.errorMessage.red);
 					return;
 				}
-				printObject.printHeader('Database reload completed, including the following objects:');
-				_.each(data2, function(obj) {
-					printObject.printObject(obj, obj.status);
-				});
+				printObject.printHeader('Database reload completed. Status Code: ' + data2.statusCode);
+				
 				var trailer = "Request took: " + (endTime - startTime) + "ms";
-				trailer += " - # objects touched: ";
+				
 				if (data2.length == 0) {
 					console.log('No data returned'.yellow);
 				}
 				else {
-					trailer += data2.length;
+					//trailer += data2.length;
 				}
 				printObject.printTrailer(trailer);
 			});
@@ -533,8 +530,8 @@ module.exports = {
 			//do not export passwords
 			if(Array.isArray(data) && data.length > 0){
 				for(var i = 0; i < data.length ; i++){
-					data[i].password = null;
-					data[i].salt = null;
+					//data[i].password = null;
+					//data[i].salt = null;
 					data[i].project_ident = null;
 					delete data[i]["ident"];
 					delete data[i]["@metadata"];

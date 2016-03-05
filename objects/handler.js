@@ -159,14 +159,23 @@ module.exports = {
 			cmd.file = '/dev/stdin';
 		}
 		
-		var fileContent = JSON.parse(fs.readFileSync(cmd.file));
-		if(Array.isArray(fileContent) && fileContent.length > 0){
-			fileContent[0].project_ident = projIdent;
-			//fileContent[0]["@metadata"] = {action:"MERGE_INSERT", key: "name"} ;
-		} else {
-			fileContent.project_ident = projIdent;
-			//fileContent["@metadata"] = {action:"MERGE_INSERT", key: "name"} ;
-		}
+		var fileContent  = null;
+		var json = null;
+		fs.readFile(cmd.file, function read(err,data){
+			if(err) {
+				console.log("Unable to read file");
+				return;
+			}
+			json = data;
+		
+			fileContent = JSON.parse(json);
+			if(Array.isArray(fileContent) && fileContent.length > 0){
+				fileContent[0].project_ident = projIdent;
+				//fileContent[0]["@metadata"] = {action:"MERGE_INSERT", key: "name"} ;
+			} else {
+				fileContent.project_ident = projIdent;
+				//fileContent["@metadata"] = {action:"MERGE_INSERT", key: "name"} ;
+			}
 		
 		var startTime = new Date();
 		client.post(loginInfo.url + "/admin:handlers", {
@@ -213,5 +222,6 @@ module.exports = {
 			}
 			printObject.printHeader(trailer);
 		});
+	  });
 	}
 };

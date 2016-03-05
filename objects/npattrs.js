@@ -248,7 +248,16 @@ module.exports = {
 			return;
 		}
 		context.getContext(cmd, function() {
-			var fileContent = JSON.parse(fs.readFileSync(cmd.file));
+			var fileContent  = null;
+			var json = null;
+			fs.readFile(cmd.file, function read(err,data){
+				if(err) {
+					console.log("Unable to read file");
+					return;
+				}
+			json = data;
+		
+			fileContent = JSON.parse(json);
 			if(Array.isArray(fileContent)){
 				for(var i = 0 ; i < fileContent.length; i++){
 					fileContent[i].dbaseschema_ident = curProj;
@@ -304,5 +313,6 @@ module.exports = {
 				printObject.printHeader(trailer);
 			})
 		});
+	  });
 	}
 };

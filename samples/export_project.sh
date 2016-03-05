@@ -1,39 +1,42 @@
 #! /bin/bash
 
-#SERVER=http://localhost:8080/APIServer
-SERVER=http://localhost:8080
+LACSERVER=http://localhost:8080/APIServer
+#LACSERVER=http://localhost:8080
+PROJECT=nwindb2b
+
 ## Connect to a local server
-lacadmin logout -a nwind
-lacadmin login -u admin -p Password1 $SERVER -a nwind
-lacadmin use nwind
+lacadmin logout -a $PROJECT
+lacadmin login -u admin -p Password1 $LACSERVER -a $PROJECT
+lacadmin use $PROJECT
 lacadmin status
 
 # Select a Project
-lacadmin project use --url_name nwindb2b
+lacadmin project use --url_name $PROJECT
 
 ## Export everything
-mkdir -p nwind
+mkdir -p $PROJECT
 
 lacadmin snapshot start --name snapshot1
-lacadmin project export --file nwind/nwind.json
-lacadmin apioptions export --file nwind/apioptions.json
-lacadmin datasource export --file nwind/datasource.json
-lacadmin libraries export --file nwind/libraries.json
-lacadmin authprovider export --file nwind/authprovider.json
-lacadmin rule export --file nwind/rules.json 
-lacadmin resource export --file nwind/resources.json
-lacadmin relationship export --file nwind/relationships.json
-lacadmin token export --file nwind/tokens.json
-lacadmin role export --file nwind/roles.json
-lacadmin user export --file nwind/users.json
-lacadmin namedsort export --file nwind/sorts.json
-lacadmin namedfilter export --file nwind/filters.json
-lacadmin apiversion export --file nwind/apiversions.json
-lacadmin event export --file nwind/events.json
-lacadmin handler export --file nwind/handlers.json
-lacadmin topic export --file nwind/topic.json
-#lacadmin npa export --file nwind/npa.json
+lacadmin project export --file $PROJECT/$PROJECT.json
+lacadmin apioptions export --file $PROJECT/apioptions.json
+lacadmin datasource export --file $PROJECT/datasource.json
+lacadmin libraries export --file $PROJECT/libraries.json
+lacadmin authprovider export --file $PROJECT/authprovider.json
+lacadmin rule export --file $PROJECT/rules.json 
+lacadmin resource export --file $PROJECT/resources.json
+lacadmin relationship export --file $PROJECT/relationships.json
+lacadmin token export --file $PROJECT/tokens.json
+lacadmin role export --file $PROJECT/roles.json
+lacadmin user export --file $PROJECT/users.json
+lacadmin namedsort export --file $PROJECT/sorts.json
+lacadmin namedfilter export --file $PROJECT/filters.json
+lacadmin apiversion export --file $PROJECT/apiversions.json
+lacadmin event export --file $PROJECT/events.json
+lacadmin handler export --file $PROJECT/handlers.json
+lacadmin topic export --file $PROJECT/topic.json
+lacadmin npa export --file $PROJECT/npa.json
+lacadmin gateway export --file $PROJECT/gateway.json
 #lacadmin snapshot restore --name snapshot1
 
-lacadmin logout -a nwind
+lacadmin logout -a $PROJECT
 

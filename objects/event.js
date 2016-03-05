@@ -168,18 +168,26 @@ module.exports = {
 		if ( ! cmd.file) {
 			cmd.file = '/dev/stdin';
 		}
+		var fileContent  = null;
+		var json = null;
+		fs.readFile(cmd.file, function read(err,data){
+			if(err) {
+				console.log("Unable to read file");
+				return;
+			}
+			json = data;
 		
-		var fileContent = JSON.parse(fs.readFileSync(cmd.file));
-		if(Array.isArray(fileContent) && fileContent.length > 0){
-				for(var i = 0 ; i < fileContent.length; i++){
-					fileContent[i].project_ident = projIdent;
-					delete fileContent[i].ident;
-					fileContent[i]["@metadata"] = {action:"MERGE_INSERT", key:  ["project_ident","name"]};
-				} 
-		} else {
-			fileContent.project_ident = projIdent;
-			fileContent["@metadata"] = {action:"MERGE_INSERT", key: ["project_ident","name"]};
-		}
+			fileContent = JSON.parse(json);
+			if(Array.isArray(fileContent) && fileContent.length > 0){
+					for(var i = 0 ; i < fileContent.length; i++){
+						fileContent[i].project_ident = projIdent;
+						delete fileContent[i].ident;
+						fileContent[i]["@metadata"] = {action:"MERGE_INSERT", key:  ["project_ident","name"]};
+					} 
+			} else {
+				fileContent.project_ident = projIdent;
+				fileContent["@metadata"] = {action:"MERGE_INSERT", key: ["project_ident","name"]};
+			}
 		
 		var startTime = new Date();
 		client.put(loginInfo.url + "/admin:eventhandlers", {
@@ -226,5 +234,6 @@ module.exports = {
 			}
 			printObject.printTrailer(trailer);
 		});
+	  });
 	}
 };

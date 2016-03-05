@@ -1,45 +1,50 @@
 #! /bin/bash
 
-#LACSERVER=http://localhost:8080/APIServer
-LACSERVER=http://localhost:8080
-
+LACSERVER=http://localhost:8080/APIServer
+#LACSERVER=http://localhost:8080
+PROJECT=nwindb2b
+NEWPROJECT=b2bcopy
+PASSWORD=password
+PREFIX=nw
 
 ## Connect to a local server
-lacadmin logout -a nwind
-lacadmin login -u admin -p Password1 $LACSERVER -a nwind
-lacadmin use nwind
+lacadmin logout -a $PROJECT
+lacadmin login -u admin -p Password1 $LACSERVER -a $PROJECT
+lacadmin use $PROJECT
 lacadmin status
 
 lacadmin project list
-##lacadmin project import --file nwind/nwind.json
-##OR create a new project
-lacadmin project use --url_name newproj
-lacadmin project delete --url_name newproj
-lacadmin project create --project_name NorthWindCopy --url_name newproj
-lacadmin project use --url_name newproj
+#This first way will import the entire project and all content 
+##lacadmin project import --file $PROJECT/$PROJECT.json
+##This shows how to create a new project from each json component
+lacadmin project use --url_name $NEWPROJECT
+lacadmin project delete --url_name $NEWPROJECT
+lacadmin project create --project_name "NewProject - $NEWPROJECT" --url_name $NEWPROJECT
+lacadmin project use --url_name $NEWPROJECT
 
 ## Start Import
-lacadmin libraries import --file nwind/libraries.json
-lacadmin authprovider import --file nwind/authprovider.json
+lacadmin libraries import --file $PROJECT/libraries.json
+lacadmin authprovider import --file $PROJECT/authprovider.json
 lacadmin authprovider linkProject --ident 1000
-lacadmin apioptions import --file nwind/apioptions.json
-lacadmin datasource import --file nwind/datasource.json
-lacadmin datasource reload --prefix nw
-lacadmin relationship import --file nwind/relationships.json
-lacadmin topic import --file nwind/topic.json
-lacadmin rule import --file nwind/rules.json 
-lacadmin resource import --file nwind/resources.json
+lacadmin apioptions import --file $PROJECT/apioptions.json
+lacadmin datasource import --file $PROJECT/datasource.json
+lacadmin datasource update --password $PASSWORD --prefix $PREFIX
+lacadmin datasource reload --prefix $PREFIX
+lacadmin relationship import --file $PROJECT/relationships.json
+lacadmin topic import --file $PROJECT/topic.json
+lacadmin rule import --file $PROJECT/rules.json 
+lacadmin resource import --file $PROJECT/resources.json
 #security info
-lacadmin role import --file nwind/roles.json
-lacadmin token import --file nwind/tokens.json
-lacadmin user import --file nwind/users.json
+lacadmin role import --file $PROJECT/roles.json
+lacadmin token import --file $PROJECT/tokens.json
+lacadmin user import --file $PROJECT/users.json
 #other stuff
-lacadmin namedsort import --file nwind/sorts.json
-lacadmin namedfilter import --file nwind/filters.json
-lacadmin apiversion import --file nwind/apiversions.json
-lacadmin event import --file nwind/events.json
-lacadmin handler import --file nwind/handlers.json
-#lacadmin npa import --file nwind/npa.json
+lacadmin namedsort import --file $PROJECT/sorts.json
+lacadmin namedfilter import --file $PROJECT/filters.json
+lacadmin apiversion import --file $PROJECT/apiversions.json
+lacadmin event import --file $PROJECT/events.json
+lacadmin handler import --file $PROJECT/handlers.json
+#lacadmin npa import --file $PROJECT/npa.json
 lacadmin snapshot start --name 'first project'
 
 lacadmin project list
