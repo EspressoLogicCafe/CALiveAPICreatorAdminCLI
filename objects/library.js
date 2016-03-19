@@ -196,8 +196,8 @@ module.exports = {
 			   cmd.file = '/dev/stdin';
 			}
 			var fileContent = fs.readFileSync(cmd.file);
-			var data = fileContent.toString('hex');
-			newLibrary.code  = "0x"+data; //{ type: "base64", length: data.length , value: data};
+			var data = fileContent.toString('base64');//hex
+			newLibrary.code  = { type: "base64", length: data.length , value: data};//"0x"+data; //
 			var startTime = new Date();
 			newLibrary["@metadata"] = {action:"MERGE_INSERT", key: ["name","account_ident"]} ;
 			client.put(loginInfo.url + "/admin:logic_libraries", {
