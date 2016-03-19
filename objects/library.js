@@ -184,7 +184,7 @@ module.exports = {
 				group_name: cmd.short_name ,
 				lib_name: cmd.short_name ,
 				version: ver  ,
-				description:  cmd.comments ,
+				description:  cmd.comments || null,
 				doc_url: cmd.docurl || null,
 				ref_url: cmd.refurl || null,
 				code: "",
@@ -196,9 +196,8 @@ module.exports = {
 			   cmd.file = '/dev/stdin';
 			}
 			var fileContent = fs.readFileSync(cmd.file);
-			var data = fileContent.toString('base64');
-			//base64 endcode this first
-			newLibrary.code  = { type: "base64", length: data.length , value: data};
+			var data = fileContent.toString('hex');
+			newLibrary.code  = "0x"+data; //{ type: "base64", length: data.length , value: data};
 			var startTime = new Date();
 			newLibrary["@metadata"] = {action:"MERGE_INSERT", key: "name"} ;
 			client.put(loginInfo.url + "/logic_libraries", {
