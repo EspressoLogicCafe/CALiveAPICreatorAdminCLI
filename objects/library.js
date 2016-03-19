@@ -199,8 +199,8 @@ module.exports = {
 			var data = fileContent.toString('hex');
 			newLibrary.code  = "0x"+data; //{ type: "base64", length: data.length , value: data};
 			var startTime = new Date();
-			newLibrary["@metadata"] = {action:"MERGE_INSERT", key: "name"} ;
-			client.put(loginInfo.url + "/logic_libraries", {
+			newLibrary["@metadata"] = {action:"MERGE_INSERT", key: ["name","account_ident"]} ;
+			client.put(loginInfo.url + "/admin:logic_libraries", {
 				data: newLibrary,
 				headers: {
 					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
@@ -211,37 +211,42 @@ module.exports = {
 					console.log(data.errorMessage.red);
 					return;
 				}
-				printObject.printHeader('Library was created, including:');
-				var newLib = _.find(data.txsummary, function(p) {
-					return p['@metadata'].resource === 'admin:logic_libraries';
-				});
-				if ( ! newLib) {
-					console.log('CREATE PROJECT ERROR: unable to find newly created library'.red);
-					return;
-				}
-				if (cmd.verbose) {
-					_.each(data.txsummary, function(obj) {
-						printObject.printObject(obj, obj['@metadata'].entity, 0, obj['@metadata'].verb);
+				
+				if(data.statusCode == 200 && data.txsummary.length == 0){
+					console.log("Merge completed - no changes detected");
+				} else {
+					printObject.printHeader('Library was created, including:');
+					var newLib = _.find(data.txsummary, function(p) {
+						return p['@metadata'].resource === 'admin:logic_libraries';
 					});
+					if ( ! newLib) {
+						console.log('Library Create error: unable to find newly created library'.red);
+						return;
+					}
+					if (cmd.verbose) {
+						_.each(data.txsummary, function(obj) {
+							printObject.printObject(obj, obj['@metadata'].entity, 0, obj['@metadata'].verb);
+						});
+					}
+					else {
+						printObject.printObject(newLib, newLib['@metadata'].entity, 0, newLib['@metadata'].verb);
+						console.log(('and ' + (data.txsummary.length - 1) + ' other objects').grey);
+					}
+					var trailer = "Request took: " + (endTime - startTime) + "ms";
+					trailer += " - # objects touched: ";
+					if (data.txsummary.length == 0) {
+						console.log('No data returned'.yellow);
+					}
+					else {
+						trailer += data.txsummary.length;
+					}
+					printObject.printHeader(trailer);
 				}
-				else {
-					printObject.printObject(newLib, newLib['@metadata'].entity, 0, newLib['@metadata'].verb);
-					console.log(('and ' + (data.txsummary.length - 1) + ' other objects').grey);
-				}
-				var trailer = "Request took: " + (endTime - startTime) + "ms";
-				trailer += " - # objects touched: ";
-				if (data.txsummary.length == 0) {
-					console.log('No data returned'.yellow);
-				}
-				else {
-					trailer += data.txsummary.length;
-				}
-				printObject.printHeader(trailer);
 				var projIdent = cmd.project_ident;
 				if ( ! projIdent) {
 					projIdent = dotfile.getCurrentProject();
 				}
-				if(cmd.linkProject && projIdent !== null){
+				if(cmd.linkProject && projIdent !== null && data.txsummary.lenght > 0){
 					var linkproject = { 
 						//@metadata: {action: 'INSERT'}, 
 						logic_library_ident: data.txsummary[0].ident , 
