@@ -219,7 +219,7 @@ program
 	
 	
 program
-	.command('npa <list|create|import|export>')
+	.command('npa <list|create|export>')
 	.description('Administer Non Persistent Attributes for the active API Project. New in version 2.1.x')
 	.option('--ident [ident]', 'The ident of the specific named sort object')
 	.option('--dbschema_ident [ident]', '[Optional] The dbschema ident if not the active project')

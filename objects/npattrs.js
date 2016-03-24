@@ -181,51 +181,62 @@ module.exports = {
 			return;
 		var url = loginInfo.url;
 		var apiKey = loginInfo.apiKey;
-		var projIdent = cmd.project_ident;
-		if ( ! projIdent) {
-			projIdent = dotfile.getCurrentProject();
-		}
-		var filter = "";
-		var sep = "";
-		if (cmd.dbaseschema_ident) {
-			filter += sep + "sysfilter=equal(dbaseschema_ident:" + cmd.dbaseschema_ident + ")";
-			sep = "&";
-		} else if (projIdent) {
-				filter += sep + "sysfilter=equal(dbaseschema_ident:" + projIdent + ")";
-		}
 		
 		var toStdout = false;
 		if ( ! cmd.file) {
 			toStdout = true;
 		}
-		
-		client.get(loginInfo.url + "/np_attributes?" + filter, {
-			headers: {
-				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
-			}
-		}, function(data) {
-			//Sconsole.log('get result: ' + JSON.stringify(data, null, 2));
-			if (data.errorMessage) {
-				console.log(("Error: " + data.errorMessage).red);
+		var projIdent = cmd.project_ident;
+		if ( ! projIdent) {
+			projIdent = dotfile.getCurrentProject();
+			if ( ! projIdent) {
+				console.log('There is no current project.'.yellow);
 				return;
 			}
-			if (data.length === 0) {
-				console.log(("No non persistent attributes found").red);
-				return;
-			}
-			//do not export passwords
-			for(var i = 0; i < data.length ; i++){
-				delete data[i]["ident"];
-				delete data[i]["@metadata"];
-			}
-			if (toStdout) {
-				console.log(JSON.stringify(data, null, 2));
-			} else {
-				var exportFile = fs.openSync(cmd.file, 'w+', 0600);
-				fs.writeSync(exportFile, JSON.stringify(data, null, 2));
-				console.log(('Non Persistent Attrs have been exported to file: ' + cmd.file).green);
-			}
+		}
+		var output = [];
+		//ALLNpaAttributes subselect dbaseschema project_ident - no need for loop
+		var filter = "/DbSchemas?sysfilter=equal(project_ident:"+projIdent+")";
+		client.get(url + filter, {
+				headers: {
+					Authorization: "CALiveAPICreator " + apiKey + ":1"
+				}
+			},function(schema) {
+			//console.log(JSON.stringify(schema,null,2));
+			
+			client.get(loginInfo.url + "/np_attributes?sysfilter=equal(dbaseschema_ident:" + schema[0].ident+")", {
+				headers: {
+					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
+				}
+			}, function(data) {
+				//console.log('get result: ' + JSON.stringify(data, null, 2));
+				if (data.errorMessage) {
+					console.log(("Error: " + data.errorMessage).red);
+					return;
+				}
+				if (data.length === 0) {
+					console.log(("No non persistent attributes found").red);
+					return;
+				}
+				//do not export passwords
+				for(var i = 0; i < data.length ; i++){
+					delete data[i]["ident"];
+					delete data[i]["@metadata"];
+					data[i].prefix = schema[0].prefix;
+					output.push(data[i]);
+					//console.log(JSON.stringify(data[i],null,2));
+				}
+				if (toStdout) {
+					console.log(JSON.stringify(output, null, 2));
+				} else {
+					var filename = schema[0].name + "_" + cmd.file;
+					var exportFile = fs.openSync(filename, 'w+', 0600);
+					fs.writeSync(exportFile, JSON.stringify(output, null, 2));
+					console.log(('Non Persistent Attrs have been exported to file: ' + filename).green);
+				}
+			});
 		});
+		
 	},
 	import: function(cmd) {
 		var client = new Client();
@@ -247,6 +258,14 @@ module.exports = {
 			console.log('There is no current project.'.yellow);
 			return;
 		}
+		var projIdent = cmd.project_ident;
+		if ( ! projIdent) {
+			projIdent = dotfile.getCurrentProject();
+			if ( ! projIdent) {
+				console.log('There is no current project.'.yellow);
+				return;
+			}
+		}
 		context.getContext(cmd, function() {
 			var fileContent  = null;
 			var json = null;
@@ -260,17 +279,21 @@ module.exports = {
 			fileContent = JSON.parse(json);
 			if(Array.isArray(fileContent)){
 				for(var i = 0 ; i < fileContent.length; i++){
-					fileContent[i].dbaseschema_ident = curProj;
+					//fileContent[i].dbaseschema_ident = curProj;
 					delete fileContent[i].ident;
-					fileContent[i]["@metadata"] = {action:"MERGE_INSERT", key: ["dbaseschema_ident","table_name","attr_name"]} ;
+					var prefix = fileContent[i].prefix;
+					delete fileContent[i].prefix;
+					fileContent[i].dbaseschemas = { "@metadata": {"action": "LOOKUP", "key": ["prefix","active","project_ident"},,"prefix": prefix ,"active": true, "project_ident": projIdent};
+
+					//fileContent[i]["@metadata"] = {action:"MERGE_INSERT", key: ["dbaseschema_ident","table_name","attr_name"]} ;
 				} 
 			} else {
-				fileContent.dbaseschema_ident = curProj;
+				//fileContent.dbaseschema_ident = curProj;
 				delete fileContent.ident;
-				fileContent["@metadata"] = {action:"MERGE_INSERT", key:  ["dbaseschema_ident","table_name","attr_name"]} ;
+				//fileContent["@metadata"] = {action:"MERGE_INSERT", key:  ["dbaseschema_ident","table_name","attr_name"]} ;
 			}
 			var startTime = new Date();
-			client.put(loginInfo.url + "/admin:np_attributes", {
+			client.post(loginInfo.url + "/ALLNpaAttributes", {
 				data: fileContent,
 				headers: {Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1" }
 				}, function(data) {
