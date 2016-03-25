@@ -132,7 +132,7 @@ module.exports = {
 		if (dotDirName) {
 			var allFiles = fs.readdirSync(dotDirName);
 			_.each(allFiles, function(f) {
-				if (f === 'currentServer.txt' || f === 'admin') {
+				if (f === 'currentServer.txt' || f === 'admin' || f === '.DS_Store') {
 					return;
 				}
 				var fileContent = JSON.parse(fs.readFileSync(dotDirName + "/" + f));

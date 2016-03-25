@@ -283,7 +283,7 @@ module.exports = {
 					delete fileContent[i].ident;
 					var prefix = fileContent[i].prefix;
 					delete fileContent[i].prefix;
-					fileContent[i].dbaseschemas = { "@metadata": {"action": "LOOKUP", "key": ["prefix","active","project_ident"},,"prefix": prefix ,"active": true, "project_ident": projIdent};
+					//fileContent[i].dbaseschemas = { "@metadata": {"action": "LOOKUP", "key": ["prefix","active","project_ident"},"prefix": prefix ,"active": true, "project_ident": projIdent};
 
 					//fileContent[i]["@metadata"] = {action:"MERGE_INSERT", key: ["dbaseschema_ident","table_name","attr_name"]} ;
 				} 
