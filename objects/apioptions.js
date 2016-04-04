@@ -189,6 +189,7 @@ module.exports = {
 			var row = null;
 			for(var i = 0 ; i < fileContent.length ; i++ ){
 				delete fileContent[i].ProjectOptionTypes;
+				delete fileContent[i].ts;
 				fileContent[i].project_ident = projIdent;
 				fileContent[i]["@metadata"] = {action:"MERGE_INSERT", key: ["projectoptiontype_ident","project_ident"]} ;
 
@@ -212,7 +213,7 @@ module.exports = {
 					return p['@metadata'].resource === 'ProjectOptions';
 				});
 				if ( ! newSettings) {
-					console.log('INFO: no change to find imported project settings'.red);
+					console.log('INFO: no change to find imported project settings'.yellow);
 					return;
 				}
 				if (cmd.verbose) {

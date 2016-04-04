@@ -144,6 +144,7 @@ module.exports = {
 				for(var i = 0 ; i < fileContent.length; i++){
 					fileContent[i].account_ident = context.account.ident;
 					delete fileContent[i].ident;
+					delete fileContent[i].ts;
 					fileContent[i]["@metadata"] = {action:"MERGE_INSERT", key: ["account_ident","name"]} ;
 				} 
 			}

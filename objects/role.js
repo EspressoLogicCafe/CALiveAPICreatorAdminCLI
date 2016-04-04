@@ -163,9 +163,11 @@ module.exports = {
 				fileContent[i].project_ident = projIdent;
 				fileContent[i]["@metadata"] = {action:"MERGE_INSERT", key: ["name","project_ident"]} ;
 				delete fileContent[i].ident;
+				delete fileContent[i].ts;
 			}
 		} else {
 			fileContent.project_ident = projIdent;
+			delete fileContent.ts;
 			fileContent["@metadata"] = {action:"MERGE_INSERT", key: ["project_ident","name"]} ;
 		}
 		

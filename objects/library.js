@@ -292,6 +292,7 @@ module.exports = {
 			for(var i = 0 ; i < fileContent.length ; i++ ){
 				delete fileContent[i].ident;
 				fileContent[i].account_ident = account_ident;
+				delete fileContent[i].ts;
 				fileContent[i]["@metadata"] = {action:"MERGE_INSERT", key: ["name","account_ident"]} ;
 			}
 			var startTime = new Date();

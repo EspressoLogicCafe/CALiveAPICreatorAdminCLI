@@ -295,7 +295,7 @@ module.exports = {
 				return;
 			}
 			if (data.length === 0) {
-				console.log(("project to delete does not exist").red);
+				console.log(("Project "+ cmd.project_name +"  does not exist").yellow);
 				return;
 			}
 			if (data.length > 1) {

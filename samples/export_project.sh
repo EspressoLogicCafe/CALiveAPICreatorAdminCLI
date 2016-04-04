@@ -2,7 +2,7 @@
 
 LACSERVER=http://localhost:8080/APIServer
 #LACSERVER=http://localhost:8080
-PROJECT=nwindb2b
+PROJECT=banking
 
 ## Connect to a local server
 lacadmin logout -a $PROJECT

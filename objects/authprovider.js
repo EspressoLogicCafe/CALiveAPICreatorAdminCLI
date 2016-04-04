@@ -217,7 +217,7 @@ module.exports = {
 				var newAuth = _.find(data.txsummary, function(p) {
 					return p['@metadata'].resource === 'admin:authproviders';
 				});
-				if ( ! newAuth) {
+				if ( data.txsummary.length > 0 && ! newAuth) {
 					console.log('ERROR: unable to find newly created auth provider'.red);
 					return;
 				}
@@ -225,7 +225,7 @@ module.exports = {
 				var trailer = "Request took: " + (endTime - startTime) + "ms";
 				trailer += " - # objects touched: ";
 				if (data.txsummary.length == 0) {
-					console.log('No data returned'.yellow);
+					console.log('merge_insert completed or no data returned'.yellow);
 				}
 				else {
 					trailer += data.txsummary.length;

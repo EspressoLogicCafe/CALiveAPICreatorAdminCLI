@@ -170,10 +170,14 @@ module.exports = {
 		
 			fileContent = JSON.parse(json);
 			if(Array.isArray(fileContent) && fileContent.length > 0){
-				fileContent[0].project_ident = projIdent;
-				//fileContent[0]["@metadata"] = {action:"MERGE_INSERT", key: "name"} ;
+				for(var i = 0; i < fileContent.length; i++){
+					fileContent[i].project_ident = projIdent;
+					delete fileContent[i].ts;
+					//fileContent[0]["@metadata"] = {action:"MERGE_INSERT", key: "name"} ;
+				}
 			} else {
 				fileContent.project_ident = projIdent;
+				delete fileContent.ts;
 				//fileContent["@metadata"] = {action:"MERGE_INSERT", key: "name"} ;
 			}
 		

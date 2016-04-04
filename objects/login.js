@@ -56,8 +56,9 @@ module.exports = {
 				console.log(data.errorMessage.red);
 				return;
 			}
-			console.log(("This server licensed to: " + data.company + " license_type: "+ data.license_type).red);
-			//console.log("This server licensed to: " + data.company.red);
+					
+			console.log(("This server licensed to: " + data.company + " license_type: "+ data.license_type).green);
+			
 			process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 			client.post(url + "/@authentication",
 				{
@@ -99,7 +100,7 @@ module.exports = {
 				console.log(('Logout successful for alias ' + cmd.serverAlias).green);
 			}
 			else {
-				console.log(('Unknown alias: ' + cmd.serverAlias).red);
+				console.log(('Unknown alias: ' + cmd.serverAlias).yellow);
 			}
 		}
 		else {
@@ -115,7 +116,7 @@ module.exports = {
 		}
 		var login = dotfile.getLoginForAlias(serverAlias);
 		if ( ! login) {
-			console.log(('No such alias: ' + serverAlias).red);
+			console.log(('No such alias: ' + serverAlias).yellow);
 			return;
 		}
 		dotfile.setCurrentServer(login.url, login);

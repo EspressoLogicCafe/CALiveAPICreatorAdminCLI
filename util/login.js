@@ -7,7 +7,7 @@ module.exports = {
 		if (cmd.serverAlias) {
 			var loginInfo = dotfile.getLoginForAlias(cmd.serverAlias);
 			if ( ! loginInfo) {
-				console.log(('Unknown alias: ' + cmd.serverAlias).red);
+				console.log(('Unknown alias: ' + cmd.serverAlias).yellow);
 				return;
 			}
 			url = loginInfo.url;

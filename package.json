@@ -1,6 +1,6 @@
 {
   "name": "liveapicreator-admin-cli",
-  "version": "2.1.17",
+  "version": "2.1.22",
   "description": "The command line utility for CA Live Creator Administration from CA Technologies",
   "main": "liveapicreatoradmin.js",
   "scripts": {

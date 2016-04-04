@@ -398,6 +398,7 @@ module.exports = {
 				for(var i = 0 ; i < fileContent.length; i++){
 					fileContent[i].project_ident = curProj;
 					delete fileContent[i].ident;
+					delete fileContent[i].ts;
 					fileContent[i]["@metadata"] = {action:"MERGE_INSERT", key: ["project_ident","name"]} ;
 				} 
 			} else {

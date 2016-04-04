@@ -40,7 +40,7 @@ program
 	.version(pkg.version);
 
 program
-	.command('login <url>')
+	.command('login [url]')
 	.description('Login to an API server')
 	.option('-u, --username <username>', 'API Server admin user name')
 	.option('-p, --password <password>', 'API Server admin password')

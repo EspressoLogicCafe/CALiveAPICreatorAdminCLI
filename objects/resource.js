@@ -529,6 +529,7 @@ module.exports = {
 			var resourceCnt = 0;
 			var parent_ident = null;
 			if(Array.isArray(fileContent)){
+				delete fileContent[i].ts;
 				for(var i = 0 ; i < fileContent.length; i++){
 					delete fileContent[i]["@metadata"];
 					fileContent[i].apiversion_ident = apiversion_ident;
