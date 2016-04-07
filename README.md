@@ -75,7 +75,7 @@ $ liveapicreatoradmin --help
     apiversion [options] <list|export|import>                              Administer API Versions for Resources for current project.
     relationship [options] <list|export|import>                            Administer Relationships (Virtual Keys) for current project.
     snapshot [options] <list|start>                                        List or start a project snapshot (backup) for current project.
- 	gateway <list|create|import|export|publish|publishReadSwagger>         Publish Swagger document for current project to Gateway. New in version 2.1.x - publish requires existing swagger file   
+ 	gateway <list|create|import|export|publish>         				   Publish Swagger 2.0 document for current project to CA Gateway.    
     
   Options:
 
