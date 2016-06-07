@@ -52,12 +52,11 @@ module.exports = {
 				console.log(data.errorMessage.red);
 				return;
 			}
-			printObject.printHeader('Datasources');
+			printObject.printHeader('Managed Data Server(s)');
 			var table = new Table();
 			_.each(data, function(p) {
 				table.cell("Ident", p.ident);
 				table.cell("Name", p.name);
-				table.cell("Prefix", p.prefix);
 				var type = "";
 				switch(p.dbasetype_ident) {
 					case 1: type = "MySQL"; break;
@@ -71,7 +70,7 @@ module.exports = {
 					default: type = "unknown";
 				}
 				table.cell("Type", type);
-				table.cell("Active", p.active);
+				table.cell("Active", p.is_active);
 				table.cell("Catalog", p.catalog_name);
 				table.cell("User", p.user_name);
 				table.cell("URL", p.url);
