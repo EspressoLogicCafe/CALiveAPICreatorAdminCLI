@@ -1,9 +1,9 @@
-# datasource
+# Managed Data Server
 This suite of commands allows you to manipulate the managed_data_servers .
 ```
 Usage: managedserver [options] <list|create|update|delete|import|export>
 
-  Administer datasources within a project.
+  Administer managed data server(s) within an account (must have role 'Data admin').
 
   Options:
 
@@ -21,7 +21,7 @@ Usage: managedserver [options] <list|create|update|delete|import|export>
 ## managedserver list
     lcadmin managedserver list
 
-The `list` command shows all datasource connections for the current project.
+The `list` command shows all Managed Data Servers for the current account.
 
 #### Output
     Managed Data Server(s)
@@ -31,7 +31,7 @@ The `list` command shows all datasource connections for the current project.
 
 ***
 ## managedserver create
-    liveapicreatoradmin datasource create --name <name> 
+    liveapicreatoradmin managedserver create --name <name> 
     	--user_name <db-user-name> 
     	--password <db-password>
     	[--url <db-url> ]
@@ -46,8 +46,8 @@ The `create` command creates a new managed data server.
 
 The `url` parameter should be a valid JDBC URL, such as:
 
-    MySQL	    jdbc:mysql://<server-name>[:port-number (default 3306)]/[datasource-name]	
-    Postgres	jdbc:postgresql://<server-name>[:port-number (default 5432)]/<datasource-name>	
+    MySQL	    jdbc:mysql://<server-name>[:port-number (default 3306)]	
+    Postgres	    jdbc:postgresql://<server-name>[:port-number (default 5432)]	
     Derby	    jdbc:derby://<server-dirname>[/<datasource-name>;create=true	
     
 
@@ -72,7 +72,7 @@ lacadmin managedserver update
 
 ***
 ## managedserver delete
-    lacadmin datasource delete [--server_name <name> | --ident <ident>]
+    lacadmin managedserver delete [--server_name <name> | --ident <ident>]
 
 The `delete` command deletes a managed data server from the current account.
 Either the name of the or ident, must be specified (use list to get ident).
@@ -85,7 +85,7 @@ lacadmin managedserver export  [--ident <ident> | --server_name <name> ] --file 
 This exports the specified managed data server(s) into a JSON file. If the filename parameter is not specified, stdout is used.
 
 ## managedserver import
-Import a managed data server to the current account server (or one specified) using the name of the json file for the datasource you wish to import.
+Import a managed data server to the current account server (or one specified) using the name of the json file for the managedserver you wish to import.
 ```
 lacadmin managedserver import --file managedserver.json
 ```
