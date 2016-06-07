@@ -76,6 +76,7 @@ $ liveapicreatoradmin --help
     relationship [options] <list|export|import>                            Administer Relationships (Virtual Keys) for current project.
     snapshot [options] <list|start>                                        List or start a project snapshot (backup) for current project.
  	gateway <list|create|import|export|publish>         				   Publish Swagger 2.0 document for current project to CA Gateway.    
+    managedserver <list|create|delete|update|import|export>                 Administer a managed data server (used by @databases to create datasources).
     
   Options:
 
