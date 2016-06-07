@@ -15,7 +15,7 @@ Usage: managedserver [options] <list|create|update|delete|import|export>
     --password [password]          The password of the managed data server user
     --url [url]                    The JDBC URL for the managed data server url
     --comments [comment]           The comment used for this managed data server
-    --active [true"false]	   	Is this managed data server active
+    --active [true"false]	   		Is this managed data server active
     --file [file]                  Optional: for import/export, the name of a file to read from/save to, if unspecified, use stdin/stdout
 ```
 ***
