@@ -28,6 +28,7 @@ var event = require('./objects/event.js');
 var reln = require('./objects/reln.js');
 var handler = require('./objects/handler.js');
 var apiversion = require('./objects/version.js');
+var managedserver = require('./objects/managedserver.js');
 
 //var sequence = require('./objects/sequence.js'); //Oracle
 //var apps = require('./objects/applicaitons.js'); //list | export | import
@@ -284,6 +285,22 @@ program
 	.option('--comments [comments]','The gateway definition comments' )
 	.option('--file [fileName]', '[Optional] Name of file to import/export (if not provided stdin/stdout used for export)')
 	.action(gateway.doGateway);	
+	
+program
+	.command('managedserver <list|create|update|delete|import|export>')
+	.description('Administer a managed data server (used by @databases to create datasources).')
+	.option('--server_name [name]', 'The name of the datasource connection')
+	.option('--ident [ident]', 'For delete or reload, the ident of the managed data server')
+	.option('--dbasetype [dbasetype]', 'The type of the managed data server connection, can be mysql, derby, postgres')
+	.option('--catalog_name [catalog_name]', 'The catalog in the managed data server')
+	.option('--user_name [user_name]', 'The name of the managed data server user')
+	.option('--password [password]', 'The password of the managed data server user')
+	.option('--url [url]', 'The JDBC URL for the managed data server')
+	.option('--comments [comment]', 'This is the comment for this managed data server')
+	.option('--active [true|false]', 'This marks the managed data server active or inactive')
+	.option('--file [file]', 'Optional: for import/export, the name of a file to read from/save to, if unspecified, use stdin/stdout')
+	.action(managedserver.doDbase);
+		
 		
 program.parse(process.argv);
 
