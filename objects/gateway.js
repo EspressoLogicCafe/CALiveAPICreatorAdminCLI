@@ -43,7 +43,8 @@ module.exports = {
 
 		client.get(url + "/admin:gateways?pagesize=100&sysorder=(name:asc_uc,name:desc)", {
 			headers: {
-				Authorization: "CALiveAPICreator " + apiKey + ":1"
+				Authorization: "CALiveAPICreator " + apiKey + ":1",
+				"Content-Type" : "application/json"
 			}
 		}, function(data) {
 			if (data.errorMessage) {
@@ -98,7 +99,8 @@ module.exports = {
 		
 		client.get(url + "/admin:gateways" + filter, {
 			headers: {
-				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
+				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+				"Content-Type" : "application/json"
 			}
 		}, function(data) {
 			//console.log('get result: ' + JSON.stringify(data, null, 2));
@@ -151,7 +153,10 @@ module.exports = {
 			var startTime = new Date();
 			client.put(loginInfo.url + "/admin:gateways", {
 				data: fileContent,
-				headers: {Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1" }
+				headers: {
+						Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+						"Content-Type" : "application/json"
+					}
 				}, function(data) {
 				var endTime = new Date();
 				if (data.errorMessage) {
@@ -244,7 +249,10 @@ module.exports = {
 		
 		var headers = {};
 		if(cmd.useAuthToken){
-		 	headers = {	Authorization: "CALiveAPICreator " + apiKey + ":1" };
+		 	headers = {	
+		 		Authorization: "CALiveAPICreator " + apiKey + ":1",
+				"Content-Type" : "application/json"
+			 }
 		}		
 			var gateway = {
 				 url: cmd.hostname,
@@ -258,7 +266,8 @@ module.exports = {
 			client.post(loginInfo.url + "/@gateway_publish", {
 				data: gateway,
 				headers: {
-					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
+					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+					"Content-Type" : "application/json"
 				}
 			}, function(data) {
 				var endTime = new Date();
@@ -311,7 +320,8 @@ module.exports = {
 			client.put(loginInfo.url + "/admin:gateways", {
 				data: newGateway,
 				headers: {
-					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
+					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+					"Content-Type" : "application/json"
 				}
 			}, function(data) {
 				var endTime = new Date();

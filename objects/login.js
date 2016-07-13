@@ -181,7 +181,8 @@ module.exports = {
 		var client = new Client();
 		client.get(loginInfo.url + "/projects/" + curProj, {
 			headers: {
-				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
+				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+				"Content-Type" : "application/json"
 			}
 		}, function(data) {
 			if (data.errorMessage) {

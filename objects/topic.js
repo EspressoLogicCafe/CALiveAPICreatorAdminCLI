@@ -44,7 +44,8 @@ module.exports = {
 		}
 		client.get(url + "/admin:topics?sysfilter=equal(project_ident:" + projIdent+")&pagesize=100&&sysorder=(name:asc_uc,name:desc)", {
 						headers: {
-							Authorization: "CALiveAPICreator " + apiKey + ":1"
+							Authorization: "CALiveAPICreator " + apiKey + ":1",
+							"Content-Type" : "application/json"
 						}
 					}, function(data) {
 						if (data.errorMessage) {
@@ -110,7 +111,8 @@ module.exports = {
 		
 		client.get(loginInfo.url + "/admin:topics?pagesize=1000&"+filter, {
 			headers: {
-				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
+				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+				"Content-Type" : "application/json"
 			}
 		}, function(data) {
 			//console.log('get result: ' + JSON.stringify(data, null, 2));
@@ -183,7 +185,8 @@ module.exports = {
 		client.put(loginInfo.url + "/admin:topics", {
 			data: fileContent,
 			headers: {
-				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
+				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+				"Content-Type" : "application/json"
 			}
 		}, function(data) {
 		

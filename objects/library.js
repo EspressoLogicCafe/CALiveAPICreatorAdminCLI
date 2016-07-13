@@ -42,7 +42,8 @@ module.exports = {
 
 		client.get(url + "/logic_libraries?pagesize=100&sysorder=(name:asc_uc,name:desc)", {
 			headers: {
-				Authorization: "CALiveAPICreator " + apiKey + ":1"
+				Authorization: "CALiveAPICreator " + apiKey + ":1",
+				"Content-Type" : "application/json"
 			}
 		}, function(data) {
 			if (data.errorMessage) {
@@ -89,7 +90,8 @@ module.exports = {
 		
 		client.get(loginInfo.url + "/logic_libraries?sysfilter=" + filt, {
 			headers: {
-				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
+				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+				"Content-Type" : "application/json"
 			}
 		}, function(data) {
 			//console.log('get result: ' + JSON.stringify(data, null, 2));
@@ -197,13 +199,14 @@ module.exports = {
 			}
 			var fileContent = fs.readFileSync(cmd.file);
 			var data = fileContent.toString('base64');//hex
-			newLibrary.code  = { type: "base64", length: data.length , value: data};//"0x"+data; //
+			newLibrary.code  = "b64:" + data;//"0x"+data; //
 			var startTime = new Date();
 			newLibrary["@metadata"] = {action:"MERGE_INSERT", key: ["name","account_ident"]} ;
 			client.put(loginInfo.url + "/admin:logic_libraries", {
 				data: newLibrary,
 				headers: {
-					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
+					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+					"Content-Type" : "application/json"
 				}
 			}, function(data) {
 				var endTime = new Date();
@@ -255,7 +258,10 @@ module.exports = {
 					linkproject["@metadata"] = {action:"MERGE_INSERT"} ;
 					client.put(loginInfo.url + "/admin:project_libraries", {
 						data: linkproject,
-						headers: { Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"}
+						headers: { 
+							Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+							"Content-Type" : "application/json"
+							}
 						}, function(data) {
 						if (data.errorMessage) {
 							console.log(("LinkProject Error: " + data.errorMessage).red);
@@ -298,7 +304,10 @@ module.exports = {
 			var startTime = new Date();
 			client.put(loginInfo.url + "/logic_libraries", {
 				data: fileContent,
-				headers: {Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1" }
+				headers: {
+						Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+						"Content-Type" : "application/json" 
+					}
 				}, function(data) {
 				var endTime = new Date();
 				if (data.errorMessage) {
@@ -349,7 +358,10 @@ module.exports = {
 					linkproject["@metadata"] = {action:"MERGE_INSERT"} ;
 					client.post(loginInfo.url + "/admin:project_libraries", {
 						data: linkproject,
-						headers: { Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"}
+						headers: { 
+							Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+							"Content-Type" : "application/json"
+						}
 						}, function(data) {
 						if (data.errorMessage) {
 							console.log(("Error: " + data.errorMessage).red);
@@ -396,7 +408,8 @@ module.exports = {
 
 		client.get(loginInfo.url + "/logic_libraries?" + filter, {
 			headers: {
-				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
+				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+				"Content-Type" : "application/json"
 			}
 		}, function(data) {
 			//console.log('get result: ' + JSON.stringify(data, null, 2));

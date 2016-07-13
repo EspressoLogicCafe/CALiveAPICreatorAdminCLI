@@ -45,7 +45,8 @@ module.exports = {
 
 		client.get(url + "/@tables?sysfilter=equal(project_ident:" + projIdent+")&sysorder=(entity:asc_uc,entity:desc)&pagesize=1000", {
 			headers: {
-				Authorization: "CALiveAPICreator " + apiKey + ":1"
+				Authorization: "CALiveAPICreator " + apiKey + ":1",
+				"Content-Type" : "application/json"
 			}
 		}, function(data) {
 			if (data.errorMessage) {
@@ -106,7 +107,8 @@ module.exports = {
 		
 		client.get(url + "/@tables?"+ filter, {
 			headers: {
-				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
+				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+				"Content-Type" : "application/json"
 			}
 		}, function(data) {
 			//console.log('get result: ' + JSON.stringify(data, null, 2));
@@ -125,7 +127,8 @@ module.exports = {
 				//table.cell("Name", p.entity);
 				client.get(url + "/@tables/"+p.name, {
 					headers: {
-						Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
+						Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+						"Content-Type" : "application/json"
 					}
 				}, function(details) {
 					if (details.errorMessage) {

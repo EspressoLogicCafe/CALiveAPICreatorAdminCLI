@@ -44,7 +44,8 @@ module.exports = {
 		}
 		client.get(url + "/AllRoles?sysfilter=equal(project_ident:" + projIdent+")&pagesize=100", {
 						headers: {
-							Authorization: "CALiveAPICreator " + apiKey + ":1"
+							Authorization: "CALiveAPICreator " + apiKey + ":1",
+							"Content-Type" : "application/json"
 						}
 					}, function(data) {
 						if (data.errorMessage) {
@@ -109,7 +110,8 @@ module.exports = {
 		
 		client.get(loginInfo.url + "/AllRoles?pagesize=1000&"+filter, {
 			headers: {
-				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
+				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+				"Content-Type" : "application/json"
 			}
 		}, function(data) {
 			//console.log('get result: ' + JSON.stringify(data, null, 2));
@@ -175,7 +177,8 @@ module.exports = {
 		client.put(loginInfo.url + "/AllRoles", {
 			data: fileContent,
 			headers: {
-				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
+				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+				"Content-Type" : "application/json"
 			}
 		}, function(data) {
 		

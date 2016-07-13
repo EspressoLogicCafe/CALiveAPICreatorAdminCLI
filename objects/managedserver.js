@@ -45,7 +45,8 @@ module.exports = {
 
 		client.get(url + "/admin:managed_data_servers", {
 			headers: {
-				Authorization: "CALiveAPICreator " + apiKey + ":1"
+				Authorization: "CALiveAPICreator " + apiKey + ":1",
+				"Content-Type" : "application/json"
 			}
 		}, function(data) {
 			if (data.errorMessage) {
@@ -161,7 +162,8 @@ module.exports = {
 			client.post(loginInfo.url + "/admin:managed_data_servers", {
 				data: newServer,
 				headers: {
-					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
+					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+					"Content-Type" : "application/json"
 				}
 			}, function(data) {
 				
@@ -208,7 +210,8 @@ module.exports = {
 		//console.log(filter);
 		client.get(loginInfo.url + "/admin:managed_data_servers?sysfilter=" + filter, {
 			headers: {
-				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
+				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+				"Content-Type" : "application/json"
 			}
 		}, function(data) {
 			
@@ -257,7 +260,8 @@ module.exports = {
 			client.put(db['@metadata'].href, {
 				data: db,
 				headers: {
-					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
+					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+					"Content-Type" : "application/json"
 				}
 			}, function(data2) {
 				var endTime = new Date();
@@ -301,7 +305,8 @@ module.exports = {
 		
 		client.get(loginInfo.url + "/admin:managed_data_servers?sysfilter=" + filter, {
 			headers: {
-				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
+				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+				"Content-Type" : "application/json"
 			}
 		}, function(data) {
 			//console.log('get result: ' + JSON.stringify(data, null, 2));
@@ -321,7 +326,8 @@ module.exports = {
 			var startTime = new Date();
 			client['delete'](db['@metadata'].href + "?checksum=" + db['@metadata'].checksum, {
 				headers: {
-					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
+					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+					"Content-Type" : "application/json"
 				}
 			}, function(data2) {
 				var endTime = new Date();
@@ -376,7 +382,8 @@ module.exports = {
 		
 		client.get(loginInfo.url + "/admin:managed_data_servers" + filter, {
 			headers: {
-				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
+				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+				"Content-Type" : "application/json"
 			}
 		}, function(data) {
 			//Sconsole.log('get result: ' + JSON.stringify(data, null, 2));
@@ -441,7 +448,10 @@ module.exports = {
 			var startTime = new Date();
 			client.post(loginInfo.url + "/admin:managed_data_servers", {
 				data: fileContent,
-				headers: {Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1" }
+				headers: {
+						Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+						"Content-Type" : "application/json"
+					}
 				}, function(data) {
 				var endTime = new Date();
 				if (data.errorMessage) {

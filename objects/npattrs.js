@@ -48,7 +48,8 @@ module.exports = {
 	var filter = "/DbSchemas?sysfilter=equal(project_ident:"+projIdent+")";
 	client.get(url + filter, {
 			headers: {
-				Authorization: "CALiveAPICreator " + apiKey + ":1"
+				Authorization: "CALiveAPICreator " + apiKey + ":1",
+				"Content-Type" : "application/json"
 			}
 		},function(schema) {
 			if (schema.errorMessage) {
@@ -57,7 +58,8 @@ module.exports = {
 				}
 			client.get(url + "/admin:np_attributes?sysfilter=equal(dbaseschema_ident:" + schema[0].ident+")&sysorder=(table_name%2C+attr_name)&pagesize=100", {
 				headers: {
-					Authorization: "CALiveAPICreator " + apiKey + ":1"
+					Authorization: "CALiveAPICreator " + apiKey + ":1",
+					"Content-Type" : "application/json"
 				}
 			}, function(data) {
 				if (data.errorMessage) {
@@ -129,7 +131,8 @@ module.exports = {
 		
 		client.get(loginInfo.url + "/admin:np_attributes?sysfilter=" + filt, {
 			headers: {
-				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
+				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+				"Content-Type" : "application/json"
 			}
 		}, function(data) {
 			//console.log('get result: ' + JSON.stringify(data, null, 2));
@@ -149,7 +152,8 @@ module.exports = {
 			var startTime = new Date();
 			client['delete'](db['@metadata'].href + "?checksum=" + db['@metadata'].checksum, {
 				headers: {
-					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
+					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+					"Content-Type" : "application/json"
 				}
 			}, function(data2) {
 				var endTime = new Date();
@@ -199,14 +203,16 @@ module.exports = {
 		var filter = "/DbSchemas?sysfilter=equal(project_ident:"+projIdent+")";
 		client.get(url + filter, {
 				headers: {
-					Authorization: "CALiveAPICreator " + apiKey + ":1"
+					Authorization: "CALiveAPICreator " + apiKey + ":1",
+					"Content-Type" : "application/json"
 				}
 			},function(schema) {
 			//console.log(JSON.stringify(schema,null,2));
 			
 			client.get(loginInfo.url + "/np_attributes?sysfilter=equal(dbaseschema_ident:" + schema[0].ident+")", {
 				headers: {
-					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
+					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+					"Content-Type" : "application/json"
 				}
 			}, function(data) {
 				//console.log('get result: ' + JSON.stringify(data, null, 2));
@@ -295,7 +301,10 @@ module.exports = {
 			var startTime = new Date();
 			client.post(loginInfo.url + "/ALLNpaAttributes", {
 				data: fileContent,
-				headers: {Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1" }
+				headers: {
+					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+					"Content-Type" : "application/json"
+				 }
 				}, function(data) {
 				var endTime = new Date();
 				if (data.errorMessage) {

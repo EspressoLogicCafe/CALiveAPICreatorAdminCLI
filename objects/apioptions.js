@@ -46,7 +46,8 @@ module.exports = {
 		}
 		client.get(url + "/ProjectOptions?sysfilter=equal(project_ident:" + projIdent +")&pagesize=100", {
 			headers: {
-				Authorization: "CALiveAPICreator " + apiKey + ":1"
+				Authorization: "CALiveAPICreator " + apiKey + ":1",
+				"Content-Type" : "application/json"
 			}
 		}, function(data) {
 			if (data.errorMessage) {
@@ -111,7 +112,8 @@ module.exports = {
 		
 		client.get(loginInfo.url + "/ProjectOptions?sysfilter=" + filter, {
 			headers: {
-				Authorization: "CALiveAPICreator " + apiKey + ":1"
+				Authorization: "CALiveAPICreator " + apiKey + ":1",
+				"Content-Type" : "application/json"
 			}
 		}, function(data) {
 			//console.log('get result: ' + JSON.stringify(data, null, 2));
@@ -139,7 +141,8 @@ module.exports = {
 			client.put(setting['@metadata'].href, {
 				data: setting,
 				headers: {
-					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
+					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+					"Content-Type" : "application/json"
 				}
 			}, function(data) {
 				var endTime = new Date();
@@ -197,7 +200,10 @@ module.exports = {
 			var startTime = new Date();
 			client.put(loginInfo.url + "/ProjectOptions", {
 				data: row,
-				headers: {Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1" }
+				headers: {
+					 Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+					"Content-Type" : "application/json"
+				}
 				}, function(data) {
 				var endTime = new Date();
 				if (data.errorMessage) {
@@ -274,7 +280,8 @@ module.exports = {
 		//console.log(filter);
 		client.get(loginInfo.url + "/ProjectOptions?sysfilter=" + filter +"&pagesize=100", {
 			headers: {
-				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
+				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+				"Content-Type" : "application/json"
 			}
 		}, function(data) {
 			if (data.errorMessage) {

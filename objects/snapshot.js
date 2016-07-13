@@ -45,7 +45,8 @@ module.exports = {
 
 		client.get(url + "/admin:project_versions?sysfilter=equal(project_ident:" + projIdent+")&sysorder=(version_datetime:desc)&pagesize=1000", {
 			headers: {
-				Authorization: "CALiveAPICreator " + apiKey + ":1"
+				Authorization: "CALiveAPICreator " + apiKey + ":1",
+				"Content-Type" : "application/json"
 			}
 		}, function(data) {
 			if (data.errorMessage) {
@@ -116,7 +117,8 @@ module.exports = {
 		client.post(loginInfo.url + "/admin:project_versions", {
 				data: snapshot,
 				headers: {
-					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
+					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+					"Content-Type" : "application/json"
 				}
 			}, function(data) {
 				var endTime = new Date();
@@ -175,7 +177,8 @@ module.exports = {
 		client.post(loginInfo.url + "/admin:project_version_restores", {
 				data: snapshot,
 				headers: {
-					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
+					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+					"Content-Type" : "application/json"
 				}
 			}, function(data) {
 				var endTime = new Date();

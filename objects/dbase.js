@@ -57,7 +57,8 @@ module.exports = {
 
 		client.get(url + "/dbaseschemas?sysfilter=equal(project_ident:" + projIdent+")", {
 			headers: {
-				Authorization: "CALiveAPICreator " + apiKey + ":1"
+				Authorization: "CALiveAPICreator " + apiKey + ":1",
+				"Content-Type" : "application/json"
 			}
 		}, function(data) {
 			if (data.errorMessage) {
@@ -182,7 +183,8 @@ module.exports = {
 			client.post(loginInfo.url + "/dbaseschemas", {
 				data: newDbase,
 				headers: {
-					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
+					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+					"Content-Type" : "application/json"
 				}
 			}, function(data) {
 				var endTime = new Date();
@@ -242,7 +244,8 @@ module.exports = {
 		//console.log(filter);
 		client.get(loginInfo.url + "/DbSchemas?sysfilter=" + filter, {
 			headers: {
-				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
+				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+				"Content-Type" : "application/json"
 			}
 		}, function(data) {
 			
@@ -298,7 +301,8 @@ module.exports = {
 			client.put(db['@metadata'].href, {
 				data: db,
 				headers: {
-					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
+					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+					"Content-Type" : "application/json"
 				}
 			}, function(data2) {
 				var endTime = new Date();
@@ -362,7 +366,8 @@ module.exports = {
 		
 		client.get(loginInfo.url + "/DbSchemas?" + filter, {
 			headers: {
-				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
+				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+				"Content-Type" : "application/json"
 			}
 		}, function(data) {
 			
@@ -385,7 +390,8 @@ module.exports = {
 			client.put( loginInfo.url  + "/DbSchemas/"+db.ident, {
 				data: db,
 				headers: {
-					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
+					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+					"Content-Type" : "application/json"
 				}
 			}, function(data2) {
 				var endTime = new Date();
@@ -432,7 +438,8 @@ module.exports = {
 		
 		client.get(loginInfo.url + "/dbaseschemas?sysfilter=" + filt, {
 			headers: {
-				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
+				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+				"Content-Type" : "application/json"
 			}
 		}, function(data) {
 			//console.log('get result: ' + JSON.stringify(data, null, 2));
@@ -452,7 +459,8 @@ module.exports = {
 			var startTime = new Date();
 			client['delete'](db['@metadata'].href + "?checksum=" + db['@metadata'].checksum, {
 				headers: {
-					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
+					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+					"Content-Type" : "application/json"
 				}
 			}, function(data2) {
 				var endTime = new Date();
@@ -515,7 +523,8 @@ module.exports = {
 		
 		client.get(loginInfo.url + "/dbaseschemas?" + filter, {
 			headers: {
-				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
+				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+				"Content-Type" : "application/json"
 			}
 		}, function(data) {
 			//Sconsole.log('get result: ' + JSON.stringify(data, null, 2));
@@ -585,7 +594,10 @@ module.exports = {
 			var startTime = new Date();
 			client.put(loginInfo.url + "/admin:dbaseschemas", {
 				data: fileContent,
-				headers: {Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1" }
+				headers: {
+						Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+						"Content-Type" : "application/json"
+					 }
 				}, function(data) {
 				var endTime = new Date();
 				if (data.errorMessage) {

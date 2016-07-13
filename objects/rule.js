@@ -54,7 +54,8 @@ module.exports = {
 
 		client.get(url + "/rules?sysfilter=equal(project_ident:" + projIdent +")&pagesize=100", {
 			headers: {
-				Authorization: "CALiveAPICreator " + apiKey + ":1"
+				Authorization: "CALiveAPICreator " + apiKey + ":1",
+				"Content-Type" : "application/json"
 			}
 		}, function(data) {
 			if (data.errorMessage) {
@@ -277,7 +278,8 @@ module.exports = {
 		client.post(loginInfo.url + "/rules", {
 			data: newRule,
 			headers: {
-				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
+				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+				"Content-Type" : "application/json"
 			}
 		}, function(data) {
 			var endTime = new Date();
@@ -327,7 +329,8 @@ module.exports = {
 		
 		client.get(loginInfo.url + "/rules?sysfilter=" + filt, {
 			headers: {
-				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
+				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+				"Content-Type" : "application/json"
 			}
 		}, function(data) {
 			//console.log('get result: ' + JSON.stringify(data, null, 2));
@@ -347,7 +350,8 @@ module.exports = {
 			var startTime = new Date();
 			client['delete'](db['@metadata'].href + "?checksum=" + db['@metadata'].checksum, {
 				headers: {
-					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
+					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+					"Content-Type" : "application/json"
 				}
 			}, function(data2) {
 				var endTime = new Date();
@@ -511,7 +515,8 @@ module.exports = {
 
 		client.get(url + "/rules?sysfilter=equal(project_ident:" + projIdent +")&pagesize=100", {
 			headers: {
-				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
+				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+				"Content-Type" : "application/json"
 			}
 		}, function(data) {
 			//console.log('get result: ' + JSON.stringify(data, null, 2));
@@ -578,7 +583,8 @@ module.exports = {
 		client.post(loginInfo.url + "/AllRules", {
 			data: fileContent,
 			headers: {
-				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
+				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+				"Content-Type" : "application/json"
 			}
 		}, function(data) {
 		

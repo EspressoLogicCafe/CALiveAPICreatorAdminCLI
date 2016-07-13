@@ -66,7 +66,10 @@ module.exports = {
 		
 			//var filter = 'sysfilter=equal(ident:'+cmd.ident+')';
 			client.get(url + "/authproviders?"+filter, {
-				headers: {Authorization: "CALiveAPICreator " + apiKey + ":1"}
+				headers: {
+					Authorization: "CALiveAPICreator " + apiKey + ":1",
+					"Content-Type" : "application/json"
+				}
 			}, function(data_auth) {
 				if (data_auth.errorMessage ) {
 					console.log(data_auth.errorMessage.red);
@@ -77,7 +80,10 @@ module.exports = {
 				}
 				
 				client.get(url + '/AllProjects/'+projIdent, {
-					headers: {Authorization: "CALiveAPICreator " + apiKey + ":1"}
+					headers: {
+						Authorization: "CALiveAPICreator " + apiKey + ":1",
+						"Content-Type" : "application/json"
+					}
 				}, function(data) {
 					if (data.errorMessage ) {
 						console.log(data.errorMessage.red);
@@ -93,7 +99,10 @@ module.exports = {
 					auth.authprovider_ident = data_auth[0].ident;
 					client.put(url + '/AllProjects/'+projIdent, {
 						data: auth,
-						headers: { Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1" }
+						headers: { 
+							Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+							"Content-Type" : "application/json"
+					 	}
 					}, function(data2) {
 						var endTime = new Date();
 						if (data2.errorMessage) {
@@ -130,7 +139,8 @@ module.exports = {
 
 		client.get(url + "/authproviders", {
 			headers: {
-				Authorization: "CALiveAPICreator " + apiKey + ":1"
+				Authorization: "CALiveAPICreator " + apiKey + ":1",
+				"Content-Type" : "application/json"
 			}
 		}, function(data) {
 			if (data.errorMessage) {
@@ -205,7 +215,8 @@ module.exports = {
 			client.put(loginInfo.url + "/admin:authproviders", {
 				data: authProvider,
 				headers: {
-					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
+					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+					"Content-Type" : "application/json"
 				}
 			}, function(data) {
 				var endTime = new Date();
@@ -260,7 +271,8 @@ module.exports = {
 		
 		client.get(loginInfo.url + "/authproviders?sysfilter=" + filt, {
 			headers: {
-				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
+				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+				"Content-Type" : "application/json"
 			}
 		}, function(data) {
 			if (data.errorMessage) {
@@ -279,7 +291,8 @@ module.exports = {
 			var startTime = new Date();
 			client['delete'](provider['@metadata'].href + "?checksum=" + provider['@metadata'].checksum, {
 				headers: {
-					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
+					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+					"Content-Type" : "application/json"
 				}
 			}, function(data2) {
 				var endTime = new Date();
@@ -348,7 +361,8 @@ module.exports = {
 		
 		client.get(loginInfo.url + "/authproviders?" + filter, {
 			headers: {
-				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
+				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+				"Content-Type" : "application/json"
 			}
 		}, function(data) {
 			//console.log('get result: ' + JSON.stringify(data, null, 2));
@@ -407,7 +421,10 @@ module.exports = {
 			var startTime = new Date();
 			client.put(loginInfo.url + "/admin:authproviders", {
 				data: fileContent,
-				headers: {Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1" }
+				headers: {
+						Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+						"Content-Type" : "application/json" 
+					}
 				}, function(data) {
 				var endTime = new Date();
 				if (data.errorMessage) {
