@@ -109,9 +109,11 @@ module.exports = {
 	
 	printHeader: function(str) {
 		var termWidth = 100;
-		if (process.stdout.getWindowSize) { // Does not exist if output is redirected
-			termWidth = process.stdout.getWindowSize()[0];
-		}
+		try{
+			if (process.stdout.getWindowSize) { // Does not exist if output is redirected
+				termWidth = process.stdout.getWindowSize()[0];
+			}
+		} catch(e){}
 		
 		while (str.length < termWidth ) {
 			str += " ";
