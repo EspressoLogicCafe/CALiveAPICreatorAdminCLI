@@ -1,6 +1,6 @@
 {
   "name": "liveapicreator-admin-cli",
-  "version": "2.2.9",
+  "version": "2.2.10",
   "description": "The command line utility for CA Live Creator Administration from CA Technologies",
   "main": "liveapicreatoradmin.js",
   "scripts": {
@@ -14,12 +14,15 @@
     "line",
     "REST",
     "JSON",
+    "XML",
     "SQL",
     "database",
     "mysql",
     "oracle",
     "nosql",
     "postgres",
+    "db2luw",
+    "db2zos",
     "derby",
     "sqlserver",
     "mobile",
