@@ -29,6 +29,7 @@ var reln = require('./objects/reln.js');
 var handler = require('./objects/handler.js');
 var apiversion = require('./objects/version.js');
 var managedserver = require('./objects/managedserver.js');
+var migrate = require('./objects/migrate.js');
 
 //var sequence = require('./objects/sequence.js'); //Oracle
 //var apps = require('./objects/applicaitons.js'); //list | export | import
@@ -300,7 +301,12 @@ program
 	.option('--active [true|false]', 'This marks the managed data server active or inactive')
 	.option('--file [file]', 'Optional: for import/export, the name of a file to read from/save to, if unspecified, use stdin/stdout')
 	.action(managedserver.doDbase);
-		
+	
+program
+	.command('migrate <list|import|export>')
+	.description('Migrate will take ALL projects in connect active server and create a series of directory names with export content.')
+	.option('--directory [directory]', 'Optional: for import/export, the name of a directory to read from/save to, if unspecified, use stdin/stdout')
+	.action(migrate.doMigrate);	
 		
 program.parse(process.argv);
 
