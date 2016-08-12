@@ -13,15 +13,22 @@ module.exports = {
 	    if (action === 'list') {
 			module.exports.list(cmd);
 		}
-		else if (action === 'export') {
+		else if (action === 'exportRepos') {
 			module.exports.export(cmd);
 		}
+		else if (action === 'importLib') {
+			module.exports.importLib(cmd);
+		}
+		else if (action === 'importAuth') {
+			module.exports.importAuth(cmd);
+		}
+		else if (action === 'importProject') {
+			module.exports.importProject(cmd);
+		}
 		else {
-			console.log('You must specify an action: list or export');
-			//program.help();
+			console.log('You must specify an action: list, importProject, importAuth, importLib,  or exportRepos');
 		}
 	},
-	
 	list: function (cmd) {
 		var client = new Client();
 		
@@ -67,6 +74,10 @@ module.exports = {
 	},
 	
 	export: function(cmd) {
+		if (!cmd.directory) {
+			console.log(("--directory must exist and is required  " ).red);
+			return;
+		}
 		var path = "lacmigration";
 		if(cmd.directory){
 			path = cmd.directory;
@@ -78,7 +89,8 @@ module.exports = {
 				//do something with contents
 			} else {
 				//debug
-				console.log(e);
+				console.log(("--directory does not exist:  "+ cmd.directory ).red);
+				return;
 			}
 		});
 		module.exports.exportlibraries(cmd);
@@ -163,9 +175,7 @@ module.exports = {
 					
 						//lets convert the p.code hex to base64 to real pname.js
 						//fs.writeFile(p.name +".js", p.code) {}
-					}
-					
-			
+					}	
 				});	
 			});
 			table.sort(['Name']);
@@ -307,7 +317,67 @@ module.exports = {
 			printObject.printTrailer("# projects exported: " + projects.length);
 		});// end get list of projects
 	},
-	import: function(cmd) {
+	importLib: function(cmd) {
+		var path = "lacmigration";
+		if(cmd.directory){
+			path = cmd.directory;
+		} else {
+			cmd.directory = path;
+		}
+		fs.mkdir(path,function(e){
+			if(!e || (e && e.code === 'EEXIST')){
+				//do something with contents
+			} else {
+				//debug
+				console.log(e);
+			}
+		});
+		cmd.libType = "LIBRARY_";
+		cmd.Table = "logic_libraries";
+		module.exports.importLibraries(cmd);
+	},
+	importAuth: function(cmd) {
+		var path = "lacmigration";
+		if(cmd.directory){
+			path = cmd.directory;
+		} else {
+			cmd.directory = path;
+		}
+		fs.mkdir(path,function(e){
+			if(!e || (e && e.code === 'EEXIST')){
+				//do something with contents
+			} else {
+				//debug
+				console.log(e);
+			}
+		});
+		
+		cmd.libType = "AUTHPROVIDER_";
+		cmd.Table = "authproviders";
+		module.exports.importLibraries(cmd);
+		
+	},
+	importProject: function(cmd) {
+		var path = "lacmigration";
+		if(cmd.directory){
+			path = cmd.directory;
+		} else {
+			cmd.directory = path;
+		}
+		fs.mkdir(path,function(e){
+			if(!e || (e && e.code === 'EEXIST')){
+				//do something with contents
+			} else {
+				//debug
+				console.log(e);
+			}
+		});
+		
+		cmd.libType = "PROJECT_";
+		cmd.Table = "ProjectExport";
+		module.exports.importLibraries(cmd);
+	},
+	importLibraries: function(cmd) {
 		var client = new Client();
 		
 		var loginInfo = login.login(cmd);
@@ -316,14 +386,85 @@ module.exports = {
 		var url = loginInfo.url;
 		var apiKey = loginInfo.apiKey;
 		
-		if ( ! cmd.file) {
-			cmd.file = '/dev/stdin';
-		}
-		
-		//import LIBRARIES
-		//import AUTHPRODIER
-		//import PROJECTS
-		
-		
+		console.log("Import files starting with: "+ cmd.libType +" in directory: "+cmd.directory);
+		//need to read each file in directory starting with LibType_
+		//POST to server
+		function readFilePromisified(filename) {
+		   return new Promise(
+			function (resolve, reject) {
+				fs.readFile(filename, { encoding: 'utf8' },
+					(error, data) => {
+						if (error) {
+							reject(error);
+						} else {
+							resolve(data);
+						}
+					});
+			});
+		};
+		function readDirPromisified(path) {
+		   return new Promise(
+			function (resolve, reject) {
+				fs.readdir(path,
+					(error, items) => {
+						if (error) {
+							reject(error);
+						} else {
+							resolve(items);
+						}
+					});
+			});
+		};
+		readDirPromisified(cmd.directory) 
+			.then(items => {
+			  for (var i=0; i<items.length; i++) {
+        	    if(items[i].startsWith(cmd.libType)) {
+        	 		
+        	    	var fileName = cmd.directory + "/" + items[i];
+        	    	console.log("FileName: " + fileName);
+        	    	var startTime = new Date();
+        	    
+					readFilePromisified(fileName)
+					.then(text => {
+						//console.log(text);
+						var fileContent = JSON.parse(text);
+						for(var i = 0 ; i < fileContent.length; i++){
+							fileContent[i]["@metadata"] = {action:"MERGE_INSERT", key: "name"} ;
+						}
+						console.log(loginInfo.url + "/" + cmd.Table);
+						console.log(JSON.stringify(fileContent));
+						var args = {
+							path: { "id": cmd.Table },
+							parameters: {},
+							headers:{
+						  		Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+						  		"Content-Type" : "application/json"
+					  		},
+							data:fileContent
+						};			
+						client.post(loginInfo.url + "/${id}" , args, function (postData, response) {
+						  //console.log(response);
+						  //console.log(postData);
+						  var endTime = new Date();
+						  if (postData.errorMessage) {
+							  console.log(postData.errorMessage.red);
+							  return;
+						  }
+						  printObject.printHeader(fileName +' was imported:');
+						  if(postData.statusCode < 205 ){
+							  console.log("Request took: " + (endTime - startTime) + "ms");
+							  return;
+						  } 	
+						});
+					})
+					.catch(error => {
+						console.log(error);
+					});
+				   } //if startsWith
+		  		  } //for
+				}) //promise files
+			.catch(error => {
+				console.log(error);
+			});
 	}
 };

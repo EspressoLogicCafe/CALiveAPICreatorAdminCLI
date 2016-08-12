@@ -396,14 +396,6 @@ module.exports = {
 			return;
 		var url = loginInfo.url;
 		var apiKey = loginInfo.apiKey;
-		var projIdent = cmd.project_ident;
-		if ( ! projIdent) {
-			projIdent = dotfile.getCurrentProject();
-			if ( ! projIdent) {
-				console.log('There is no current project.'.yellow);
-				return;
-			}
-		}
 		
 		if ( ! cmd.file) {
 			cmd.file = '/dev/stdin';

@@ -303,9 +303,9 @@ program
 	.action(managedserver.doDbase);
 	
 program
-	.command('migrate <list|import|export>')
-	.description('Migrate will take ALL projects in connect active server and create a series of directory names with export content.')
-	.option('--directory [directory]', 'Optional: for import/export, the name of a directory to read from/save to, if unspecified, use stdin/stdout')
+	.command('migrate <exportRepos>')
+	.description('Migrate will export ALL user libraries, auth providers, and projects in the connection and export to a named directory')
+	.option('--directory [directory]', 'Required for import/export, the name of a directory to read from/save to, if unspecified "lacmigration" will be used')
 	.action(migrate.doMigrate);	
 		
 program.parse(process.argv);
