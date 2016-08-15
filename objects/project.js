@@ -402,7 +402,7 @@ module.exports = {
 			return;
 
 		var filter = null;
-		var projIdent = cmd.project_ident;
+		var projIdent = cmd.ident;
 		filter = "equal(ident:" + projIdent + ")";
 		if (cmd.url_name) {
 			filter = "equal(url_name:'" + cmd.url_name + "')";

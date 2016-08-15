@@ -93,10 +93,20 @@ module.exports = {
 				return;
 			}
 		});
+		var client = new Client();
+		
+		var loginInfo = login.login(cmd);
+		if ( ! loginInfo)
+			return;
+		var url = loginInfo.url;
+		console.log("lacadmin login -u admin -p <password> http://localhost:8080 -a migrate");
+		console.log("lacadmin use migrate");
 		module.exports.exportlibraries(cmd);
 		module.exports.exportAuthProviders(cmd);
-		module.exports.list(cmd);
 		module.exports.exportProjects(cmd);
+		//module.exports.exportMDS(cmd);
+		module.exports.exportGateway(cmd);
+		//console.log("lacadmin logout migrate");
 	
 	},
 	exportlibraries: function(cmd) {
@@ -120,24 +130,9 @@ module.exports = {
 				console.log(data.errorMessage.red);
 				return;
 			}
-			printObject.printHeader('All Libraries');
+			//printObject.printHeader('All Libraries');
 			var table = new Table();
 			_.each(data, function(p) {
-				table.cell("Ident", p.ident);
-				table.cell("Name", p.name);
-				table.cell("Version", p.version);
-				table.cell("Short Name", p.lib_name);
-				//table.cell("UserLib",(p.system_only == true));
-				table.cell("Type", p.logic_type);
-				var comments = p.description;
-				if ( ! comments) {
-					comments = "";
-				}
-				else if (comments.length > 50){
-					comments = comments.substring(0, 47) + "...";
-				}
-				table.cell("Comments", comments);
-				table.newRow();
 				
 				var filter = "sysfilter=equal(ident:" + p.ident + ")";
 				var exportFileName = dir + "/LIBRARY_"+p.name+".json";
@@ -154,33 +149,27 @@ module.exports = {
 						return;
 					}
 					if (libData.length === 0) {
-						console.log(("Error: no such library found").red);
+						//console.log(("Error: no such library found").red);
 						return;
 					}
-					for(var i = 0; i < libData.length ; i++){
-						delete libData[i].ident;
-						data[i].account_ident = null;
-						delete libData[i]['@metadata'].links;
-						delete libData[i]['@metadata'];
-					}
+					//for(var i = 0; i < libData.length ; i++){
+						//delete libData[i].ident;
+						//data[i].account_ident = null;
+						//delete libData[i]['@metadata'].links;
+						//delete libData[i]['@metadata'];
+					//}
 			
 					//var exportFile = fs.openSync(exportFileName, 'w+', 0600);
-					fs.writeFile(exportFileName, JSON.stringify(libData, null, 2), function(err) {
-  					  if(err) {
-      					  return console.log(err);
-   					   }
-				    	console.log(('Logic Library has been exported to file: ' + exportFileName).green);
-					}); 
-					if(p.logic_type === 'javascript'){
+					console.log("lacadmin libraries export --file '" + exportFileName +"'");
+					//fs.writeFile(exportFileName, JSON.stringify(libData, null, 2), function(err) {
+  					//  if(err) {
+      				//	  return console.log(err);
+   					//   }
+				    //	console.log(('Logic Library has been exported to file: ' + exportFileName).green);
+					//}); 
 					
-						//lets convert the p.code hex to base64 to real pname.js
-						//fs.writeFile(p.name +".js", p.code) {}
-					}	
 				});	
 			});
-			table.sort(['Name']);
-			console.log(table.toString());
-			printObject.printHeader("# libraries: " + data.length);
 		});
 	},
 	exportAuthProviders: function(cmd) {
@@ -205,22 +194,9 @@ module.exports = {
 				console.log(data.errorMessage.red);
 				return;
 			}
-			printObject.printHeader('All authentication providers');
+			//printObject.printHeader('All authentication providers');
 			var table = new Table();
 			_.each(data, function(p) {
-				table.cell("Ident", p.ident);
-				table.cell("Name", p.name);
-				table.cell("createFunction", p.bootstrap_config_value);
-				table.cell("ParamMap", p.param_map);
-				var comments = p.comments;
-				if ( ! comments) {
-					comments = "";
-				}
-				else if (comments.length > 50){
-					comments = comments.substring(0, 47) + "...";
-				}
-				table.cell("Comments", comments);
-				table.newRow();
 				
 				var filter = "sysfilter=equal(ident:" + p.ident + ")";
 				var exportFileName = dir + "/AUTHPROVIDER_"+p.name+".json";
@@ -237,26 +213,23 @@ module.exports = {
 						return;
 					}
 					if (authData.length === 0) {
-						console.log(("Error: no such project").red);
+						//console.log(("Error: no such auth provider").red);
 						return;
 					}
 					for(var i = 0; i < authData.length ; i++){
-						delete authData[i].ident;
-						data[i].account_ident = null;
-						delete authData[i]['@metadata'];
+					//	delete authData[i].ident;
+					//	data[i].account_ident = null;
+					//	delete authData[i]['@metadata'];
 					}
-				
-					fs.writeFile(exportFileName, JSON.stringify(authData, null, 2), function(err) {
-  					  if(err) {
-      					  return console.log(err);
-   					   }
-   					     console.log(('Auth Provider has been exported to file: ' + exportFileName).green);
-					}); 
+					console.log("lacadmin authprovider export --file '" + exportFileName +"'");
+					//fs.writeFile(exportFileName, JSON.stringify(authData, null, 2), function(err) {
+  					//  if(err) {
+      				//	  return console.log(err);
+   					//   }
+   					//     console.log(('Auth Provider has been exported to file: ' + exportFileName).green);
+					//}); 
 				});
 			});
-			table.sort(['Name']);
-			console.log(table.toString());
-			printObject.printHeader("# authentication providers: " + data.length);
 		});
 	},
 	exportProjects: function(cmd) {
@@ -268,7 +241,7 @@ module.exports = {
 		var url = loginInfo.url;
 		var apiKey = loginInfo.apiKey;
 		var filter = "";
-		var dir = "projects";
+		var dir = "";
 		if(cmd.directory){
 			dir = cmd.directory;
 		}
@@ -303,18 +276,19 @@ module.exports = {
 						console.log(("Error: no such project").red);
 						return;
 					}
+					console.log("lacadmin project export --url_name " + url_name + " --file '" + exportFileName +"'");
 					//var exportFile = fs.openSync(exportFileName, 'w+', 0600);
-					fs.writeFile(exportFileName, JSON.stringify(data, null, 2), function(err) {
-  					  if(err) {
-      					  return console.log(err);
-   					   }
-				    	console.log(('Project ident ['+projIdent+'] with url_name ['+ url_name +'] has been exported to file: ' + exportFileName).green);
+					//fs.writeFile(exportFileName, JSON.stringify(data, null, 2), function(err) {
+  					 // if(err) {
+      				//	  return console.log(err);
+   					//   }
+				    //	console.log(('Project ident ['+projIdent+'] with url_name ['+ url_name +'] has been exported to file: ' + exportFileName).green);
 		
-					}); 
+					//}); 
 					//fs.writeSync(exportFile, JSON.stringify(data, null, 2));
 				}); 
 			});
-			printObject.printTrailer("# projects exported: " + projects.length);
+			//printObject.printTrailer("# projects exported: " + projects.length);
 		});// end get list of projects
 	},
 	importLib: function(cmd) {
@@ -376,6 +350,136 @@ module.exports = {
 		cmd.libType = "PROJECT_";
 		cmd.Table = "ProjectExport";
 		module.exports.importLibraries(cmd);
+	},
+	exportMDS: function(cmd) {
+		var client = new Client();
+		var loginInfo = login.login(cmd);
+		if ( ! loginInfo)
+			return;
+		var url = loginInfo.url;
+		var apiKey = loginInfo.apiKey;
+		var dir = "projects";
+		if(cmd.directory){
+			dir = cmd.directory;
+		}
+		client.get(url + "/admin:managed_data_servers?pagesize=100sysorder=(name:asc_uc,name:desc)", {
+			headers: {
+				Authorization: "CALiveAPICreator " + apiKey + ":1",
+				"Content-Type" : "application/json"
+			}
+		}, function(data) {
+			if (data.errorMessage) {
+				console.log(data.errorMessage.red);
+				return;
+			}
+			//printObject.printHeader('All Libraries');
+			var table = new Table();
+			_.each(data, function(p) {
+				var filter = "sysfilter=equal(ident:" + p.ident + ")";
+				var exportFileName = dir + "/MDS_"+p.name+".json";
+				
+				client.get(loginInfo.url + "/admin:managed_data_servers?" + filter, {
+					headers: {
+						Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+						"Content-Type" : "application/json"
+					}
+				}, function(mdsData) {
+					//console.log('get result: ' + JSON.stringify(data, null, 2));
+					if (mdsData.errorMessage) {
+						//console.log(("Error: " + mdsData.errorMessage).red);
+						return;
+					}
+					if (mdsData.length === 0) {
+						//console.log(("Error: no such library found").red);
+						return;
+					}
+					for(var i = 0; i < mdsData.length ; i++){
+						//delete mdsData[i].ident;
+						//data[i].account_ident = null;
+						//delete mdsData[i]['@metadata'].links;
+						//delete mdsData[i]['@metadata'];
+					}
+			
+					//var exportFile = fs.openSync(exportFileName, 'w+', 0600);
+					console.log("lacadmin managedserver export --file '" + exportFileName +"'");
+					//fs.writeFile(exportFileName, JSON.stringify(libData, null, 2), function(err) {
+  					//  if(err) {
+      				//	  return console.log(err);
+   					//   }
+				    //	console.log(('Logic Library has been exported to file: ' + exportFileName).green);
+					//}); 
+					
+				});	
+			});
+			//table.sort(['Name']);
+			//console.log(table.toString());
+			//printObject.printHeader("# libraries: " + data.length);
+		});
+	},
+	exportGateway: function(cmd) {
+		var client = new Client();
+		var loginInfo = login.login(cmd);
+		if ( ! loginInfo)
+			return;
+		var url = loginInfo.url;
+		var apiKey = loginInfo.apiKey;
+		var dir = "projects";
+		if(cmd.directory){
+			dir = cmd.directory;
+		}
+		client.get(url + "/admin:gateways?pagesize=100sysorder=(name:asc_uc,name:desc)", {
+			headers: {
+				Authorization: "CALiveAPICreator " + apiKey + ":1",
+				"Content-Type" : "application/json"
+			}
+		}, function(data) {
+			if (data.errorMessage) {
+				console.log(data.errorMessage.red);
+				return;
+			}
+			//printObject.printHeader('All Libraries');
+			var table = new Table();
+			_.each(data, function(p) {
+				var filter = "sysfilter=equal(ident:" + p.ident + ")";
+				var exportFileName = dir + "/MDS_"+p.name+".json";
+				
+				client.get(loginInfo.url + "/admin:gateways?" + filter, {
+					headers: {
+						Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+						"Content-Type" : "application/json"
+					}
+				}, function(mdsData) {
+					//console.log('get result: ' + JSON.stringify(data, null, 2));
+					if (mdsData.errorMessage) {
+						console.log(("Error: " + mdsData.errorMessage).red);
+						return;
+					}
+					if (mdsData.length === 0) {
+						console.log(("Error: no such library found").red);
+						return;
+					}
+					for(var i = 0; i < mdsData.length ; i++){
+						delete mdsData[i].ident;
+						data[i].account_ident = null;
+						delete mdsData[i]['@metadata'].links;
+						delete mdsData[i]['@metadata'];
+					}
+			
+					//var exportFile = fs.openSync(exportFileName, 'w+', 0600);
+					console.log("lacadmin gateway export --file '" + exportFileName +"'");
+					//fs.writeFile(exportFileName, JSON.stringify(libData, null, 2), function(err) {
+  					//  if(err) {
+      				//	  return console.log(err);
+   					//   }
+				    //	console.log(('Logic Library has been exported to file: ' + exportFileName).green);
+					//}); 
+					
+				});	
+			});
+			//table.sort(['Name']);
+			//console.log(table.toString());
+			//printObject.printHeader("# libraries: " + data.length);
+		});
 	},
 	importLibraries: function(cmd) {
 		var client = new Client();

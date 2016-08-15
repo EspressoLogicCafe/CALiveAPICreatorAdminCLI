@@ -340,13 +340,6 @@ module.exports = {
 			return;
 		var url = loginInfo.url;
 		var apiKey = loginInfo.apiKey;
-		
-		
-		var filter = "";
-		var projIdent = cmd.project_ident;
-		if ( ! projIdent) {
-			projIdent = dotfile.getCurrentProject();
-		}
 		filter = "sysfilter=greater(ident:1000)";
 		if (cmd.ident) {
 			filter += "&sysfilter=equal(ident:" + cmd.ident + ")";

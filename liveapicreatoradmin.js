@@ -28,15 +28,15 @@ var event = require('./objects/event.js');
 var reln = require('./objects/reln.js');
 var handler = require('./objects/handler.js');
 var apiversion = require('./objects/version.js');
-var managedserver = require('./objects/managedserver.js');
-var migrate = require('./objects/migrate.js');
-
 //var sequence = require('./objects/sequence.js'); //Oracle
 //var apps = require('./objects/applicaitons.js'); //list | export | import
 // 2.1 features
 var snapshot = require('./objects/snapshot.js');//list | start  | restore --name  
 var npa = require('./objects/npattrs.js');// list | create | delete | update | import |export
 var gateway = require('./objects/gateway.js');
+//3.0 features
+var managedserver = require('./objects/managedserver.js');
+var migrate = require('./objects/migrate.js');
 
 program
 	.version(pkg.version);
