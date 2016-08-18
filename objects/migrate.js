@@ -104,7 +104,7 @@ module.exports = {
 		module.exports.exportlibraries(cmd);
 		module.exports.exportAuthProviders(cmd);
 		module.exports.exportProjects(cmd);
-		//module.exports.exportMDS(cmd);
+		module.exports.exportMDS(cmd); //NOT IN 2.1
 		module.exports.exportGateway(cmd);
 		//console.log("lacadmin logout migrate");
 	
@@ -120,7 +120,8 @@ module.exports = {
 		if(cmd.directory){
 			dir = cmd.directory;
 		}
-		client.get(url + "/logic_libraries?pagesize=100&sysfilter=greater(ident:999)&sysorder=(name:asc_uc,name:desc)", {
+		var filter = "sysfilter=greater(ident:599)&sysfilter=equal(logic_type:'javascript')&sysorder=(name:asc_uc,name:desc)";
+		client.get(url + "/logic_libraries?pagesize=100&"+ filter, {
 			headers: {
 				Authorization: "CALiveAPICreator " + apiKey + ":1",
 				"Content-Type" : "application/json"
@@ -152,22 +153,7 @@ module.exports = {
 						//console.log(("Error: no such library found").red);
 						return;
 					}
-					//for(var i = 0; i < libData.length ; i++){
-						//delete libData[i].ident;
-						//data[i].account_ident = null;
-						//delete libData[i]['@metadata'].links;
-						//delete libData[i]['@metadata'];
-					//}
-			
-					//var exportFile = fs.openSync(exportFileName, 'w+', 0600);
-					console.log("lacadmin libraries export --file '" + exportFileName +"'");
-					//fs.writeFile(exportFileName, JSON.stringify(libData, null, 2), function(err) {
-  					//  if(err) {
-      				//	  return console.log(err);
-   					//   }
-				    //	console.log(('Logic Library has been exported to file: ' + exportFileName).green);
-					//}); 
-					
+					console.log("lacadmin libraries export --ident " + p.ident + " --file '" + exportFileName +"'");
 				});	
 			});
 		});
@@ -216,18 +202,9 @@ module.exports = {
 						//console.log(("Error: no such auth provider").red);
 						return;
 					}
-					for(var i = 0; i < authData.length ; i++){
-					//	delete authData[i].ident;
-					//	data[i].account_ident = null;
-					//	delete authData[i]['@metadata'];
-					}
-					console.log("lacadmin authprovider export --file '" + exportFileName +"'");
-					//fs.writeFile(exportFileName, JSON.stringify(authData, null, 2), function(err) {
-  					//  if(err) {
-      				//	  return console.log(err);
-   					//   }
-   					//     console.log(('Auth Provider has been exported to file: ' + exportFileName).green);
-					//}); 
+				
+					console.log("lacadmin authprovider export --ident " + p.ident + " --file '" + exportFileName +"'");
+				
 				});
 			});
 		});
@@ -277,15 +254,6 @@ module.exports = {
 						return;
 					}
 					console.log("lacadmin project export --url_name " + url_name + " --file '" + exportFileName +"'");
-					//var exportFile = fs.openSync(exportFileName, 'w+', 0600);
-					//fs.writeFile(exportFileName, JSON.stringify(data, null, 2), function(err) {
-  					 // if(err) {
-      				//	  return console.log(err);
-   					//   }
-				    //	console.log(('Project ident ['+projIdent+'] with url_name ['+ url_name +'] has been exported to file: ' + exportFileName).green);
-		
-					//}); 
-					//fs.writeSync(exportFile, JSON.stringify(data, null, 2));
 				}); 
 			});
 			//printObject.printTrailer("# projects exported: " + projects.length);
@@ -376,7 +344,7 @@ module.exports = {
 			var table = new Table();
 			_.each(data, function(p) {
 				var filter = "sysfilter=equal(ident:" + p.ident + ")";
-				var exportFileName = dir + "/MDS_"+p.name+".json";
+				var exportFileName = dir + "/MANAGED_SERVERS.json";
 				
 				client.get(loginInfo.url + "/admin:managed_data_servers?" + filter, {
 					headers: {
@@ -393,27 +361,11 @@ module.exports = {
 						//console.log(("Error: no such library found").red);
 						return;
 					}
-					for(var i = 0; i < mdsData.length ; i++){
-						//delete mdsData[i].ident;
-						//data[i].account_ident = null;
-						//delete mdsData[i]['@metadata'].links;
-						//delete mdsData[i]['@metadata'];
-					}
-			
-					//var exportFile = fs.openSync(exportFileName, 'w+', 0600);
 					console.log("lacadmin managedserver export --file '" + exportFileName +"'");
-					//fs.writeFile(exportFileName, JSON.stringify(libData, null, 2), function(err) {
-  					//  if(err) {
-      				//	  return console.log(err);
-   					//   }
-				    //	console.log(('Logic Library has been exported to file: ' + exportFileName).green);
-					//}); 
-					
+					return;
 				});	
 			});
-			//table.sort(['Name']);
-			//console.log(table.toString());
-			//printObject.printHeader("# libraries: " + data.length);
+		
 		});
 	},
 	exportGateway: function(cmd) {
@@ -441,7 +393,7 @@ module.exports = {
 			var table = new Table();
 			_.each(data, function(p) {
 				var filter = "sysfilter=equal(ident:" + p.ident + ")";
-				var exportFileName = dir + "/MDS_"+p.name+".json";
+				var exportFileName = dir + "/GATEWAYS.json";
 				
 				client.get(loginInfo.url + "/admin:gateways?" + filter, {
 					headers: {
@@ -467,18 +419,10 @@ module.exports = {
 			
 					//var exportFile = fs.openSync(exportFileName, 'w+', 0600);
 					console.log("lacadmin gateway export --file '" + exportFileName +"'");
-					//fs.writeFile(exportFileName, JSON.stringify(libData, null, 2), function(err) {
-  					//  if(err) {
-      				//	  return console.log(err);
-   					//   }
-				    //	console.log(('Logic Library has been exported to file: ' + exportFileName).green);
-					//}); 
+					return;
 					
 				});	
 			});
-			//table.sort(['Name']);
-			//console.log(table.toString());
-			//printObject.printHeader("# libraries: " + data.length);
 		});
 	},
 	importLibraries: function(cmd) {

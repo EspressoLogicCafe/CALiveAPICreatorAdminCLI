@@ -145,8 +145,8 @@ program
 	.option('--ident [ident]','The ident of the library')
 	.option('--project_ident [projectId]','The project ident that this library will be marked as used' )
 	.option('--name [name]', 'Name of library')
-	.option('--libtype [type]', 'Type of Library javascript ! java')
-	.option('--ver [version]', 'Version of Library JS or Java')
+	.option('--libtype [type]', 'Type of Library javascript (as of 3.0.x)')
+	.option('--ver [version]', 'Version # of Library')
 	.option('--short_name [shortname]', 'Short Name')
 	.option('--docUrl [docurl]', 'Documentation URL')
 	.option('--refUrl [refurl]', 'Reference URL')
@@ -304,8 +304,8 @@ program
 	
 program
 	.command('migrate <exportRepos>')
-	.description('Migrate will export ALL user libraries, auth providers, and projects in the connection and export to a named directory')
-	.option('--directory [directory]', 'Required for import/export, the name of a directory to read from/save to, if unspecified "lacmigration" will be used')
+	.description('Migrate will list all export files for ALL user libraries, auth providers, gateways, and projects in the connection and export to a named directory')
+	.option('--directory [directory]', 'Required for export, the name of a directory to save all exported json files')
 	.action(migrate.doMigrate);	
 		
 program.parse(process.argv);

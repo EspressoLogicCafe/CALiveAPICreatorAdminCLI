@@ -1,7 +1,7 @@
 #! /bin/bash
 # Generate the contents of an existing repository
-SERVER=http://localhost:8080/APIServer
-#SERVER=http://localhost:8080
+#SERVER=http://localhost:8080/APIServer
+SERVER=http://localhost:8080
 PROJECT=demo
 
 ## Connect to a local server $SERVER and use API Project $PROEJCT

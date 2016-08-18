@@ -6,7 +6,7 @@
 ## add  --format json for a full JSON response
 
 
-SERVER=http://localhost:8080/rest/default/nwindb2b/v1
+SERVER=http://localhost:8080/rest/default/b2bderbynw/v1
 #echo 1
 # Note that the URL contains the entire path to the project 
 lac login -u demo -p Password1 $SERVER -a demo
