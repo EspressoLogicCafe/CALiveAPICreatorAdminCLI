@@ -175,8 +175,8 @@ module.exports = {
 		if( ! cmd.ver ) {
 			ver = "1.0";
 		}
-		if (( cmd.libtype !== 'java') && ( cmd.libtype !== 'javascript')) {
-			console.log('You did not specify a library type of [javascript | java])'.red);
+		if (cmd.libtype !== 'javascript') {
+			console.log('You did not specify a library type of [javascript])'.red);
 			return;
 		}
 		context.getContext(cmd, function() {
@@ -214,7 +214,6 @@ module.exports = {
 					console.log(data.errorMessage.red);
 					return;
 				}
-				
 				if(data.statusCode == 200 && data.txsummary.length == 0){
 					console.log("Merge completed - no changes detected");
 				} else {
@@ -297,6 +296,7 @@ module.exports = {
 			var account_ident = context.account.ident;
 			for(var i = 0 ; i < fileContent.length ; i++ ){
 				delete fileContent[i].ident;
+				fileContent[i].logic_type = "javascript";
 				fileContent[i].account_ident = account_ident;
 				delete fileContent[i].ts;
 				fileContent[i]["@metadata"] = {action:"MERGE_INSERT", key: ["name","account_ident"]} ;

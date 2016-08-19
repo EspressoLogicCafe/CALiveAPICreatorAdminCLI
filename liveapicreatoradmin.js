@@ -37,6 +37,7 @@ var gateway = require('./objects/gateway.js');
 //3.0 features
 var managedserver = require('./objects/managedserver.js');
 var migrate = require('./objects/migrate.js');
+var eula = require('./objects/eula.js');
 
 program
 	.version(pkg.version);
@@ -307,6 +308,11 @@ program
 	.description('Migrate will list all export files for ALL user libraries, auth providers, gateways, and projects in the connection and export to a named directory')
 	.option('--directory [directory]', 'Required for export, the name of a directory to save all exported json files')
 	.action(migrate.doMigrate);	
+	
+program
+	.command('eula <accepted>')
+	.description('Returns true or false - end user license agreement must be accepted before any script will run')
+	.action(eula.doStatus);
 		
 program.parse(process.argv);
 
