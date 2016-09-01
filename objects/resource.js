@@ -69,6 +69,7 @@ module.exports = {
 				printObject.printHeader('Top-level resources');
 				var table = new Table();
 				_.each(data, function(p) {
+					table.cell("Ident", p.ident);
 					table.cell("Name", p.name);
 					table.cell("Prefix", p.prefix);
 					table.cell("Table", p.table_name);
@@ -269,9 +270,67 @@ module.exports = {
 	},
 	
 	update: function(cmd) {
-		console.log('Sorry, this function is not yet implemented'.yellow);
+		var client = new Client();
+		var loginInfo = login.login(cmd);
+		if ( ! loginInfo)
+			return;
+		var url = loginInfo.url;
+		var apiKey = loginInfo.apiKey;
+		var projIdent = cmd.project_ident;
+		if ( ! projIdent) {
+			projIdent = dotfile.getCurrentProject();
+			if ( ! projIdent) {
+				console.log('There is no current project.'.yellow);
+				return;
+			}
+		}
+		if ( ! cmd.ident) {
+			console.log('Missing parameter: ident'.red);
+			return;
+		}
+
+		// This gets called to get the resource before we do an update
+		client.get(url + "/resources?sysfilter=equal(container_ident: null,ident:" + cmd.ident +")", {
+			headers: {
+				Authorization: "CALiveAPICreator " + apiKey + ":1",
+				"Content-Type" : "application/json"
+			}
+			}, function(data) {
+				if (data.errorMessage) {
+					console.log(data.errorMessage.red);
+					return;
+			}
+			
+			if (data.length === 0) {
+				console.log('Resource not found for ident :'+cmd.ident.yellow);
+				return;
+			}
+			var resource = data[0];
+			resource.prop1 = cmd.prop1 || resource.prop1;
+			resource.prop2 = cmd.prop2 || resource.prop2;
+			resource.prop3 = cmd.prop3 || resource.prop3;
+			resource.prop4 = cmd.prop4 || resource.prop4;
+			resource.prefix = cmd.prefix || resource.prefix;
+			resource.table_name = cmd.table_name || resource.table_name;
+			client.put(url + "/resources", {
+				data: resource,
+				headers: {
+					Authorization: "CALiveAPICreator " + apiKey + ":1",
+					"Content-Type" : "application/json"
+				}
+			}, function(res) {
+				if (res.errorMessage) {
+					console.log(res);
+					return;
+			    }
+			   if (res.length === 0) {
+				   console.log('Update Resource not found for ident :'+cmd.ident.yellow);
+				   return;
+			   }
+			   console.log(JSON.stringify(res,null,2));
+			});
+		});
 	},
-	
 	del : function(cmd) {
 		var client = new Client();
 		var loginInfo = login.login(cmd);

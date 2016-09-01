@@ -97,9 +97,15 @@ program
 	.action(dbase.doDbase);
 
 program
-	.command('resource <list|delete|import|export>')
+	.command('resource <list|delete|update|export>')
 	.description('Administer resources within a project.')
-	.option('--resource_name [name]', 'The name of the resource')
+	.option('--ident [ident]', 'For update, the ident of the resource (use resource list)')
+	.option('--prop1 [value]', 'For update, the server name of the mongo resource')
+	.option('--prop2 [value]', 'For update, the database name of the mongo resource')
+	.option('--prop3 [value]', 'For update, the user name of the mongo resource')
+	.option('--prop4 [value]', 'For update, the password name of the mongo resource')
+	.option('--table_name [tablename]', 'For update, the table name of the normal or mongo resource')
+	.option('--resource_name [resourcename]', 'The name of the resource')
 	.option('--type [type]', 'The type of the resource: normal, sql, javascript, storedproc, mongo')
 	.option('--prefix [prefix]', 'The prefix of the table')
 	.option('--apiversion [apiversion]', 'The name of an API version, if there is more than one - default v1')
