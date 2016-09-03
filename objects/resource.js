@@ -66,7 +66,7 @@ module.exports = {
 					console.log(data.errorMessage.red);
 					return;
 				}
-				printObject.printHeader('Top-level resources');
+				printObject.printHeader('Top-level resources for API Version: '+apiversion_ident);
 				var table = new Table();
 				_.each(data, function(p) {
 					table.cell("Ident", p.ident);
@@ -284,13 +284,18 @@ module.exports = {
 				return;
 			}
 		}
-		if ( ! cmd.ident) {
-			console.log('Missing parameter: ident'.red);
-			return;
+		var filter = "";
+		if( cmd.resource_name != null && cmd.apiversion != null) {
+			filter = "sysfilter=equal(container_ident: null,name:" + cmd.resource_name  + ",version: " + cmd.apiversion + ")";
+		} else {
+		 if ( ! cmd.ident) {
+			 console.log('Missing parameter: ident'.red);
+			 return;
+		 }
+		 filter = "sysfilter=equal(container_ident: null,ident:" + cmd.ident +")";
 		}
-
 		// This gets called to get the resource before we do an update
-		client.get(url + "/resources?sysfilter=equal(container_ident: null,ident:" + cmd.ident +")", {
+		client.get(url + "/resources", {
 			headers: {
 				Authorization: "CALiveAPICreator " + apiKey + ":1",
 				"Content-Type" : "application/json"
