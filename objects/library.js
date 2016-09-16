@@ -406,7 +406,7 @@ module.exports = {
 			toStdout = true;
 		}
 
-		client.get(loginInfo.url + "/logic_libraries?" + filter, {
+		client.get(loginInfo.url + "/admin:logic_libraries?" + filter, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
 				"Content-Type" : "application/json"
@@ -430,12 +430,36 @@ module.exports = {
 			
 			if (toStdout) {
 				console.log(JSON.stringify(data, null, 2));
-				var libcode = data[0].code;
-				//console.log("libcode "+new Buffer(libcode.value.toString(), 'base64').toString('ascii'));
+				if (cmd.ident) {
+				   filter = "/" + cmd.ident + "/code";
+				   var dataUrl = loginInfo.url;
+				   dataUrl = dataUrl.replace("rest","data");
+				   client.get(dataUrl + "/admin:logic_libraries" + filter, {
+				   headers: {
+					  Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+					  "Content-Type" : "application/json"
+				   }
+					  }, function(code) {
+					  if (code.errorMessage) {
+							  console.log(("Error: " + code.errorMessage).red);
+							  return;
+						  }
+						  if (code.length === 0) {
+							  console.log(("Error: no such library code").red);
+							  return;
+						  }
+						var filename = data[0].name + ".js";
+						var fileAsString = new Buffer(code).toString('utf8');
+						var exportFile = fs.openSync(filename, 'w+', 0600);
+						fs.writeSync(exportFile, JSON.stringify(fileAsString, null, 2));
+						console.log(('Logic Library as text has been exported to file: ' + filename ).green);
+				   });	
+				}
+		
 			} else {
 				var exportFile = fs.openSync(cmd.file, 'w+', 0600);
 				fs.writeSync(exportFile, JSON.stringify(data, null, 2));
-				console.log(('Logic Library has been exported to file: ' + cmd.file).green);
+				console.log(('Logic Library as JSON has been exported to file: ' + cmd.file).green);
 			}
 			
 		});	

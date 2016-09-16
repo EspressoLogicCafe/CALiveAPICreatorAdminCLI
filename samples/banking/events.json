@@ -1,0 +1,24 @@
+[
+  {
+    "ts": "2016-04-04T11:35:03",
+    "name": "RequestEventSample",
+    "description": null,
+    "code": "// Event handling code goes here\nlog.debug(\"Request Event called first\");\n",
+    "active": true,
+    "enabled_verbs": null,
+    "resource_name_pattern": null,
+    "eventtype_ident": 1,
+    "code_type": null
+  },
+  {
+    "ts": "2016-04-04T11:35:03",
+    "name": "Response Event",
+    "description": null,
+    "code": "// Event handling code goes here\nlog.debug(\"Response Event Called Last\");\n",
+    "active": true,
+    "enabled_verbs": null,
+    "resource_name_pattern": null,
+    "eventtype_ident": 2,
+    "code_type": null
+  }
+]

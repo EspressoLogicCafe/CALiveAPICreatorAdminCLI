@@ -1,0 +1,1573 @@
+[
+  {
+    "ident": 2004,
+    "ts": "2016-04-04T11:35:03",
+    "exportVersion": "v4",
+    "adminSchemaVersion": "20160323",
+    "name": "Banking Demo",
+    "url_name": "banking",
+    "comments": "1. Deploy your SQL to a database\n2. Change your Data Source database connections\n3. Change the Authentication Provider (above)\n4.. Data Explorer - select Transfer Funds",
+    "status": null,
+    "is_active": true,
+    "account_ident": 1000,
+    "authprovider_ident": 1000,
+    "@metadata": {
+      "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport/2004",
+      "checksum": "A:c2bb8f1f5f3eb4ae",
+      "nonpersistent": [
+        "exportVersion",
+        "adminSchemaVersion"
+      ]
+    },
+    "Topics": [
+      {
+        "ident": 2032,
+        "name": "Balances",
+        "color": "#a3fdf7",
+        "summary": "Sum of transaction details",
+        "description": "",
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.Topics/2032",
+          "checksum": "A:8dcefa28b0257c51"
+        }
+      },
+      {
+        "ident": 2033,
+        "name": "Defaults",
+        "color": "#6dbeff",
+        "summary": null,
+        "description": "",
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.Topics/2033",
+          "checksum": "A:857bca8f9e1cfcc0"
+        }
+      },
+      {
+        "ident": 2034,
+        "name": "Transfer Funds",
+        "color": "#ffda37",
+        "summary": "Move between checking and savings",
+        "description": "",
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.Topics/2034",
+          "checksum": "A:db5a0b458f356721"
+        }
+      },
+      {
+        "ident": 2035,
+        "name": "Validation",
+        "color": "#ffabfb",
+        "summary": null,
+        "description": "",
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.Topics/2035",
+          "checksum": "A:a3d0ceeaaa0e6f6b"
+        }
+      }
+    ],
+    "Rules": [
+      {
+        "ident": 2082,
+        "ts": "2016-04-04T11:35:03",
+        "entity_name": "main:ALERT",
+        "attribute_name": null,
+        "prop1": null,
+        "prop2": null,
+        "prop3": null,
+        "prop4": "javascript",
+        "prop5": null,
+        "rule_text1": "if( row.fk_Alert_CUSTOMER1.CheckingAcctBal < row.WhenBalance){\n    log.debug(\"Send Email Alert to \"+row.EmailAddress);\n}",
+        "rule_text2": null,
+        "rule_text3": null,
+        "rule_text4": null,
+        "rule_text5": null,
+        "predicate": null,
+        "name": null,
+        "auto_name": "Commit event: if( row.fk_Alert_CUSTOMER1.CheckingAcctBal < row.WhenBalance){\n    log.debug(\"Send Email Alert to \"+row.EmailAddress);\n}.null",
+        "verbs": "UPDATE,",
+        "comments": null,
+        "active": true,
+        "sqlable": false,
+        "project_ident": 2004,
+        "ruletype_ident": 9,
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.Rules/2082",
+          "checksum": "A:8dae24f26bc1b75f"
+        },
+        "RuleTopics": []
+      },
+      {
+        "ident": 2083,
+        "ts": "2016-04-04T11:35:03",
+        "entity_name": "main:CHECKING",
+        "attribute_name": "AvailableBalance",
+        "prop1": null,
+        "prop2": null,
+        "prop3": null,
+        "prop4": "javascript",
+        "prop5": null,
+        "rule_text1": "return row.Deposits - row.Withdrawls;",
+        "rule_text2": null,
+        "rule_text3": null,
+        "rule_text4": null,
+        "rule_text5": null,
+        "predicate": null,
+        "name": null,
+        "auto_name": "Derive AvailableBalance as return row.Deposits - row.Withdrawls;",
+        "verbs": null,
+        "comments": null,
+        "active": true,
+        "sqlable": false,
+        "project_ident": 2004,
+        "ruletype_ident": 3,
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.Rules/2083",
+          "checksum": "A:29478c0e187506f7"
+        },
+        "RuleTopics": [
+          {
+            "ident": 2088,
+            "topic_ident": 2032,
+            "@metadata": {
+              "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.Rules.RuleTopics/2088",
+              "checksum": "A:c24486a63418b631"
+            }
+          }
+        ]
+      },
+      {
+        "ident": 2084,
+        "ts": "2016-04-04T11:35:03",
+        "entity_name": "main:CHECKING",
+        "attribute_name": "Deposits",
+        "prop1": null,
+        "prop2": null,
+        "prop3": null,
+        "prop4": null,
+        "prop5": null,
+        "rule_text1": "CHECKING_TRANSList",
+        "rule_text2": null,
+        "rule_text3": "DepositAmt",
+        "rule_text4": null,
+        "rule_text5": null,
+        "predicate": null,
+        "name": null,
+        "auto_name": "Derive Deposits as sum(CHECKING_TRANSList.DepositAmt)",
+        "verbs": null,
+        "comments": null,
+        "active": true,
+        "sqlable": false,
+        "project_ident": 2004,
+        "ruletype_ident": 1,
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.Rules/2084",
+          "checksum": "A:2722b67a84e11d04"
+        },
+        "RuleTopics": [
+          {
+            "ident": 2089,
+            "topic_ident": 2032,
+            "@metadata": {
+              "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.Rules.RuleTopics/2089",
+              "checksum": "A:c111334cbc9f5164"
+            }
+          }
+        ]
+      },
+      {
+        "ident": 2085,
+        "ts": "2016-04-04T11:35:03",
+        "entity_name": "main:CHECKING",
+        "attribute_name": "ItemCount",
+        "prop1": null,
+        "prop2": null,
+        "prop3": null,
+        "prop4": null,
+        "prop5": null,
+        "rule_text1": "CHECKING_TRANSList",
+        "rule_text2": null,
+        "rule_text3": null,
+        "rule_text4": null,
+        "rule_text5": null,
+        "predicate": null,
+        "name": null,
+        "auto_name": "Derive ItemCount as count(CHECKING_TRANSList)",
+        "verbs": null,
+        "comments": null,
+        "active": true,
+        "sqlable": false,
+        "project_ident": 2004,
+        "ruletype_ident": 2,
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.Rules/2085",
+          "checksum": "A:15d6403085521b6a"
+        },
+        "RuleTopics": [
+          {
+            "ident": 2090,
+            "topic_ident": 2033,
+            "@metadata": {
+              "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.Rules.RuleTopics/2090",
+              "checksum": "A:d188ddb5136f08f4"
+            }
+          }
+        ]
+      },
+      {
+        "ident": 2086,
+        "ts": "2016-04-04T11:35:03",
+        "entity_name": "main:CHECKING",
+        "attribute_name": "Withdrawls",
+        "prop1": null,
+        "prop2": null,
+        "prop3": null,
+        "prop4": null,
+        "prop5": null,
+        "rule_text1": "CHECKING_TRANSList",
+        "rule_text2": null,
+        "rule_text3": "WithdrawlAmt",
+        "rule_text4": null,
+        "rule_text5": null,
+        "predicate": null,
+        "name": null,
+        "auto_name": "Derive Withdrawls as sum(CHECKING_TRANSList.WithdrawlAmt)",
+        "verbs": null,
+        "comments": null,
+        "active": true,
+        "sqlable": false,
+        "project_ident": 2004,
+        "ruletype_ident": 1,
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.Rules/2086",
+          "checksum": "A:f85b1c8ef400b848"
+        },
+        "RuleTopics": [
+          {
+            "ident": 2091,
+            "topic_ident": 2032,
+            "@metadata": {
+              "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.Rules.RuleTopics/2091",
+              "checksum": "A:9469f3bc63b8174e"
+            }
+          }
+        ]
+      },
+      {
+        "ident": 2087,
+        "ts": "2016-04-04T11:35:03",
+        "entity_name": "main:CHECKING_TRANS",
+        "attribute_name": "Total",
+        "prop1": null,
+        "prop2": null,
+        "prop3": null,
+        "prop4": "javascript",
+        "prop5": null,
+        "rule_text1": "return row.DepositAmt - row.WithdrawlAmt;",
+        "rule_text2": null,
+        "rule_text3": null,
+        "rule_text4": null,
+        "rule_text5": null,
+        "predicate": null,
+        "name": null,
+        "auto_name": "Derive Total as return row.DepositAmt - row.WithdrawlAmt;",
+        "verbs": null,
+        "comments": null,
+        "active": true,
+        "sqlable": false,
+        "project_ident": 2004,
+        "ruletype_ident": 3,
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.Rules/2087",
+          "checksum": "A:35f28b54f7f1d691"
+        },
+        "RuleTopics": [
+          {
+            "ident": 2092,
+            "topic_ident": 2032,
+            "@metadata": {
+              "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.Rules.RuleTopics/2092",
+              "checksum": "A:4b1d355598ef38a7"
+            }
+          }
+        ]
+      },
+      {
+        "ident": 2088,
+        "ts": "2016-04-04T11:35:03",
+        "entity_name": "main:CHECKING_TRANS",
+        "attribute_name": "TransDate",
+        "prop1": null,
+        "prop2": null,
+        "prop3": null,
+        "prop4": "javascript",
+        "prop5": null,
+        "rule_text1": "return new Date();",
+        "rule_text2": null,
+        "rule_text3": null,
+        "rule_text4": null,
+        "rule_text5": null,
+        "predicate": null,
+        "name": null,
+        "auto_name": "Derive TransDate as return new Date();",
+        "verbs": null,
+        "comments": null,
+        "active": true,
+        "sqlable": false,
+        "project_ident": 2004,
+        "ruletype_ident": 3,
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.Rules/2088",
+          "checksum": "A:b24e7e7857872dc0"
+        },
+        "RuleTopics": [
+          {
+            "ident": 2093,
+            "topic_ident": 2033,
+            "@metadata": {
+              "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.Rules.RuleTopics/2093",
+              "checksum": "A:7aaae3219b485c8d"
+            }
+          }
+        ]
+      },
+      {
+        "ident": 2092,
+        "ts": "2016-04-04T11:35:03",
+        "entity_name": "main:CUSTOMER",
+        "attribute_name": null,
+        "prop1": null,
+        "prop2": null,
+        "prop3": null,
+        "prop4": "javascript",
+        "prop5": null,
+        "rule_text1": "return row.CheckingAcctBal >= 0;",
+        "rule_text2": "You cannot have a negative checking Balance [CheckingAcctBal]",
+        "rule_text3": null,
+        "rule_text4": null,
+        "rule_text5": null,
+        "predicate": null,
+        "name": null,
+        "auto_name": "Validation return row.CheckingAcctBal >= 0;",
+        "verbs": null,
+        "comments": null,
+        "active": true,
+        "sqlable": false,
+        "project_ident": 2004,
+        "ruletype_ident": 5,
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.Rules/2092",
+          "checksum": "A:33f0b5d704bbbefe"
+        },
+        "RuleTopics": [
+          {
+            "ident": 2097,
+            "topic_ident": 2035,
+            "@metadata": {
+              "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.Rules.RuleTopics/2097",
+              "checksum": "A:2e2b600befc0dd26"
+            }
+          }
+        ]
+      },
+      {
+        "ident": 2089,
+        "ts": "2016-04-04T11:35:03",
+        "entity_name": "main:CUSTOMER",
+        "attribute_name": "CheckingAcctBal",
+        "prop1": null,
+        "prop2": null,
+        "prop3": null,
+        "prop4": null,
+        "prop5": null,
+        "rule_text1": "CHECKINGList",
+        "rule_text2": null,
+        "rule_text3": "AvailableBalance",
+        "rule_text4": null,
+        "rule_text5": null,
+        "predicate": null,
+        "name": null,
+        "auto_name": "Derive CheckingAcctBal as sum(CHECKINGList.AvailableBalance)",
+        "verbs": null,
+        "comments": null,
+        "active": true,
+        "sqlable": false,
+        "project_ident": 2004,
+        "ruletype_ident": 1,
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.Rules/2089",
+          "checksum": "A:79798249ce19ba82"
+        },
+        "RuleTopics": [
+          {
+            "ident": 2094,
+            "topic_ident": 2032,
+            "@metadata": {
+              "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.Rules.RuleTopics/2094",
+              "checksum": "A:19ecec00938e1135"
+            }
+          }
+        ]
+      },
+      {
+        "ident": 2090,
+        "ts": "2016-04-04T11:35:03",
+        "entity_name": "main:CUSTOMER",
+        "attribute_name": "SavingsAcctBal",
+        "prop1": null,
+        "prop2": null,
+        "prop3": null,
+        "prop4": null,
+        "prop5": null,
+        "rule_text1": "SAVINGSList",
+        "rule_text2": null,
+        "rule_text3": "AvailableBalance",
+        "rule_text4": null,
+        "rule_text5": null,
+        "predicate": null,
+        "name": null,
+        "auto_name": "Derive SavingsAcctBal as sum(SAVINGSList.AvailableBalance)",
+        "verbs": null,
+        "comments": null,
+        "active": true,
+        "sqlable": false,
+        "project_ident": 2004,
+        "ruletype_ident": 1,
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.Rules/2090",
+          "checksum": "A:53ab19c85e81f3a4"
+        },
+        "RuleTopics": [
+          {
+            "ident": 2095,
+            "topic_ident": 2032,
+            "@metadata": {
+              "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.Rules.RuleTopics/2095",
+              "checksum": "A:505bf0f83457a986"
+            }
+          }
+        ]
+      },
+      {
+        "ident": 2091,
+        "ts": "2016-04-04T11:35:03",
+        "entity_name": "main:CUSTOMER",
+        "attribute_name": "TotalBalance",
+        "prop1": null,
+        "prop2": null,
+        "prop3": null,
+        "prop4": "javascript",
+        "prop5": null,
+        "rule_text1": "return row.CheckingAcctBal+row.SavingsAcctBal",
+        "rule_text2": null,
+        "rule_text3": null,
+        "rule_text4": null,
+        "rule_text5": null,
+        "predicate": null,
+        "name": null,
+        "auto_name": "Derive TotalBalance as return row.CheckingAcctBal+row.SavingsAcctBal",
+        "verbs": null,
+        "comments": null,
+        "active": true,
+        "sqlable": false,
+        "project_ident": 2004,
+        "ruletype_ident": 3,
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.Rules/2091",
+          "checksum": "A:98d09595bf9db927"
+        },
+        "RuleTopics": [
+          {
+            "ident": 2096,
+            "topic_ident": 2032,
+            "@metadata": {
+              "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.Rules.RuleTopics/2096",
+              "checksum": "A:e79ccb0ae7c4a8d9"
+            }
+          }
+        ]
+      },
+      {
+        "ident": 2093,
+        "ts": "2016-04-04T11:35:03",
+        "entity_name": "main:SAVINGS",
+        "attribute_name": "AvailableBalance",
+        "prop1": null,
+        "prop2": null,
+        "prop3": null,
+        "prop4": "javascript",
+        "prop5": null,
+        "rule_text1": "return row.Deposits - row.Withdrawls;",
+        "rule_text2": null,
+        "rule_text3": null,
+        "rule_text4": null,
+        "rule_text5": null,
+        "predicate": null,
+        "name": null,
+        "auto_name": "Derive AvailableBalance as return row.Deposits - row.Withdrawls;",
+        "verbs": null,
+        "comments": null,
+        "active": true,
+        "sqlable": false,
+        "project_ident": 2004,
+        "ruletype_ident": 3,
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.Rules/2093",
+          "checksum": "A:615e7188fae7e028"
+        },
+        "RuleTopics": [
+          {
+            "ident": 2098,
+            "topic_ident": 2032,
+            "@metadata": {
+              "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.Rules.RuleTopics/2098",
+              "checksum": "A:4f5f17b670730dd9"
+            }
+          }
+        ]
+      },
+      {
+        "ident": 2094,
+        "ts": "2016-04-04T11:35:03",
+        "entity_name": "main:SAVINGS",
+        "attribute_name": "Deposits",
+        "prop1": null,
+        "prop2": null,
+        "prop3": null,
+        "prop4": null,
+        "prop5": null,
+        "rule_text1": "SAVINGS_TRANSList",
+        "rule_text2": null,
+        "rule_text3": "DepositAmt",
+        "rule_text4": null,
+        "rule_text5": null,
+        "predicate": null,
+        "name": null,
+        "auto_name": "Derive Deposits as sum(SAVINGS_TRANSList.DepositAmt)",
+        "verbs": null,
+        "comments": null,
+        "active": true,
+        "sqlable": false,
+        "project_ident": 2004,
+        "ruletype_ident": 1,
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.Rules/2094",
+          "checksum": "A:2e838b30084b1c50"
+        },
+        "RuleTopics": [
+          {
+            "ident": 2099,
+            "topic_ident": 2032,
+            "@metadata": {
+              "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.Rules.RuleTopics/2099",
+              "checksum": "A:c6d5d64cad560513"
+            }
+          }
+        ]
+      },
+      {
+        "ident": 2095,
+        "ts": "2016-04-04T11:35:03",
+        "entity_name": "main:SAVINGS",
+        "attribute_name": "Withdrawls",
+        "prop1": null,
+        "prop2": null,
+        "prop3": null,
+        "prop4": null,
+        "prop5": null,
+        "rule_text1": "SAVINGS_TRANSList",
+        "rule_text2": null,
+        "rule_text3": "WithdrawlAmt",
+        "rule_text4": null,
+        "rule_text5": null,
+        "predicate": null,
+        "name": null,
+        "auto_name": "Derive Withdrawls as sum(SAVINGS_TRANSList.WithdrawlAmt)",
+        "verbs": null,
+        "comments": null,
+        "active": true,
+        "sqlable": false,
+        "project_ident": 2004,
+        "ruletype_ident": 1,
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.Rules/2095",
+          "checksum": "A:fcd197160a7f98f1"
+        },
+        "RuleTopics": [
+          {
+            "ident": 2100,
+            "topic_ident": 2032,
+            "@metadata": {
+              "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.Rules.RuleTopics/2100",
+              "checksum": "A:992beeb5408216cd"
+            }
+          }
+        ]
+      },
+      {
+        "ident": 2096,
+        "ts": "2016-04-04T11:35:03",
+        "entity_name": "main:SAVINGS_TRANS",
+        "attribute_name": "Total",
+        "prop1": null,
+        "prop2": null,
+        "prop3": null,
+        "prop4": "javascript",
+        "prop5": null,
+        "rule_text1": "return row.DepositAmt - row.WithdrawlAmt;                           ",
+        "rule_text2": null,
+        "rule_text3": null,
+        "rule_text4": null,
+        "rule_text5": null,
+        "predicate": null,
+        "name": null,
+        "auto_name": "Derive Total as return row.DepositAmt - row.WithdrawlAmt;                           ",
+        "verbs": null,
+        "comments": null,
+        "active": true,
+        "sqlable": false,
+        "project_ident": 2004,
+        "ruletype_ident": 3,
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.Rules/2096",
+          "checksum": "A:58d7449c4ae1a2b4"
+        },
+        "RuleTopics": [
+          {
+            "ident": 2101,
+            "topic_ident": 2032,
+            "@metadata": {
+              "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.Rules.RuleTopics/2101",
+              "checksum": "A:493670c078a946ec"
+            }
+          }
+        ]
+      },
+      {
+        "ident": 2097,
+        "ts": "2016-04-04T11:35:03",
+        "entity_name": "main:SAVINGS_TRANS",
+        "attribute_name": "TransDate",
+        "prop1": null,
+        "prop2": null,
+        "prop3": null,
+        "prop4": "javascript",
+        "prop5": null,
+        "rule_text1": "return new Date();",
+        "rule_text2": null,
+        "rule_text3": null,
+        "rule_text4": null,
+        "rule_text5": null,
+        "predicate": null,
+        "name": null,
+        "auto_name": "Derive TransDate as return new Date();",
+        "verbs": null,
+        "comments": null,
+        "active": true,
+        "sqlable": false,
+        "project_ident": 2004,
+        "ruletype_ident": 3,
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.Rules/2097",
+          "checksum": "A:c70985a97599acd8"
+        },
+        "RuleTopics": [
+          {
+            "ident": 2102,
+            "topic_ident": 2033,
+            "@metadata": {
+              "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.Rules.RuleTopics/2102",
+              "checksum": "A:c171fd676924970b"
+            }
+          }
+        ]
+      },
+      {
+        "ident": 2099,
+        "ts": "2016-04-04T11:35:03",
+        "entity_name": "main:TRANSFER_FUNDS",
+        "attribute_name": null,
+        "prop1": null,
+        "prop2": null,
+        "prop3": null,
+        "prop4": "javascript",
+        "prop5": null,
+        "rule_text1": "return row.FromAcct !== row.ToAcct;",
+        "rule_text2": "Cannot transfer from and to the same account",
+        "rule_text3": null,
+        "rule_text4": null,
+        "rule_text5": null,
+        "predicate": null,
+        "name": null,
+        "auto_name": "Validation return row.FromAcct !== row.ToAcct;",
+        "verbs": null,
+        "comments": null,
+        "active": true,
+        "sqlable": false,
+        "project_ident": 2004,
+        "ruletype_ident": 5,
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.Rules/2099",
+          "checksum": "A:12cb94de3f1f2139"
+        },
+        "RuleTopics": [
+          {
+            "ident": 2104,
+            "topic_ident": 2035,
+            "@metadata": {
+              "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.Rules.RuleTopics/2104",
+              "checksum": "A:37d09398c3e35c7d"
+            }
+          }
+        ]
+      },
+      {
+        "ident": 2100,
+        "ts": "2016-04-04T11:35:03",
+        "entity_name": "main:TRANSFER_FUNDS",
+        "attribute_name": null,
+        "prop1": null,
+        "prop2": null,
+        "prop3": null,
+        "prop4": "javascript",
+        "prop5": null,
+        "rule_text1": "\n//we will create 2 transactions\\n//FROM ACCOUNT, AMOUNT and TO ACCOUNT and AMOUNT\n//add account type to each and mange parent to determine which account\\n\\n\nvar fromBean = true ? 'CHECKING_TRANS' : 'SAVINGS_TRANS';\nvar toBean = false ? 'CHECKING_TRANS' : 'SAVINGS_TRANS';\nvar fromAccount = logicContext.createPersistentBean(fromBean);\nfromAccount.CustNum = row.FromCustNum;\nfromAccount.AcctNum = row.FromAcct;\nfromAccount.WithdrawlAmt = row.TransferAmt;\nfromAccount.DepositAmt = 0;\nfromAccount.PendingFlag = 0;\nif(fromBean === 'CHECKING_TRANS' ){\n    fromAccount.ChkNo = 'TRF: '+row.ToAcct;\n}\nlogicContext.insert(fromAccount);\nvar toAccount = logicContext.createPersistentBean(toBean);\ntoAccount.CustNum = row.ToCustNum;\ntoAccount.AcctNum = row.ToAcct;\ntoAccount.DepositAmt = row.TransferAmt;\ntoAccount.PendingFlag = 0;\ntoAccount.WithdrawlAmt = 0;\nlogicContext.insert(toAccount);\nreturn true;",
+        "rule_text2": null,
+        "rule_text3": null,
+        "rule_text4": null,
+        "rule_text5": null,
+        "predicate": null,
+        "name": "move money from check to savings",
+        "auto_name": "Event: \n//we will create 2 transactions\\n//FROM ACCOUNT, AMOUNT and TO ACCOUNT and AMOUNT\n//add account type to each and mange parent to determine ...",
+        "verbs": "INSERT,",
+        "comments": null,
+        "active": true,
+        "sqlable": false,
+        "project_ident": 2004,
+        "ruletype_ident": 7,
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.Rules/2100",
+          "checksum": "A:8452ca6ee1d21dfa"
+        },
+        "RuleTopics": [
+          {
+            "ident": 2105,
+            "topic_ident": 2034,
+            "@metadata": {
+              "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.Rules.RuleTopics/2105",
+              "checksum": "A:67903f79932e46e4"
+            }
+          }
+        ]
+      },
+      {
+        "ident": 2098,
+        "ts": "2016-04-04T11:35:03",
+        "entity_name": "main:TRANSFER_FUNDS",
+        "attribute_name": "TransDate",
+        "prop1": null,
+        "prop2": null,
+        "prop3": null,
+        "prop4": "javascript",
+        "prop5": null,
+        "rule_text1": "return new Date();",
+        "rule_text2": null,
+        "rule_text3": null,
+        "rule_text4": null,
+        "rule_text5": null,
+        "predicate": null,
+        "name": null,
+        "auto_name": "Derive TransDate as return new Date();",
+        "verbs": null,
+        "comments": null,
+        "active": true,
+        "sqlable": false,
+        "project_ident": 2004,
+        "ruletype_ident": 3,
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.Rules/2098",
+          "checksum": "A:3ae189f6c2d8bc38"
+        },
+        "RuleTopics": [
+          {
+            "ident": 2103,
+            "topic_ident": 2033,
+            "@metadata": {
+              "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.Rules.RuleTopics/2103",
+              "checksum": "A:6d3a009d5da5a42f"
+            }
+          }
+        ]
+      }
+    ],
+    "ApiVersions": [
+      {
+        "ident": 2004,
+        "ts": "2016-04-04T11:35:03",
+        "name": "v1",
+        "comments": null,
+        "project_ident": 2004,
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.ApiVersions/2004",
+          "checksum": "A:c4005c09e53375de"
+        },
+        "Resources": [
+          {
+            "ident": 2086,
+            "ts": "2016-04-04T11:35:03",
+            "resource_type_ident": 1,
+            "prefix": "main",
+            "table_name": "CUSTOMER",
+            "name": "CUSTOMERObject",
+            "description": null,
+            "is_collection": "Y",
+            "join_condition": null,
+            "filter": null,
+            "sorting": null,
+            "attach_path": null,
+            "caching": null,
+            "custom_class": null,
+            "code_text": null,
+            "filter_code": "",
+            "serial_filter": null,
+            "prop1": null,
+            "prop2": null,
+            "prop3": null,
+            "prop4": null,
+            "prop5": null,
+            "container_ident": null,
+            "sibling_rank": 100,
+            "combined": false,
+            "root_ident": null,
+            "linked_ident": null,
+            "apiversion_ident": 2004,
+            "@metadata": {
+              "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.ApiVersions.Resources/2086",
+              "checksum": "A:07eb85dbbe11391f"
+            },
+            "ResourceAttributes": []
+          },
+          {
+            "ident": 2087,
+            "ts": "2016-04-04T11:35:03",
+            "resource_type_ident": 1,
+            "prefix": "main",
+            "table_name": "TRANSFER_FUNDS",
+            "name": "TRANSFER_FUNDSChild",
+            "description": "Generated sample resource",
+            "is_collection": "Y",
+            "join_condition": "ToCustNum = [CustNum]",
+            "filter": null,
+            "sorting": null,
+            "attach_path": null,
+            "caching": null,
+            "custom_class": null,
+            "code_text": null,
+            "filter_code": null,
+            "serial_filter": null,
+            "prop1": null,
+            "prop2": null,
+            "prop3": null,
+            "prop4": null,
+            "prop5": null,
+            "container_ident": 2086,
+            "sibling_rank": 100,
+            "combined": false,
+            "root_ident": 2086,
+            "linked_ident": null,
+            "apiversion_ident": 2004,
+            "@metadata": {
+              "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.ApiVersions.Resources/2087",
+              "checksum": "A:02f74d014e8f37e9"
+            },
+            "ResourceAttributes": []
+          },
+          {
+            "ident": 2088,
+            "ts": "2016-04-04T11:35:03",
+            "resource_type_ident": 1,
+            "prefix": "main",
+            "table_name": "valid_state",
+            "name": "valid_stateParent",
+            "description": "Generated sample resource",
+            "is_collection": "N",
+            "join_condition": "stateCode = [State]",
+            "filter": null,
+            "sorting": null,
+            "attach_path": null,
+            "caching": null,
+            "custom_class": null,
+            "code_text": null,
+            "filter_code": null,
+            "serial_filter": null,
+            "prop1": null,
+            "prop2": null,
+            "prop3": null,
+            "prop4": null,
+            "prop5": null,
+            "container_ident": 2086,
+            "sibling_rank": 100,
+            "combined": false,
+            "root_ident": 2086,
+            "linked_ident": null,
+            "apiversion_ident": 2004,
+            "@metadata": {
+              "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.ApiVersions.Resources/2088",
+              "checksum": "A:8bbf1ef6e4ef38fb"
+            },
+            "ResourceAttributes": []
+          }
+        ]
+      }
+    ],
+    "DbaseSchemas": [
+      {
+        "ident": 2006,
+        "name": "Database: banking - root",
+        "comments": "Created using Connect Wizard",
+        "url": "jdbc:mysql://localhost:3306/banking",
+        "catalog_name": "banking",
+        "schema_name": null,
+        "user_name": "abl",
+        "password": null,
+        "salt": null,
+        "active": true,
+        "status": null,
+        "dbasetype_ident": 1,
+        "prefix": "main",
+        "datasource_name": null,
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.DbaseSchemas/2006",
+          "checksum": "A:5233ad56c0d5d559"
+        },
+        "TableInfos": [],
+        "NonPersistentAttributes": []
+      }
+    ],
+    "ProjectLibraries": [],
+    "ProjectOptions": [
+      {
+        "ident": 2054,
+        "ts": "2016-04-04T11:35:03",
+        "option_value": "false",
+        "project_ident": 2004,
+        "projectoptiontype_ident": 1,
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.ProjectOptions/2054",
+          "checksum": "A:9dabee0468dab816"
+        }
+      },
+      {
+        "ident": 2055,
+        "ts": "2016-04-04T11:35:03",
+        "option_value": "http://www.espressologic.com/model/",
+        "project_ident": 2004,
+        "projectoptiontype_ident": 2,
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.ProjectOptions/2055",
+          "checksum": "A:e8f8ba10c52f78fb"
+        }
+      },
+      {
+        "ident": 2056,
+        "ts": "2016-04-04T11:35:03",
+        "option_value": "false",
+        "project_ident": 2004,
+        "projectoptiontype_ident": 3,
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.ProjectOptions/2056",
+          "checksum": "A:e378e2b6b01bb40e"
+        }
+      },
+      {
+        "ident": 2057,
+        "ts": "2016-04-04T11:35:03",
+        "option_value": "@metadata",
+        "project_ident": 2004,
+        "projectoptiontype_ident": 4,
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.ProjectOptions/2057",
+          "checksum": "A:f0bc6f5f42bd23ac"
+        }
+      },
+      {
+        "ident": 2058,
+        "ts": "2016-04-04T11:35:03",
+        "option_value": "2000",
+        "project_ident": 2004,
+        "projectoptiontype_ident": 5,
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.ProjectOptions/2058",
+          "checksum": "A:8230dd302ce11ae7"
+        }
+      },
+      {
+        "ident": 2059,
+        "ts": "2016-04-04T11:35:03",
+        "option_value": "2000",
+        "project_ident": 2004,
+        "projectoptiontype_ident": 6,
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.ProjectOptions/2059",
+          "checksum": "A:684d5739548e1160"
+        }
+      },
+      {
+        "ident": 2060,
+        "ts": "2016-04-04T11:35:03",
+        "option_value": "20",
+        "project_ident": 2004,
+        "projectoptiontype_ident": 7,
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.ProjectOptions/2060",
+          "checksum": "A:6ce333f0eba3b9a7"
+        }
+      },
+      {
+        "ident": 2061,
+        "ts": "2016-04-04T11:35:03",
+        "option_value": "5000",
+        "project_ident": 2004,
+        "projectoptiontype_ident": 8,
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.ProjectOptions/2061",
+          "checksum": "A:fc1c0722871cbd89"
+        }
+      },
+      {
+        "ident": 2062,
+        "ts": "2016-04-04T11:35:03",
+        "option_value": "20",
+        "project_ident": 2004,
+        "projectoptiontype_ident": 9,
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.ProjectOptions/2062",
+          "checksum": "A:58509320b953fdc1"
+        }
+      },
+      {
+        "ident": 2063,
+        "ts": "2016-04-04T11:35:03",
+        "option_value": "100",
+        "project_ident": 2004,
+        "projectoptiontype_ident": 10,
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.ProjectOptions/2063",
+          "checksum": "A:257db0d9dd2314b8"
+        }
+      },
+      {
+        "ident": 2064,
+        "ts": "2016-04-04T11:35:03",
+        "option_value": "2000",
+        "project_ident": 2004,
+        "projectoptiontype_ident": 11,
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.ProjectOptions/2064",
+          "checksum": "A:20e081522dc66c1d"
+        }
+      },
+      {
+        "ident": 2065,
+        "ts": "2016-04-04T11:35:03",
+        "option_value": "true",
+        "project_ident": 2004,
+        "projectoptiontype_ident": 12,
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.ProjectOptions/2065",
+          "checksum": "A:157345db2a1265ed"
+        }
+      },
+      {
+        "ident": 2066,
+        "ts": "2016-04-04T11:35:03",
+        "option_value": "json",
+        "project_ident": 2004,
+        "projectoptiontype_ident": 15,
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.ProjectOptions/2066",
+          "checksum": "A:e14fc80cd63105a1"
+        }
+      },
+      {
+        "ident": 2067,
+        "ts": "2016-04-04T11:35:03",
+        "option_value": "true",
+        "project_ident": 2004,
+        "projectoptiontype_ident": 16,
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.ProjectOptions/2067",
+          "checksum": "A:8f552f2308be34cc"
+        }
+      },
+      {
+        "ident": 2068,
+        "ts": "2016-04-04T11:35:03",
+        "option_value": "https://sites.google.com/a/espressologic.com/projects/northwind",
+        "project_ident": 2004,
+        "projectoptiontype_ident": 13,
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.ProjectOptions/2068",
+          "checksum": "A:1ac901c20a0e1425"
+        }
+      },
+      {
+        "ident": 2069,
+        "ts": "2016-04-04T11:35:03",
+        "option_value": "false",
+        "project_ident": 2004,
+        "projectoptiontype_ident": 18,
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.ProjectOptions/2069",
+          "checksum": "A:84126dc4ade6c6fe"
+        }
+      },
+      {
+        "ident": 2070,
+        "ts": "2016-04-04T11:35:03",
+        "option_value": "50",
+        "project_ident": 2004,
+        "projectoptiontype_ident": 17,
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.ProjectOptions/2070",
+          "checksum": "A:01c5cc9cd12ce13d"
+        }
+      },
+      {
+        "ident": 2071,
+        "ts": "2016-04-04T11:35:03",
+        "option_value": "false",
+        "project_ident": 2004,
+        "projectoptiontype_ident": 19,
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.ProjectOptions/2071",
+          "checksum": "A:f9368c17edcf9c35"
+        }
+      },
+      {
+        "ident": 2072,
+        "ts": "2016-04-04T11:35:03",
+        "option_value": null,
+        "project_ident": 2004,
+        "projectoptiontype_ident": 14,
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.ProjectOptions/2072",
+          "checksum": "A:c99e80de5a04ccc9"
+        }
+      },
+      {
+        "ident": 2073,
+        "ts": "2016-04-04T11:35:03",
+        "option_value": "0",
+        "project_ident": 2004,
+        "projectoptiontype_ident": 20,
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.ProjectOptions/2073",
+          "checksum": "A:56726be140b6d0a1"
+        }
+      },
+      {
+        "ident": 2074,
+        "ts": "2016-04-04T11:35:03",
+        "option_value": "null",
+        "project_ident": 2004,
+        "projectoptiontype_ident": 22,
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.ProjectOptions/2074",
+          "checksum": "A:201782704871e8c7"
+        }
+      },
+      {
+        "ident": 2075,
+        "ts": "2016-04-04T11:35:03",
+        "option_value": "null",
+        "project_ident": 2004,
+        "projectoptiontype_ident": 24,
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.ProjectOptions/2075",
+          "checksum": "A:7f6953086205e8af"
+        }
+      },
+      {
+        "ident": 2076,
+        "ts": "2016-04-04T11:35:03",
+        "option_value": "null",
+        "project_ident": 2004,
+        "projectoptiontype_ident": 21,
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.ProjectOptions/2076",
+          "checksum": "A:10f9fb8569b24d39"
+        }
+      },
+      {
+        "ident": 2077,
+        "ts": "2016-04-04T11:35:03",
+        "option_value": "null",
+        "project_ident": 2004,
+        "projectoptiontype_ident": 23,
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.ProjectOptions/2077",
+          "checksum": "A:d1136b389550cf58"
+        }
+      }
+    ],
+    "ApiKeys": [
+      {
+        "ident": 2026,
+        "ts": "2016-04-04T11:35:03",
+        "name": "Admin key",
+        "description": null,
+        "apikey": "nTL3LsHYM32kwXAtXCxP",
+        "status": "A",
+        "expiration": null,
+        "logging": "*=FINE",
+        "user_identifier": null,
+        "data": null,
+        "origin": null,
+        "project_ident": 2004,
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.ApiKeys/2026",
+          "checksum": "A:2a3f5beb6ad8aafb"
+        }
+      }
+    ],
+    "Roles": [
+      {
+        "ident": 2020,
+        "ts": "2016-04-04T11:35:03",
+        "name": "API Documentation",
+        "description": null,
+        "default_permission": "R",
+        "default_apivisibility": "TVRPM",
+        "project_ident": 2004,
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.Roles/2020",
+          "checksum": "A:464da2957a9f6edf"
+        },
+        "TablePermissions": [],
+        "PermissionData": [],
+        "ApiKeyRoles": [],
+        "ApiVisibility": []
+      },
+      {
+        "ident": 2021,
+        "ts": "2016-04-04T11:35:03",
+        "name": "Full access",
+        "description": "Full access to everything in this project",
+        "default_permission": "A",
+        "default_apivisibility": "TVPRM",
+        "project_ident": 2004,
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.Roles/2021",
+          "checksum": "A:361df85c6e11f8a8"
+        },
+        "TablePermissions": [],
+        "PermissionData": [],
+        "ApiKeyRoles": [
+          {
+            "ident": 2026,
+            "ts": "2016-04-04T11:35:03",
+            "apikey_ident": 2026,
+            "role_ident": 2021,
+            "@metadata": {
+              "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.Roles.ApiKeyRoles/2026",
+              "checksum": "A:103888b2bea7baa4"
+            }
+          }
+        ],
+        "ApiVisibility": []
+      },
+      {
+        "ident": 2022,
+        "ts": "2016-04-04T11:35:03",
+        "name": "Read only",
+        "description": "Read-only access to everything in this project",
+        "default_permission": "R",
+        "default_apivisibility": "TVPRM",
+        "project_ident": 2004,
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.Roles/2022",
+          "checksum": "A:d56de14016bac9b6"
+        },
+        "TablePermissions": [],
+        "PermissionData": [],
+        "ApiKeyRoles": [],
+        "ApiVisibility": []
+      },
+      {
+        "ident": 2023,
+        "ts": "2016-04-04T11:35:03",
+        "name": "Teller",
+        "description": null,
+        "default_permission": "RIU",
+        "default_apivisibility": "TVRM",
+        "project_ident": 2004,
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.Roles/2023",
+          "checksum": "A:871c68d3b6f85da2"
+        },
+        "TablePermissions": [],
+        "PermissionData": [],
+        "ApiKeyRoles": [],
+        "ApiVisibility": []
+      }
+    ],
+    "Users": [
+      {
+        "ident": 2010,
+        "ts": "2016-04-04T11:35:03",
+        "name": "demo",
+        "fullname": "Demo Account with full access",
+        "email": null,
+        "status": "A",
+        "roles": "Full access",
+        "data": null,
+        "comments": null,
+        "apikey_lifespan": null,
+        "password_hash": "gESdCQPGM8zIFj+b2VGdtpCGrLz65WPDXEbzMrnp18MNAPVbHMhvSB6BT5Lb5oUj+B9xbYHcED8Gl8uvdQ2FwQ==",
+        "password_salt": "7k4q7OkkmDFX3S4x3FwRWQ89il0ZoQftP2D7l/E/",
+        "project_ident": 2004,
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.Users/2010",
+          "checksum": "A:79d18650d6d112e9"
+        }
+      },
+      {
+        "ident": 2011,
+        "ts": "2016-04-04T11:35:03",
+        "name": "guest",
+        "fullname": "Guest Account with read-only access",
+        "email": null,
+        "status": "A",
+        "roles": "Read only",
+        "data": null,
+        "comments": null,
+        "apikey_lifespan": null,
+        "password_hash": "D2EfCi8rDleBuDgtzd/IiM/5u/tVwcETqurbElDCJ9NwoEpsCLgRbZw/F+gyek+0SPJKbDW5LX3T1Tm/vZocMg==",
+        "password_salt": "rIzqaePSNxUpY99OvRFkdL7yYHzD/V7dVP4liDY9",
+        "project_ident": 2004,
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.Users/2011",
+          "checksum": "A:a5a8c5eeb5880d07"
+        }
+      },
+      {
+        "ident": 2012,
+        "ts": "2016-04-04T11:35:03",
+        "name": "Teller1",
+        "fullname": "Teller1",
+        "email": "new@user.com",
+        "status": "A",
+        "roles": "Teller,",
+        "data": null,
+        "comments": null,
+        "apikey_lifespan": 86400,
+        "password_hash": "zk2S678QZeWHcGymR4NWCZGVdakkgOSaSNvkz2xaK3KBUi6JLDgMNZm2SB6fBvKF4s7HNlD2uoJbeujAMPhBOA==",
+        "password_salt": "uOAc9j6fZc6QwJsMZDWSQa7OsvwndX/ZEHWQQFZ7",
+        "project_ident": 2004,
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.Users/2012",
+          "checksum": "A:ec5b1b2da4abb2fe"
+        }
+      }
+    ],
+    "Handlers": [
+      {
+        "ident": 2002,
+        "ts": "2016-04-04T11:35:03",
+        "name": "New custom endpoint",
+        "active": true,
+        "url_pattern": ".*",
+        "verbs": "GET,",
+        "code": "var res = {result: 'Custom Endpoint'};\nreturn JSON.stringify(res);\n",
+        "comments": "This demonstrates that you can create a free form custom endpoint",
+        "project_ident": 2004,
+        "authenticate": false,
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.Handlers/2002",
+          "checksum": "A:8f355c7bf67e886b"
+        }
+      }
+    ],
+    "EventHandlers": [
+      {
+        "ident": 2002,
+        "ts": "2016-04-04T11:35:03",
+        "name": "RequestEventSample",
+        "description": null,
+        "code": "// Event handling code goes here\nlog.debug(\"Request Event called first\");\n",
+        "active": true,
+        "enabled_verbs": null,
+        "resource_name_pattern": null,
+        "eventtype_ident": 1,
+        "code_type": null,
+        "project_ident": 2004,
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.EventHandlers/2002",
+          "checksum": "A:a567f3fbfb05d493"
+        }
+      },
+      {
+        "ident": 2003,
+        "ts": "2016-04-04T11:35:03",
+        "name": "Response Event",
+        "description": null,
+        "code": "// Event handling code goes here\nlog.debug(\"Response Event Called Last\");\n",
+        "active": true,
+        "enabled_verbs": null,
+        "resource_name_pattern": null,
+        "eventtype_ident": 2,
+        "code_type": null,
+        "project_ident": 2004,
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.EventHandlers/2003",
+          "checksum": "A:54333e3ed0b18301"
+        }
+      }
+    ],
+    "Relationships": [
+      {
+        "ident": 2002,
+        "name": "Between main:CHECKING and main:TRANSFER_FUNDS",
+        "parent_entity_name": "main:CHECKING",
+        "child_entity_name": "main:TRANSFER_FUNDS",
+        "role_to_child": "main_TRANSFER_FUNDS_List",
+        "role_to_parent": "main_CHECKING_Parent",
+        "parent_columns": "CustNum,AcctNum",
+        "child_columns": "FromCustNum,FromAcct",
+        "update_rule": "R",
+        "delete_rule": "R",
+        "comments": "used for Data Explorer lookup",
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.Relationships/2002",
+          "checksum": "A:48c876e617d2f940"
+        }
+      },
+      {
+        "ident": 2003,
+        "name": "main:Savings and main:TRANSFER_FUNDS",
+        "parent_entity_name": "main:SAVINGS",
+        "child_entity_name": "main:TRANSFER_FUNDS",
+        "role_to_child": "main_TRANSFER_FUNDS_List",
+        "role_to_parent": "main_SAVINGS_Parent",
+        "parent_columns": "CustNum,AcctNum",
+        "child_columns": "ToCustNum,ToAcct",
+        "update_rule": "R",
+        "delete_rule": "R",
+        "comments": "used for Data Explorer lookup",
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.Relationships/2003",
+          "checksum": "A:9a42f6396c206853"
+        }
+      }
+    ],
+    "Applications": [
+      {
+        "ident": 2002,
+        "ts": "2016-04-04T11:35:03",
+        "name": "Default app",
+        "description": null,
+        "project_ident": 2004,
+        "default_language": "eng",
+        "skin_ident": null,
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.Applications/2002",
+          "checksum": "A:7cd734a39350c23e"
+        },
+        "ApplicationOptions": [],
+        "ApplicationSkins": [],
+        "ApplicationTableSettings": [
+          {
+            "ident": 2000,
+            "ts": "2016-04-04T11:35:03",
+            "table_name": "main:CHECKING",
+            "object_type": "table",
+            "json": "{\"name\":\"main:CHECKING\",\"alias\":\"main:CHECKING\",\"columnFormats\":{\"AcctNum\":{\"name\":\"AcctNum\",\"alias\":\"Acct Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"AcctNum\",\"$$hashKey\":\"26M\",\"width\":87.16666666666667},\"CustNum\":{\"name\":\"CustNum\",\"alias\":\"Cust Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"CustNum\",\"$$hashKey\":\"26N\"},\"Deposits\":{\"name\":\"Deposits\",\"alias\":\"Deposits\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":false,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"Deposits\",\"$$hashKey\":\"26O\",\"width\":87.16666666666667},\"Withdrawls\":{\"name\":\"Withdrawls\",\"alias\":\"Withdrawls\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":false,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"Withdrawls\",\"$$hashKey\":\"26P\"},\"CurrentBalance\":{\"name\":\"CurrentBalance\",\"alias\":\"Current Balance\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"CurrentBalance\",\"$$hashKey\":\"26Q\"},\"AvailableBalance\":{\"name\":\"AvailableBalance\",\"alias\":\"Available Balance\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"AvailableBalance\",\"$$hashKey\":\"26R\"},\"ItemCount\":{\"name\":\"ItemCount\",\"alias\":\"Item Count\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"ItemCount\",\"$$hashKey\":\"26S\"},\"CreditCode\":{\"name\":\"CreditCode\",\"alias\":\"Credit Code\",\"type\":\"SMALLINT\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"CreditCode\",\"$$hashKey\":\"26T\"},\"CreditLimit\":{\"name\":\"CreditLimit\",\"alias\":\"Credit Limit\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"CreditLimit\",\"$$hashKey\":\"26U\"},\"AcctType\":{\"name\":\"AcctType\",\"alias\":\"Acct Type\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"AcctType\",\"$$hashKey\":\"26V\"}},\"gridColumns\":{\"AcctNum\":{\"name\":\"AcctNum\",\"alias\":\"Acct Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"AcctNum\",\"$$hashKey\":\"26M\",\"width\":87.16666666666667},\"CustNum\":{\"name\":\"CustNum\",\"alias\":\"Cust Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"CustNum\",\"$$hashKey\":\"26N\"},\"Deposits\":{\"name\":\"Deposits\",\"alias\":\"Deposits\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":false,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"Deposits\",\"$$hashKey\":\"26O\",\"width\":87.16666666666667}},\"scalarColumns\":{\"AcctNum\":{\"name\":\"AcctNum\",\"alias\":\"Acct Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"AcctNum\",\"$$hashKey\":\"26M\",\"width\":87.16666666666667},\"CustNum\":{\"name\":\"CustNum\",\"alias\":\"Cust Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"CustNum\",\"$$hashKey\":\"26N\"},\"Deposits\":{\"name\":\"Deposits\",\"alias\":\"Deposits\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":false,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"Deposits\",\"$$hashKey\":\"26O\",\"width\":87.16666666666667},\"Withdrawls\":{\"name\":\"Withdrawls\",\"alias\":\"Withdrawls\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":false,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"Withdrawls\",\"$$hashKey\":\"26P\"},\"CurrentBalance\":{\"name\":\"CurrentBalance\",\"alias\":\"Current Balance\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"CurrentBalance\",\"$$hashKey\":\"26Q\"},\"AvailableBalance\":{\"name\":\"AvailableBalance\",\"alias\":\"Available Balance\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"AvailableBalance\",\"$$hashKey\":\"26R\"},\"ItemCount\":{\"name\":\"ItemCount\",\"alias\":\"Item Count\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"ItemCount\",\"$$hashKey\":\"26S\"},\"CreditCode\":{\"name\":\"CreditCode\",\"alias\":\"Credit Code\",\"type\":\"SMALLINT\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"CreditCode\",\"$$hashKey\":\"26T\"},\"CreditLimit\":{\"name\":\"CreditLimit\",\"alias\":\"Credit Limit\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"CreditLimit\",\"$$hashKey\":\"26U\"},\"AcctType\":{\"name\":\"AcctType\",\"alias\":\"Acct Type\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"AcctType\",\"$$hashKey\":\"26V\"}},\"parentSettings\":{\"fk_valid_credit\":{\"name\":\"fk_valid_credit\",\"alias\":\"fk_valid_credit\",\"columnFormats\":{\"creditCode\":{\"name\":\"creditCode\",\"alias\":\"Credit Code\",\"type\":\"SMALLINT\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_valid_credit.creditCode\",\"parentRole\":\"fk_valid_credit\"},\"displayValue\":{\"name\":\"displayValue\",\"alias\":\"Display Value\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_valid_credit.displayValue\",\"parentRole\":\"fk_valid_credit\"},\"MaxCreditLimit\":{\"name\":\"MaxCreditLimit\",\"alias\":\"Max Credit Limit\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_valid_credit.MaxCreditLimit\",\"parentRole\":\"fk_valid_credit\"}}},\"fk_CHECKING_CUSTOMER1\":{\"name\":\"fk_CHECKING_CUSTOMER1\",\"alias\":\"fk_CHECKING_CUSTOMER1\",\"columnFormats\":{\"CustNum\":{\"name\":\"CustNum\",\"alias\":\"Cust Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_CHECKING_CUSTOMER1.CustNum\",\"parentRole\":\"fk_CHECKING_CUSTOMER1\"},\"Name\":{\"name\":\"Name\",\"alias\":\"Name\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_CHECKING_CUSTOMER1.Name\",\"parentRole\":\"fk_CHECKING_CUSTOMER1\",\"width\":348.6666666666667},\"CheckingAcctBal\":{\"name\":\"CheckingAcctBal\",\"alias\":\"Checking Acct Bal\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":false,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_CHECKING_CUSTOMER1.CheckingAcctBal\",\"parentRole\":\"fk_CHECKING_CUSTOMER1\"},\"SavingsAcctBal\":{\"name\":\"SavingsAcctBal\",\"alias\":\"Savings Acct Bal\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":false,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_CHECKING_CUSTOMER1.SavingsAcctBal\",\"parentRole\":\"fk_CHECKING_CUSTOMER1\"},\"TotalBalance\":{\"name\":\"TotalBalance\",\"alias\":\"Total Balance\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_CHECKING_CUSTOMER1.TotalBalance\",\"parentRole\":\"fk_CHECKING_CUSTOMER1\"},\"Street\":{\"name\":\"Street\",\"alias\":\"Street\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_CHECKING_CUSTOMER1.Street\",\"parentRole\":\"fk_CHECKING_CUSTOMER1\"},\"City\":{\"name\":\"City\",\"alias\":\"City\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_CHECKING_CUSTOMER1.City\",\"parentRole\":\"fk_CHECKING_CUSTOMER1\"},\"State\":{\"name\":\"State\",\"alias\":\"State\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_CHECKING_CUSTOMER1.State\",\"parentRole\":\"fk_CHECKING_CUSTOMER1\"},\"ZIP\":{\"name\":\"ZIP\",\"alias\":\"ZIP\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_CHECKING_CUSTOMER1.ZIP\",\"parentRole\":\"fk_CHECKING_CUSTOMER1\"},\"isActive\":{\"name\":\"isActive\",\"alias\":\"Is Active\",\"type\":\"BIT\",\"generic_type\":\"boolean\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_CHECKING_CUSTOMER1.isActive\",\"parentRole\":\"fk_CHECKING_CUSTOMER1\"},\"Phone\":{\"name\":\"Phone\",\"alias\":\"Phone\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_CHECKING_CUSTOMER1.Phone\",\"parentRole\":\"fk_CHECKING_CUSTOMER1\"},\"emailAddress\":{\"name\":\"emailAddress\",\"alias\":\"Email Address\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_CHECKING_CUSTOMER1.emailAddress\",\"parentRole\":\"fk_CHECKING_CUSTOMER1\"}}}},\"defaultTable\":false,\"windows\":[\"main\",\"child\",\"form\"],\"childrenSettings\":{\"CHECKING_TRANSList\":{\"name\":\"CHECKING_TRANSList\",\"tableName\":\"main:CHECKING_TRANS\",\"alias\":\"CHECKING TRANS\",\"displayed\":true,\"selected\":false,\"columnFormats\":{\"TransId\":{\"name\":\"TransId\",\"alias\":\"Trans Id\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"TransId\",\"width\":125.30921757770632},\"AcctNum\":{\"name\":\"AcctNum\",\"alias\":\"Acct Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"AcctNum\"},\"CustNum\":{\"name\":\"CustNum\",\"alias\":\"Cust Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"CustNum\"},\"TransDate\":{\"name\":\"TransDate\",\"alias\":\"Trans Date\",\"type\":\"TIMESTAMP\",\"generic_type\":\"date\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"TransDate\",\"width\":311.8732910970323},\"DepositAmt\":{\"name\":\"DepositAmt\",\"alias\":\"Deposit Amt\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"DepositAmt\",\"width\":155.93664554851614},\"WithdrawlAmt\":{\"name\":\"WithdrawlAmt\",\"alias\":\"Withdrawl Amt\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"WithdrawlAmt\",\"width\":85.09503167722573},\"Total\":{\"name\":\"Total\",\"alias\":\"Total\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"Total\",\"width\":85.09503167722573},\"ChkNo\":{\"name\":\"ChkNo\",\"alias\":\"Chk No\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"ChkNo\"},\"ImageURL\":{\"name\":\"ImageURL\",\"alias\":\"Image URL\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"ImageURL\"},\"PendingFlag\":{\"name\":\"PendingFlag\",\"alias\":\"Pending Flag\",\"type\":\"BIT\",\"generic_type\":\"boolean\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"PendingFlag\"}},\"downloadable\":false,\"gridColumns\":{\"TransDate\":{\"name\":\"TransDate\",\"alias\":\"Trans Date\",\"type\":\"TIMESTAMP\",\"generic_type\":\"date\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"TransDate\",\"width\":311.8732910970323},\"DepositAmt\":{\"name\":\"DepositAmt\",\"alias\":\"Deposit Amt\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"DepositAmt\",\"width\":155.93664554851614},\"WithdrawlAmt\":{\"name\":\"WithdrawlAmt\",\"alias\":\"Withdrawl Amt\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"WithdrawlAmt\",\"width\":85.09503167722573},\"Total\":{\"name\":\"Total\",\"alias\":\"Total\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"Total\",\"width\":85.09503167722573}},\"parentSettings\":{\"fk_CHECKING_TRANS_CHECKING1\":{\"alias\":\"main:CHECKING\",\"columnFormats\":{\"AcctNum\":{\"name\":\"AcctNum\",\"alias\":\"Acct Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_CHECKING_TRANS_CHECKING1.AcctNum\",\"parentRole\":\"fk_CHECKING_TRANS_CHECKING1\"},\"CustNum\":{\"name\":\"CustNum\",\"alias\":\"Cust Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_CHECKING_TRANS_CHECKING1.CustNum\",\"parentRole\":\"fk_CHECKING_TRANS_CHECKING1\"},\"Deposits\":{\"name\":\"Deposits\",\"alias\":\"Deposits\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":false,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_CHECKING_TRANS_CHECKING1.Deposits\",\"parentRole\":\"fk_CHECKING_TRANS_CHECKING1\"},\"Withdrawls\":{\"name\":\"Withdrawls\",\"alias\":\"Withdrawls\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":false,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_CHECKING_TRANS_CHECKING1.Withdrawls\",\"parentRole\":\"fk_CHECKING_TRANS_CHECKING1\"},\"CurrentBalance\":{\"name\":\"CurrentBalance\",\"alias\":\"Current Balance\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_CHECKING_TRANS_CHECKING1.CurrentBalance\",\"parentRole\":\"fk_CHECKING_TRANS_CHECKING1\"},\"AvailableBalance\":{\"name\":\"AvailableBalance\",\"alias\":\"Available Balance\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_CHECKING_TRANS_CHECKING1.AvailableBalance\",\"parentRole\":\"fk_CHECKING_TRANS_CHECKING1\"},\"ItemCount\":{\"name\":\"ItemCount\",\"alias\":\"Item Count\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_CHECKING_TRANS_CHECKING1.ItemCount\",\"parentRole\":\"fk_CHECKING_TRANS_CHECKING1\"},\"CreditCode\":{\"name\":\"CreditCode\",\"alias\":\"Credit Code\",\"type\":\"SMALLINT\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_CHECKING_TRANS_CHECKING1.CreditCode\",\"parentRole\":\"fk_CHECKING_TRANS_CHECKING1\"},\"CreditLimit\":{\"name\":\"CreditLimit\",\"alias\":\"Credit Limit\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_CHECKING_TRANS_CHECKING1.CreditLimit\",\"parentRole\":\"fk_CHECKING_TRANS_CHECKING1\"},\"AcctType\":{\"name\":\"AcctType\",\"alias\":\"Acct Type\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_CHECKING_TRANS_CHECKING1.AcctType\",\"parentRole\":\"fk_CHECKING_TRANS_CHECKING1\"}}}},\"groups\":[],\"labelPlacement\":\"left\"},\"main_TRANSFER_FUNDS_List\":{\"name\":\"main_TRANSFER_FUNDS_List\",\"tableName\":\"main:TRANSFER_FUNDS\",\"alias\":\"Main TRANSFER FUNDS\",\"displayed\":true,\"selected\":false,\"columnFormats\":{\"TransId\":{\"name\":\"TransId\",\"alias\":\"Trans Id\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"TransId\",\"width\":92.49112426035504},\"FromAcct\":{\"name\":\"FromAcct\",\"alias\":\"From Acct\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"FromAcct\"},\"FromCustNum\":{\"name\":\"FromCustNum\",\"alias\":\"From Cust Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"FromCustNum\"},\"ToAcct\":{\"name\":\"ToAcct\",\"alias\":\"To Acct\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"ToAcct\"},\"ToCustNum\":{\"name\":\"ToCustNum\",\"alias\":\"To Cust Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"ToCustNum\"},\"TransferAmt\":{\"name\":\"TransferAmt\",\"alias\":\"Transfer Amt\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"TransferAmt\",\"width\":92.49112426035504},\"TransDate\":{\"name\":\"TransDate\",\"alias\":\"Trans Date\",\"type\":\"TIMESTAMP\",\"generic_type\":\"date\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"TransDate\"}},\"downloadable\":false,\"gridColumns\":{\"TransId\":{\"name\":\"TransId\",\"alias\":\"Trans Id\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"TransId\",\"width\":92.49112426035504},\"main_SAVINGS_Parent/AcctType\":{\"name\":\"AcctType\",\"type\":\"VARCHAR\",\"maskType\":null,\"mask\":null,\"generic_type\":\"text\",\"alias\":\"Acct Type\",\"displayed\":true,\"parentRole\":\"main_SAVINGS_Parent\",\"dataSource\":\"__internal.parentRows.main_SAVINGS_Parent.AcctType\",\"width\":453.0177514792899},\"TransferAmt\":{\"name\":\"TransferAmt\",\"alias\":\"Transfer Amt\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"TransferAmt\",\"width\":92.49112426035504}},\"parentSettings\":{\"main_CHECKING_Parent\":{\"alias\":\"main:CHECKING\",\"columnFormats\":{\"AcctNum\":{\"name\":\"AcctNum\",\"alias\":\"Acct Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.main_CHECKING_Parent.AcctNum\",\"parentRole\":\"main_CHECKING_Parent\"},\"CustNum\":{\"name\":\"CustNum\",\"alias\":\"Cust Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.main_CHECKING_Parent.CustNum\",\"parentRole\":\"main_CHECKING_Parent\"},\"Deposits\":{\"name\":\"Deposits\",\"alias\":\"Deposits\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":false,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.main_CHECKING_Parent.Deposits\",\"parentRole\":\"main_CHECKING_Parent\"},\"Withdrawls\":{\"name\":\"Withdrawls\",\"alias\":\"Withdrawls\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":false,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.main_CHECKING_Parent.Withdrawls\",\"parentRole\":\"main_CHECKING_Parent\"},\"CurrentBalance\":{\"name\":\"CurrentBalance\",\"alias\":\"Current Balance\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.main_CHECKING_Parent.CurrentBalance\",\"parentRole\":\"main_CHECKING_Parent\"},\"AvailableBalance\":{\"name\":\"AvailableBalance\",\"alias\":\"Available Balance\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.main_CHECKING_Parent.AvailableBalance\",\"parentRole\":\"main_CHECKING_Parent\"},\"ItemCount\":{\"name\":\"ItemCount\",\"alias\":\"Item Count\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.main_CHECKING_Parent.ItemCount\",\"parentRole\":\"main_CHECKING_Parent\"},\"CreditCode\":{\"name\":\"CreditCode\",\"alias\":\"Credit Code\",\"type\":\"SMALLINT\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.main_CHECKING_Parent.CreditCode\",\"parentRole\":\"main_CHECKING_Parent\"},\"CreditLimit\":{\"name\":\"CreditLimit\",\"alias\":\"Credit Limit\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.main_CHECKING_Parent.CreditLimit\",\"parentRole\":\"main_CHECKING_Parent\"},\"AcctType\":{\"name\":\"AcctType\",\"alias\":\"Acct Type\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.main_CHECKING_Parent.AcctType\",\"parentRole\":\"main_CHECKING_Parent\"}}},\"main_SAVINGS_Parent\":{\"alias\":\"main:SAVINGS\",\"columnFormats\":{\"AcctNum\":{\"name\":\"AcctNum\",\"alias\":\"Acct Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.main_SAVINGS_Parent.AcctNum\",\"parentRole\":\"main_SAVINGS_Parent\"},\"CustNum\":{\"name\":\"CustNum\",\"alias\":\"Cust Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.main_SAVINGS_Parent.CustNum\",\"parentRole\":\"main_SAVINGS_Parent\"},\"Deposits\":{\"name\":\"Deposits\",\"alias\":\"Deposits\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":false,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.main_SAVINGS_Parent.Deposits\",\"parentRole\":\"main_SAVINGS_Parent\"},\"Withdrawls\":{\"name\":\"Withdrawls\",\"alias\":\"Withdrawls\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":false,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.main_SAVINGS_Parent.Withdrawls\",\"parentRole\":\"main_SAVINGS_Parent\"},\"CurrentBalance\":{\"name\":\"CurrentBalance\",\"alias\":\"Current Balance\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.main_SAVINGS_Parent.CurrentBalance\",\"parentRole\":\"main_SAVINGS_Parent\"},\"AvailableBalance\":{\"name\":\"AvailableBalance\",\"alias\":\"Available Balance\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.main_SAVINGS_Parent.AvailableBalance\",\"parentRole\":\"main_SAVINGS_Parent\"},\"ItemCount\":{\"name\":\"ItemCount\",\"alias\":\"Item Count\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.main_SAVINGS_Parent.ItemCount\",\"parentRole\":\"main_SAVINGS_Parent\"},\"AcctType\":{\"name\":\"AcctType\",\"alias\":\"Acct Type\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.main_SAVINGS_Parent.AcctType\",\"parentRole\":\"main_SAVINGS_Parent\",\"width\":326.6666666666667}}}},\"groups\":[],\"labelPlacement\":\"left\"}},\"groups\":[],\"labelPlacement\":\"Left\"}",
+            "app_ident": 2002,
+            "@metadata": {
+              "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.Applications.ApplicationTableSettings/2000",
+              "checksum": "A:c4773f1238957338"
+            }
+          },
+          {
+            "ident": 2001,
+            "ts": "2016-04-04T11:35:03",
+            "table_name": "main:CUSTOMER",
+            "object_type": "table",
+            "json": "{\"name\":\"main:CUSTOMER\",\"alias\":\"main:CUSTOMER\",\"columnFormats\":{\"CustNum\":{\"name\":\"CustNum\",\"alias\":\"Cust Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"CustNum\",\"width\":54.762278978389006,\"$$hashKey\":\"1DW\"},\"Name\":{\"name\":\"Name\",\"alias\":\"Name\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"Name\",\"width\":220.4715127701375,\"$$hashKey\":\"1DX\"},\"CheckingAcctBal\":{\"name\":\"CheckingAcctBal\",\"alias\":\"Checking Acct Bal\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":false,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"CheckingAcctBal\",\"width\":125.66666666666667,\"$$hashKey\":\"1F7\"},\"SavingsAcctBal\":{\"name\":\"SavingsAcctBal\",\"alias\":\"Savings Acct Bal\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":false,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"SavingsAcctBal\",\"$$hashKey\":\"1F8\"},\"TotalBalance\":{\"name\":\"TotalBalance\",\"alias\":\"Total Balance\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"TotalBalance\",\"width\":43.383104125736736,\"$$hashKey\":\"1F9\"},\"Street\":{\"name\":\"Street\",\"alias\":\"Street\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"Street\",\"$$hashKey\":\"1DY\"},\"City\":{\"name\":\"City\",\"alias\":\"City\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"City\",\"$$hashKey\":\"040\"},\"State\":{\"name\":\"State\",\"alias\":\"State\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"State\",\"$$hashKey\":\"04C\"},\"ZIP\":{\"name\":\"ZIP\",\"alias\":\"ZIP\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"ZIP\",\"$$hashKey\":\"1E0\"},\"isActive\":{\"name\":\"isActive\",\"alias\":\"Is Active\",\"type\":\"BIT\",\"generic_type\":\"boolean\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"isActive\",\"width\":43.383104125736736,\"$$hashKey\":\"1E2\"},\"Phone\":{\"name\":\"Phone\",\"alias\":\"Phone\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"Phone\",\"$$hashKey\":\"1E1\"},\"emailAddress\":{\"name\":\"emailAddress\",\"alias\":\"Email Address\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"emailAddress\",\"$$hashKey\":\"045\"}},\"gridColumns\":{\"CustNum\":{\"name\":\"CustNum\",\"alias\":\"Cust Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"CustNum\",\"width\":54.762278978389006,\"$$hashKey\":\"1DW\"},\"Name\":{\"name\":\"Name\",\"alias\":\"Name\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"Name\",\"width\":220.4715127701375,\"$$hashKey\":\"1DX\"},\"TotalBalance\":{\"name\":\"TotalBalance\",\"alias\":\"Total Balance\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"TotalBalance\",\"width\":43.383104125736736,\"$$hashKey\":\"1F9\"},\"isActive\":{\"name\":\"isActive\",\"alias\":\"Is Active\",\"type\":\"BIT\",\"generic_type\":\"boolean\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"isActive\",\"width\":43.383104125736736,\"$$hashKey\":\"1E2\"}},\"scalarColumns\":{\"CustNum\":{\"name\":\"CustNum\",\"alias\":\"Cust Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"CustNum\",\"width\":54.762278978389006,\"$$hashKey\":\"1DW\"},\"Name\":{\"name\":\"Name\",\"alias\":\"Name\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"Name\",\"width\":220.4715127701375,\"$$hashKey\":\"1DX\"},\"SavingsAcctBal\":{\"name\":\"SavingsAcctBal\",\"alias\":\"Savings Acct Bal\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":false,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"SavingsAcctBal\",\"$$hashKey\":\"1F8\"},\"TotalBalance\":{\"name\":\"TotalBalance\",\"alias\":\"Total Balance\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"TotalBalance\",\"width\":43.383104125736736,\"$$hashKey\":\"1F9\"},\"Street\":{\"name\":\"Street\",\"alias\":\"Street\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"Street\",\"$$hashKey\":\"1DY\"},\"City\":{\"name\":\"City\",\"alias\":\"City\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"City\",\"$$hashKey\":\"040\"},\"ZIP\":{\"name\":\"ZIP\",\"alias\":\"ZIP\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"ZIP\",\"$$hashKey\":\"1E0\"},\"isActive\":{\"name\":\"isActive\",\"alias\":\"Is Active\",\"type\":\"BIT\",\"generic_type\":\"boolean\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"isActive\",\"width\":43.383104125736736,\"$$hashKey\":\"1E2\"},\"Phone\":{\"name\":\"Phone\",\"alias\":\"Phone\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"Phone\",\"$$hashKey\":\"1E1\"},\"emailAddress\":{\"name\":\"emailAddress\",\"alias\":\"Email Address\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"emailAddress\",\"$$hashKey\":\"045\"},\"CheckingAcctBal\":{\"name\":\"CheckingAcctBal\",\"alias\":\"Checking Acct Bal\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":false,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"CheckingAcctBal\",\"width\":125.66666666666667,\"$$hashKey\":\"1F7\"},\"fk_valid_state/stateName\":{\"name\":\"stateName\",\"alias\":\"State Name\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_valid_state.stateName\",\"parentRole\":\"fk_valid_state\",\"$$hashKey\":\"1DZ\"}},\"parentSettings\":{\"fk_valid_state\":{\"name\":\"fk_valid_state\",\"alias\":\"fk_valid_state\",\"columnFormats\":{\"stateCode\":{\"name\":\"stateCode\",\"alias\":\"State Code\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_valid_state.stateCode\",\"parentRole\":\"fk_valid_state\"},\"stateName\":{\"name\":\"stateName\",\"alias\":\"State Name\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_valid_state.stateName\",\"parentRole\":\"fk_valid_state\",\"$$hashKey\":\"1DZ\"}}}},\"defaultTable\":\"main:CUSTOMER\",\"windows\":[\"main\",\"child\",\"form\"],\"childrenSettings\":{\"SAVINGSList\":{\"name\":\"SAVINGSList\",\"tableName\":\"main:SAVINGS\",\"alias\":\"SAVINGS\",\"displayed\":true,\"selected\":false,\"columnFormats\":{\"AcctNum\":{\"name\":\"AcctNum\",\"alias\":\"Acct Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"AcctNum\",\"width\":143.72549019607845},\"CustNum\":{\"name\":\"CustNum\",\"alias\":\"Cust Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"CustNum\"},\"Deposits\":{\"name\":\"Deposits\",\"alias\":\"Deposits\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":false,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"Deposits\",\"width\":143.72549019607845},\"Withdrawls\":{\"name\":\"Withdrawls\",\"alias\":\"Withdrawls\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":false,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"Withdrawls\",\"width\":143.72549019607845},\"CurrentBalance\":{\"name\":\"CurrentBalance\",\"alias\":\"Current Balance\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"CurrentBalance\"},\"AvailableBalance\":{\"name\":\"AvailableBalance\",\"alias\":\"Available Balance\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"AvailableBalance\",\"width\":58.82352941176471},\"ItemCount\":{\"name\":\"ItemCount\",\"alias\":\"Item Count\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"ItemCount\"},\"AcctType\":{\"name\":\"AcctType\",\"alias\":\"Acct Type\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"AcctType\"}},\"downloadable\":false,\"gridColumns\":{\"AcctNum\":{\"name\":\"AcctNum\",\"alias\":\"Acct Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"AcctNum\",\"width\":143.72549019607845},\"Deposits\":{\"name\":\"Deposits\",\"alias\":\"Deposits\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":false,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"Deposits\",\"width\":143.72549019607845},\"Withdrawls\":{\"name\":\"Withdrawls\",\"alias\":\"Withdrawls\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":false,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"Withdrawls\",\"width\":143.72549019607845},\"AvailableBalance\":{\"name\":\"AvailableBalance\",\"alias\":\"Available Balance\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"AvailableBalance\",\"width\":58.82352941176471}},\"parentSettings\":{\"fk_SAVINGS_CUSTOMER1\":{\"alias\":\"main:CUSTOMER\",\"columnFormats\":{\"CustNum\":{\"name\":\"CustNum\",\"alias\":\"Cust Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_SAVINGS_CUSTOMER1.CustNum\",\"parentRole\":\"fk_SAVINGS_CUSTOMER1\"},\"Name\":{\"name\":\"Name\",\"alias\":\"Name\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_SAVINGS_CUSTOMER1.Name\",\"parentRole\":\"fk_SAVINGS_CUSTOMER1\"},\"CheckingAcctBal\":{\"name\":\"CheckingAcctBal\",\"alias\":\"Checking Acct Bal\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":false,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_SAVINGS_CUSTOMER1.CheckingAcctBal\",\"parentRole\":\"fk_SAVINGS_CUSTOMER1\"},\"SavingsAcctBal\":{\"name\":\"SavingsAcctBal\",\"alias\":\"Savings Acct Bal\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":false,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_SAVINGS_CUSTOMER1.SavingsAcctBal\",\"parentRole\":\"fk_SAVINGS_CUSTOMER1\"},\"TotalBalance\":{\"name\":\"TotalBalance\",\"alias\":\"Total Balance\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_SAVINGS_CUSTOMER1.TotalBalance\",\"parentRole\":\"fk_SAVINGS_CUSTOMER1\"},\"Street\":{\"name\":\"Street\",\"alias\":\"Street\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_SAVINGS_CUSTOMER1.Street\",\"parentRole\":\"fk_SAVINGS_CUSTOMER1\"},\"City\":{\"name\":\"City\",\"alias\":\"City\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_SAVINGS_CUSTOMER1.City\",\"parentRole\":\"fk_SAVINGS_CUSTOMER1\"},\"State\":{\"name\":\"State\",\"alias\":\"State\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_SAVINGS_CUSTOMER1.State\",\"parentRole\":\"fk_SAVINGS_CUSTOMER1\"},\"ZIP\":{\"name\":\"ZIP\",\"alias\":\"ZIP\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_SAVINGS_CUSTOMER1.ZIP\",\"parentRole\":\"fk_SAVINGS_CUSTOMER1\"},\"isActive\":{\"name\":\"isActive\",\"alias\":\"Is Active\",\"type\":\"BIT\",\"generic_type\":\"boolean\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_SAVINGS_CUSTOMER1.isActive\",\"parentRole\":\"fk_SAVINGS_CUSTOMER1\"},\"Phone\":{\"name\":\"Phone\",\"alias\":\"Phone\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_SAVINGS_CUSTOMER1.Phone\",\"parentRole\":\"fk_SAVINGS_CUSTOMER1\"},\"emailAddress\":{\"name\":\"emailAddress\",\"alias\":\"Email Address\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_SAVINGS_CUSTOMER1.emailAddress\",\"parentRole\":\"fk_SAVINGS_CUSTOMER1\"}}}},\"groups\":[],\"labelPlacement\":\"left\"},\"LINE_OF_CREDITList\":{\"name\":\"LINE_OF_CREDITList\",\"tableName\":\"main:LINE_OF_CREDIT\",\"alias\":\"LINE OF CREDIT\",\"displayed\":true,\"selected\":false,\"columnFormats\":{\"CustNum\":{\"name\":\"CustNum\",\"alias\":\"Cust Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"CustNum\"},\"AcctNum\":{\"name\":\"AcctNum\",\"alias\":\"Acct Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"AcctNum\",\"width\":163.33333333333334},\"OverdaftFeeAmt\":{\"name\":\"OverdaftFeeAmt\",\"alias\":\"Overdaft Fee Amt\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"OverdaftFeeAmt\",\"width\":163.33333333333334},\"LineOfCreditAmt\":{\"name\":\"LineOfCreditAmt\",\"alias\":\"Line Of Credit Amt\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"LineOfCreditAmt\",\"width\":163.33333333333334},\"TotalCharges\":{\"name\":\"TotalCharges\",\"alias\":\"Total Charges\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"TotalCharges\"},\"TotalPayments\":{\"name\":\"TotalPayments\",\"alias\":\"Total Payments\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"TotalPayments\"},\"AvailableBalance\":{\"name\":\"AvailableBalance\",\"alias\":\"Available Balance\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"AvailableBalance\"},\"Id\":{\"name\":\"Id\",\"alias\":\"Id\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"Id\"}},\"downloadable\":false,\"gridColumns\":{\"AcctNum\":{\"name\":\"AcctNum\",\"alias\":\"Acct Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"AcctNum\",\"width\":163.33333333333334},\"OverdaftFeeAmt\":{\"name\":\"OverdaftFeeAmt\",\"alias\":\"Overdaft Fee Amt\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"OverdaftFeeAmt\",\"width\":163.33333333333334},\"LineOfCreditAmt\":{\"name\":\"LineOfCreditAmt\",\"alias\":\"Line Of Credit Amt\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"LineOfCreditAmt\",\"width\":163.33333333333334}},\"parentSettings\":{\"fk_LINE_OF_CREDIT_CUSTOMER1\":{\"alias\":\"main:CUSTOMER\",\"columnFormats\":{\"CustNum\":{\"name\":\"CustNum\",\"alias\":\"Cust Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_LINE_OF_CREDIT_CUSTOMER1.CustNum\",\"parentRole\":\"fk_LINE_OF_CREDIT_CUSTOMER1\"},\"Name\":{\"name\":\"Name\",\"alias\":\"Name\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_LINE_OF_CREDIT_CUSTOMER1.Name\",\"parentRole\":\"fk_LINE_OF_CREDIT_CUSTOMER1\"},\"CheckingAcctBal\":{\"name\":\"CheckingAcctBal\",\"alias\":\"Checking Acct Bal\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":false,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_LINE_OF_CREDIT_CUSTOMER1.CheckingAcctBal\",\"parentRole\":\"fk_LINE_OF_CREDIT_CUSTOMER1\"},\"SavingsAcctBal\":{\"name\":\"SavingsAcctBal\",\"alias\":\"Savings Acct Bal\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":false,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_LINE_OF_CREDIT_CUSTOMER1.SavingsAcctBal\",\"parentRole\":\"fk_LINE_OF_CREDIT_CUSTOMER1\"},\"TotalBalance\":{\"name\":\"TotalBalance\",\"alias\":\"Total Balance\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_LINE_OF_CREDIT_CUSTOMER1.TotalBalance\",\"parentRole\":\"fk_LINE_OF_CREDIT_CUSTOMER1\"},\"Street\":{\"name\":\"Street\",\"alias\":\"Street\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_LINE_OF_CREDIT_CUSTOMER1.Street\",\"parentRole\":\"fk_LINE_OF_CREDIT_CUSTOMER1\"},\"City\":{\"name\":\"City\",\"alias\":\"City\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_LINE_OF_CREDIT_CUSTOMER1.City\",\"parentRole\":\"fk_LINE_OF_CREDIT_CUSTOMER1\"},\"State\":{\"name\":\"State\",\"alias\":\"State\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_LINE_OF_CREDIT_CUSTOMER1.State\",\"parentRole\":\"fk_LINE_OF_CREDIT_CUSTOMER1\"},\"ZIP\":{\"name\":\"ZIP\",\"alias\":\"ZIP\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_LINE_OF_CREDIT_CUSTOMER1.ZIP\",\"parentRole\":\"fk_LINE_OF_CREDIT_CUSTOMER1\"},\"isActive\":{\"name\":\"isActive\",\"alias\":\"Is Active\",\"type\":\"BIT\",\"generic_type\":\"boolean\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_LINE_OF_CREDIT_CUSTOMER1.isActive\",\"parentRole\":\"fk_LINE_OF_CREDIT_CUSTOMER1\"},\"Phone\":{\"name\":\"Phone\",\"alias\":\"Phone\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_LINE_OF_CREDIT_CUSTOMER1.Phone\",\"parentRole\":\"fk_LINE_OF_CREDIT_CUSTOMER1\"},\"emailAddress\":{\"name\":\"emailAddress\",\"alias\":\"Email Address\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_LINE_OF_CREDIT_CUSTOMER1.emailAddress\",\"parentRole\":\"fk_LINE_OF_CREDIT_CUSTOMER1\"}}}},\"groups\":[],\"labelPlacement\":\"left\"},\"ALERTList\":{\"name\":\"ALERTList\",\"tableName\":\"main:ALERT\",\"alias\":\"ALERT\",\"displayed\":true,\"selected\":false,\"columnFormats\":{\"AlertID\":{\"name\":\"AlertID\",\"alias\":\"Alert ID\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"AlertID\",\"width\":105.66931450426596},\"CustNum\":{\"name\":\"CustNum\",\"alias\":\"Cust Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"CustNum\"},\"AcctNum\":{\"name\":\"AcctNum\",\"alias\":\"Acct Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"AcctNum\",\"width\":105.66931450426596},\"WhenBalance\":{\"name\":\"WhenBalance\",\"alias\":\"When Balance\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"WhenBalance\",\"width\":105.66931450426596},\"AccountBalance\":{\"name\":\"AccountBalance\",\"alias\":\"Account Balance\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"AccountBalance\",\"width\":39.74047039740471},\"EmailAddress\":{\"name\":\"EmailAddress\",\"alias\":\"Email Address\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"EmailAddress\",\"width\":172.99205648720212}},\"downloadable\":false,\"gridColumns\":{\"AlertID\":{\"name\":\"AlertID\",\"alias\":\"Alert ID\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"AlertID\",\"width\":105.66931450426596},\"AcctNum\":{\"name\":\"AcctNum\",\"alias\":\"Acct Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"AcctNum\",\"width\":105.66931450426596},\"WhenBalance\":{\"name\":\"WhenBalance\",\"alias\":\"When Balance\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"WhenBalance\",\"width\":105.66931450426596},\"EmailAddress\":{\"name\":\"EmailAddress\",\"alias\":\"Email Address\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"EmailAddress\",\"width\":172.99205648720212}},\"parentSettings\":{\"fk_Alert_CUSTOMER1\":{\"alias\":\"main:CUSTOMER\",\"columnFormats\":{\"CustNum\":{\"name\":\"CustNum\",\"alias\":\"Cust Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_Alert_CUSTOMER1.CustNum\",\"parentRole\":\"fk_Alert_CUSTOMER1\"},\"Name\":{\"name\":\"Name\",\"alias\":\"Name\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_Alert_CUSTOMER1.Name\",\"parentRole\":\"fk_Alert_CUSTOMER1\"},\"CheckingAcctBal\":{\"name\":\"CheckingAcctBal\",\"alias\":\"Checking Acct Bal\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":false,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_Alert_CUSTOMER1.CheckingAcctBal\",\"parentRole\":\"fk_Alert_CUSTOMER1\"},\"SavingsAcctBal\":{\"name\":\"SavingsAcctBal\",\"alias\":\"Savings Acct Bal\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":false,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_Alert_CUSTOMER1.SavingsAcctBal\",\"parentRole\":\"fk_Alert_CUSTOMER1\"},\"TotalBalance\":{\"name\":\"TotalBalance\",\"alias\":\"Total Balance\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_Alert_CUSTOMER1.TotalBalance\",\"parentRole\":\"fk_Alert_CUSTOMER1\"},\"Street\":{\"name\":\"Street\",\"alias\":\"Street\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_Alert_CUSTOMER1.Street\",\"parentRole\":\"fk_Alert_CUSTOMER1\"},\"City\":{\"name\":\"City\",\"alias\":\"City\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_Alert_CUSTOMER1.City\",\"parentRole\":\"fk_Alert_CUSTOMER1\"},\"State\":{\"name\":\"State\",\"alias\":\"State\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_Alert_CUSTOMER1.State\",\"parentRole\":\"fk_Alert_CUSTOMER1\"},\"ZIP\":{\"name\":\"ZIP\",\"alias\":\"ZIP\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_Alert_CUSTOMER1.ZIP\",\"parentRole\":\"fk_Alert_CUSTOMER1\"},\"isActive\":{\"name\":\"isActive\",\"alias\":\"Is Active\",\"type\":\"BIT\",\"generic_type\":\"boolean\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_Alert_CUSTOMER1.isActive\",\"parentRole\":\"fk_Alert_CUSTOMER1\"},\"Phone\":{\"name\":\"Phone\",\"alias\":\"Phone\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_Alert_CUSTOMER1.Phone\",\"parentRole\":\"fk_Alert_CUSTOMER1\"},\"emailAddress\":{\"name\":\"emailAddress\",\"alias\":\"Email Address\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_Alert_CUSTOMER1.emailAddress\",\"parentRole\":\"fk_Alert_CUSTOMER1\"}}}},\"groups\":[],\"labelPlacement\":\"left\"},\"CHECKINGList\":{\"name\":\"CHECKINGList\",\"tableName\":\"main:CHECKING\",\"alias\":\"CHECKING\",\"displayed\":true,\"selected\":false,\"columnFormats\":{\"AcctNum\":{\"name\":\"AcctNum\",\"alias\":\"Acct Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"AcctNum\",\"width\":143.72549019607845},\"CustNum\":{\"name\":\"CustNum\",\"alias\":\"Cust Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"CustNum\"},\"Deposits\":{\"name\":\"Deposits\",\"alias\":\"Deposits\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":false,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"Deposits\",\"width\":143.72549019607845},\"Withdrawls\":{\"name\":\"Withdrawls\",\"alias\":\"Withdrawls\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":false,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"Withdrawls\",\"width\":143.72549019607845},\"CurrentBalance\":{\"name\":\"CurrentBalance\",\"alias\":\"Current Balance\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"CurrentBalance\"},\"AvailableBalance\":{\"name\":\"AvailableBalance\",\"alias\":\"Available Balance\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"AvailableBalance\",\"width\":58.823529411764696},\"ItemCount\":{\"name\":\"ItemCount\",\"alias\":\"Item Count\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"ItemCount\"},\"CreditCode\":{\"name\":\"CreditCode\",\"alias\":\"Credit Code\",\"type\":\"SMALLINT\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"CreditCode\"},\"CreditLimit\":{\"name\":\"CreditLimit\",\"alias\":\"Credit Limit\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"CreditLimit\"},\"AcctType\":{\"name\":\"AcctType\",\"alias\":\"Acct Type\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"AcctType\"}},\"downloadable\":false,\"gridColumns\":{\"AcctNum\":{\"name\":\"AcctNum\",\"alias\":\"Acct Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"AcctNum\",\"width\":143.72549019607845},\"Deposits\":{\"name\":\"Deposits\",\"alias\":\"Deposits\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":false,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"Deposits\",\"width\":143.72549019607845},\"Withdrawls\":{\"name\":\"Withdrawls\",\"alias\":\"Withdrawls\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":false,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"Withdrawls\",\"width\":143.72549019607845},\"AvailableBalance\":{\"name\":\"AvailableBalance\",\"alias\":\"Available Balance\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"AvailableBalance\",\"width\":58.823529411764696}},\"parentSettings\":{\"fk_valid_credit\":{\"alias\":\"main:valid_credit\",\"columnFormats\":{\"creditCode\":{\"name\":\"creditCode\",\"alias\":\"Credit Code\",\"type\":\"SMALLINT\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_valid_credit.creditCode\",\"parentRole\":\"fk_valid_credit\"},\"displayValue\":{\"name\":\"displayValue\",\"alias\":\"Display Value\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_valid_credit.displayValue\",\"parentRole\":\"fk_valid_credit\"},\"MaxCreditLimit\":{\"name\":\"MaxCreditLimit\",\"alias\":\"Max Credit Limit\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_valid_credit.MaxCreditLimit\",\"parentRole\":\"fk_valid_credit\"}}},\"fk_CHECKING_CUSTOMER1\":{\"alias\":\"main:CUSTOMER\",\"columnFormats\":{\"CustNum\":{\"name\":\"CustNum\",\"alias\":\"Cust Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_CHECKING_CUSTOMER1.CustNum\",\"parentRole\":\"fk_CHECKING_CUSTOMER1\"},\"Name\":{\"name\":\"Name\",\"alias\":\"Name\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_CHECKING_CUSTOMER1.Name\",\"parentRole\":\"fk_CHECKING_CUSTOMER1\"},\"CheckingAcctBal\":{\"name\":\"CheckingAcctBal\",\"alias\":\"Checking Acct Bal\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":false,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_CHECKING_CUSTOMER1.CheckingAcctBal\",\"parentRole\":\"fk_CHECKING_CUSTOMER1\"},\"SavingsAcctBal\":{\"name\":\"SavingsAcctBal\",\"alias\":\"Savings Acct Bal\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":false,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_CHECKING_CUSTOMER1.SavingsAcctBal\",\"parentRole\":\"fk_CHECKING_CUSTOMER1\"},\"TotalBalance\":{\"name\":\"TotalBalance\",\"alias\":\"Total Balance\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_CHECKING_CUSTOMER1.TotalBalance\",\"parentRole\":\"fk_CHECKING_CUSTOMER1\"},\"Street\":{\"name\":\"Street\",\"alias\":\"Street\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_CHECKING_CUSTOMER1.Street\",\"parentRole\":\"fk_CHECKING_CUSTOMER1\"},\"City\":{\"name\":\"City\",\"alias\":\"City\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_CHECKING_CUSTOMER1.City\",\"parentRole\":\"fk_CHECKING_CUSTOMER1\"},\"State\":{\"name\":\"State\",\"alias\":\"State\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_CHECKING_CUSTOMER1.State\",\"parentRole\":\"fk_CHECKING_CUSTOMER1\"},\"ZIP\":{\"name\":\"ZIP\",\"alias\":\"ZIP\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_CHECKING_CUSTOMER1.ZIP\",\"parentRole\":\"fk_CHECKING_CUSTOMER1\"},\"isActive\":{\"name\":\"isActive\",\"alias\":\"Is Active\",\"type\":\"BIT\",\"generic_type\":\"boolean\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_CHECKING_CUSTOMER1.isActive\",\"parentRole\":\"fk_CHECKING_CUSTOMER1\"},\"Phone\":{\"name\":\"Phone\",\"alias\":\"Phone\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_CHECKING_CUSTOMER1.Phone\",\"parentRole\":\"fk_CHECKING_CUSTOMER1\"},\"emailAddress\":{\"name\":\"emailAddress\",\"alias\":\"Email Address\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_CHECKING_CUSTOMER1.emailAddress\",\"parentRole\":\"fk_CHECKING_CUSTOMER1\"}}}},\"groups\":[],\"labelPlacement\":\"left\"}},\"groups\":[{\"title\":\"Customer\",\"columns\":[\"CustNum\",\"Name\",\"Street\",\"fk_valid_state/stateName\",\"ZIP\",\"Phone\",\"isActive\"],\"$$hashKey\":\"7NO\"},{\"title\":\"Balances\",\"columns\":[\"CheckingAcctBal\",\"SavingsAcctBal\",\"TotalBalance\"],\"$$hashKey\":\"7PR\"}],\"labelPlacement\":\"Left\"}",
+            "app_ident": 2002,
+            "@metadata": {
+              "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.Applications.ApplicationTableSettings/2001",
+              "checksum": "A:7de4baa4845ad6d0"
+            }
+          },
+          {
+            "ident": 2002,
+            "ts": "2016-04-04T11:35:03",
+            "table_name": "main:SAVINGS",
+            "object_type": "table",
+            "json": "{\"name\":\"main:SAVINGS\",\"alias\":\"main:SAVINGS\",\"columnFormats\":{\"AcctNum\":{\"name\":\"AcctNum\",\"alias\":\"Acct Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"AcctNum\",\"$$hashKey\":\"20S\",\"width\":130.57326596233347},\"CustNum\":{\"name\":\"CustNum\",\"alias\":\"Cust Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"CustNum\",\"$$hashKey\":\"20T\"},\"Deposits\":{\"name\":\"Deposits\",\"alias\":\"Deposits\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":false,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"Deposits\",\"$$hashKey\":\"20U\",\"width\":125.66666666666667},\"Withdrawls\":{\"name\":\"Withdrawls\",\"alias\":\"Withdrawls\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":false,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"Withdrawls\",\"$$hashKey\":\"20V\"},\"CurrentBalance\":{\"name\":\"CurrentBalance\",\"alias\":\"Current Balance\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"CurrentBalance\",\"$$hashKey\":\"20W\"},\"AvailableBalance\":{\"name\":\"AvailableBalance\",\"alias\":\"Available Balance\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"AvailableBalance\",\"$$hashKey\":\"20X\",\"width\":103.90445567294441},\"ItemCount\":{\"name\":\"ItemCount\",\"alias\":\"Item Count\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"ItemCount\",\"$$hashKey\":\"20Y\",\"width\":103.90445567294441},\"AcctType\":{\"name\":\"AcctType\",\"alias\":\"Acct Type\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"AcctType\",\"$$hashKey\":\"20Z\"}},\"gridColumns\":{\"AcctNum\":{\"name\":\"AcctNum\",\"alias\":\"Acct Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"AcctNum\",\"$$hashKey\":\"20S\",\"width\":130.57326596233347},\"AvailableBalance\":{\"name\":\"AvailableBalance\",\"alias\":\"Available Balance\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"AvailableBalance\",\"$$hashKey\":\"20X\",\"width\":103.90445567294441},\"ItemCount\":{\"name\":\"ItemCount\",\"alias\":\"Item Count\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"ItemCount\",\"$$hashKey\":\"20Y\",\"width\":103.90445567294441},\"fk_SAVINGS_CUSTOMER1/Name\":{\"name\":\"Name\",\"type\":\"VARCHAR\",\"maskType\":null,\"mask\":null,\"generic_type\":\"text\",\"alias\":\"Name\",\"displayed\":true,\"parentRole\":\"fk_SAVINGS_CUSTOMER1\",\"dataSource\":\"__internal.parentRows.fk_SAVINGS_CUSTOMER1.Name\",\"width\":415.61782269177763}},\"scalarColumns\":{\"AcctNum\":{\"name\":\"AcctNum\",\"alias\":\"Acct Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"AcctNum\",\"$$hashKey\":\"20S\",\"width\":130.57326596233347},\"CustNum\":{\"name\":\"CustNum\",\"alias\":\"Cust Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"CustNum\",\"$$hashKey\":\"20T\"},\"Deposits\":{\"name\":\"Deposits\",\"alias\":\"Deposits\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":false,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"Deposits\",\"$$hashKey\":\"20U\",\"width\":125.66666666666667},\"Withdrawls\":{\"name\":\"Withdrawls\",\"alias\":\"Withdrawls\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":false,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"Withdrawls\",\"$$hashKey\":\"20V\"},\"CurrentBalance\":{\"name\":\"CurrentBalance\",\"alias\":\"Current Balance\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"CurrentBalance\",\"$$hashKey\":\"20W\"},\"AvailableBalance\":{\"name\":\"AvailableBalance\",\"alias\":\"Available Balance\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"AvailableBalance\",\"$$hashKey\":\"20X\",\"width\":103.90445567294441},\"ItemCount\":{\"name\":\"ItemCount\",\"alias\":\"Item Count\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"ItemCount\",\"$$hashKey\":\"20Y\",\"width\":103.90445567294441},\"AcctType\":{\"name\":\"AcctType\",\"alias\":\"Acct Type\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"AcctType\",\"$$hashKey\":\"20Z\"}},\"parentSettings\":{\"fk_SAVINGS_CUSTOMER1\":{\"name\":\"fk_SAVINGS_CUSTOMER1\",\"alias\":\"fk_SAVINGS_CUSTOMER1\",\"columnFormats\":{\"CustNum\":{\"name\":\"CustNum\",\"alias\":\"Cust Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_SAVINGS_CUSTOMER1.CustNum\",\"parentRole\":\"fk_SAVINGS_CUSTOMER1\"},\"Name\":{\"name\":\"Name\",\"alias\":\"Name\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_SAVINGS_CUSTOMER1.Name\",\"parentRole\":\"fk_SAVINGS_CUSTOMER1\",\"width\":502.6666666666667},\"CheckingAcctBal\":{\"name\":\"CheckingAcctBal\",\"alias\":\"Checking Acct Bal\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":false,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_SAVINGS_CUSTOMER1.CheckingAcctBal\",\"parentRole\":\"fk_SAVINGS_CUSTOMER1\"},\"SavingsAcctBal\":{\"name\":\"SavingsAcctBal\",\"alias\":\"Savings Acct Bal\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":false,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_SAVINGS_CUSTOMER1.SavingsAcctBal\",\"parentRole\":\"fk_SAVINGS_CUSTOMER1\"},\"TotalBalance\":{\"name\":\"TotalBalance\",\"alias\":\"Total Balance\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_SAVINGS_CUSTOMER1.TotalBalance\",\"parentRole\":\"fk_SAVINGS_CUSTOMER1\"},\"Street\":{\"name\":\"Street\",\"alias\":\"Street\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_SAVINGS_CUSTOMER1.Street\",\"parentRole\":\"fk_SAVINGS_CUSTOMER1\"},\"City\":{\"name\":\"City\",\"alias\":\"City\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_SAVINGS_CUSTOMER1.City\",\"parentRole\":\"fk_SAVINGS_CUSTOMER1\"},\"State\":{\"name\":\"State\",\"alias\":\"State\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_SAVINGS_CUSTOMER1.State\",\"parentRole\":\"fk_SAVINGS_CUSTOMER1\"},\"ZIP\":{\"name\":\"ZIP\",\"alias\":\"ZIP\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_SAVINGS_CUSTOMER1.ZIP\",\"parentRole\":\"fk_SAVINGS_CUSTOMER1\"},\"isActive\":{\"name\":\"isActive\",\"alias\":\"Is Active\",\"type\":\"BIT\",\"generic_type\":\"boolean\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_SAVINGS_CUSTOMER1.isActive\",\"parentRole\":\"fk_SAVINGS_CUSTOMER1\"},\"Phone\":{\"name\":\"Phone\",\"alias\":\"Phone\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_SAVINGS_CUSTOMER1.Phone\",\"parentRole\":\"fk_SAVINGS_CUSTOMER1\"},\"emailAddress\":{\"name\":\"emailAddress\",\"alias\":\"Email Address\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_SAVINGS_CUSTOMER1.emailAddress\",\"parentRole\":\"fk_SAVINGS_CUSTOMER1\"}}}},\"defaultTable\":false,\"windows\":[\"main\",\"child\",\"form\"],\"childrenSettings\":{\"SAVINGS_TRANSList\":{\"name\":\"SAVINGS_TRANSList\",\"tableName\":\"main:SAVINGS_TRANS\",\"alias\":\"SAVINGS TRANS\",\"displayed\":true,\"selected\":false,\"columnFormats\":{\"TransId\":{\"name\":\"TransId\",\"alias\":\"Trans Id\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"TransId\",\"width\":143.9681136120043},\"AcctNum\":{\"name\":\"AcctNum\",\"alias\":\"Acct Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"AcctNum\"},\"CustNum\":{\"name\":\"CustNum\",\"alias\":\"Cust Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"CustNum\"},\"TransDate\":{\"name\":\"TransDate\",\"alias\":\"Trans Date\",\"type\":\"TIMESTAMP\",\"generic_type\":\"date\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"TransDate\",\"width\":287.9362272240086},\"DepositAmt\":{\"name\":\"DepositAmt\",\"alias\":\"Deposit Amt\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"DepositAmt\",\"width\":143.9681136120043},\"WithdrawlAmt\":{\"name\":\"WithdrawlAmt\",\"alias\":\"Withdrawl Amt\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"WithdrawlAmt\",\"width\":78.56377277599142},\"Total\":{\"name\":\"Total\",\"alias\":\"Total\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"Total\",\"width\":78.56377277599142},\"PendingFlag\":{\"name\":\"PendingFlag\",\"alias\":\"Pending Flag\",\"type\":\"BIT\",\"generic_type\":\"boolean\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"PendingFlag\"}},\"downloadable\":false,\"gridColumns\":{\"TransId\":{\"name\":\"TransId\",\"alias\":\"Trans Id\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"TransId\",\"width\":143.9681136120043},\"TransDate\":{\"name\":\"TransDate\",\"alias\":\"Trans Date\",\"type\":\"TIMESTAMP\",\"generic_type\":\"date\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"TransDate\",\"width\":287.9362272240086},\"DepositAmt\":{\"name\":\"DepositAmt\",\"alias\":\"Deposit Amt\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"DepositAmt\",\"width\":143.9681136120043},\"WithdrawlAmt\":{\"name\":\"WithdrawlAmt\",\"alias\":\"Withdrawl Amt\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"WithdrawlAmt\",\"width\":78.56377277599142},\"Total\":{\"name\":\"Total\",\"alias\":\"Total\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"Total\",\"width\":78.56377277599142}},\"parentSettings\":{\"fk_SAVINGS_TRANS_SAVINGS1\":{\"alias\":\"main:SAVINGS\",\"columnFormats\":{\"AcctNum\":{\"name\":\"AcctNum\",\"alias\":\"Acct Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_SAVINGS_TRANS_SAVINGS1.AcctNum\",\"parentRole\":\"fk_SAVINGS_TRANS_SAVINGS1\"},\"CustNum\":{\"name\":\"CustNum\",\"alias\":\"Cust Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_SAVINGS_TRANS_SAVINGS1.CustNum\",\"parentRole\":\"fk_SAVINGS_TRANS_SAVINGS1\"},\"Deposits\":{\"name\":\"Deposits\",\"alias\":\"Deposits\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":false,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_SAVINGS_TRANS_SAVINGS1.Deposits\",\"parentRole\":\"fk_SAVINGS_TRANS_SAVINGS1\"},\"Withdrawls\":{\"name\":\"Withdrawls\",\"alias\":\"Withdrawls\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":false,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_SAVINGS_TRANS_SAVINGS1.Withdrawls\",\"parentRole\":\"fk_SAVINGS_TRANS_SAVINGS1\"},\"CurrentBalance\":{\"name\":\"CurrentBalance\",\"alias\":\"Current Balance\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_SAVINGS_TRANS_SAVINGS1.CurrentBalance\",\"parentRole\":\"fk_SAVINGS_TRANS_SAVINGS1\"},\"AvailableBalance\":{\"name\":\"AvailableBalance\",\"alias\":\"Available Balance\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_SAVINGS_TRANS_SAVINGS1.AvailableBalance\",\"parentRole\":\"fk_SAVINGS_TRANS_SAVINGS1\"},\"ItemCount\":{\"name\":\"ItemCount\",\"alias\":\"Item Count\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_SAVINGS_TRANS_SAVINGS1.ItemCount\",\"parentRole\":\"fk_SAVINGS_TRANS_SAVINGS1\"},\"AcctType\":{\"name\":\"AcctType\",\"alias\":\"Acct Type\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_SAVINGS_TRANS_SAVINGS1.AcctType\",\"parentRole\":\"fk_SAVINGS_TRANS_SAVINGS1\"}}}},\"groups\":[],\"labelPlacement\":\"left\"},\"main_TRANSFER_FUNDS_List\":{\"name\":\"main_TRANSFER_FUNDS_List\",\"tableName\":\"main:TRANSFER_FUNDS\",\"alias\":\"Main TRANSFER FUNDS\",\"displayed\":true,\"selected\":false,\"columnFormats\":{\"TransId\":{\"name\":\"TransId\",\"alias\":\"Trans Id\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"TransId\",\"width\":122.16666666666666},\"FromAcct\":{\"name\":\"FromAcct\",\"alias\":\"From Acct\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"FromAcct\"},\"FromCustNum\":{\"name\":\"FromCustNum\",\"alias\":\"From Cust Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"FromCustNum\"},\"ToAcct\":{\"name\":\"ToAcct\",\"alias\":\"To Acct\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"ToAcct\"},\"ToCustNum\":{\"name\":\"ToCustNum\",\"alias\":\"To Cust Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"ToCustNum\"},\"TransferAmt\":{\"name\":\"TransferAmt\",\"alias\":\"Transfer Amt\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"TransferAmt\",\"width\":122.16666666666666},\"TransDate\":{\"name\":\"TransDate\",\"alias\":\"Trans Date\",\"type\":\"TIMESTAMP\",\"generic_type\":\"date\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"TransDate\"}},\"downloadable\":false,\"gridColumns\":{\"TransId\":{\"name\":\"TransId\",\"alias\":\"Trans Id\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"TransId\",\"width\":122.16666666666666},\"main_CHECKING_Parent/AcctType\":{\"name\":\"AcctType\",\"alias\":\"Acct Type\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.main_CHECKING_Parent.AcctType\",\"parentRole\":\"main_CHECKING_Parent\",\"width\":488.66666666666663},\"TransferAmt\":{\"name\":\"TransferAmt\",\"alias\":\"Transfer Amt\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"TransferAmt\",\"width\":122.16666666666666}},\"parentSettings\":{\"main_CHECKING_Parent\":{\"alias\":\"main:CHECKING\",\"columnFormats\":{\"AcctNum\":{\"name\":\"AcctNum\",\"alias\":\"Acct Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.main_CHECKING_Parent.AcctNum\",\"parentRole\":\"main_CHECKING_Parent\"},\"CustNum\":{\"name\":\"CustNum\",\"alias\":\"Cust Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.main_CHECKING_Parent.CustNum\",\"parentRole\":\"main_CHECKING_Parent\"},\"Deposits\":{\"name\":\"Deposits\",\"alias\":\"Deposits\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":false,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.main_CHECKING_Parent.Deposits\",\"parentRole\":\"main_CHECKING_Parent\"},\"Withdrawls\":{\"name\":\"Withdrawls\",\"alias\":\"Withdrawls\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":false,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.main_CHECKING_Parent.Withdrawls\",\"parentRole\":\"main_CHECKING_Parent\"},\"CurrentBalance\":{\"name\":\"CurrentBalance\",\"alias\":\"Current Balance\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.main_CHECKING_Parent.CurrentBalance\",\"parentRole\":\"main_CHECKING_Parent\"},\"AvailableBalance\":{\"name\":\"AvailableBalance\",\"alias\":\"Available Balance\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.main_CHECKING_Parent.AvailableBalance\",\"parentRole\":\"main_CHECKING_Parent\"},\"ItemCount\":{\"name\":\"ItemCount\",\"alias\":\"Item Count\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.main_CHECKING_Parent.ItemCount\",\"parentRole\":\"main_CHECKING_Parent\"},\"CreditCode\":{\"name\":\"CreditCode\",\"alias\":\"Credit Code\",\"type\":\"SMALLINT\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.main_CHECKING_Parent.CreditCode\",\"parentRole\":\"main_CHECKING_Parent\"},\"CreditLimit\":{\"name\":\"CreditLimit\",\"alias\":\"Credit Limit\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.main_CHECKING_Parent.CreditLimit\",\"parentRole\":\"main_CHECKING_Parent\"},\"AcctType\":{\"name\":\"AcctType\",\"alias\":\"Acct Type\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.main_CHECKING_Parent.AcctType\",\"parentRole\":\"main_CHECKING_Parent\",\"width\":488.66666666666663}}},\"main_SAVINGS_Parent\":{\"alias\":\"main:SAVINGS\",\"columnFormats\":{\"AcctNum\":{\"name\":\"AcctNum\",\"alias\":\"Acct Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.main_SAVINGS_Parent.AcctNum\",\"parentRole\":\"main_SAVINGS_Parent\"},\"CustNum\":{\"name\":\"CustNum\",\"alias\":\"Cust Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.main_SAVINGS_Parent.CustNum\",\"parentRole\":\"main_SAVINGS_Parent\"},\"Deposits\":{\"name\":\"Deposits\",\"alias\":\"Deposits\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":false,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.main_SAVINGS_Parent.Deposits\",\"parentRole\":\"main_SAVINGS_Parent\"},\"Withdrawls\":{\"name\":\"Withdrawls\",\"alias\":\"Withdrawls\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":false,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.main_SAVINGS_Parent.Withdrawls\",\"parentRole\":\"main_SAVINGS_Parent\"},\"CurrentBalance\":{\"name\":\"CurrentBalance\",\"alias\":\"Current Balance\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.main_SAVINGS_Parent.CurrentBalance\",\"parentRole\":\"main_SAVINGS_Parent\"},\"AvailableBalance\":{\"name\":\"AvailableBalance\",\"alias\":\"Available Balance\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.main_SAVINGS_Parent.AvailableBalance\",\"parentRole\":\"main_SAVINGS_Parent\"},\"ItemCount\":{\"name\":\"ItemCount\",\"alias\":\"Item Count\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.main_SAVINGS_Parent.ItemCount\",\"parentRole\":\"main_SAVINGS_Parent\"},\"AcctType\":{\"name\":\"AcctType\",\"alias\":\"Acct Type\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.main_SAVINGS_Parent.AcctType\",\"parentRole\":\"main_SAVINGS_Parent\"}}}},\"groups\":[],\"labelPlacement\":\"left\"}},\"groups\":[],\"labelPlacement\":\"Left\"}",
+            "app_ident": 2002,
+            "@metadata": {
+              "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.Applications.ApplicationTableSettings/2002",
+              "checksum": "A:1a1e9d0ff30dde44"
+            }
+          },
+          {
+            "ident": 2003,
+            "ts": "2016-04-04T11:35:03",
+            "table_name": "main:ALERT",
+            "object_type": "table",
+            "json": "{\"name\":\"main:ALERT\",\"alias\":\"main:ALERT\",\"columnFormats\":{\"AlertID\":{\"name\":\"AlertID\",\"alias\":\"Alert ID\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"AlertID\",\"width\":85,\"$$hashKey\":\"027\"},\"CustNum\":{\"name\":\"CustNum\",\"alias\":\"Cust Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"CustNum\",\"$$hashKey\":\"028\"},\"AcctNum\":{\"name\":\"AcctNum\",\"alias\":\"Acct Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"AcctNum\",\"width\":85,\"$$hashKey\":\"029\"},\"WhenBalance\":{\"name\":\"WhenBalance\",\"alias\":\"When Balance\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"WhenBalance\",\"$$hashKey\":\"02A\"},\"AccountBalance\":{\"name\":\"AccountBalance\",\"alias\":\"Account Balance\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"AccountBalance\",\"$$hashKey\":\"02B\"},\"EmailAddress\":{\"name\":\"EmailAddress\",\"alias\":\"Email Address\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"EmailAddress\",\"$$hashKey\":\"02C\"}},\"gridColumns\":{\"AlertID\":{\"name\":\"AlertID\",\"alias\":\"Alert ID\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"AlertID\",\"width\":85,\"$$hashKey\":\"027\"},\"CustNum\":{\"name\":\"CustNum\",\"alias\":\"Cust Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"CustNum\",\"$$hashKey\":\"028\"},\"AcctNum\":{\"name\":\"AcctNum\",\"alias\":\"Acct Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"AcctNum\",\"width\":85,\"$$hashKey\":\"029\"}},\"scalarColumns\":{\"AlertID\":{\"name\":\"AlertID\",\"alias\":\"Alert ID\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"AlertID\",\"width\":85,\"$$hashKey\":\"027\"},\"CustNum\":{\"name\":\"CustNum\",\"alias\":\"Cust Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"CustNum\",\"$$hashKey\":\"028\"},\"AcctNum\":{\"name\":\"AcctNum\",\"alias\":\"Acct Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"AcctNum\",\"width\":85,\"$$hashKey\":\"029\"},\"WhenBalance\":{\"name\":\"WhenBalance\",\"alias\":\"When Balance\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"WhenBalance\",\"$$hashKey\":\"02A\"},\"AccountBalance\":{\"name\":\"AccountBalance\",\"alias\":\"Account Balance\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"AccountBalance\",\"$$hashKey\":\"02B\"},\"EmailAddress\":{\"name\":\"EmailAddress\",\"alias\":\"Email Address\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"EmailAddress\",\"$$hashKey\":\"02C\"}},\"parentSettings\":{\"fk_Alert_CUSTOMER1\":{\"name\":\"fk_Alert_CUSTOMER1\",\"alias\":\"fk_Alert_CUSTOMER1\",\"columnFormats\":{\"CustNum\":{\"name\":\"CustNum\",\"alias\":\"Cust Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_Alert_CUSTOMER1.CustNum\",\"parentRole\":\"fk_Alert_CUSTOMER1\"},\"Name\":{\"name\":\"Name\",\"alias\":\"Name\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_Alert_CUSTOMER1.Name\",\"parentRole\":\"fk_Alert_CUSTOMER1\",\"width\":340},\"CheckingAcctBal\":{\"name\":\"CheckingAcctBal\",\"alias\":\"Checking Acct Bal\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":false,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_Alert_CUSTOMER1.CheckingAcctBal\",\"parentRole\":\"fk_Alert_CUSTOMER1\"},\"SavingsAcctBal\":{\"name\":\"SavingsAcctBal\",\"alias\":\"Savings Acct Bal\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":false,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_Alert_CUSTOMER1.SavingsAcctBal\",\"parentRole\":\"fk_Alert_CUSTOMER1\"},\"TotalBalance\":{\"name\":\"TotalBalance\",\"alias\":\"Total Balance\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_Alert_CUSTOMER1.TotalBalance\",\"parentRole\":\"fk_Alert_CUSTOMER1\"},\"Street\":{\"name\":\"Street\",\"alias\":\"Street\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_Alert_CUSTOMER1.Street\",\"parentRole\":\"fk_Alert_CUSTOMER1\"},\"City\":{\"name\":\"City\",\"alias\":\"City\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_Alert_CUSTOMER1.City\",\"parentRole\":\"fk_Alert_CUSTOMER1\"},\"State\":{\"name\":\"State\",\"alias\":\"State\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_Alert_CUSTOMER1.State\",\"parentRole\":\"fk_Alert_CUSTOMER1\"},\"ZIP\":{\"name\":\"ZIP\",\"alias\":\"ZIP\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_Alert_CUSTOMER1.ZIP\",\"parentRole\":\"fk_Alert_CUSTOMER1\"},\"isActive\":{\"name\":\"isActive\",\"alias\":\"Is Active\",\"type\":\"BIT\",\"generic_type\":\"boolean\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_Alert_CUSTOMER1.isActive\",\"parentRole\":\"fk_Alert_CUSTOMER1\"},\"Phone\":{\"name\":\"Phone\",\"alias\":\"Phone\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_Alert_CUSTOMER1.Phone\",\"parentRole\":\"fk_Alert_CUSTOMER1\"},\"emailAddress\":{\"name\":\"emailAddress\",\"alias\":\"Email Address\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.fk_Alert_CUSTOMER1.emailAddress\",\"parentRole\":\"fk_Alert_CUSTOMER1\"}}}},\"defaultTable\":\"main:CUSTOMER\",\"windows\":[\"main\",\"form\"],\"childrenSettings\":{},\"groups\":[],\"labelPlacement\":\"Left\"}",
+            "app_ident": 2002,
+            "@metadata": {
+              "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.Applications.ApplicationTableSettings/2003",
+              "checksum": "A:0d27245d5f5c44e6"
+            }
+          },
+          {
+            "ident": 2004,
+            "ts": "2016-04-04T11:35:03",
+            "table_name": "main:TRANSFER_FUNDS",
+            "object_type": "table",
+            "json": "{\"name\":\"main:TRANSFER_FUNDS\",\"alias\":\"main:TRANSFER_FUNDS\",\"columnFormats\":{\"TransId\":{\"name\":\"TransId\",\"alias\":\"Trans Id\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"TransId\",\"width\":53.571309032921086,\"$$hashKey\":\"1LX\"},\"FromAcct\":{\"name\":\"FromAcct\",\"alias\":\"From Acct\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"FromAcct\",\"$$hashKey\":\"1LY\"},\"FromCustNum\":{\"name\":\"FromCustNum\",\"alias\":\"From Cust Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"FromCustNum\",\"$$hashKey\":\"1LZ\"},\"ToAcct\":{\"name\":\"ToAcct\",\"alias\":\"To Acct\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"ToAcct\",\"$$hashKey\":\"1M0\"},\"ToCustNum\":{\"name\":\"ToCustNum\",\"alias\":\"To Cust Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"ToCustNum\",\"$$hashKey\":\"1M1\"},\"TransferAmt\":{\"name\":\"TransferAmt\",\"alias\":\"Transfer Amt\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"TransferAmt\",\"$$hashKey\":\"1M2\"},\"TransDate\":{\"name\":\"TransDate\",\"alias\":\"Trans Date\",\"type\":\"TIMESTAMP\",\"generic_type\":\"date\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"TransDate\",\"$$hashKey\":\"1M3\"}},\"gridColumns\":{\"TransId\":{\"name\":\"TransId\",\"alias\":\"Trans Id\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"TransId\",\"width\":53.571309032921086,\"$$hashKey\":\"1LX\"},\"FromAcct\":{\"name\":\"AcctType\",\"alias\":\"Acct Type\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.main_CHECKING_Parent.AcctType\",\"parentRole\":\"main_CHECKING_Parent\",\"width\":114.7954060600294},\"FromCustNum\":{\"name\":\"AcctType\",\"alias\":\"Acct Type\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.main_CHECKING_Parent.AcctType\",\"parentRole\":\"main_CHECKING_Parent\",\"width\":114.7954060600294}},\"scalarColumns\":{\"TransId\":{\"name\":\"TransId\",\"alias\":\"Trans Id\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"TransId\",\"width\":53.571309032921086,\"$$hashKey\":\"1LX\"},\"FromAcct\":{\"name\":\"FromAcct\",\"alias\":\"From Acct\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"FromAcct\",\"$$hashKey\":\"1LY\"},\"FromCustNum\":{\"name\":\"FromCustNum\",\"alias\":\"From Cust Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"FromCustNum\",\"$$hashKey\":\"1LZ\"},\"ToAcct\":{\"name\":\"ToAcct\",\"alias\":\"To Acct\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"ToAcct\",\"$$hashKey\":\"1M0\"},\"ToCustNum\":{\"name\":\"ToCustNum\",\"alias\":\"To Cust Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"ToCustNum\",\"$$hashKey\":\"1M1\"},\"TransferAmt\":{\"name\":\"TransferAmt\",\"alias\":\"Transfer Amt\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"TransferAmt\",\"$$hashKey\":\"1M2\"},\"TransDate\":{\"name\":\"TransDate\",\"alias\":\"Trans Date\",\"type\":\"TIMESTAMP\",\"generic_type\":\"date\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"TransDate\",\"$$hashKey\":\"1M3\"}},\"parentSettings\":{\"main_CHECKING_Parent\":{\"name\":\"main_CHECKING_Parent\",\"alias\":\"main_CHECKING_Parent\",\"columnFormats\":{\"AcctNum\":{\"name\":\"AcctNum\",\"alias\":\"Acct Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.main_CHECKING_Parent.AcctNum\",\"parentRole\":\"main_CHECKING_Parent\"},\"CustNum\":{\"name\":\"CustNum\",\"alias\":\"Cust Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.main_CHECKING_Parent.CustNum\",\"parentRole\":\"main_CHECKING_Parent\"},\"Deposits\":{\"name\":\"Deposits\",\"alias\":\"Deposits\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":false,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.main_CHECKING_Parent.Deposits\",\"parentRole\":\"main_CHECKING_Parent\"},\"Withdrawls\":{\"name\":\"Withdrawls\",\"alias\":\"Withdrawls\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":false,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.main_CHECKING_Parent.Withdrawls\",\"parentRole\":\"main_CHECKING_Parent\"},\"CurrentBalance\":{\"name\":\"CurrentBalance\",\"alias\":\"Current Balance\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.main_CHECKING_Parent.CurrentBalance\",\"parentRole\":\"main_CHECKING_Parent\"},\"AvailableBalance\":{\"name\":\"AvailableBalance\",\"alias\":\"Available Balance\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.main_CHECKING_Parent.AvailableBalance\",\"parentRole\":\"main_CHECKING_Parent\"},\"ItemCount\":{\"name\":\"ItemCount\",\"alias\":\"Item Count\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":false,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.main_CHECKING_Parent.ItemCount\",\"parentRole\":\"main_CHECKING_Parent\"},\"CreditCode\":{\"name\":\"CreditCode\",\"alias\":\"Credit Code\",\"type\":\"SMALLINT\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.main_CHECKING_Parent.CreditCode\",\"parentRole\":\"main_CHECKING_Parent\"},\"CreditLimit\":{\"name\":\"CreditLimit\",\"alias\":\"Credit Limit\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.main_CHECKING_Parent.CreditLimit\",\"parentRole\":\"main_CHECKING_Parent\"},\"AcctType\":{\"name\":\"AcctType\",\"alias\":\"Acct Type\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.main_CHECKING_Parent.AcctType\",\"parentRole\":\"main_CHECKING_Parent\",\"width\":114.7954060600294}}},\"main_SAVINGS_Parent\":{\"name\":\"main_SAVINGS_Parent\",\"alias\":\"main_SAVINGS_Parent\",\"columnFormats\":{\"AcctNum\":{\"name\":\"AcctNum\",\"alias\":\"Acct Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.main_SAVINGS_Parent.AcctNum\",\"parentRole\":\"main_SAVINGS_Parent\"},\"CustNum\":{\"name\":\"CustNum\",\"alias\":\"Cust Num\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.main_SAVINGS_Parent.CustNum\",\"parentRole\":\"main_SAVINGS_Parent\"},\"Deposits\":{\"name\":\"Deposits\",\"alias\":\"Deposits\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":false,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.main_SAVINGS_Parent.Deposits\",\"parentRole\":\"main_SAVINGS_Parent\"},\"Withdrawls\":{\"name\":\"Withdrawls\",\"alias\":\"Withdrawls\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":false,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.main_SAVINGS_Parent.Withdrawls\",\"parentRole\":\"main_SAVINGS_Parent\"},\"CurrentBalance\":{\"name\":\"CurrentBalance\",\"alias\":\"Current Balance\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.main_SAVINGS_Parent.CurrentBalance\",\"parentRole\":\"main_SAVINGS_Parent\"},\"AvailableBalance\":{\"name\":\"AvailableBalance\",\"alias\":\"Available Balance\",\"type\":\"DECIMAL\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":true,\"mask\":\"$0,0.00\",\"maskType\":\"numeric\",\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.main_SAVINGS_Parent.AvailableBalance\",\"parentRole\":\"main_SAVINGS_Parent\"},\"ItemCount\":{\"name\":\"ItemCount\",\"alias\":\"Item Count\",\"type\":\"INTEGER\",\"generic_type\":\"number\",\"is_editable\":true,\"is_nullable\":false,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.main_SAVINGS_Parent.ItemCount\",\"parentRole\":\"main_SAVINGS_Parent\"},\"AcctType\":{\"name\":\"AcctType\",\"alias\":\"Acct Type\",\"type\":\"VARCHAR\",\"generic_type\":\"text\",\"is_editable\":true,\"is_nullable\":true,\"mask\":null,\"maskType\":null,\"binaryType\":null,\"extensionType\":null,\"eval\":[],\"dataSource\":\"__internal.parentRows.main_SAVINGS_Parent.AcctType\",\"parentRole\":\"main_SAVINGS_Parent\"}}}},\"defaultTable\":\"main:CUSTOMER\",\"windows\":[\"main\",\"form\"],\"childrenSettings\":{},\"groups\":[],\"labelPlacement\":\"Left\"}",
+            "app_ident": 2002,
+            "@metadata": {
+              "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.Applications.ApplicationTableSettings/2004",
+              "checksum": "A:85c1e20d5d9d3c13"
+            }
+          }
+        ]
+      }
+    ],
+    "NamedFilters": [
+      {
+        "ident": 2000,
+        "ts": "2016-04-04T11:35:03",
+        "name": "userNamedFilter",
+        "description": "This is a sample Filter userfilter=userNamedFilter(name:'Customer 1')",
+        "resource_names": "main:CUSTOMER",
+        "filter_text": "name = {name}",
+        "project_ident": 2004,
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.NamedFilters/2000",
+          "checksum": "A:9e6cbc2cb758527d"
+        }
+      }
+    ],
+    "NamedSorts": [
+      {
+        "ident": 2000,
+        "ts": "2016-04-04T11:35:03",
+        "name": "sortByName",
+        "description": "Sample named sort usersort=sortByName()",
+        "resource_names": null,
+        "sort_text": "name desc",
+        "project_ident": 2004,
+        "@metadata": {
+          "href": "http://localhost:8080/APIServer/rest/abl/admin/v2/ProjectExport.NamedSorts/2000",
+          "checksum": "A:4df20867d1598b5f"
+        }
+      }
+    ]
+  }
+]

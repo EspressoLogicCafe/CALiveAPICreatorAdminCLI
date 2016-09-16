@@ -1,0 +1,12 @@
+[
+  {
+    "ts": "2016-04-04T11:35:03",
+    "name": "New custom endpoint",
+    "active": true,
+    "url_pattern": ".*",
+    "verbs": "GET,",
+    "code": "var res = {result: 'Custom Endpoint'};\nreturn JSON.stringify(res);\n",
+    "comments": "This demonstrates that you can create a free form custom endpoint",
+    "authenticate": false
+  }
+]

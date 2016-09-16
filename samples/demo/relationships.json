@@ -1,0 +1,15 @@
+[
+  {
+    "ts": "2016-08-01T19:13:15.283",
+    "name": "demo:customer -> finance:orders",
+    "parent_entity_name": "demo:customer",
+    "child_entity_name": "finance:orders",
+    "role_to_child": "financeOrders",
+    "role_to_parent": "demoCustomer",
+    "parent_columns": "name",
+    "child_columns": "customer_name",
+    "update_rule": "R",
+    "delete_rule": "R",
+    "comments": "Virtual Foreign Key between databases, enabling\nResource Definition (see MDB...), Rules and Data Explorer"
+  }
+]

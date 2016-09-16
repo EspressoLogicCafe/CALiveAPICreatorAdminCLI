@@ -1,0 +1,35 @@
+[
+  {
+    "ts": "2016-04-04T11:35:03",
+    "name": "demo",
+    "fullname": "Demo Account with full access",
+    "email": null,
+    "status": "A",
+    "roles": "Full access",
+    "data": null,
+    "comments": null,
+    "apikey_lifespan": null
+  },
+  {
+    "ts": "2016-04-04T11:35:03",
+    "name": "guest",
+    "fullname": "Guest Account with read-only access",
+    "email": null,
+    "status": "A",
+    "roles": "Read only",
+    "data": null,
+    "comments": null,
+    "apikey_lifespan": null
+  },
+  {
+    "ts": "2016-04-04T11:35:03",
+    "name": "Teller1",
+    "fullname": "Teller1",
+    "email": "new@user.com",
+    "status": "A",
+    "roles": "Teller,",
+    "data": null,
+    "comments": null,
+    "apikey_lifespan": 86400
+  }
+]

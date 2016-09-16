@@ -1,0 +1,13 @@
+[
+  {
+    "ts": "2016-04-02T18:32:37.306",
+    "name": "RESTAuthSecurityProviderCreateJSderby",
+    "comments": "Uses Get Employees for REST Validation ",
+    "auth_type_ident": 2,
+    "class_name": "com.kahuna.server.auth.JavaScriptAuthProvider",
+    "bootstrap_config_value": "RESTAuthSecurityProviderCreate",
+    "class_location": "",
+    "param_map": "logonApiKey=Bzn8jVyfOTiIpW6UQCgy,loginBaseURL=http://localhost:8080/rest/default/b2bderbynw/v1/nw:Employees,loginGroupURL=http://localhost:8080/rest/default/derby/v1/nw:Region",
+    "account_ident": null
+  }
+]

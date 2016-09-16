@@ -1,0 +1,24 @@
+[
+  {
+    "ts": "2016-08-01T19:13:15.183",
+    "name": "admin",
+    "fullname": "Demo user (admin)",
+    "email": "admin@ca.com",
+    "status": "A",
+    "roles": "API Owner",
+    "data": "",
+    "comments": null,
+    "apikey_lifespan": null
+  },
+  {
+    "ts": "2016-08-01T19:13:15.198",
+    "name": "demo",
+    "fullname": "Demo user",
+    "email": "admin@ca.com",
+    "status": "A",
+    "roles": "API Owner",
+    "data": "",
+    "comments": null,
+    "apikey_lifespan": null
+  }
+]

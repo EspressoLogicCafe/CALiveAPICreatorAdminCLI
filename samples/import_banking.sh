@@ -2,10 +2,9 @@
 
 #LACSERVER=http://localhost:8080/APIServer
 LACSERVER=http://localhost:8080
-PROJECT=demo
-NEWPROJECT=demo2
-PASSWORD=password
-PREFIX=nw
+PROJECT=banking
+PASSWORD=kahuna_local!
+PREFIX=main
 
 ## Connect to a local server
 lacadmin logout -a $PROJECT
@@ -15,17 +14,12 @@ lacadmin status
 
 lacadmin project list
 #This first way will import the entire project and all content 
-##lacadmin project import --file $PROJECT/$PROJECT.json
-##This shows how to create a new project from each json component
-lacadmin project use --url_name $NEWPROJECT
-lacadmin project delete --url_name $NEWPROJECT
-lacadmin project create --project_name "NewProject - $NEWPROJECT" --url_name $NEWPROJECT
-lacadmin project use --url_name $NEWPROJECT
+lacadmin project import --file $PROJECT/$PROJECT.json
+lacadmin project use --url_name $PROJECT
 
 ## Start Import
 lacadmin libraries import --file $PROJECT/libraries.json
-lacadmin authprovider import --file $PROJECT/authprovider.json
-lacadmin authprovider linkProject --ident 1000
+
 lacadmin apioptions import --file $PROJECT/apioptions.json
 lacadmin datasource import --file $PROJECT/datasource.json
 lacadmin datasource update --password $PASSWORD --prefix $PREFIX
@@ -48,4 +42,4 @@ lacadmin handler import --file $PROJECT/handlers.json
 lacadmin snapshot start --name 'first project'
 
 lacadmin project list
-#lacadmin logout nwind
+lacadmin logout  -a $PROJECT

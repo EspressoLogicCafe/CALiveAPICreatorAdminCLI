@@ -1,0 +1,50 @@
+[
+  {
+    "name": "API Documentation",
+    "description": "Full permissions on the entire API, special documentation role",
+    "default_permission": "A",
+    "default_apivisibility": "TVRPM",
+    "PermissionData": [],
+    "ApiVisibility": []
+  },
+  {
+    "name": "API Owner",
+    "description": "Full permissions on the entire API",
+    "default_permission": "A",
+    "default_apivisibility": "TVRPM",
+    "PermissionData": [],
+    "ApiVisibility": []
+  },
+  {
+    "name": "API User",
+    "description": "Limited permissions on the entire API",
+    "default_permission": "N",
+    "default_apivisibility": "RM",
+    "PermissionData": [],
+    "ApiVisibility": []
+  },
+  {
+    "name": "Sales Rep",
+    "description": "Preselects orders",
+    "default_permission": "N",
+    "default_apivisibility": "RM",
+    "PermissionData": [
+      {
+        "ident": 2000,
+        "name": "current_employee_row",
+        "description": null,
+        "prefix": "demo",
+        "query": "* from \"employee\" where \"login\" = '@{_apikey.user_identifier}'",
+        "query_order": 1,
+        "required": true,
+        "code_type": "SQL",
+        "role_ident": 2003,
+        "@metadata": {
+          "href": "http://localhost:8080/rest/abl/admin/v2/AllRoles.PermissionData/2000",
+          "checksum": "A:c59cd0e6b519f412"
+        }
+      }
+    ],
+    "ApiVisibility": []
+  }
+]

@@ -1,0 +1,28 @@
+[
+  {
+    "ts": "2016-04-04T11:35:03",
+    "name": "Between main:CHECKING and main:TRANSFER_FUNDS",
+    "parent_entity_name": "main:CHECKING",
+    "child_entity_name": "main:TRANSFER_FUNDS",
+    "role_to_child": "main_TRANSFER_FUNDS_List",
+    "role_to_parent": "main_CHECKING_Parent",
+    "parent_columns": "CustNum,AcctNum",
+    "child_columns": "FromCustNum,FromAcct",
+    "update_rule": "R",
+    "delete_rule": "R",
+    "comments": "used for Data Explorer lookup"
+  },
+  {
+    "ts": "2016-04-04T11:35:03",
+    "name": "main:Savings and main:TRANSFER_FUNDS",
+    "parent_entity_name": "main:SAVINGS",
+    "child_entity_name": "main:TRANSFER_FUNDS",
+    "role_to_child": "main_TRANSFER_FUNDS_List",
+    "role_to_parent": "main_SAVINGS_Parent",
+    "parent_columns": "CustNum,AcctNum",
+    "child_columns": "ToCustNum,ToAcct",
+    "update_rule": "R",
+    "delete_rule": "R",
+    "comments": "used for Data Explorer lookup"
+  }
+]
