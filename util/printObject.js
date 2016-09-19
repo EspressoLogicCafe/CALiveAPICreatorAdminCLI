@@ -6,7 +6,15 @@ var _ = require('underscore');
 
 module.exports = {
 	printObject: function(obj, prefix, indent, action) {
-		var termWidth = process.stdout.getWindowSize()[0];
+		var termWidth = 80;
+		if (process.stdout.getWindowSize) {
+			try {
+				termWidth = process.stdout.getWindowSize()[0];
+			}
+			catch(e) {
+				// Do nothing -- we're most likely in a headless environment
+			}
+		}
 
 		var objSum = "";
 		
