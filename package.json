@@ -1,6 +1,6 @@
 {
   "name": "liveapicreator-admin-cli",
-  "version": "3.0.6",
+  "version": "3.0.8",
   "description": "The NodeJS command line utility for CA Live Creator Administration from CA Technologies",
   "main": "liveapicreatoradmin.js",
   "scripts": {
@@ -24,6 +24,7 @@
     "db2luw",
     "db2zos",
     "derby",
+    "salesforce",
     "sqlserver",
     "mobile",
     "reactive"
