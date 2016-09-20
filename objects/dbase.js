@@ -84,6 +84,7 @@ module.exports = {
 				}
 				table.cell("Type", type);
 				table.cell("Active", p.active);
+				table.cell("Editable", p.schema_editable);
 				table.cell("Catalog", p.catalog_name);
 				table.cell("Schema", p.schema_name);
 				table.cell("User", p.user_name);
