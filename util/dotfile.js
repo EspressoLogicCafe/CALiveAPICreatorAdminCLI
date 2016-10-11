@@ -36,7 +36,7 @@ module.exports = {
 		var dotFileName = dotDirName + "/" + querystring.escape(name) + "--" + data.userName;
 		var dotFile = fs.openSync(dotFileName, 'w', 0600);
 		fs.writeSync(dotFile, JSON.stringify(data, null, 2));
-		this.setCurrentServer(name, data);
+		//this.setCurrentServer(name, data);
 	},
 	
 	deleteDotFile: function(url, userName) {

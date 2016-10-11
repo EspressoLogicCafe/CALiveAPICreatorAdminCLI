@@ -81,7 +81,7 @@ module.exports = {
 					};
 					
 					dotfile.writeToDotFile(url, fullData);
-					//dotfile.setCurrentServer(url, fullData);
+					dotfile.setCurrentServer(url, fullData);
 					console.log(('Login successful, API key will expire on: ' + data.expiration).green);
 				}).on('error', function(err) {
 					console.log(('ERROR: ' + err).red);
