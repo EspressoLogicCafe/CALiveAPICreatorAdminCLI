@@ -80,9 +80,21 @@ module.exports = {
 						loginInfo: data
 					};
 					
-					dotfile.writeToDotFile(url, fullData);
+					dotfile.writeToDotFile(url, fullData)
+					.then(
+						// Log completion of login process.
+						function(val){		
+							console.log(('Login successful, API key will expire on: ' + data.expiration).green);
+						}
+						)
+					.catch(
+						// Login fails if that file cannot be written. 
+						function(reason){
+							console.log(('Login failed, Reason : ' + reason).green);
+							throw "Error logging in";
+						}
+						);
 					dotfile.setCurrentServer(url, fullData);
-					console.log(('Login successful, API key will expire on: ' + data.expiration).green);
 				}).on('error', function(err) {
 					console.log(('ERROR: ' + err).red);
 					throw "Error logging in: " + err;
