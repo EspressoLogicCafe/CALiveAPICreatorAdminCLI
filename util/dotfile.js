@@ -33,10 +33,16 @@ module.exports = {
 	// Write the given data to the dot file with the given URL
 	writeToDotFile: function(name, data) {
 		var dotDirName = this.getDotDirectory(true);
-		var dotFileName = dotDirName + "/" + querystring.escape(name) + "--" + data.userName;
-		var dotFile = fs.openSync(dotFileName, 'w', 0600);
-		fs.writeSync(dotFile, JSON.stringify(data, null, 2));
-		//this.setCurrentServer(name, data);
+		return new Promise(function(resolve,reject) {
+					var dotFileName = dotDirName + "/" + querystring.escape(name) + "--" + data.userName;
+					var dotFile = fs.openSync(dotFileName, 'w', 0600);
+					var numOfBytes = fs.writeSync(dotFile, JSON.stringify(data, null, 2));
+					if(numOfBytes>0){
+						resolve(numOfBytes);
+					}else{
+						reject("Data could'nt be written to the dot file :"+dotFileName);
+					}
+		} );
 	},
 	
 	deleteDotFile: function(url, userName) {
