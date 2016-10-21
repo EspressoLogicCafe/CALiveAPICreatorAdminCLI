@@ -39,7 +39,7 @@ var managedserver = require('./objects/managedserver.js');
 var migrate = require('./objects/migrate.js');
 var eula = require('./objects/eula.js');
 //3.1 features
-var schema = require('./objects/schema.js');
+//var schema = require('./objects/schema.js');
 
 program
 	.version(pkg.version);
@@ -317,13 +317,13 @@ program
 	.option('--directory [directory]', 'Required for export, the name of a directory to save all exported json files')
 	.action(migrate.doMigrate);	
 
-program
-	.command('schema <list|export|create>')
-	.description('Administer Schema exports and creation for current project.')
-	.option('--project_ident [project_ident]','The project ident that will be marked as used' )
-	.option('--prefix [prefix]','The datasource prefix used for export. Note for import, the prefix must be marked as schema isEditable' )
-	.option('--file [fileName]', '[Optional] Name of file to import/export (if not provided stdin/stdout used for export)')
-	.action(schema.doSchema);	
+//program
+//	.command('schema <list|export|create>')
+//	.description('Administer Schema exports and creation for current project.')
+//	.option('--project_ident [project_ident]','The project ident that will be marked as used' )
+//	.option('--prefix [prefix]','The datasource prefix used for export. Note for import, the prefix must be marked as schema isEditable' )
+//	.option('--file [fileName]', '[Optional] Name of file to import/export (if not provided stdin/stdout used for export)')
+//	.action(schema.doSchema);	
 		
 program
 	.command('eula <accepted>')
