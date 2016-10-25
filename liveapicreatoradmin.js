@@ -39,7 +39,8 @@ var managedserver = require('./objects/managedserver.js');
 var migrate = require('./objects/migrate.js');
 var eula = require('./objects/eula.js');
 //3.1 features
-//var schema = require('./objects/schema.js');
+var schema = require('./objects/schema.js');
+var fnction = require('./objects/function.js');
 
 program
 	.version(pkg.version);
@@ -82,7 +83,7 @@ program
 	.action(project.doProject);
 
 program
-	.command('datasource <list|create|update|delete|import|reload|export>')
+	.command('datasource <list|create|createDatabase|update|delete|import|reload|export>')
 	.description('Administer datasources within a project.')
 	.option('--db_name [name]', 'The name of the datasource connection')
 	.option('--ident [ident]', 'For delete or reload, the ident of the datasource')
@@ -95,6 +96,7 @@ program
 	.option('--url [url]', 'The JDBC URL for the datasource')
 	.option('--active [true|false]', 'This marks the datasource active or inactive')
 	.option('--project_ident [ident]', 'The ident of a project, (if other than the current project')
+	.option('--managedserver_ident [managedserver_ident]', 'The managed server ident used with command createDatabase (creates both database and datasource)')
 	.option('--file [file]', 'Optional: for import/export, the name of a file to read from/save to, if unspecified, use stdin/stdout')
 	.action(dbase.doDbase);
 
@@ -317,14 +319,22 @@ program
 	.option('--directory [directory]', 'Required for export, the name of a directory to save all exported json files')
 	.action(migrate.doMigrate);	
 
-//program
-//	.command('schema <list|export|create>')
-//	.description('Administer Schema exports and creation for current project.')
-//	.option('--project_ident [project_ident]','The project ident that will be marked as used' )
-//	.option('--prefix [prefix]','The datasource prefix used for export. Note for import, the prefix must be marked as schema isEditable' )
-//	.option('--file [fileName]', '[Optional] Name of file to import/export (if not provided stdin/stdout used for export)')
-//	.action(schema.doSchema);	
+program
+	.command('schema <list|export|create>')
+	.description('Administer Schema exports and creation for current project.')
+	.option('--project_ident [project_ident]','The project ident that will be marked as used' )
+	.option('--prefix [prefix]','The datasource prefix used for export. Note for import, the prefix must be marked as schema isEditable' )
+	.option('--file [fileName]', '[Optional] Name of file to import/export (if not provided stdin/stdout used for export)')
+	.action(schema.doSchema);	
 		
+program
+	.command('function <list|export|import>')
+	.description('Administer Functions for current project.')
+	.option('--ident [ident]', 'This is the ident of the function')
+	.option('--project_ident [project_ident]','The project ident that will be used' )
+	.option('--file [fileName]', '[Optional] Name of file to import/export (if not provided stdin/stdout used for export)')
+	.action(fnction.doFunction);	
+	
 program
 	.command('eula <accepted>')
 	.description('Returns true or false - end user license agreement must be accepted before any script will run')

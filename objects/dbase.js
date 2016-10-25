@@ -16,6 +16,9 @@ module.exports = {
 		else if (action === 'create') {
 			module.exports.create(cmd);
 		}
+		else if (action === 'createDatabase') {
+			module.exports.createDatabase(cmd);
+		}
 		else if (action === 'update') {
 			module.exports.update(cmd);
 		}
@@ -84,7 +87,7 @@ module.exports = {
 				}
 				table.cell("Type", type);
 				table.cell("Active", p.active);
-				table.cell("Editable", p.schema_editable);
+				table.cell("isEditable", p.schema_editable);
 				table.cell("Catalog", p.catalog_name);
 				table.cell("Schema", p.schema_name);
 				table.cell("User", p.user_name);
@@ -142,6 +145,7 @@ module.exports = {
 			console.log('Missing parameter: url'.red);
 			return;
 		}
+		
 		
 		var dbasetype = cmd.dbasetype;
 		if ( ! dbasetype) {
@@ -209,7 +213,91 @@ module.exports = {
 			});
 		});
 	},
-	
+	createDatabase: function(cmd) {
+		var client = new Client();
+		var loginInfo = login.login(cmd);
+		if ( ! loginInfo) {
+			console.log('You are not currently logged into any API Creator server.'.red);
+			return;
+		}
+		if ( ! loginInfo)
+			return;
+		
+		var curProj = cmd.project_ident;
+		if ( ! curProj) {
+			curProj = dotfile.getCurrentProject();
+		}
+		if ( ! curProj) {
+			console.log('There is no current project.'.yellow);
+			return;
+		}
+		
+		if ( ! cmd.managedserver_ident) {
+			console.log('Missing parameter: managedserver_ident (use lacadmin managedserver list)'.red);
+			return;
+		}
+		var managedServer =	{ managed_data_server_ident: Number(cmd.managedserver_ident) };
+		//console.log(JSON.stringify(managedServer,null,2));
+		client.post(loginInfo.url + "/@databases", {
+				data: managedServer,
+				headers: {
+					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+					"Content-Type" : "application/json"
+				}
+			}, function(database) {
+				if (database.errorMessage) {
+					console.log("@database error: "+database.errorMessage.red);
+					return;
+				}
+			//console.log(database);
+			context.getContext(cmd, function() {
+			  // console.log('Current account: ' + JSON.stringify(context.account));
+			
+			   var newDbase = {
+				   name: database.name,
+				   prefix: database.name,
+				   url: database.url,
+				   catalog_name: database.catalog_name,
+				   schema_name: database.schema_name,
+				   user_name: database.user_name,
+				   password: database.password,
+				  // port_num: cmd.port_num,
+				   active: true,
+				   schema_editable: true,
+				   comments: 'created by lacadmin command line',
+				   dbasetype_ident: database.dbasetype_ident,
+				   project_ident: curProj
+			   };
+			   var startTime = new Date();
+			   client.post(loginInfo.url + "/dbaseschemas", {
+				   data: newDbase,
+				   headers: {
+					   Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+					   "Content-Type" : "application/json"
+				   }
+			   }, function(data) {
+				   var endTime = new Date();
+				   if (data.errorMessage) {
+					   console.log(data.errorMessage.red);
+					   return;
+				   }
+				   printObject.printHeader('Database connection was created');
+				   _.each(data.txsummary, function(obj) {
+					   printObject.printObject(obj, obj['@metadata'].entity, 0, obj['@metadata'].verb);
+				   });
+				   var trailer = "Request took: " + (endTime - startTime) + "ms";
+				   trailer += " - # objects touched: ";
+				   if (data.txsummary.length == 0) {
+					   console.log('No data returned'.yellow);
+				   }
+				   else {
+					   trailer += data.txsummary.length;
+				   }
+				   printObject.printTrailer(trailer);
+			   });
+		   });
+		});
+	},
 	update: function(cmd) {
 		var client = new Client();
 		var loginInfo = login.login(cmd);
