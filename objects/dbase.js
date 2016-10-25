@@ -252,10 +252,17 @@ module.exports = {
 			//console.log(database);
 			context.getContext(cmd, function() {
 			  // console.log('Current account: ' + JSON.stringify(context.account));
-			
+			var prefix = database.name;
+			if ( cmd.prefix) {
+				prefix = cmd.prefix;
+			}
+			var db_name = database.name;
+			if ( cmd.db_name) {
+				db_name = cmd.db_name;
+			}
 			   var newDbase = {
-				   name: database.name,
-				   prefix: database.name,
+				   name: db_name,
+				   prefix: prefix,
 				   url: database.url,
 				   catalog_name: database.catalog_name,
 				   schema_name: database.schema_name,
