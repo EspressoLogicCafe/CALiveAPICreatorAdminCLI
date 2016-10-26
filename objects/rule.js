@@ -422,7 +422,7 @@ module.exports = {
 					adminCmd += "liveapicreatoradmin rule create --ruletype validation --entity_name "+p.entity_name;
 					adminCmd += " --rule_name "+p.name;
 					adminCmd += " --expression '"+p.rule_text1 + "'";
-					adminCmd += " --error_message "+p.rule_text2;
+					adminCmd += " --error_message '"+p.rule_text2 +"'";
 					adminCmd += " --active "+((p.active == 1)?"A":"I");
 					adminCmd += " --comments '"+p.comments +"'";	
 					adminCmd += "\n\n";
