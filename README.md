@@ -53,31 +53,35 @@ $ lacadmin --help
 
   Commands:
 
-    login [options] <url>                                                  Login to an API server
-    logout [options] <url>                                                 Logout from the current server, or a specific server
-    use <alias>                                                            Use the specified server by default
-    status                                                                 Show the current server, and any defined server aliases
-    project [options] <list|create|update|delete|use|import|export>        Administer projects. Actions are: list, create, update, delete, use, export
-    datasource [options] <list|create|update|delete|import|export>         Administer datasources within a project.
-    resource [options] <list|create|delete|import|export>                  Administer resources within a project.
-    rule [options] <list|create|delete|export>                             Administer rules within a project.
-    authprovider [options] <list|create|linkProject|delete|export|import>  Administer authentication providers for an account.
-    libraries [options] <list|create|update|delete|export|import>          Administer java and javascript libraries for an account.
-    apioptions [options] <list|update|import|export>                       Administer API project options for an account.
-    namedsort [options] <list|create|update|delete|import|export>          Administer Named Sorts for the active API Project.
-    namedfilter [options] <list|create|delete|update|import|export>        Administer Named filter for the active API Project.
-    token [options] <list|export|import>                                   Administer Auth Tokens for current project.
-    role [options] <list|export|import>                                    Administer Roles for current project.
-    user [options] <list|export|import>                                    Administer Users for current project.
-    topic [options] <list|export|import>                                   Administer Topics for current project.
-    event [options] <list|export|import>                                   Administer Request & Response Events for current project.
-    handler [options] <list|export|import>                                 Administer Custom Endpoints (Handlers) for current project.
-    apiversion [options] <list|export|import>                              Administer API Versions for Resources for current project.
-    relationship [options] <list|export|import>                            Administer Relationships (Virtual Keys) for current project.
-    snapshot [options] <list|start>                                        List or start a project snapshot (backup) for current project.
-    gateway <list|create|import|export|publish>                            Publish Swagger 2.0 document for current project to CA Gateway.    
-    managedserver <list|create|delete|update|import|export>                Administer a managed data server (used by @databases to create datasources).
-    migrate [options] <exportRepos>                                        Migrate will list export scripts for ALL user libraries, auth providers, and projects in the connection and export to a named directory
+    login [options] [url]                                                                 Login to an API server
+    logout [options] [url]                                                                Logout from the current server, or a specific server
+    use <alias>                                                                           Use the specified server by default
+    status                                                                                Show the current server, and any defined server aliases
+    project [options] <list|create|update|delete|use|import|export>                       Administer projects. Actions are: list, create, update, delete, use, export
+    datasource [options] <list|create|createDatabase|update|delete|import|reload|export>  Administer datasources within a project.
+    resource [options] <list|delete|update|export>                                        Administer resources within a project.
+    rule [options] <list|create|update|delete|import|export>                              Administer rules within a project.
+    authprovider [options] <list|create|linkProject|delete|export|import>                 Administer authentication providers for an account.
+    libraries [options] <list|create|update|delete|export|import>                         Administer java and javascript libraries for an account.
+    apioptions [options] <list|update|import|export>                                      Administer API project options for an account.
+    namedsort [options] <list|create|update|delete|import|export>                         Administer Named Sorts for the active API Project.
+    namedfilter [options] <list|create|delete|update|import|export>                       Administer Named filter for the active API Project.
+    token [options] <list|export|import>                                                  Administer Auth Tokens for current project.
+    role [options] <list|export|import>                                                   Administer Roles for current project.
+    user [options] <list|update|export|import>                                            Administer Users for current project.
+    npa [options] <list|create|export>                                                    Administer Non Persistent Attributes for the active API Project. New in version 2.1.x
+    topic [options] <list|export|import>                                                  Administer Topics for current project.
+    event [options] <list|export|import>                                                  Administer Request & Response Events for current project.
+    handler [options] <list|export|import>                                                Administer Custom Endpoints (Handlers) for current project.
+    apiversion [options] <list|export|import>                                             Administer API Versions for Resources for current project.
+    relationship [options] <list|export|import>                                           Administer Relationships (Virtual Keys) for current project.
+    snapshot [options] <list|start|restore>                                               List or start a project snapshot (backup) for current project. New in version 2.1.x
+    gateway [options] <list|create|import|export|publish>                                 Publish Swagger document for current project to Gateway. New in version 2.1.x - publish requires existing swagger file
+    managedserver [options] <list|create|update|delete|import|export>                     Administer a managed data server (used by @databases to create datasources).
+    migrate [options] <exportRepos>                                                       Migrate will list all export files for ALL user libraries, auth providers, gateways, and projects in the connection and export to a named directory
+    schema [options] <list|export|create>                                                 Administer Schema exports and creation for current project.
+    function [options] <list|export|import>                                               Administer Functions for current project.
+    eula <accepted>                                                                       Returns true or false - end user license agreement must be accepted before any script will run
     
   Options:
 
