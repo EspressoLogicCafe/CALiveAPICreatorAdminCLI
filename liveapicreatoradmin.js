@@ -320,10 +320,13 @@ program
 	.action(migrate.doMigrate);	
 
 program
-	.command('schema <list|export|create>')
-	.description('Administer Schema exports and creation for current project.')
+	.command('schema <create>')
+	.description('Create new table/columns/relationships using @schema format and managed data server datasource.')
 	.option('--project_ident [project_ident]','The project ident that will be marked as used' )
 	.option('--prefix [prefix]','The datasource prefix used for export. Note for import, the prefix must be marked as schema isEditable' )
+	.option('--ignoredbcolumntype [true|false]','(optional) The ignoredbcolumntype setting is used when moving between database vendors' )
+	.option('--ignoreprimarykeyname [true|false]','(optional) The ignoreprimarykeyname setting is used when moving between database vendors' )
+	.option('--ignoreconstraintname [true|false]','(optional) The ignoreconstraintname setting is used when moving between database vendors' )
 	.option('--file [fileName]', '[Optional] Name of file to import/export (if not provided stdin/stdout used for export)')
 	.action(schema.doSchema);	
 		

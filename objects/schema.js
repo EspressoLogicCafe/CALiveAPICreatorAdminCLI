@@ -36,14 +36,22 @@ module.exports = {
 			}
 		}
 		
-		var filter = null;
+		var filter = "";
 		if (projIdent) {
 			filter = "?projectId=" + projIdent;
 		} else {
 			console.log('Missing parameter: please specify project settings (use: lacadmin project use --url_name [urlname]) project_ident '.red);
 			return;
 		}
-		
+		if(cmd.ignoredbcolumntype){
+			filter += "&ignoredbcolumntype="+cmd.ignoredbcolumntype;
+		}
+		if(cmd.ignoreprimarykeyname){
+			filter += "&ignoreprimarykeyname="+cmd.ignoreprimarykeyname;
+		}
+		if(cmd.ignoreconstraintname){
+			filter += "&ignoreconstraintname="+cmd.ignoreconstraintname;
+		}
 		var prefix = "";
 		if (cmd.prefix) {
 			prefix = "/" + cmd.prefix ;

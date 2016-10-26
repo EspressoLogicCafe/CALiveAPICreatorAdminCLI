@@ -61,10 +61,11 @@ module.exports = {
 				printObject.printHeader('Functions: ');
 				var table = new Table();
 				_.each(data, function(p) {
+				var type_name = ['none','number','string','boolean'];
 				 var parameters = "(";
 				 var parmsep = "";
 				_.each(p.parameters, function(arg) {
-					parameters += parmsep + arg.type_name + " "+ arg.name;
+					parameters += parmsep + type_name[arg.type_ident] + " "+ arg.name;
 					parmsep = ",";
 				 });
 				 parameters += ")";
