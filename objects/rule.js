@@ -384,7 +384,7 @@ module.exports = {
 					adminCmd += " --rule_name "+p.name;
 					adminCmd += " --role_name "+p.rule_text1;
 					adminCmd += " --child_attribute "+p.rule_text3;
-					adminCmd += " --expression "+p.rule_text2;
+					adminCmd += " --expression '"+p.rule_text2+"'";
 					adminCmd += " --active "+((p.active == 1)?"A":"I");
 					adminCmd += " --comments '"+p.comments +"'";	
 					adminCmd += "\n\n";
@@ -394,7 +394,7 @@ module.exports = {
 					adminCmd += " --rule_name "+p.name;
 					adminCmd += " --role_name "+p.rule_text1;
 					adminCmd += " --attribute_name "+p.attribute_name;
-					adminCmd += " --expression "+p.rule_text2;
+					adminCmd += " --expression '"+p.rule_text2+"'";
 					adminCmd += " --active "+((p.active == 1)?"A":"I");
 					adminCmd += " --comments '"+p.comments +"'";	
 					adminCmd += "\n\n";
@@ -465,7 +465,7 @@ module.exports = {
 					adminCmd += " --attribute_name "+p.attribute_name;
 					adminCmd += " --role_name "+p.rule_text1;
 					adminCmd += " --child_attribute "+p.rule_text3;
-					adminCmd += " --expression "+p.rule_text2;
+					adminCmd += " --expression '"+p.rule_text2+ "'";
 					adminCmd += " --active "+((p.active == 1)?"A":"I");
 					adminCmd += " --comments '"+p.comments +"'";	
 					adminCmd += "\n\n";
@@ -476,7 +476,7 @@ module.exports = {
 					adminCmd += " --attribute_name "+p.attribute_name;
 					adminCmd += " --role_name "+p.rule_text1;
 					adminCmd += " --child_attribute "+p.rule_text3;
-					adminCmd += " --expression "+p.rule_text2;
+					adminCmd += " --expression '"+p.rule_text2 + "'";
 					adminCmd += " --active "+((p.active == 1)?"A":"I");
 					adminCmd += " --comments '"+p.comments +"'";	
 					adminCmd += "\n\n";
