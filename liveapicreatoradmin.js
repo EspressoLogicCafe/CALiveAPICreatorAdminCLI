@@ -328,7 +328,7 @@ program
 	.action(schema.doSchema);	
 		
 program
-	.command('function <list|export|import>')
+	.command('function <list|delete|export|import>')
 	.description('Administer Functions for current project.')
 	.option('--ident [ident]', 'This is the ident of the function')
 	.option('--project_ident [project_ident]','The project ident that will be used' )
