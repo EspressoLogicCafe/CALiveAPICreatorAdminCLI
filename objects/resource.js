@@ -482,10 +482,11 @@ module.exports = {
 		if(cmd.apiversion){
 			apiversion = cmd.apiversion;
 		}
-		var filter = "";//"sysfilter=equal(root_ident: null)"; //only get root objects
 		var projIdent = cmd.project_ident;
-		if ( cmd.ident) {
-			filter = "sysfilter=equal(ident:" + cmd.ident +")";
+		var rootIdent = cmd.ident;
+		if ( !cmd.ident) {
+			console.log("You must specifiy a specific resource using --ident (use lacadmin resource list)".red);
+			return;
 		}
 		if ( ! projIdent) {
 			projIdent = dotfile.getCurrentProject();
@@ -494,70 +495,54 @@ module.exports = {
 				return;
 			}
 		}
-		client.get(url + "/admin:apiversions?sysfilter=equal(project_ident:" + projIdent +")&sysfilter=equal(name:'" + apiversion +"')&pagesize=1", {
+		var sysfilter = 'equal_or(ident:' + rootIdent + ', root_ident:' + rootIdent+ ')';
+		var sysorder = 'sysorder=(root_ident:null_first, prefix:asc_uc, table_name:asc_uc)';
+		client.get(url + "/AllResources?sysfilter="+sysfilter+"&pagesize=1"+sysorder, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
 				"Content-Type" : "application/json"
 			}
-		}, function(versionident) {
+		}, function(data) {
 			//console.log('get result: ' + JSON.stringify(data, null, 2));
-			if (versionident.errorMessage) {
-				console.log(("Error: " + versionident.errorMessage).red);
+			if (data.errorMessage) {
+				console.log(("Error: " + data.errorMessage).red);
 				return;
 			}
 			
-			if (versionident.length === 0) {
-				console.log(("Error: no such apiversion").red);
+			if (data.length === 0) {
+				console.log(("Error: no such resource").red);
 				return;
 			}
-			//console.log("Version "+ JSON.stringify(versionident,null,2));
-			var apiversion_ident = versionident[0].ident;
-			if(cmd.resource_name){
-				filter += "&sysfilter=equal(name:'" + cmd.resource_name +"')"; 
-			}
-			filter += "&sysfilter=equal(apiversion_ident:" + apiversion_ident +")"; 
-			client.get(url + "/AllResources?"+filter+"&pagesize=100", {
-				headers: {
-					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
-					"Content-Type" : "application/json"
-				}
-			}, function(data) {
-				//console.log('get result: ' + JSON.stringify(data, null, 2));
-				if (data.errorMessage) {
-					console.log(("Error: " + data.errorMessage).red);
-					return;
-				}
-				var toStdout = false;
-				if ( ! cmd.file) {
-					toStdout = true;
-				}
-				if (data.length === 0) {
-					console.log(("Error: no such project").red);
-					return;
-				}
-				for(var i = 0; i < data.length ; i++){
-					  delete data[i].project_ident;
-					  delete data[i]['@metadata'];
-					  delete data[i].apiversion_ident;
-				}
-				if (toStdout) {
-					console.log(JSON.stringify(data, null, 2));
-				
-				} else {
-					var exportFile = fs.openSync(cmd.file, 'w+', 0600);
-					fs.writeSync(exportFile, JSON.stringify(data, null, 2));
-					console.log(('Resources have been exported to file: ' + cmd.file).green);
-				}
-			});	
-	  	});	
+			 var toStdout = false;
+			 if ( ! cmd.file) {
+				 toStdout = true;
+			 }
+		 
+			 for(var i = 0; i < data.length ; i++){
+				   delete data[i].project_ident;
+				   delete data[i]['@metadata'];
+				   delete data[i].apiversion_ident;
+				   for(var j = 0; j < data[i].Attributes.length; j++){
+				   		delete data[i].Attributes[j]['@metadata'];
+				   }
+			 }
+			 if (toStdout) {
+				 console.log(JSON.stringify(data, null, 2));
+			 
+			 } else {
+				 var exportFile = fs.openSync(cmd.file, 'w+', 0600);
+				 fs.writeSync(exportFile, JSON.stringify(data, null, 2));
+				 console.log(('Resources have been exported to file: ' + cmd.file).green);
+			 }
+		 });	
 	},
 	import: function(cmd) {
 		var client = new Client();
 		//need to decompose both export and import
-		if(true){
-			console.log("Import of Resources not available - use Live API Creator GUI");
-			return;
-		}
+		//if(true){
+			//console.log("Import of Resources not available - use Live API Creator GUI");
+			//return;
+		//}
 	
 		var loginInfo = login.login(cmd);
 		if ( ! loginInfo)
@@ -603,99 +588,83 @@ module.exports = {
 			var resourceCnt = 0;
 			var parent_ident = null;
 			if(Array.isArray(fileContent)){
-				delete fileContent[i].ts;
 				for(var i = 0 ; i < fileContent.length; i++){
 					delete fileContent[i]["@metadata"];
+					delete fileContent[i].ts;
 					fileContent[i].apiversion_ident = apiversion_ident;
-					fileContent[i].container_ident = null;// this is set for each child level
+					//fileContent[i].container_ident = null;// this is set for each child level
 					if(fileContent[i].root_ident == null) {
 						root = fileContent[i];
-						root["@metadata"] = {action:"MERGE_INSERT", key: ["apiversion_ident","name"]} ;
+						//root["@metadata"] = {action:"MERGE_INSERT", key: ["apiversion_ident","name"]} ;
 						resourceCnt += 1;
 						parent_ident = root.ident;
 					}
 				} 
-			}
+			}	
+			delete root.entity_name;
+
 			if(resourceCnt > 1){
 				console.log("You can only import a single resource - use project import for multiple resources".red);
 				return;
 			}
+			//console.log(root);
 			
-			var startTime = new Date();
-			var root_ident = null; // == parent root
-				delete root.ident;
-				client.put(loginInfo.url + "/AllResources", {
-					data: root,
-					headers: {
-						Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
-						"Content-Type" : "application/json" 
-						}
-					}, function(data) {
-					var endTime = new Date();
-					if (data.errorMessage) {
-						console.log(data.errorMessage.red);
-						return;
-					}
-					printObject.printHeader('Resourcer was created, including:');
-					console.log(data);
-					if(data.statusCode == 200 ){
-						console.log("Request took: " + (endTime - startTime) + "ms");
-						return;
-					} 
-					var newResource = _.find(data.txsummary, function(p) {
-						return p['@metadata'].resource === 'AllResources';
-					});
-					if ( ! newResource) {
-						console.log('Resource did not return a transaction summary - no changes made'.red);
-						return;
-					}
-					if (cmd.verbose) {
-						_.each(data.txsummary, function(obj) {
-							printObject.printObject(obj, obj['@metadata'].entity, 0, obj['@metadata'].verb);
-						});
-					}
-					else {
-						printObject.printObject(newResource, newResource['@metadata'].entity, 0, newResource['@metadata'].verb);
-						console.log(('and ' + (data.txsummary.length - 1) + ' other objects').grey);
-					}
-					root_ident = root_object.ident;
-				_.each(data.txsummary , function(root_object) {
-					_.each(fileContent , function(obj) {
-						if(obj.root_ident !== null && parent_ident == obj.container_ident){
-							parent_ident = obj.ident;
-							obj.root_ident = root_ident;
-							obj.container_ident = parent.ident;
-							client.post(loginInfo.url + "/AllResources", {
-								data: obj,
-								headers: {
-									Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
-									"Content-Type" : "application/json" 
-									}
-								}, function(parent) {
-								console.log(parent);
-								if (parent.errorMessage) {
-									console.log(parent.errorMessage.red);
-									return;
-								}
-								if(parent.status_code == 201){
-									parent_ident = parent.txsummary[0].ident;
-								}
-							});	
-						}
-					});
-				});
-				var endTime = new Date();
-				var trailer = "Request took: " + (endTime - startTime) + "ms";
-				trailer += " - # objects touched: ";
-				if (data.txsummary.length === 0) {
-					console.log('No data returned'.yellow);
-				}
-				else {
-					trailer += data.txsummary.length;
-				}
-				printObject.printHeader(trailer);
-			 })
+			module.exports.importResourceLevel(cmd, root , null, null , null ,fileContent);
+			printObject.printHeader('Import Resource ' + root.name + ':');
 			});
 		});
-	}
+	},
+    importResourceLevel: function(cmd, res, newRootIdent, newResIdent, containerIdent, originalResource) {
+    //console.log(res);
+    	var client = new Client();
+		var loginInfo = login.login(cmd);
+		if ( ! loginInfo) {
+			return;
+		}
+			var url = loginInfo.url;
+		   	var originalIdent = res.ident;
+		   	delete res['@metadata'];
+		   	delete res.ident;
+		   	res.root_ident = newRootIdent;
+		   	res.container_ident = newResIdent;
+		   	delete res.entity_name;
+		   	_.each(res.Attributes, function (a) {
+			   delete a.ident;
+			   delete a['@metadata'];
+			   delete a.resource_ident;
+		   	});    
+		   	//console.log("newRootIdent: "+newRootIdent);
+		   	//console.log("originalIdent: " + originalIdent);
+		   	//console.log("containerIdent: "+containerIdent);
+			client.post(loginInfo.url + "/AllResources", {
+			   data: res,
+			   headers: {
+				   Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+				   "Content-Type" : "application/json" 
+				   }
+			   }, function(data) {
+			   
+				  if (data.errorMessage) {
+					  console.log(data.errorMessage.red);
+					  return;
+				  }
+				 var newRes = _.find(data.txsummary, function (b) {
+					 return b['@metadata'].resource === 'AllResources';
+				 });
+				 if ( ! newRes) {
+					 throw "Unable to find newly created resource";
+				 }
+			  	newResIdent =newRes.ident;
+				 // If this is the top resource
+				 if ( ! newRootIdent) {
+					 newRootIdent = newRes.ident;
+				 }
+				 var children = _.filter(originalResource, function (r) {
+					 return r.container_ident === originalIdent;
+				 });
+				 _.each(children, function (c) {
+					 module.exports.importResourceLevel(cmd, c, newRootIdent ,newRes.ident,  originalIdent, originalResource);
+				 });
+			});
+	   }
 };
