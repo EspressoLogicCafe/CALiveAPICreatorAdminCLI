@@ -253,6 +253,10 @@ module.exports = {
 		
 		}
 		var curProj = cmd.project_ident;
+		var jit = false;
+		if(cmd.jit !== null){
+			jit = cmd.jit;
+		}
 		if ( ! curProj) {
 			curProj = dotfile.getCurrentProject();
 		}
@@ -272,7 +276,8 @@ module.exports = {
 			comments: cmd.comments,
 			active: cmd.active,
 			ruletype_ident: cmd.ruletype,
-			project_ident: curProj
+			project_ident: curProj,
+			jit: jit
 		};
 		var startTime = new Date();
 		client.post(loginInfo.url + "/rules", {
@@ -379,114 +384,119 @@ module.exports = {
 	var adminCmd = "";
 			switch(p.ruletype_ident) {
 					case 1: type = "sum"; 
-					adminCmd += "liveapicreatoradmin rule create --ruletype sum --entity_name "+p.entity_name;
+					adminCmd += "lacadmin rule create --ruletype sum --entity_name "+p.entity_name;
 					adminCmd += " --attribute_name "+p.attribute_name;
 					adminCmd += " --rule_name "+p.name;
 					adminCmd += " --role_name "+p.rule_text1;
 					adminCmd += " --child_attribute "+p.rule_text3;
 					adminCmd += " --expression '"+p.rule_text2+"'";
-					adminCmd += " --active "+((p.active == 1)?"A":"I");
+					adminCmd += " --active "+ p.active;
+					adminCmd += " --jit "+ p.jit;
 					adminCmd += " --comments '"+p.comments +"'";	
 					adminCmd += "\n\n";
 					break;
 					case 2: type = "count"; 
-					adminCmd += "liveapicreatoradmin rule create --ruletype count --entity_name "+p.entity_name;
+					adminCmd += "lacadmin rule create --ruletype count --entity_name "+p.entity_name;
 					adminCmd += " --rule_name "+p.name;
 					adminCmd += " --role_name "+p.rule_text1;
 					adminCmd += " --attribute_name "+p.attribute_name;
 					adminCmd += " --expression '"+p.rule_text2+"'";
-					adminCmd += " --active "+((p.active == 1)?"A":"I");
+					adminCmd += " --active "+ p.active;
+					adminCmd += " --jit "+ p.jit;
 					adminCmd += " --comments '"+p.comments +"'";	
 					adminCmd += "\n\n";
 					break;
 					case 3: type = "formula"; 
-					adminCmd += "liveapicreatoradmin rule create --ruletype formula --entity_name "+p.entity_name;
+					adminCmd += "lacadmin rule create --ruletype formula --entity_name "+p.entity_name;
 					adminCmd += " --rule_name "+p.name;
 					adminCmd += " --attribute_name "+p.attribute_name;
-					adminCmd += " --expression '"+p.rule_text1 + "'";;
-					adminCmd += " --active "+((p.active == 1)?"A":"I");
+					adminCmd += " --expression '"+p.rule_text1 + "'";
+					adminCmd += " --active "+ p.active;
+					adminCmd += " --jit "+ p.jit;
 					adminCmd += " --comments '"+p.comments +"'";	
 					adminCmd += "\n\n";
 					break;
 					case 4: type = "parent copy"; 
-					adminCmd += "liveapicreatoradmin rule create --ruletype parentcopy --entity_name "+p.entity_name;
+					adminCmd += "lacadmin rule create --ruletype parentcopy --entity_name "+p.entity_name;
 					adminCmd += " --rule_name "+p.name;
 					adminCmd += " --attribute_name "+p.attribute_name;
 					adminCmd += " --role_name "+p.rule_text1;
 					adminCmd += " --parent_attribute "+p.rule_text2;
-					adminCmd += " --active "+((p.active == 1)?"A":"I");
+					adminCmd += " --active "+ p.active;
 					adminCmd += " --comments '"+p.comments +"'";	
 					adminCmd += "\n\n";
 					break;
 					case 5: type = "validation"; 
-					adminCmd += "liveapicreatoradmin rule create --ruletype validation --entity_name "+p.entity_name;
+					adminCmd += "lacadmin rule create --ruletype validation --entity_name "+p.entity_name;
 					adminCmd += " --rule_name "+p.name;
 					adminCmd += " --expression '"+p.rule_text1 + "'";
 					adminCmd += " --error_message '"+p.rule_text2 +"'";
-					adminCmd += " --active "+((p.active == 1)?"A":"I");
+					adminCmd += " --active "+ p.active;
 					adminCmd += " --comments '"+p.comments +"'";	
 					adminCmd += "\n\n";
 					break;
 					case 6: type = "commit validation"; 
-					adminCmd += "liveapicreatoradmin rule create --ruletype commitvalidation --entity_name "+p.entity_name;
+					adminCmd += "lacadmin rule create --ruletype commitvalidation --entity_name "+p.entity_name;
 					adminCmd += " --rule_name "+p.name + "'";
-					adminCmd += " --expression '"+p.rule_text1 + "'";;
-					adminCmd += " --active "+((p.active == 1)?"A":"I");
+					adminCmd += " --expression '"+p.rule_text1 + "'";
+					adminCmd += " --active "+ p.active;
 					adminCmd += " --comments '"+p.comments +"'";	
 					adminCmd += "\n\n";
 					break;
 					case 7: type = "event"; 
-					adminCmd += "liveapicreatoradmin rule create --ruletype event --entity_name "+p.entity_name;
+					adminCmd += "lacadmin rule create --ruletype event --entity_name "+p.entity_name;
 					adminCmd += " --rule_name "+p.name;
 					adminCmd += " --expression '"+p.rule_text1 +"'";
-					adminCmd += " --active "+((p.active == 1)?"A":"I");
+					adminCmd += " --active "+ p.active;
 					adminCmd += " --comments '"+p.comments +"'";	
 					adminCmd += "\n\n";
 					break;
 					case 8: type = "early event"; 
-					adminCmd += "liveapicreatoradmin rule create --ruletype earlyevent --entity_name "+p.entity_name;
+					adminCmd += "lacadmin rule create --ruletype earlyevent --entity_name "+p.entity_name;
 					adminCmd += " --rule_name "+p.name;
-					adminCmd += " --expression '"+p.rule_text1 + "'";;
-					adminCmd += " --active "+((p.active == 1)?"A":"I");
+					adminCmd += " --expression '"+p.rule_text1 + "'";
+					adminCmd += " --active "+ p.active;
 					adminCmd += " --comments '"+p.comments +"'";	
 					adminCmd += "\n\n";
 					break;
 					case 9: type = "commit event"; 
-					adminCmd += "liveapicreatoradmin rule create --ruletype commitevent --entity_name "+p.entity_name;
+					adminCmd += "lacadmin rule create --ruletype commitevent --entity_name "+p.entity_name;
 					adminCmd += " --rule_name "+p.name;
-					adminCmd += " --expression '"+p.rule_text1 + "'";;
-					adminCmd += " --active "+((p.active == 1)?"A":"I");
+					adminCmd += " --expression '"+p.rule_text1 + "'";
+					adminCmd += " --active "+ p.active;
 					adminCmd += " --comments '"+p.comments +"'";	
 					adminCmd += "\n\n";
 					break;
 					case 11: type = "minimum"; 
-					adminCmd += "liveapicreatoradmin rule create --ruletype minimum --entity_name "+p.entity_name;
+					adminCmd += "lacadmin rule create --ruletype minimum --entity_name "+p.entity_name;
 					adminCmd += " --rule_name "+p.name;
 					adminCmd += " --attribute_name "+p.attribute_name;
 					adminCmd += " --role_name "+p.rule_text1;
 					adminCmd += " --child_attribute "+p.rule_text3;
 					adminCmd += " --expression '"+p.rule_text2+ "'";
-					adminCmd += " --active "+((p.active == 1)?"A":"I");
+					adminCmd += " --active "+ p.active;
+					adminCmd += " --jit "+ p.jit;
 					adminCmd += " --comments '"+p.comments +"'";	
 					adminCmd += "\n\n";
 					break;
 					case 12: type = "maximum"; 
-					adminCmd += "liveapicreatoradmin rule create --ruletype maximum --entity_name "+p.entity_name;
+					adminCmd += "lacadmin rule create --ruletype maximum --entity_name "+p.entity_name;
 					adminCmd += " --rule_name "+p.name;
 					adminCmd += " --attribute_name "+p.attribute_name;
 					adminCmd += " --role_name "+p.rule_text1;
 					adminCmd += " --child_attribute "+p.rule_text3;
 					adminCmd += " --expression '"+p.rule_text2 + "'";
-					adminCmd += " --active "+((p.active == 1)?"A":"I");
+					adminCmd += " --active "+ p.active;
+					adminCmd += " --jit "+ p.jit;
 					adminCmd += " --comments '"+p.comments +"'";	
 					adminCmd += "\n\n";
 					break;
 					case 13: type = "managed parent"; 
-					adminCmd += "liveapicreatoradmin rule create --ruletype managedparent --entity_name "+p.entity_name;
+					adminCmd += "lacadmin rule create --ruletype managedparent --entity_name "+p.entity_name;
 					adminCmd += " --rule_name "+p.name;
 					adminCmd += " --role_name "+p.rule_text1;
-					adminCmd += " --expression '"+p.rule_text1 + "'";;
-					adminCmd += " --active "+((p.active == 1)?"A":"I");
+					adminCmd += " --expression '"+p.rule_text1 + "'";
+					adminCmd += " --active "+ p.active;
 					adminCmd += " --comments '"+p.comments +"'";	
 					adminCmd += "\n\n";
 					break;
@@ -513,7 +523,11 @@ module.exports = {
 			}
 		}
 
-		client.get(url + "/rules?sysfilter=equal(project_ident:" + projIdent +")&pagesize=100", {
+		var filter = "";
+		if(cmd.ident){
+			filter = "&sysfilter=equal(ident: "+cmd.ident+")";
+		}
+		client.get(url + "/rules?sysfilter=equal(project_ident:" + projIdent +")&pagesize=100"+filter, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
 				"Content-Type" : "application/json"

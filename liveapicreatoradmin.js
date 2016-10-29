@@ -132,8 +132,9 @@ program
 	.option('--rule_name [name]', 'Optional: a name for the rule. If not specified, a name will be generated.')
 	.option('--comments [comments]', 'Optional: a comment for the rule')
 	.option('--active [true|false]', 'Optional: whether the rule should be active, true by default')
-	.option('--project_ident', 'The ident of a project, if other than the current project')
+	.option('--project_ident [ident]', 'The ident of a project, if other than the current project')
 	.option('--ident [ident]', 'For delete, the ident of the rule to delete')
+	.option('--jit [true|false]', 'Just in time flag (default false)')
 	.option('--file [file]', 'Optional: for import/export, the name of a file to read from/save to, if unspecified, use stdin/stdout')
 	.option('--verbose', 'Optional: whether to display list of rules in detailed format that can be used to recreate using command line')
 	.action(rule.doRule);
