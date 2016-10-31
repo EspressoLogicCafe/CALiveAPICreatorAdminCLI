@@ -16,9 +16,6 @@ module.exports = {
 		else if (action === 'create') {
 			module.exports.create(cmd);
 		}
-		else if (action === 'update') {
-			module.exports.update(cmd);
-		}
 		else if (action === 'export') {
 			module.exports.export(cmd);
 		}
@@ -257,6 +254,10 @@ module.exports = {
 		if(cmd.jit !== null){
 			jit = cmd.jit;
 		}
+		var sqlable = false;
+		if(cmd.sqlable !== null){
+			sqlable = cmd.sqlable;
+		}
 		if ( ! curProj) {
 			curProj = dotfile.getCurrentProject();
 		}
@@ -277,7 +278,8 @@ module.exports = {
 			active: cmd.active,
 			ruletype_ident: cmd.ruletype,
 			project_ident: curProj,
-			jit: jit
+			jit: jit,
+			sqlable: sqlable
 		};
 		var startTime = new Date();
 		client.post(loginInfo.url + "/rules", {
@@ -389,9 +391,10 @@ module.exports = {
 					adminCmd += " --rule_name "+p.name;
 					adminCmd += " --role_name "+p.rule_text1;
 					adminCmd += " --child_attribute "+p.rule_text3;
-					adminCmd += " --expression '"+p.rule_text2+"'";
+					adminCmd += " --clause '"+p.rule_text2+"'";
 					adminCmd += " --active "+ p.active;
 					adminCmd += " --jit "+ p.jit;
+					adminCmd += " --sqlable "+ p.sqlable;
 					adminCmd += " --comments '"+p.comments +"'";	
 					adminCmd += "\n\n";
 					break;
@@ -400,9 +403,10 @@ module.exports = {
 					adminCmd += " --rule_name "+p.name;
 					adminCmd += " --role_name "+p.rule_text1;
 					adminCmd += " --attribute_name "+p.attribute_name;
-					adminCmd += " --expression '"+p.rule_text2+"'";
+					adminCmd += " --clause '"+p.rule_text2+"'";
 					adminCmd += " --active "+ p.active;
 					adminCmd += " --jit "+ p.jit;
+					adminCmd += " --sqlable "+ p.sqlable;
 					adminCmd += " --comments '"+p.comments +"'";	
 					adminCmd += "\n\n";
 					break;
@@ -413,6 +417,7 @@ module.exports = {
 					adminCmd += " --expression '"+p.rule_text1 + "'";
 					adminCmd += " --active "+ p.active;
 					adminCmd += " --jit "+ p.jit;
+					adminCmd += " --sqlable "+ p.sqlable;
 					adminCmd += " --comments '"+p.comments +"'";	
 					adminCmd += "\n\n";
 					break;
@@ -473,9 +478,10 @@ module.exports = {
 					adminCmd += " --attribute_name "+p.attribute_name;
 					adminCmd += " --role_name "+p.rule_text1;
 					adminCmd += " --child_attribute "+p.rule_text3;
-					adminCmd += " --expression '"+p.rule_text2+ "'";
+					adminCmd += " --clause '"+p.rule_text2+ "'";
 					adminCmd += " --active "+ p.active;
 					adminCmd += " --jit "+ p.jit;
+					adminCmd += " --sqlable "+ p.sqlable;
 					adminCmd += " --comments '"+p.comments +"'";	
 					adminCmd += "\n\n";
 					break;
@@ -485,9 +491,10 @@ module.exports = {
 					adminCmd += " --attribute_name "+p.attribute_name;
 					adminCmd += " --role_name "+p.rule_text1;
 					adminCmd += " --child_attribute "+p.rule_text3;
-					adminCmd += " --expression '"+p.rule_text2 + "'";
+					adminCmd += " --clause '"+p.rule_text2 + "'";
 					adminCmd += " --active "+ p.active;
 					adminCmd += " --jit "+ p.jit;
+					adminCmd += " --sqlable "+ p.sqlable;
 					adminCmd += " --comments '"+p.comments +"'";	
 					adminCmd += "\n\n";
 					break;
