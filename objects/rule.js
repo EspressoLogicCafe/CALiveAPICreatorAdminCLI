@@ -254,6 +254,10 @@ module.exports = {
 		if(cmd.jit !== null){
 			jit = cmd.jit;
 		}
+		var ruleActive = true;
+		if(cmd.active !== null){
+			ruleActive = cmd.active;
+		}
 		var sqlable = false;
 		if(cmd.sqlable !== null){
 			sqlable = cmd.sqlable;
@@ -274,8 +278,8 @@ module.exports = {
 			rule_text2: rule_text2,
 			rule_text3: rule_text3,
 			name: rule_name,
-			comments: cmd.comments,
-			active: cmd.active,
+			comments: cmd.comments || "",
+			active: ruleActive,
 			ruletype_ident: cmd.ruletype,
 			project_ident: curProj,
 			jit: jit,
