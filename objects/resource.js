@@ -538,11 +538,6 @@ module.exports = {
 	},
 	import: function(cmd) {
 		var client = new Client();
-		//need to decompose both export and import
-		//if(true){
-			//console.log("Import of Resources not available - use Live API Creator GUI");
-			//return;
-		//}
 	
 		var loginInfo = login.login(cmd);
 		if ( ! loginInfo)

@@ -46,7 +46,7 @@ The `delete` command deletes the specified resource.
 ## Resource export
 Provide the ident of the resource and the export file name. If the project_ident is not provided it will use the current one.
 ```
-liveapicreatoradmin resource export  [--project_ident <ident>] [--ident <ident>] [--resource_name <name>] --file resources.json
+lacadmin resource export  [--project_ident <ident>] [--ident <ident>] [--resource_name <name>] --file resources.json
 ```
 The export resource exports to the specified JSON file. If the filename parameter is not specified, stdout is used.
 
@@ -54,7 +54,7 @@ The export resource exports to the specified JSON file. If the filename paramete
 ## Resource import
 Provide the file name of the json file for the resource you wish to import.
 ```
-use live API Creator admin GUI for resource import or lacadmin project import/export
-```
-The import resource imports the specified JSON file. If the filename parameter is not specified, stdin is used. (you can pipe the json file to the import)
+lacadmin resource import  [--project_ident <ident>] --file resources.json
+
+The import functions imports the specified JSON resource file. If the filename (--file) parameter is not specified, stdin is used. (you can pipe the json file to the import)
 
