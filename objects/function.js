@@ -74,6 +74,7 @@ module.exports = {
 					table.cell("Ident", p.ident);
 					table.cell("Name", p.name);
 					table.cell("Parameters",parameters);
+					table.cell("Resource",p.resource_names);
 					table.cell("Is Active", p.is_active);
 					var comments = p.comments;
 					if ( ! comments) {

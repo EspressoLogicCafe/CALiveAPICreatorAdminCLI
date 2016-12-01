@@ -18,6 +18,7 @@ lacadmin datasource list
 lacadmin libraries list
 lacadmin authprovider list
 lacadmin rule list 
+lacadmin apiversion list
 lacadmin resource list
 lacadmin relationship list
 lacadmin token list
@@ -25,13 +26,15 @@ lacadmin role list
 lacadmin user list
 lacadmin namedsort list
 lacadmin namedfilter list
-lacadmin apiversion list
 lacadmin event list
 lacadmin handler list
 lacadmin topic list
 lacadmin npa list
 lacadmin gateway list
 lacadmin snapshot list
+lacadmin managedserver list
+lacadmin function list
+lacadmin eula accepted 
 
 lacadmin logout -a $PROJECT
 
