@@ -41,6 +41,7 @@ var eula = require('./objects/eula.js');
 //3.1 features
 var schema = require('./objects/schema.js');
 var fnction = require('./objects/function.js');
+var license = require('./objects/license.js');
 
 program
 	.version(pkg.version);
@@ -88,7 +89,7 @@ program
 	.option('--db_name [name]', 'The name of the datasource connection')
 	.option('--ident [ident]', 'For delete or reload, the ident of the datasource')
 	.option('--prefix [prefix]', 'The prefix of the datasource connection')
-	.option('--dbasetype [dbasetype]', 'The type of the datasource connection, can be mysql, oracle, sqlserver,derby, postgres')
+	.option('--dbasetype [dbasetype]', 'The type of the datasource connection, can be mysql, oracle, sqlserver, derby, postgresql, db2luw, csv, hbase, sap, salesforce, db2zos, sqlserverazure')
 	.option('--catalog_name [catalog_name]', 'The catalog in the datasource')
 	.option('--schema_name [schema_name]', 'The schema in the datasource')
 	.option('--user_name [user_name]', 'The name of the datasource user')
@@ -154,7 +155,7 @@ program
 	
 program
 	.command('libraries <list|create|update|delete|export|import>')
-	.description('Administer java and javascript libraries for an account.')
+	.description('Administer javascript libraries for an account.')
 	.option('--ident [ident]','The ident of the library')
 	.option('--project_ident [projectId]','The project ident that this library will be marked as used' )
 	.option('--name [name]', 'Name of library')
@@ -165,7 +166,7 @@ program
 	.option('--refUrl [refurl]', 'Reference URL')
 	.option('--linkProject','Link the imported library to the current project')
 	.option('--comments [comment]', 'Comment on Library')
-	.option('--file [fileName]', '[Optional] Name of file to import/export library JAR or JS (if not provided stdin/stdout used for export)')
+	.option('--file [fileName]', '[Optional] Name of JS file to import/export (if not provided stdin/stdout used for export)')
 	.action(library.doLibrary);
 	 
 	 
@@ -194,7 +195,7 @@ program
 	
 program
 	.command('namedfilter <list|create|delete|update|import|export>')
-	.description('Administer Named filter for the active API Project.')
+	.description('Administer Named Filter for the active API Project.')
 	.option('--ident [ident]', 'The ident of the specific named filter object')
 	.option('--filtername [name]', 'The Name of named filter')
 	.option('--filter_text [text]', 'Text to define named filter')
@@ -235,7 +236,7 @@ program
 	
 program
 	.command('npa <list|create|export>')
-	.description('Administer Non Persistent Attributes for the active API Project. New in version 2.1.x')
+	.description('Administer Non Persistent Attributes for the active API Project.')
 	.option('--ident [ident]', 'The ident of the specific named sort object')
 	.option('--dbschema_ident [ident]', '[Optional] The dbschema ident if not the active project')
 	.option('--file [fileName]', '[Optional] Name of file for import/export (if not provided stdin/stdout used for export)')
@@ -273,7 +274,7 @@ program
 	
 program
 	.command('relationship <list|export|import>')
-	.description('Administer Relationships (Virtual Keys) for current project.')
+	.description('Administer Relationships for current project.')
 	.option('--ident [ident]', 'This is the ident of the relationship')
 	.option('--project_ident [project_ident]','The project ident that will be used' )
 	.option('--file [fileName]', '[Optional] Name of file to import/export (if not provided stdin/stdout used for export)')
@@ -281,14 +282,14 @@ program
 
 program
 	.command('snapshot <list|start|restore>')
-	.description('List or start a project snapshot (backup) for current project. New in version 2.1.x')
+	.description('List or start a project snapshot (backup) for current project.')
 	.option('--name [name]', 'The snapshot Name used by both start and restore')
 	.option('--project_ident [project_ident]','[optional] The project ident that will be used instead of current selected' )
 	.action(snapshot.doSnapshot);	
 
 program
-	.command('gateway <list|create|import|export|publish>')
-	.description('Publish Swagger document for current project to Gateway. New in version 2.1.x - publish requires existing swagger file')
+	.command('gateway <list|create|delete|import|export|publish>')
+	.description('Publish Swagger document for current project to CA Gateway.')
 	.option('--ident [ident]', 'The ident for the saved gateway definition')
 	.option('--name [name]', 'The name for the gateway definition')
 	.option('--username [name]', 'The username for the gateway')
@@ -301,7 +302,7 @@ program
 	.action(gateway.doGateway);	
 	
 program
-	.command('managedserver <list|create|update|delete|import|export>')
+	.command('managedserver <list|create|delete|update|import|export>')
 	.description('Administer a managed data server (used by @databases to create datasources).')
 	.option('--server_name [name]', 'The name of the datasource connection')
 	.option('--ident [ident]', 'For delete or reload, the ident of the managed data server')
@@ -339,6 +340,12 @@ program
 	.option('--project_ident [project_ident]','The project ident that will be used' )
 	.option('--file [fileName]', '[Optional] Name of file to import/export (if not provided stdin/stdout used for export)')
 	.action(fnction.doFunction);	
+	
+program
+	.command('license <list|import>')
+	.description('Administer server License for connected server.')
+	.option('--file [fileName]', ' Name of file to import (if not provided stdin used for import)')
+	.action(license.doLicense);
 	
 program
 	.command('eula <accepted>')

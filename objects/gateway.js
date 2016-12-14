@@ -24,11 +24,14 @@ module.exports = {
 		else if (action === 'import') {
 			module.exports.import(cmd);
 		}
+		else if (action === 'delete') {
+			module.exports.delete(cmd);
+		}
 		else if (action === 'create') {
 			module.exports.create(cmd);
 		}
 		else {
-			console.log('You must specify an action: list, create, import, export, or publish');
+			console.log('You must specify an action: list, create, import, delete, export, or publish');
 			//program.help();
 		}
 	},
@@ -282,6 +285,83 @@ module.exports = {
 				printObject.printHeader(trailer);
 				
 		});
+	},
+	delete: function(cmd) {
+		var client = new Client();
+		var loginInfo = login.login(cmd);
+		if ( ! loginInfo)
+			return;
+		var filt = null;
+		if (cmd.ident) {
+			filt = "equal(ident:" + cmd.ident + ")";
+		} else {
+			console.log('Missing parameter: please specify gateway ident'.red);
+			return;
+		}
+		
+		client.get(loginInfo.url + "/admin:gateways?sysfilter=" + filt, {
+			headers: {
+				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+				"Content-Type" : "application/json"
+			}
+		}, function(data) {
+			//console.log('get result: ' + JSON.stringify(data, null, 2));
+			if (data.errorMessage) {
+				console.log(("Error: " + data.errorMessage).red);
+				return;
+			}
+			if (data.length === 0) {
+				console.log(("Error: no such library").red);
+				return;
+			}
+			if (data.length > 1) {
+				console.log(("Error: more than one gateways for the given condition: " + filter).red);
+				return;
+			}
+			var library = data[0];
+			var startTime = new Date();
+			client['delete'](library['@metadata'].href + "?checksum=" + library['@metadata'].checksum, {
+				headers: {
+					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1"
+				}
+			}, function(data2) {
+				var endTime = new Date();
+				if (data2.errorMessage) {
+					console.log(data2.errorMessage.red);
+					return;
+				}
+				printObject.printHeader('Gateway was deleted, including the following objects:');
+				
+				
+				var delLibrary = _.find(data2.txsummary, function(p) {
+					return p['@metadata'].resource === 'admin:gateways';
+				});
+				if ( ! delLibrary) {
+					console.log('ERROR: unable to find deleted gateway'.red);
+					return;
+				}
+				if (cmd.verbose) {
+					_.each(data2.txsummary, function(obj) {
+						printObject.printObject(obj, obj['@metadata'].entity, 0, obj['@metadata'].verb);
+					});
+				}
+				else {
+					printObject.printObject(delLibrary, delLibrary['@metadata'].entity, 0, delLibrary['@metadata'].verb);
+					console.log(('and ' + (data2.txsummary.length - 1) + ' other objects').grey);
+				}
+				
+				var trailer = "Request took: " + (endTime - startTime) + "ms";
+				trailer += " - # objects touched: ";
+				if (data2.txsummary.length == 0) {
+					console.log('No data returned'.yellow);
+				}
+				else {
+					trailer += data2.txsummary.length;
+				}
+				printObject.printHeader(trailer);
+			});
+		});
+			
 	},
 	create: function(cmd) {
 	

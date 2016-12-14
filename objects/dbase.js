@@ -163,7 +163,13 @@ module.exports = {
 			case "nuodb": dbasetype = 7; break;
 			case "postgres": dbasetype = 8; break;
 			case "postgresql": dbasetype = 8; break;
+			case "salesforce": dbasetype = 16; break;
 			case "derby": dbasetype = 17; break;
+			case "db2luw": dbasetype = 19; break;
+			case "db2zos": dbasetype = 18; break;
+			case "hbase": dbasetype = 21; break;
+			case "sap": dbasetype = 22; break;
+			case "csv": dbasetype = 23; break;
 			default : console.log('Unknown database type: ' + dbasetype); return;
 		}
 
