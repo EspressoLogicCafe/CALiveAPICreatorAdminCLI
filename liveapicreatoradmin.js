@@ -102,7 +102,7 @@ program
 	.action(dbase.doDbase);
 
 program
-	.command('resource <list|delete|update|export>')
+	.command('resource <list|delete|update|export|import>')
 	.description('Administer resources within a project.')
 	.option('--ident [ident]', 'For update, the ident of the resource (use resource list)')
 	.option('--prop1 [value]', 'For update, the server name of the mongo resource')
@@ -207,23 +207,27 @@ program
 	.action(filters.doFilter);
 
 program
-	.command('token <list|export|import>')
+	.command('token <list|import|export>')
 	.description('Administer Auth Tokens for current project.')
 	.option('--project_ident [project_ident]','The project ident that will be marked as used' )
 	.option('--file [fileName]', '[Optional] Name of file to import/export (if not provided stdin/stdout used for export)')
 	.action(token.doToken);	
 
 program
-	.command('role <list|export|import>')
+	.command('role <list|delete|import|export>')
 	.description('Administer Roles for current project.')
+	.option('--ident [ident]', 'The ident of the specific role to delete')
+	.option('--rolename [name]', 'The nam of the specific role to delete')
 	.option('--project_ident [project_ident]','The project ident that will be marked as used' )
 	.option('--file [fileName]', '[Optional] Name of file to import/export (if not provided stdin/stdout used for export)')
 	.action(role.doRole);	
 	
 program
-	.command('user <list|update|export|import>')
+	.command('user <list|delete|update|import|export>')
 	.description('Administer Users for current project.')
 	.option('--project_ident [project_ident]','The project ident that will be marked as used' )
+	.option('--ident [ident]', 'The ident of the specific user')
+	.option('--username [name]', 'The name of the specific user')
 	.option('--file [fileName]', '[Optional] Name of file to import/export (if not provided stdin/stdout used for export)')
 	.option('--password [password]','The password for this user' )
 	.option('--fullname [fullname]','User fullname' )
@@ -235,7 +239,7 @@ program
 	
 	
 program
-	.command('npa <list|create|export>')
+	.command('npa <list|delete|export|import>')
 	.description('Administer Non Persistent Attributes for the active API Project.')
 	.option('--ident [ident]', 'The ident of the specific named sort object')
 	.option('--dbschema_ident [ident]', '[Optional] The dbschema ident if not the active project')
@@ -244,14 +248,15 @@ program
 	.action(npa.doNPAttr);
 	
 program
-	.command('topic <list|export|import>')
+	.command('topic <list|delete|import|export>')
 	.description('Administer Topics for current project.')
 	.option('--project_ident [project_ident]','The project ident that will be marked as used' )
+	.option('--ident [ident]', 'The ident of the specific topic to delete')
 	.option('--file [fileName]', '[Optional] Name of file to import/export (if not provided stdin/stdout used for export)')
 	.action(topic.doTopic);	
 	
 program
-	.command('event <list|export|import>')
+	.command('event <list|delete|export|import>')
 	.description('Administer Request & Response Events for current project.')
 	.option('--eventname [name]', 'The request or response Name')
 	.option('--project_ident [project_ident]','The project ident that will be used' )
@@ -259,7 +264,7 @@ program
 	.action(event.doEvent);	
 	
 program
-	.command('handler <list|export|import>')
+	.command('handler <list|delete|export|import>')
 	.description('Administer Custom Endpoints (Handlers) for current project.')
 	.option('--project_ident [project_ident]','The project ident that will be used' )
 	.option('--file [fileName]', '[Optional] Name of file to import/export (if not provided stdin/stdout used for export)')
@@ -273,7 +278,7 @@ program
 	.action(apiversion.doVersion);	
 	
 program
-	.command('relationship <list|export|import>')
+	.command('relationship <list|delete|export|import>')
 	.description('Administer Relationships for current project.')
 	.option('--ident [ident]', 'This is the ident of the relationship')
 	.option('--project_ident [project_ident]','The project ident that will be used' )

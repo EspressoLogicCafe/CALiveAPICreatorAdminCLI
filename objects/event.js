@@ -13,6 +13,9 @@ module.exports = {
 		if (action === 'list') {
 			module.exports.list(cmd);
 		}
+		else if (action === 'delete') {
+			module.export.del(cmd);
+		}
 		else if (action === 'export') {
 			module.exports.export(cmd);
 		}
@@ -20,7 +23,7 @@ module.exports = {
 			module.exports.import(cmd);
 		}
 		else {
-			console.log('You must specify an action: list, import, or  export');
+			console.log('You must specify an action: list, delete, import, or  export');
 			//program.help();
 		}
 	},
@@ -89,6 +92,77 @@ module.exports = {
 			printObject.printTrailer("# events: " + data.length);
 		});
 			
+	},
+	del: function(cmd) {
+		var client = new Client();
+		var loginInfo = login.login(cmd);
+		if ( ! loginInfo) {
+			console.log('You are not currently logged into a CA Live API Creator server.'.red);
+			return;
+		}
+		var projIdent = cmd.project_ident;
+		if ( ! projIdent) {
+			projIdent = dotfile.getCurrentProject();
+			if ( ! projIdent) {
+				console.log('There is no current project.'.yellow);
+				return;
+			}
+		}		
+		var filt = "equal(project_ident:"+projIdent ;
+		if (cmd.ident) {
+			filt = ",ident:" + cmd.ident + ")";
+		} else {
+			console.log('Missing parameter: please specify ident'.red);
+			return;
+		}
+		
+		client.get(loginInfo.url + "/admin:eventhandlers?sysfilter=" + filt, {
+			headers: {
+				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+				"Content-Type" : "application/json"
+			}
+		}, function(data) {
+			//console.log('get result: ' + JSON.stringify(data, null, 2));
+			if (data.errorMessage) {
+				console.log(("Error: " + data.errorMessage).red);
+				return;
+			}
+			if (data.length === 0) {
+				console.log(("Error: no such event handler ident").red);
+				return;
+			}
+			if (data.length > 1) {
+				console.log(("Error: more than one event handler for the given condition: " + filter).red);
+				return;
+			}
+			var db = data[0];
+			var startTime = new Date();
+			client['delete'](db['@metadata'].href + "?checksum=" + db['@metadata'].checksum, {
+				headers: {
+					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+					"Content-Type" : "application/json"
+				}
+			}, function(data2) {
+				var endTime = new Date();
+				if (data2.errorMessage) {
+					console.log(data2.errorMessage.red);
+					return;
+				}
+				printObject.printHeader('Event Handler was deleted, including the following objects:');
+				_.each(data2.txsummary, function(obj) {
+					printObject.printObject(obj, obj['@metadata'].entity, 0, obj['@metadata'].verb);
+				});
+				var trailer = "Request took: " + (endTime - startTime) + "ms";
+				trailer += " - # objects touched: ";
+				if (data2.txsummary.length == 0) {
+					console.log('No data returned'.yellow);
+				}
+				else {
+					trailer += data2.txsummary.length;
+				}
+				printObject.printHeader(trailer);
+			});
+		});
 	},
 	export: function(cmd) {
 		var client = new Client();

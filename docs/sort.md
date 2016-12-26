@@ -60,7 +60,7 @@ liveapicreatoradmin namedsort delete --ident 2007
 ## Named Sort export
 Provide the ident of the named sort and (optional) the export file name. If [--file] is not provided output will be sent to stdout.
 ```
-liveapicreatoradmin namedsort export  [--ident <ident>  --name <name>] [--file | > ] namedSort.json
+liveapicreatoradmin namedsort export  [--ident <ident>  --name <name>] [--file | > ]u namedSort.json
 ```
 The export namedsort exports the specified named sort into a JSON file. If the filename parameter is not specified, stdout is used.
 

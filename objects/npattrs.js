@@ -23,7 +23,7 @@ module.exports = {
 			module.exports.export(cmd);
 		}
 		else {
-			console.log('You must specify an action: list, create, update, delete, import, or  export');
+			console.log('You must specify an action: list, delete, import, or  export');
 			//program.help();
 		}
 	},
@@ -125,7 +125,7 @@ module.exports = {
 			filt = "equal(ident:" + cmd.ident + ")";
 		}
 		else {
-			console.log('Missing parameter: please specify either name or ident'.red);
+			console.log('Missing parameter: please specify either ident'.red);
 			return;
 		}
 		

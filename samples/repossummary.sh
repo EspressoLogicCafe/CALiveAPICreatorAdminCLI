@@ -34,6 +34,7 @@ lacadmin gateway list
 lacadmin snapshot list
 lacadmin managedserver list
 lacadmin function list
+lacadmin license list
 lacadmin eula accepted 
 
 lacadmin logout -a $PROJECT
