@@ -14,7 +14,7 @@ module.exports = {
 			module.exports.list(cmd);
 		}
 		else if(action === 'delete') {
-			module.export.del(cmd);
+			module.exports.del(cmd);
 		}
 		else if (action === 'export') {
 			module.exports.export(cmd);

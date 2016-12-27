@@ -259,6 +259,7 @@ program
 	.command('event <list|delete|export|import>')
 	.description('Administer Request & Response Events for current project.')
 	.option('--eventname [name]', 'The request or response Name')
+	.option('--ident [ident]', 'The ident of the specific event')
 	.option('--project_ident [project_ident]','The project ident that will be used' )
 	.option('--file [fileName]', '[Optional] Name of file to import/export (if not provided stdin/stdout used for export)')
 	.action(event.doEvent);	
@@ -267,6 +268,7 @@ program
 	.command('handler <list|delete|export|import>')
 	.description('Administer Custom Endpoints (Handlers) for current project.')
 	.option('--project_ident [project_ident]','The project ident that will be used' )
+	.option('--ident [ident]', 'The ident of the specific handler')
 	.option('--file [fileName]', '[Optional] Name of file to import/export (if not provided stdin/stdout used for export)')
 	.action(handler.doHandler);	
 
