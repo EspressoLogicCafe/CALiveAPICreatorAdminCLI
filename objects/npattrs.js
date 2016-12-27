@@ -56,6 +56,7 @@ module.exports = {
 					console.log(schema.errorMessage.red);
 					return;
 				}
+			//console.log(schema);
 			client.get(url + "/admin:np_attributes?sysfilter=equal(dbaseschema_ident:" + schema[0].ident+")&sysorder=(table_name%2C+attr_name)&pagesize=100", {
 				headers: {
 					Authorization: "CALiveAPICreator " + apiKey + ":1",
@@ -67,10 +68,6 @@ module.exports = {
 					return;
 				}
 				printObject.printHeader('Non Persistent Attributes Schema Name: '+ schema[0].name );
-				
-				
-				
-				
 				var table = new Table();
 				_.each(data, function(p) {
 				

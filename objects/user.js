@@ -102,10 +102,10 @@ module.exports = {
 		}	
 		var filt = "equal(project_ident:"+projIdent ;
 		if (cmd.ident) {
-			filt = ",ident:" + cmd.ident + ")";
+			filt += ",ident:" + cmd.ident + ")";
 		}
 		else if (cmd.username) {
-			filt = ",name:'" + cmd.username + "')";
+			filt += ",name:'" + cmd.username + "')";
 		}
 		else {
 			console.log('Missing parameter: please specify either username or ident'.red);

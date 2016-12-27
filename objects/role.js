@@ -97,10 +97,10 @@ module.exports = {
 		}
 		var filt = "equal(project_ident:"+projIdent ;
 		if (cmd.ident) {
-			filt = ",ident:" + cmd.ident + ")";
+			filt += ",ident:" + cmd.ident + ")";
 		}
 		else if (cmd.rolename) {
-			filt = ",name:'" + cmd.rolename + "')";
+			filt += ",name:'" + cmd.rolename + "')";
 		}
 		else {
 			console.log('Missing parameter: please specify either rolename or ident'.red);

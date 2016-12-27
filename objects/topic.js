@@ -98,7 +98,7 @@ module.exports = {
 		}		
 		var filt = "equal(project_ident:"+projIdent ;
 		if (cmd.ident) {
-			filt = ",ident:" + cmd.ident + ")";
+			filt += ",ident:" + cmd.ident + ")";
 		} else {
 			console.log('Missing parameter: please specify ident'.red);
 			return;
