@@ -207,12 +207,14 @@ module.exports = {
 				}
 				for(var i = 0; i < data.length ; i++){
 					delete data[i]["ident"];
+					delete data[i]["ts"];
 					delete data[i]["@metadata"];
 					if(Array.isArray(data[i]["parameters"]) && data[i]["parameters"].length > 0) {
 					//console.log( JSON.stringify(data[i]["parameters"]));
 					   for(var j = 0; j < data[i]["parameters"].length ; j++){
 					  		//console.log( j +" : " + JSON.stringify(data[i]["parameters"]));
 						   delete data[i].parameters[j]["@metadata"];
+						    delete data[i].parameters[j]["ts"];
 						   delete data[i].parameters[j]["type_name"];
 						   delete data[i].parameters[j]["ident"];
 						   delete data[i].parameters[j]["function_ident"];

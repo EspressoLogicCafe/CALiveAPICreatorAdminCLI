@@ -207,84 +207,103 @@ module.exports = {
 		var loginInfo = login.login(cmd);
 		if ( ! loginInfo)
 			return;
-		var urlname = dotfile.getCurrentProjectUrl();
-		if(! urlname ){
-			console.log("You must select and use a project. $lacadmin project use --url_name myProjectName".red);
-			return;
-		}
 		var url = loginInfo.url;
 		var apiKey = loginInfo.apiKey;
-		var idx = url.indexOf("/abl");
-		var swaggerURL = url.substring(0,idx) +"/default/"+urlname+"/v1";
-	
-		var filter = null;
-		var username = ""
-		if( cmd.username){
-			username = cmd.username;
-		} else {
-			console.log("Parameter Gateway '--username' missing".red);
-			return;
-		}
-		var password = "";
-		if( cmd.password){
-			password = cmd.password;
-		}  else {
-			console.log("Parameter Gateway '--password' missing".red);
-			return;
-		}
-		var apiGatewayHostname  = "";
-		if( cmd.hostname){
-			apiGatewayHostname = cmd.hostname;
-		} else {
-			console.log("Parameter Gateway endpoint '--hostname' missing".red);
-			return;
-		}
-		
-		if( !cmd.url_name){
-			console.log("Parameter API Project '--url_name' missing".red);
-			return;
-		}
-		
-		if( !cmd.apiversion){
-			console.log("Parameter  API Project verison '--apiversion' missing".red);
-			return;
-		}
-		
-		var headers = {};
-		if(cmd.useAuthToken){
-		 	headers = {	
-		 		Authorization: "CALiveAPICreator " + apiKey + ":1",
+		if(! cmd.ident ){
+			   console.log("You must pass the ident for a specific gateway you intend to publish".red);
+			   return;
+		   }
+		client.get(url + "/admin:gateways?sysfilter=equal(ident:"+cmd.ident+")", {
+			headers: {
+				Authorization: "CALiveAPICreator " + apiKey + ":1",
 				"Content-Type" : "application/json"
-			 }
-		}		
-			var gateway = {
-				 url: cmd.hostname,
-   				 username: cmd.username,
-   				 password: cmd.password,
-    			 api_url_fragment: cmd.url_name,
-    			 api_version: cmd.apiversion
-			};
-			console.log(gateway);
-			var startTime = new Date();
-			client.post(loginInfo.url + "/@gateway_publish", {
-				data: gateway,
-				headers: {
-					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
-					"Content-Type" : "application/json"
+			}
+		}, function(data) {
+			if (data.errorMessage) {
+				console.log(data.errorMessage.red);
+				return;
+			}
+			console.log(data);
+		   	var url_name = data.api_url_fragment;
+		   	if(cmd.url_name ){
+		   		url_name = cmd.url_name;
+		   	} 
+		   	if(!url_name ){
+			   console.log("Gateway definition missing --url_name".red);
+			   return;
+		   	}
+	
+		   	var filter = null;
+		   	var username = data.default_username
+		   	if( cmd.username){
+			   username = cmd.username;
+		   	} 
+		   	if( !username){
+			   console.log("Parameter Gateway '--username' missing".red);
+			   return;
+		   	}
+		   	var password = data.password;
+		   	if( cmd.password){
+			   password = cmd.password;
+		   	}  
+		   	if( !password){
+			   console.log("Parameter Gateway '--password' missing".red);
+			   return;
+		   	}
+		   	var apiGatewayHostname  = data.url;
+		   	if( cmd.hostname){
+			   apiGatewayHostname = cmd.hostname;
+		   	} 
+	
+			if( !apiGatewayHostname){
+			   console.log("Parameter Gateway endpoint '--hostname' missing".red);
+			   return;
+		   	}
+		
+		   var apiversion = data.apiversion;
+		   if( cmd.apiversion){
+		   		apiversion = cmd.apiversion;
+		   } 
+		    if( !apiversion){
+			   console.log("Parameter  API Project verison '--apiversion' missing".red);
+			   return;
+		   }
+		
+		   var headers = {};
+		   if(cmd.useAuthToken){
+			   headers = {	
+				   Authorization: "CALiveAPICreator " + apiKey + ":1",
+				   "Content-Type" : "application/json"
 				}
-			}, function(data) {
-				var endTime = new Date();
-				if (data.errorMessage) {
-					console.log("Publish Error "+ data.errorMessage.red);
-					return;
-				}
-				printObject.printHeader('Gateway publish complete:');
-				console.log(data);
-				var trailer = "Request took: " + (endTime - startTime) + "ms";
+		   }		
+			   var gateway = {
+					url: apiGatewayHostname,
+					username: username,
+					password: password,
+					api_url_fragment: url_name,
+					api_version: apiversion
+			   };
+			   console.log(gateway);
+			   var startTime = new Date();
+			   client.post(loginInfo.url + "/@gateway_publish", {
+				   data: gateway,
+				   headers: {
+					   Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+					   "Content-Type" : "application/json"
+				   }
+			   }, function(gwdata) {
+				   var endTime = new Date();
+				   if (gwdata.errorMessage) {
+					   console.log("Publish Error "+ gwdata.errorMessage.red);
+					   return;
+				   }
+				   printObject.printHeader('Gateway publish complete:');
+				   console.log(data);
+				   var trailer = "Request took: " + (endTime - startTime) + "ms";
 
-				printObject.printHeader(trailer);
-				
-		});
+				   printObject.printHeader(trailer);	
+		    });
+		 });
 	},
 	delete: function(cmd) {
 		var client = new Client();
