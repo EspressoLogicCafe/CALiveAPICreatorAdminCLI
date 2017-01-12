@@ -164,6 +164,7 @@ program
 	.option('--short_name [shortname]', 'Short Name')
 	.option('--docUrl [docurl]', 'Documentation URL')
 	.option('--refUrl [refurl]', 'Reference URL')
+	.option('--verbose', 'Detail debug info')
 	.option('--linkProject','Link the imported library to the current project')
 	.option('--comments [comment]', 'Comment on Library')
 	.option('--file [fileName]', '[Optional] Name of JS file to import/export (if not provided stdin/stdout used for export)')

@@ -176,8 +176,12 @@ module.exports = {
 			ver = "1.0";
 		}
 		if (cmd.libtype !== 'javascript') {
-			console.log('You did not specify a library type of [javascript])'.red);
+			console.log('If you specify a library type it must be equal to: javascript)'.red);
 			return;
+		}
+		var projIdent = cmd.project_ident;
+		if ( ! projIdent) {
+			projIdent = dotfile.getCurrentProject();
 		}
 		context.getContext(cmd, function() {
 			
@@ -242,13 +246,14 @@ module.exports = {
 					else {
 						trailer += data.txsummary.length;
 					}
-					printObject.printHeader(trailer);
-				}
-				var projIdent = cmd.project_ident;
-				if ( ! projIdent) {
-					projIdent = dotfile.getCurrentProject();
-				}
-				if(cmd.linkProject && projIdent !== null && data.txsummary.lenght > 0){
+				printObject.printHeader(trailer);
+		       }
+				
+				console.log("project ident "+projIdent );
+				console.log("logic_library_ident:" +data.txsummary[0].ident);
+				console.log("LinkProject "+ cmd.linkProject);
+				console.log("data.txsummary.length ="+data.txsummary.length);
+				if(cmd.linkProject && projIdent && data.txsummary.length > 0){
 					var linkproject = { 
 						//@metadata: {action: 'INSERT'}, 
 						logic_library_ident: data.txsummary[0].ident , 
@@ -267,13 +272,11 @@ module.exports = {
 							return;
 						}
 						if (data.length === 0) {
-							console.log(("Error: no such project for library to link").red);
+							console.log(("Error: no such project or library to link").red);
 							return;
 						}
-						printObject.printHeader(trailer);
 				  });	
 				}
-				
 			});
 		});
 	},
@@ -289,7 +292,12 @@ module.exports = {
 		if ( ! cmd.file) {
 			cmd.file = '/dev/stdin';
 		}
-		
+		var projIdent = cmd.project_ident;
+		if ( ! projIdent) {
+			projIdent = dotfile.getCurrentProject();
+		}
+		console.log("project ident "+projIdent );
+		console.log("LinkProject "+ cmd.linkProject);
 		context.getContext(cmd, function() {
 		
 			var fileContent = JSON.parse(fs.readFileSync(cmd.file));	
@@ -317,7 +325,6 @@ module.exports = {
 				printObject.printHeader('Logic Library was created, including:');
 				if(data.statusCode == 200 ){
 					console.log("Request took: " + (endTime - startTime) + "ms");
-					return;
 				} 
 				var newLib = _.find(data.txsummary, function(p) {
 					return p['@metadata'].resource === 'admin:logic_libraries';
@@ -335,7 +342,8 @@ module.exports = {
 					printObject.printObject(newLib, newLib['@metadata'].entity, 0, newLib['@metadata'].verb);
 					console.log(('and ' + (data.txsummary.length - 1) + ' other objects').grey);
 				}
-			
+				console.log("logic_library_ident:" +data.txsummary[0].ident);
+				
 				var trailer = "Request took: " + (endTime - startTime) + "ms";
 				trailer += " - # objects touched: ";
 				if (data.txsummary.length === 0) {
@@ -345,17 +353,15 @@ module.exports = {
 					trailer += data.txsummary.length;
 				}
 				printObject.printHeader(trailer);
-				var projIdent = cmd.project_ident;
-				if ( ! projIdent) {
-					projIdent = dotfile.getCurrentProject();
-				}
+				
 				if(cmd.linkProject){
+					console.log("Link Project to "+projIdent);
 					var linkproject = { 
 						//@metadata: {action: 'INSERT'}, 
 						logic_library_ident: data.txsummary[0].ident , 
 						project_ident: projIdent
 					};
-					linkproject["@metadata"] = {action:"MERGE_INSERT"} ;
+					linkproject["@metadata"] = {action:"INSERT"} ;
 					client.post(loginInfo.url + "/admin:project_libraries", {
 						data: linkproject,
 						headers: { 
@@ -364,17 +370,16 @@ module.exports = {
 						}
 						}, function(data) {
 						if (data.errorMessage) {
-							console.log(("Error: " + data.errorMessage).red);
+							console.log(("Link error: " + data.errorMessage).red);
 							return;
 						}
 						if (data.length === 0) {
-							console.log(("Error: no such project for library to link").red);
+							console.log(("Link error: no such project ident or library to link").red);
 							return;
 						}
 						printObject.printHeader(trailer);
 				  });	
 				}
-			
 			})
 		});	
 	},
