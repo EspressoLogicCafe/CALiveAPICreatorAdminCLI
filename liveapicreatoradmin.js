@@ -338,6 +338,8 @@ program
 	.option('--ignoredbcolumntype [true|false]','(optional) The ignoredbcolumntype setting is used when moving between database vendors' )
 	.option('--ignoreprimarykeyname [true|false]','(optional) The ignoreprimarykeyname setting is used when moving between database vendors' )
 	.option('--ignoreconstraintname [true|false]','(optional) The ignoreconstraintname setting is used when moving between database vendors' )
+	.option('--skiprelationships [true|false]','(optional) If true, relationships will not be created - default: false')
+	.option('--skiptablecreation [true|false]','(optional) If true, tables will not be created - default: false')
 	.option('--file [fileName]', '[Optional] Name of file to import/export (if not provided stdin/stdout used for export)')
 	.action(schema.doSchema);	
 		
