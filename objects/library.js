@@ -167,18 +167,12 @@ module.exports = {
 			console.log('Missing parameter: short_name'.red);
 			return;
 		}
-		if ( ! cmd.libtype) {
-			console.log('You did not specify a library type (javascript or java)'.red);
-			return;
-		}
+		
 		var ver = cmd.ver;
 		if( ! cmd.ver ) {
 			ver = "1.0";
 		}
-		if (cmd.libtype !== 'javascript') {
-			console.log('If you specify a library type it must be equal to: javascript)'.red);
-			return;
-		}
+
 		var projIdent = cmd.project_ident;
 		if ( ! projIdent) {
 			projIdent = dotfile.getCurrentProject();
@@ -195,7 +189,7 @@ module.exports = {
 				ref_url: cmd.refurl || null,
 				code: "",
 				system_only: false,
-				logic_type:  cmd.libtype ,
+				logic_type:  "javascript" ,
 				account_ident: context.account.ident
 			};
 			if( ! cmd.file){

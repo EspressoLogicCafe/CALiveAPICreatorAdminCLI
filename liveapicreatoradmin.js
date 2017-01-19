@@ -150,24 +150,24 @@ program
 	.option('--createFunction [bootstrap]', 'Name for Create Function')
 	.option('--paramMap [map]', 'Map of auth provider settings')
 	.option('--comments [comment]', 'Comment on auth provider')
-	.option('--file [fileName]', '[Optional] Name of file to Import/Export auth provider (if not provided stdin/stdout used)')
+	.option('--file [fileName]', '[Optional] Name of file to Import/Export auth provider (if not provided stdout used for export)')
 	.action(authprovider.doAuthProvider);
 	
 program
 	.command('libraries <list|create|update|delete|export|import>')
 	.description('Administer javascript libraries for an account.')
-	.option('--ident [ident]','The ident of the library')
+	.option('--ident [ident]','The ident of the library - used by update, delete, export')
 	.option('--project_ident [projectId]','The project ident that this library will be marked as used' )
 	.option('--name [name]', 'Name of library')
-	.option('--libtype [type]', 'Type of Library javascript (as of 3.0.x)')
-	.option('--ver [version]', 'Version # of Library')
+	.option('--libtype [type]', '(optional) Type of Library javascript (as of 3.0.x)')
+	.option('--ver [version]', '(optional) Version # of Library')
 	.option('--short_name [shortname]', 'Short Name')
-	.option('--docUrl [docurl]', 'Documentation URL')
-	.option('--refUrl [refurl]', 'Reference URL')
+	.option('--docUrl [docurl]', '(optional) Documentation URL')
+	.option('--refUrl [refurl]', '(optional) Reference URL')
 	.option('--verbose', 'Detail debug info')
-	.option('--linkProject','Link the imported library to the current project')
-	.option('--comments [comment]', 'Comment on Library')
-	.option('--file [fileName]', '[Optional] Name of JS file to import/export (if not provided stdin/stdout used for export)')
+	.option('--linkProject','(optional) Link the imported library to the current project')
+	.option('--comments [comment]', '(optional) Comment on Library')
+	.option('--file [fileName]', '[Optional] Name of {JS} file to import/export (if not provided stdout used for export)')
 	.action(library.doLibrary);
 	 
 	 
@@ -177,7 +177,7 @@ program
 	.option('--ident [ident]','The ident of the specific project settings object')
 	.option('--option_value [value]','This is the value for the specific setting for the ident')
 	.option('--project_ident [project_ident]','The project ident that will be marked as used' )
-	.option('--file [fileName]', '[Optional] Name of file to settings for import/export (if not provided stdin/stdout used for export)')
+	.option('--file [fileName]', '[Optional] Name of file to settings for import/export (if not provided stdout used for export)')
 	.action(apioptions.doSettings);
 
 
@@ -190,7 +190,7 @@ program
 	.option('--resource_names [name]', '[Optional] Comma seperated list of Resource Names in quotes')
 	.option('--comments [comment]', '[Optional] Comment on named sort')
 	.option('--project_ident [project_ident]', '[Optional] The project ident if not the active project')
-	.option('--file [fileName]', '[Optional] Name of file for import/export (if not provided stdin/stdout used for export)')
+	.option('--file [fileName]', '[Optional] Name of file for import/export (if not provided stdout used for export)')
 	.option('--verbose', '[Optional]  whether to display list of named sorts in detailed format')
 	.action(sorts.doSort);
 	
@@ -306,7 +306,7 @@ program
 	.option('--apiversion [version]','The API version of the swagger document' )
 	.option('--url_name [name]','The API url fragment name (use project list)' )
 	.option('--comments [comments]','The gateway definition comments' )
-	.option('--file [fileName]', '[Optional] Name of file to import/export (if not provided stdin/stdout used for export)')
+	.option('--file [fileName]', '[Optional] Name of file to import/export (if not provided stdin/stdout used)')
 	.action(gateway.doGateway);	
 	
 program
@@ -340,7 +340,7 @@ program
 	.option('--ignoreconstraintname [true|false]','(optional) The ignoreconstraintname setting is used when moving between database vendors' )
 	.option('--skiprelationships [true|false]','(optional) If true, relationships will not be created - default: false')
 	.option('--skiptablecreation [true|false]','(optional) If true, tables will not be created - default: false')
-	.option('--file [fileName]', '[Optional] Name of file to import/export (if not provided stdin/stdout used for export)')
+	.option('--file [fileName]', '[Optional] Name of file to import/export (if not provided stdin/stdout used)')
 	.action(schema.doSchema);	
 		
 program
