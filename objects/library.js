@@ -243,10 +243,10 @@ module.exports = {
 				printObject.printHeader(trailer);
 		       }
 				
-				console.log("project ident "+projIdent );
-				console.log("logic_library_ident:" +data.txsummary[0].ident);
-				console.log("LinkProject "+ cmd.linkProject);
-				console.log("data.txsummary.length ="+data.txsummary.length);
+				//console.log("project ident "+projIdent );
+				//console.log("logic_library_ident:" +data.txsummary[0].ident);
+				//console.log("LinkProject "+ cmd.linkProject);
+				//console.log("data.txsummary.length ="+data.txsummary.length);
 				if(cmd.linkProject && projIdent && data.txsummary.length > 0){
 					var linkproject = { 
 						//@metadata: {action: 'INSERT'}, 
