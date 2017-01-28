@@ -4,7 +4,7 @@ Logon as 'sa' to list or import your license file from each server instance.
 lacadmin login -u sa -p somepassword http://localhost:8080 -a admin
 lacadmin use admin
 lacadmin status
-ou are currently logged in to admin server: http://localhost:8080/APIServer/rest/abl/admin/v2 as user sa
+you are currently logged in to admin server: http://localhost:8080/APIServer/rest/abl/admin/v2 as user sa
 ```
 ##Help
 ```
