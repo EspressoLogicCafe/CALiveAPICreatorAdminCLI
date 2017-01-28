@@ -79,17 +79,17 @@ module.exports = {
 			}
 		json = data;
 	
-		fileContent = JSON.parse(json);
+		//fileContent = JSON.parse(json);
 		
 		var startTime = new Date();
-		client.put(loginInfo.url + "/admin:server_licenses", {
-			data: fileContent,
+		client.post(loginInfo.url + "/admin:server_licenses", {
+			data: { "license_text": String(json) },
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
 				"Content-Type" : "application/json"
 			}
 		}, function(data) {
-		
+			console.log(data);
 			var endTime = new Date();
 			if (data.errorMessage) {
 				console.log(data.errorMessage.red);
