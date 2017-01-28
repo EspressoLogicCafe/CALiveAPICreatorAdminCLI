@@ -271,4 +271,5 @@ Follow the links below for detailed documentation on specific administrator comm
 * [Named Sorts](docs/sort.md)
 * [Named Filter](docs/filter.md)
 * [Publish to Gateway](docs/gateway.md)
+* [License files](docs/license.md)
 
