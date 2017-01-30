@@ -15,7 +15,7 @@ resources and rules.
     note: MAC users may need to use $sudo npm install liveapicreator-admin-cli -g.
 
 Please note that, on Windows (and sometimes Mac), `npm install` will create an executable 
-called `liveapicreatoradmin` (or `lacadmin` as a shortcut) in your
+called `lacadmin` (or `liveapicreatoradmin`) in your
 {userhome}/`<node_modules>/.bin` directory. If this directory is not in your `PATH`, you will probably
 want to fix that, otherwise you'll have to specify the full path to the executable.  You can also try 
 npm install liveapicreator-admin-cli -g
@@ -51,7 +51,7 @@ Regardless, this command sets your *current server* -- see [the use command](/us
 ```sh
 $ lacadmin --help
 
-  Usage: liveapicreatoradmin [options] [command]
+  Usage: lacadmin [options] [command]
 
   Commands:
 
