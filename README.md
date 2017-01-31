@@ -83,6 +83,7 @@ $ lacadmin --help
     migrate [options] <exportRepos>                                                       Migrate will create export files, user libraries, auth providers, gateways, and projects in the connection and export to a named directory
     schema [options] <create>                                                             Administer Schema exports and creation for current project.
     function [options] <list|export|import>                                               Administer Functions (user defined JavaScript endpoints) for a current project.
+    license [options] <list|import>                                                       Administer server License for connected server.
     eula <accepted>                                                                       Returns true or false - end user license agreement must be accepted before any script will run
     
   Options:
