@@ -1,4 +1,4 @@
-# datasource
+# Virtual Primary Key
 This suite of commands allows you to manage virtual primary keys on tables or view within an API project.
 ```
 lacadmin virtualkey --help
