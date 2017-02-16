@@ -381,9 +381,15 @@ program
 	
 program
 	.command('sequence <list|create|update|delete|import|export>')
-	.description('Manage a database sequence for a table or view.')
-	.option('--project_ident [project_ident]','The project ident that will be marked as used' )
-	.option('--ident [ident]', 'For delete or update, the ident of the listed sequence')
+	.description('Manage a database sequence on a key column for a table or view.')
+	.option('--table_ident [ident]', 'For delete or update, the ident of the listed table')
+	.option('--view_ident [ident]', 'For delete or update, the ident of the listed view')
+	.option('--project_ident [project_ident]','The project ident that will be used to list all datasources' )
+	.option('--prefix [prefix]','The datasource prefix for this table or view virtual primary key' )
+	.option('--table_name [name]','The name of the table to attach a virtual primary key' )
+	.option('--view_name [name]','The name of the view to attach a virtual primary key' )
+	.option('--keyname [colnamelist]','The comma separated list of column names' )
+	.option('--sequence [colnamelist]','The comma separated list of column names' )
 	.option('--file [fileName]', '[Optional] Name of file to import/export (if not provided stdin/stdout used for export)')
 	.action(seq.doSequence);	
 
