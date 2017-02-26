@@ -52,6 +52,12 @@ module.exports = {
 		if(cmd.ignoreconstraintname){
 			filter += "&ignoreconstraintname="+cmd.ignoreconstraintname;
 		}
+		if(cmd.skiprelationships){
+			filter += "&skiprelationships="+cmd.skiprelationships;
+		}
+		if(cmd.skiptablecreation){
+			filter += "&skiptablecreation="+cmd.skiptablecreation;
+		}
 		var prefix = "";
 		if (cmd.prefix) {
 			prefix = "/" + cmd.prefix ;
