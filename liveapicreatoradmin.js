@@ -42,6 +42,9 @@ var eula = require('./objects/eula.js');
 var schema = require('./objects/schema.js');
 var fnction = require('./objects/function.js');
 var license = require('./objects/license.js');
+//3.2 features
+var vkey = require('./objects/virtualkey.js');
+var seq = require('./objects/sequence.js');
 
 program
 	.version(pkg.version);
@@ -82,6 +85,35 @@ program
 	.option('--file [file]', 'Optional: for import/export, the name of a file to read from/save to, if unspecified, use stdin/stdout')
 	.option('--verbose', 'Optional: whether to display detailed results, or just a summary')
 	.action(project.doProject);
+
+program
+	.command('libraries <list|create|update|delete|export|import>')
+	.description('Administer javascript libraries for an account.')
+	.option('--ident [ident]','The ident of the library - used by update, delete, export')
+	.option('--project_ident [projectId]','The project ident that this library will be marked as used' )
+	.option('--name [name]', 'Name of library')
+	.option('--libtype [type]', '(optional) Type of Library javascript (as of 3.0.x)')
+	.option('--ver [version]', '(optional) Version # of Library')
+	.option('--short_name [shortname]', 'Short Name')
+	.option('--docUrl [docurl]', '(optional) Documentation URL')
+	.option('--refUrl [refurl]', '(optional) Reference URL')
+	.option('--verbose', 'Detail debug info')
+	.option('--linkProject','(optional) Link the imported library to the current project')
+	.option('--comments [comment]', '(optional) Comment on Library')
+	.option('--file [fileName]', '[Optional] Name of {JS} file to import/export (if not provided stdout used for export)')
+	.action(library.doLibrary);
+
+program
+	.command('authprovider <list|create|linkProject|delete|export|import>')
+	.description('Administer authentication providers for an account.')
+	.option('--ident [ident]','The ident of the auth provider')
+	.option('--project_ident [ident]','The project ident used to link this auth provider')
+	.option('--name [name]', 'Name of auth provider')
+	.option('--createFunction [bootstrap]', 'Name for Create Function')
+	.option('--paramMap [map]', 'Map of auth provider settings')
+	.option('--comments [comment]', 'Comment on auth provider')
+	.option('--file [fileName]', '[Optional] Name of file to Import/Export auth provider (if not provided stdout used for export)')
+	.action(authprovider.doAuthProvider);
 
 program
 	.command('datasource <list|create|createDatabase|update|delete|import|reload|export>')
@@ -141,35 +173,6 @@ program
 	.option('--verbose', 'Optional: whether to display list of rules in detailed format that can be used to recreate using command line')
 	.action(rule.doRule);
 
-program
-	.command('authprovider <list|create|linkProject|delete|export|import>')
-	.description('Administer authentication providers for an account.')
-	.option('--ident [ident]','The ident of the auth provider')
-	.option('--project_ident [ident]','The project ident used to link this auth provider')
-	.option('--name [name]', 'Name of auth provider')
-	.option('--createFunction [bootstrap]', 'Name for Create Function')
-	.option('--paramMap [map]', 'Map of auth provider settings')
-	.option('--comments [comment]', 'Comment on auth provider')
-	.option('--file [fileName]', '[Optional] Name of file to Import/Export auth provider (if not provided stdin/stdout used)')
-	.action(authprovider.doAuthProvider);
-	
-program
-	.command('libraries <list|create|update|delete|export|import>')
-	.description('Administer javascript libraries for an account.')
-	.option('--ident [ident]','The ident of the library')
-	.option('--project_ident [projectId]','The project ident that this library will be marked as used' )
-	.option('--name [name]', 'Name of library')
-	.option('--libtype [type]', 'Type of Library javascript (as of 3.0.x)')
-	.option('--ver [version]', 'Version # of Library')
-	.option('--short_name [shortname]', 'Short Name')
-	.option('--docUrl [docurl]', 'Documentation URL')
-	.option('--refUrl [refurl]', 'Reference URL')
-	.option('--verbose', 'Detail debug info')
-	.option('--linkProject','Link the imported library to the current project')
-	.option('--comments [comment]', 'Comment on Library')
-	.option('--file [fileName]', '[Optional] Name of JS file to import/export (if not provided stdin/stdout used for export)')
-	.action(library.doLibrary);
-	 
 	 
 program
 	.command('apioptions <list|update|import|export>')
@@ -177,7 +180,7 @@ program
 	.option('--ident [ident]','The ident of the specific project settings object')
 	.option('--option_value [value]','This is the value for the specific setting for the ident')
 	.option('--project_ident [project_ident]','The project ident that will be marked as used' )
-	.option('--file [fileName]', '[Optional] Name of file to settings for import/export (if not provided stdin/stdout used for export)')
+	.option('--file [fileName]', '[Optional] Name of file to settings for import/export (if not provided stdout used for export)')
 	.action(apioptions.doSettings);
 
 
@@ -190,7 +193,7 @@ program
 	.option('--resource_names [name]', '[Optional] Comma seperated list of Resource Names in quotes')
 	.option('--comments [comment]', '[Optional] Comment on named sort')
 	.option('--project_ident [project_ident]', '[Optional] The project ident if not the active project')
-	.option('--file [fileName]', '[Optional] Name of file for import/export (if not provided stdin/stdout used for export)')
+	.option('--file [fileName]', '[Optional] Name of file for import/export (if not provided stdout used for export)')
 	.option('--verbose', '[Optional]  whether to display list of named sorts in detailed format')
 	.action(sorts.doSort);
 	
@@ -306,7 +309,7 @@ program
 	.option('--apiversion [version]','The API version of the swagger document' )
 	.option('--url_name [name]','The API url fragment name (use project list)' )
 	.option('--comments [comments]','The gateway definition comments' )
-	.option('--file [fileName]', '[Optional] Name of file to import/export (if not provided stdin/stdout used for export)')
+	.option('--file [fileName]', '[Optional] Name of file to import/export (if not provided stdin/stdout used)')
 	.action(gateway.doGateway);	
 	
 program
@@ -340,7 +343,7 @@ program
 	.option('--ignoreconstraintname [true|false]','(optional) The ignoreconstraintname setting is used when moving between database vendors' )
 	.option('--skiprelationships [true|false]','(optional) If true, relationships will not be created - default: false')
 	.option('--skiptablecreation [true|false]','(optional) If true, tables will not be created - default: false')
-	.option('--file [fileName]', '[Optional] Name of file to import/export (if not provided stdin/stdout used for export)')
+	.option('--file [fileName]', '[Optional] Name of file to import/export (if not provided stdin/stdout used)')
 	.action(schema.doSchema);	
 		
 program
@@ -361,7 +364,29 @@ program
 	.command('eula <accepted>')
 	.description('Returns true or false - end user license agreement must be accepted before any script will run')
 	.action(eula.doStatus);
-		
+
+program
+	.command('virtualkey <list|create|update|delete|import|export>')
+	.description('Manage a virtualkey to a table or view.')
+	.option('--table_ident [ident]', 'For delete or update, the ident of the listed table')
+	.option('--view_ident [ident]', 'For delete or update, the ident of the listed view')
+	.option('--project_ident [project_ident]','The project ident that will be used to list all datasources' )
+	.option('--prefix [prefix]','The datasource prefix for this table or view virtual primary key' )
+	.option('--table_name [name]','The name of the table to attach a virtual primary key' )
+	.option('--view_name [name]','The name of the view to attach a virtual primary key' )
+	.option('--keyname [colnamelist]','The comma separated list of column names' )
+	.option('--is_autonum [true|false]','If the keyname of a view column that is an autonum - default false' )
+	.option('--file [fileName]', '[Optional] Name of file to import/export (if not provided stdin/stdout used for export)')
+	.action(vkey.doVirtualKey);	
+	
+program
+	.command('sequence <list|create|update|delete|import|export>')
+	.description('Manage a database sequence for a table or view.')
+	.option('--project_ident [project_ident]','The project ident that will be marked as used' )
+	.option('--ident [ident]', 'For delete or update, the ident of the listed sequence')
+	.option('--file [fileName]', '[Optional] Name of file to import/export (if not provided stdin/stdout used for export)')
+	.action(seq.doSequence);	
+
 program.parse(process.argv);
 
 if (process.argv.length < 3) {
