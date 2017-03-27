@@ -74,6 +74,17 @@ program
 	.action(login.commandStatus);
 
 program
+	.command('license <list|import>')
+	.description('Administer server License for connected server.')
+	.option('--file [fileName]', ' Name of file to import (if not provided stdin used for import)')
+	.action(license.doLicense);
+	
+program
+	.command('eula <accepted>')
+	.description('Returns true or false - end user license agreement must be accepted before any script will run')
+	.action(eula.doStatus);
+
+program
 	.command('project <list|create|update|delete|use|import|export>')
 	.description('Administer projects. Actions are: list, create, update, delete, use, export')
 	.option('--ident [ident]', 'The ident of the specific project (see project list)')
@@ -329,7 +340,7 @@ program
 	
 program
 	.command('migrate <exportRepos>')
-	.description('Migrate will list all export files for ALL user libraries, auth providers, gateways, and projects in the connection and export to a named directory')
+	.description('Migrate creates a list of user libraries, auth providers, gateways, and projects to a named directory')
 	.option('--directory [directory]', 'Required for export, the name of a directory to save all exported json files')
 	.action(migrate.doMigrate);	
 
@@ -353,17 +364,6 @@ program
 	.option('--project_ident [project_ident]','The project ident that will be used' )
 	.option('--file [fileName]', '[Optional] Name of file to import/export (if not provided stdin/stdout used for export)')
 	.action(fnction.doFunction);	
-	
-program
-	.command('license <list|import>')
-	.description('Administer server License for connected server.')
-	.option('--file [fileName]', ' Name of file to import (if not provided stdin used for import)')
-	.action(license.doLicense);
-	
-program
-	.command('eula <accepted>')
-	.description('Returns true or false - end user license agreement must be accepted before any script will run')
-	.action(eula.doStatus);
 
 program
 	.command('virtualkey <list|create|update|delete|import|export>')
