@@ -382,7 +382,7 @@ module.exports = {
 			return;
 		}
 		if (cmd.prefix) {
-			filter += "&sysfilter(prefix:'" + cmd.prefix + "')";
+			filter += "&sysfilter=equal(prefix:'" + cmd.prefix + "')";
 		} 
 		var toStdout = false;
 		if ( ! cmd.file) {

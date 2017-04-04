@@ -17,8 +17,6 @@ lacadmin status
 lacadmin project list
 lacadmin project use --url_name $PROJECT
 
-lacadmin project use --url_name demo_mysql
-lacadmin project export --url_name demo_mysql --file demo/demo_mysql.json
 #API Settings
 lacadmin apioptions list
 lacadmin apioptions export --file demo/apioptions.json
@@ -28,17 +26,17 @@ lacadmin datasource export --prefix demo --file demo/demo_ds.json
 lacadmin datasource export --prefix finance --file demo/finance_ds.json
 #Libraries - change the <ident> to the value from the list
 lacadmin libraries list
-lacadmin libraries export --ident 2041 --file demo/demo_libraries.json
+lacadmin libraries export --file demo/demo_libraries.json
 #Auth Providers
 lacadmin authprovider list
-lacadmin authprovider export --ident 2022 --file demo/demo_authprovider.json
-lacadmin authprovider export --name RESTAuthSecurityProviderCreateJS --file demo/demo_RESTAuthSecurityProviderCreateJS.json
+lacadmin authprovider export --file demo/demo_authprovider.json
+lacadmin authprovider export --name "Custom JS Auth Provider Sample" --file demo/demo_CustomJSAuthProviderCreateJS.json
 #Rules (--verbose will print out rules in lacadmin create format)
 lacadmin rule list --verbose
 lacadmin rule export --file demo/rules.json
 #Resources
 lacadmin resource list
-lacadmin resource --ident 2177 export --file demo/resources.json
+lacadmin resource export --ident 3218 --file demo/resources.json
 #Function
 lacadmin function list
 lacadmin function export --file demo/function.json

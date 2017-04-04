@@ -67,6 +67,7 @@ module.exports = {
 			_.each(data, function(p) {
 				table.cell("Ident", p.ident);
 				table.cell("Table", p.entity_name);
+				//console.log("Entity Name "+p.entity_name);
 				tblWidth = p.entity_name.length > tblWidth ? p.entity_name.length : tblWidth;
 				var type = "";
 				

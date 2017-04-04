@@ -613,16 +613,16 @@ module.exports = {
 		
 		
 		if (cmd.prefix) {
-			filter += "&sysfilter(prefix:'" + cmd.prefix + "')";
+			filter += "&sysfilter=equal(prefix:'" + cmd.prefix + "')";
 		} else if (cmd.db_name) {
-			filter += "&sysfilter=(name:'" + cmd.db_name + "')";
+			filter += "&sysfilter=equal(name:'" + cmd.db_name + "')";
 		} 
 		
 		var toStdout = false;
 		if ( ! cmd.file) {
 			toStdout = true;
 		}
-		
+		console.log("Filter "+ filter);
 		client.get(loginInfo.url + "/dbaseschemas?" + filter, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
