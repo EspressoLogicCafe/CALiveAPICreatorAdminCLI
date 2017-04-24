@@ -64,6 +64,7 @@ module.exports = {
 			}
 			printObject.printHeader('Named Sort');
 			var table = new Table();
+			var verboseDisplay = "";
 			_.each(data, function(p) {
 				table.cell("Ident", p.ident);
 				table.cell("Name", p.name);
@@ -78,6 +79,15 @@ module.exports = {
 				}
 				table.cell("Comments", comments);
 				table.newRow();
+				if(cmd.verbose) {
+					verboseDisplay += "\n";
+					verboseDisplay += "lacadmin namedsort create --sortname '"+p.name+"'";
+					verboseDisplay += " --sorttext '"+p.sort_text+"'";
+					verboseDisplay += " --resource_names '"+p.resource_names+"'";
+					if(comments){
+						verboseDisplay += " --comments '"+comments+"'";
+					}
+				}
 			});
 			table.sort(['Name', 'name']);
 			if (data.length === 0) {
@@ -87,6 +97,9 @@ module.exports = {
 				console.log(table.toString());
 			}
 			printObject.printHeader("# named sorts: " + data.length);
+			if(cmd.verbose) {
+				console.log(verboseDisplay); 
+			}
 		});
 	},
 	
@@ -95,8 +108,8 @@ module.exports = {
 		var loginInfo = login.login(cmd);
 		if ( ! loginInfo)
 			return;
-		if ( ! cmd.name) {
-			console.log('Missing parameter: name'.red);
+		if ( ! cmd.sortname) {
+			console.log('Missing parameter: sortname'.red);
 			return;
 		}
 		if ( ! cmd.sort_text) {
@@ -113,7 +126,7 @@ module.exports = {
 			//console.log('Current account: ' + JSON.stringify(context.account));
 			
 			var newSort = {
-				name: cmd.name,
+				name: cmd.sortname,
 				description: cmd.comments,
 				resource_names: cmd.resource_names,
 				sort_text: cmd.sort_text,

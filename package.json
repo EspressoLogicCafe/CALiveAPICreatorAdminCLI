@@ -1,14 +1,16 @@
 {
   "name": "liveapicreator-admin-cli",
-  "version": "3.2.13",
+  "version": "3.2.14",
   "description": "The NodeJS command line utility for CA Live Creator DevOps Administration from CA Technologies",
   "main": "liveapicreatoradmin.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
+    "caliveapicreator",
     "liveapicreator",
-     "liveapicreatoradmin",
+    "liveapicreatoradmin",
+    "apicreatorsdk",
     "logic",
     "command",
     "line",
@@ -23,6 +25,10 @@
     "postgres",
     "db2luw",
     "db2zos",
+    "sap netweaver",
+    "apache hbase",
+    "apache cassandra",
+    "csv/tsv files",
     "derby",
     "salesforce",
     "sqlserver",

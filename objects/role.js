@@ -57,6 +57,7 @@ module.exports = {
 						}
 						printObject.printHeader('Roles');
 						var table = new Table();
+						var verboseDisplay = "";
 						_.each(data, function(p) {
 							table.cell("Ident", p.ident);
 							table.cell("Name", p.name);
@@ -69,14 +70,20 @@ module.exports = {
 							else if (comments.length > 50){
 								comments = comments.substring(0, 47) + "...";
 							}
-				
-							
-				table.cell("Description", comments);
-				table.newRow();
-			});
-			table.sort(['Name']);
-			console.log(table.toString());
-			printObject.printHeader("# roles: " + data.length);
+					 table.cell("Description", comments);
+					 table.newRow();
+					 if(cmd.verbose) {
+						   verboseDisplay += "\n";
+						   verboseDisplay += "lacadmin role export --rolename '"+p.name+"' --file  ROLE_"+p.name + "\n";
+						   verboseDisplay += "#lacadmin role import --file  ROLE_"+p.name + "\n";
+					   }
+					});
+				 table.sort(['Name']);
+				 console.log(table.toString());
+				 printObject.printHeader("# roles: " + data.length);
+				 if(cmd.verbose) {
+					console.log(verboseDisplay);
+				}
 		});
 			
 	},
@@ -179,7 +186,9 @@ module.exports = {
 			console.log('Missing parameter: please specify project settings (use list) project_ident '.red);
 			return;
 		}
-		
+		if(cmd.rolename){
+			filter += "&sysfilter=equal(name:'" + cmd.rolename + "')";
+		}
 	
 		var toStdout = false;
 		if ( ! cmd.file) {

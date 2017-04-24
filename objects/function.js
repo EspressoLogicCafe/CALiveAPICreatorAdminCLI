@@ -88,7 +88,9 @@ module.exports = {
 					table.cell("Comments", comments);
 					table.newRow();
 					if(cmd.verbose) {
-						verboseDisplay = "lacadmin function create --name "+p.name + "\n";
+						verboseDisplay += "\n";
+						verboseDisplay += "lacadmin function export --name '"+p.name+"' --file  FUNCTION_"+p.name + ".json\n";
+						verboseDisplay += "#lacadmin function import --file  FUNCTION_"+p.name + ".json\n";
 					}
 				 });
 				
@@ -196,6 +198,8 @@ module.exports = {
 		var filt = "";
 		if (cmd.ident) {
 			filt = "&sysfilter=equal(ident:" + cmd.ident + ")";
+		} else if(cmd.name) {
+			filt += "&sysfilter=equal(name:'"+cmd.name+"')";
 		}
 		var output = [];
 		var filter = "/AllFunctions?sysfilter=equal(project_ident:"+projIdent+")" + filt;

@@ -108,7 +108,7 @@ program
 	.option('--short_name [shortname]', 'Short Name')
 	.option('--docUrl [docurl]', '(optional) Documentation URL')
 	.option('--refUrl [refurl]', '(optional) Reference URL')
-	.option('--verbose', 'Detail debug info')
+	.option('--verbose', 'optional: display import/export during library list')
 	.option('--linkProject','(optional) Link the imported library to the current project')
 	.option('--comments [comment]', '(optional) Comment on Library')
 	.option('--file [fileName]', '(optional) Name of {JS} file to import/export (if not provided stdout used for export)')
@@ -161,6 +161,7 @@ program
 	.option('--prefix [prefix]', 'The prefix of the table')
 	.option('--apiversion [apiversion]', 'The name of an API version, if there is more than one - default v1')
 	.option('--project_ident [ident]', 'The ident of a project, (if other than the current project')
+	.option('--verbose', 'Include export/import script for resource list')
 	.option('--file [file]', 'optional: for import/export, the name of a file to read from/save to, if unspecified, use stdin/stdout')
 	.action(resource.doResource);
 
@@ -237,6 +238,7 @@ program
 	.option('--ident [ident]', 'The ident of the specific role to delete')
 	.option('--rolename [name]', 'The nam of the specific role to delete')
 	.option('--project_ident [project_ident]','The project ident that will be marked as used' )
+	.option('--verbose', '(optional) display list of roles in detailed export/import format')
 	.option('--file [fileName]', '(optional) Name of file to import/export (if not provided stdin/stdout used for export)')
 	.action(role.doRole);	
 	
@@ -271,6 +273,7 @@ program
 	.option('--project_ident [project_ident]','The project ident that will be marked as used' )
 	.option('--name [name]', 'Name of the topic')
 	.option('--ident [ident]', 'The ident of the specific topic to delete')
+	.option('--verbose', '(optional) display list of topics in an import/export format')
 	.option('--file [fileName]', '(optional) Name of file to import/export (if not provided stdin/stdout used for export)')
 	.action(topic.doTopic);	
 	
@@ -280,6 +283,7 @@ program
 	.option('--eventname [name]', 'The request or response Name')
 	.option('--ident [ident]', 'The ident of the specific event')
 	.option('--project_ident [project_ident]','The project ident that will be used' )
+	.option('--verbose', '(optional) display list of events in detailed export/import format')
 	.option('--file [fileName]', '(optional) Name of file to import/export (if not provided stdin/stdout used for export)')
 	.action(event.doEvent);	
 	
@@ -385,6 +389,7 @@ program
 	.option('--view_name [name]','The name of the view to attach a virtual primary key' )
 	.option('--keyname [colnamelist]','The comma separated list of column names' )
 	.option('--is_autonum [true|false]','If the keyname of a view column that is an autonum - default false' )
+	.option('--verbose', '(optional) display list of virtual keys in detailed create format')
 	.option('--file [fileName]', '(optional) Name of file to import/export (if not provided stdin/stdout used for export)')
 	.action(vkey.doVirtualKey);	
 	

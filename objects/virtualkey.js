@@ -64,28 +64,53 @@ module.exports = {
 			}
 			printObject.printHeader('Virtual Primary Key');
 			var table = new Table();
+			var verboseDisplay = "";
 			_.each(data, function(p) {
 				//console.log(JSON.stringify(p.TableInfos));
 				//console.log(JSON.stringify(p.ViewInfos));
 				//table.cell("Ident", p.ident);
-				table.cell("prefix", p.prefix);
-				table.cell("Active", p.active);
+				var prefix = p.prefix;
+				var active = p.active;
+				console.log(p);
+				if(cmd.verbose) {
+					   verboseDisplay +=  "\n";
+					   verboseDisplay += "lacadmin virtualkey create ";
+				}
 				_.each(p.ViewInfos, function(q) {
 					table.cell("view_ident",q.ident);
 					table.cell("view_name",q.view_name);
+					table.cell("prefix", prefix);
+					table.cell("active", active);
 					table.cell("key name",q.primary_key_definition);
 					table.cell("autonums",q.autonums);
 					table.newRow();
+					verboseDisplay += " --view_name " + q.view.name;
+					verboseDisplay += " --keyname "+ q.primary_key_definition;
+					verboseDisplay += " --prefix "+ prefix;
+					verboseDisplay += " --active "+ active;
+					verboseDisplay += " --is_autonum "+ q.autonums;
+					verboseDisplay += " --active "+ q.active;
 				});
 				table.newRow();
-				table.cell("prefix", p.prefix);
-				table.cell("Active", p.active);
+				table.cell("prefix", prefix);
+				table.cell("Active", active);
 				_.each(p.TableInfos, function(q) {
 					table.cell("table_ident",q.ident);
 					table.cell("table_name",q.table_name);
 					table.cell("key name",q.primary_key_definition);
+					table.cell("prefix", prefix);
 					table.cell("autonums",q.autonums);
 					table.newRow();
+					if(cmd.verbose) { 
+					   verboseDisplay += " --table_name " + q.table_name;
+					   verboseDisplay += " --prefix "+ prefix;
+					   verboseDisplay += " --active "+ active;
+					   verboseDisplay += " --keyname '"+ q.primary_key_definition + "'";
+					   if( p.comments ) {
+						   verboseDisplay +=  " --comments \""+ comments +"\"";
+					   }
+					   verboseDisplay +=  "\n";
+				   }
 				});
 			});
 			table.sort(['View Name', 'Name']);
@@ -96,6 +121,9 @@ module.exports = {
 				console.log(table.toString());
 			}
 			printObject.printHeader("# view_infos: " + data.length);
+			if(cmd.verbose) {
+				console.log(verboseDisplay);
+			}
 		});
 	},
 	create: function(cmd) {

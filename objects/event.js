@@ -58,6 +58,7 @@ module.exports = {
 						printObject.printHeader('Request/Response Events');
 						var table = new Table();
 						var type = "";
+						var verboseDisplay = "";
 						_.each(data, function(p) {
 						type = p.eventtype_ident == 1 ? "Request":"Response";
 							table.cell("Ident", p.ident);
@@ -86,10 +87,18 @@ module.exports = {
 							comments = comments.replace("\n"," ");
 							table.cell("Comments", comments);
 							table.newRow();
+							if(cmd.verbose) {
+							   verboseDisplay += "\n";
+							   verboseDisplay += "lacadmin event export --eventname '"+p.name+"' --file  EVENT_"+p.name + ".json\n";
+							   verboseDisplay += "#lacadmin event import --file  EVENT_"+p.name + ".json\n";
+						   }
 				});
 			table.sort(['Name']);
 			console.log(table.toString());
 			printObject.printTrailer("# events: " + data.length);
+			if(cmd.verbose) {
+				console.log(verboseDisplay); 
+			}
 		});
 			
 	},
@@ -184,11 +193,11 @@ module.exports = {
 		} else if (cmd.eventname) {
 			filter += sep + "sysfilter=equal(name:'" + cmd.eventname + "')";
 			sep = "&";
-		} else if (projIdent) {
+		} 
+	 	if (projIdent) {
 			filter += sep + "sysfilter=equal(project_ident:" + projIdent + ")";
 		}
 		
-	
 		var toStdout = false;
 		if ( ! cmd.file) {
 			toStdout = true;

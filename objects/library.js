@@ -52,6 +52,7 @@ module.exports = {
 			}
 			printObject.printHeader('All Libraries');
 			var table = new Table();
+			var verboseDisplay = "";
 			_.each(data, function(p) {
 				table.cell("Ident", p.ident);
 				table.cell("Name", p.name);
@@ -68,10 +69,18 @@ module.exports = {
 				}
 				table.cell("Comments", comments);
 				table.newRow();
+				if(cmd.verbose && p.ident > 511) {
+					verboseDisplay += "\n";
+					verboseDisplay += "lacadmin libraries export --name '"+p.name+"' --file  LIBRARY_"+p.name + ".json\n";
+					verboseDisplay += "lacadmin libraries import --file  LIBRARY_"+p.name + ".json\n";
+				}
 			});
 			table.sort(['Name']);
 			console.log(table.toString());
 			printObject.printHeader("# libraries: " + data.length);
+			if(cmd.verbose) {
+				console.log(verboseDisplay);
+			}
 		});
 	},
 	
@@ -401,7 +410,7 @@ module.exports = {
 		} else if (cmd.short_name) {
 			filter += "&sysfilter=equal(short_name:'" + cmd.short_name + "')";
 		} else if (cmd.name) {
-			//filter += "&sysfilter=equal(name:'" + cmd.name + "')";
+			filter += "&sysfilter=equal(name:'" + cmd.name + "')";
 		} 
 		
 		var toStdout = false;

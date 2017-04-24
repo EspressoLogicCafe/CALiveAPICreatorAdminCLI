@@ -68,6 +68,7 @@ module.exports = {
 				}
 				printObject.printHeader('Top-level resources for API Version: '+apiversion_ident);
 				var table = new Table();
+				var verboseDisplay = "";
 				_.each(data, function(p) {
 					table.cell("Ident", p.ident);
 					table.cell("Name", p.name);
@@ -95,6 +96,11 @@ module.exports = {
 					}
 					table.cell("Comments", comments);
 					table.newRow();
+					if(cmd.verbose) {
+						verboseDisplay += "\n";
+						verboseDisplay += "lacadmin resource export --file  RESOURCE_"+p.name + "\n";
+						verboseDisplay += "#lacadmin resource import --file  RESOURCE_"+p.name + "\n";
+					}
 				});
 				table.sort(['Name']);
 				if (data.length === 0) {
@@ -104,6 +110,9 @@ module.exports = {
 					console.log(table.toString());
 				}
 				printObject.printHeader("# resources: " + data.length);
+				if(cmd.verbose) {
+					console.log(verboseDisplay);
+				}
 			});
 		}
 		

@@ -57,6 +57,7 @@ module.exports = {
 						}
 						printObject.printHeader('Topic');
 						var table = new Table();
+						var verboseDisplay = "";
 						_.each(data, function(p) {
 							table.cell("Ident", p.ident);
 							table.cell("Name", p.name);
@@ -74,10 +75,18 @@ module.exports = {
 				comments = comments.replace("\n"," ");
 				table.cell("Description", comments);
 				table.newRow();
+				if(cmd.verbose) {
+					verboseDisplay += "\n";
+					verboseDisplay += "lacadmin topic export --name '"+p.name+"' --file  TOPIC_"+p.name + ".json\n";
+					verboseDisplay += "#lacadmin topic import --file  TOPIC_"+p.name + ".json\n";
+				}
 			});
 			table.sort(['Name']);
 			console.log(table.toString());
 			printObject.printHeader("# topics: " + data.length);
+			if(cmd.verbose) {
+				console.log(verboseDisplay);
+			}
 		});
 			
 	},
@@ -175,13 +184,16 @@ module.exports = {
 			console.log('Missing parameter: please specify project settings (use list) project_ident '.red);
 			return;
 		}
-		
+		if(cmd.ident) {
+			filter += "&sysfilter=equal(ident: "+ cmd.ident +")";
+		} else if(cmd.name) {
+			filter += "&sysfilter=equal(name: '"+ cmd.name +"')";
+		}
 	
 		var toStdout = false;
 		if ( ! cmd.file) {
 			toStdout = true;
 		}
-		
 		client.get(loginInfo.url + "/admin:topics?pagesize=1000&"+filter, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
