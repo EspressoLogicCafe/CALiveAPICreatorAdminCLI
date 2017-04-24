@@ -96,15 +96,14 @@ module.exports = {
 				return;
 			}
 		}		
-		var filt = "equal(project_ident:"+projIdent ;
+		var filt = "sysfilter=equal(project_ident:" + projIdent + ")"; 
 		if (cmd.ident) {
-			filt += ",ident:" + cmd.ident + ")";
-		} else {
-			console.log('Missing parameter: please specify ident'.red);
-			return;
-		}
+			filt += "&sysfilter=equal(ident:" + cmd.ident + ")";
+		} else if (cmd.name) {
+			filt += "&sysfilter=equal(name:'" + cmd.name + "')";
+		} 
 		
-		client.get(loginInfo.url + "/admin:topics?sysfilter=" + filt, {
+		client.get(loginInfo.url + "/admin:topics?	" + filt, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
 				"Content-Type" : "application/json"
@@ -116,7 +115,7 @@ module.exports = {
 				return;
 			}
 			if (data.length === 0) {
-				console.log(("Error: no such topic ident").red);
+				console.log(("Error: no such topic using name or ident").red);
 				return;
 			}
 			if (data.length > 1) {

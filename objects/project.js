@@ -106,7 +106,7 @@ module.exports = {
 				name: cmd.project_name,
 				url_name: cmd.url_name,
 				is_active: true,
-				authprovider_ident: cmd.authprovider,
+				authprovider_ident: cmd.authprovider || 1000,
 				account_ident: context.account.ident,
 				comments: cmd.comments
 			};
@@ -116,7 +116,7 @@ module.exports = {
 					console.log('Project status must be either A (for active) or I (for inactive). Default is A if unspecified.'.red);
 					return;
 				}
-				newProject.status = cmd.status == "A";
+				newProject.status = cmd.status;
 			}
 
 			var startTime = new Date();

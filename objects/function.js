@@ -60,6 +60,7 @@ module.exports = {
 				}
 				printObject.printHeader('Functions: ');
 				var table = new Table();
+				var verboseDisplay = "";
 				_.each(data, function(p) {
 				var type_name = ['none','number','string','boolean'];
 				 var parameters = "(";
@@ -70,6 +71,7 @@ module.exports = {
 				 });
 				 parameters += ")";
 				 var sep = "";
+				 
 				 //need a resource to return both functions and parameters
 					table.cell("Ident", p.ident);
 					table.cell("Name", p.name);
@@ -85,6 +87,9 @@ module.exports = {
 					}
 					table.cell("Comments", comments);
 					table.newRow();
+					if(cmd.verbose) {
+						verboseDisplay = "lacadmin function create --name "+p.name + "\n";
+					}
 				 });
 				
 				table.sort(['Name', 'name']);
@@ -95,6 +100,9 @@ module.exports = {
 					console.log(table.toString());
 				}
 				printObject.printHeader("# functions: " + data.length);
+				if(cmd.verbose) {
+					console.log(verboseDisplay);
+				}
 			});
 			
 	},
@@ -109,12 +117,13 @@ module.exports = {
 		var filt = null;
 		if (cmd.ident) {
 			filt = "equal(ident:" + cmd.ident + ")";
+		} else if (cmd.name) {
+			filt = "equal(name:'" + cmd.name + "')";
 		}
-		else {
-			console.log('Missing parameter: please specify either name or ident'.red);
+		if(filt === null) {
+			console.log('Missing parameter: please specify either --name or --ident'.red);
 			return;
 		}
-		
 		client.get(loginInfo.url + "/admin:functions?sysfilter=" + filt, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
@@ -127,7 +136,7 @@ module.exports = {
 				return;
 			}
 			if (data.length === 0) {
-				console.log(("Function not found").red);
+				console.log(("Function not found using filter name or ident").red);
 				return;
 			}
 			if (data.length > 1) {

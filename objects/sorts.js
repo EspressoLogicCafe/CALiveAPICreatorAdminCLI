@@ -256,12 +256,10 @@ module.exports = {
 		var filt = null;
 		if (cmd.ident) {
 			filt = "equal(ident:'" + cmd.ident + "')";
-		}
-		else if (cmd.name) {
-			filt = "equal(name:'" + cmd.name + "')";
-		}
-		else {
-			console.log('Missing parameter: please specify either name or ident'.red);
+		} else if (cmd.sortname) {
+			filt = "equal(name:'" + cmd.sortname + "')";
+		} else {
+			console.log('Missing parameter: please specify either --sortname or --ident'.red);
 			return;
 		}
 		
@@ -277,11 +275,11 @@ module.exports = {
 				return;
 			}
 			if (data.length === 0) {
-				console.log(("Error: no such named sort").red);
+				console.log(("Error: no such named sort using sortname or ident").red);
 				return;
 			}
 			if (data.length > 1) {
-				console.log(("Error: more than one named sort for the given condition: " + filter).red);
+				console.log(("Error: more than one named sort for the given condition: " + filt).red);
 				return;
 			}
 			var db = data[0];

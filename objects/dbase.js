@@ -70,19 +70,27 @@ module.exports = {
 			}
 			printObject.printHeader('Datasources');
 			var table = new Table();
+			var verboseDisplay = "";
 			_.each(data, function(p) {
 				table.cell("Name", p.name);
 				table.cell("Prefix", p.prefix);
 				var type = "";
 				switch(p.dbasetype_ident) {
-					case 1: type = "MySQL"; break;
-					case 2: type = "Oracle"; break;
-					case 3: type = "SQL Server (jTDS)"; break;
-					case 4: type = "SQL Server"; break;
-					case 5: type = "SQL Server (Azure)"; break;
-					case 6: type = "NuoDB"; break;
-					case 7: type = "PostgreSQL"; break;
-					case 8: type = "Derby"; break;
+					case 1: type = "mysql"; break;
+					case 2: type = "oracle"; break;
+					case 3: type = "sqlservertds"; break;
+					case 5: type = "sqlserver"; break;
+					case 6: type = "sqlserverazure"; break;
+					case 7: type = "nuodb"; break;
+					case 8: type = "postgresql"; break;
+					case 16: type = "salesforce"; break;
+					case 17: type = "derby"; break;
+					case 18: type = "db2zos"; break;
+					case 19: type = "db2luw"; break;
+					case 21: type = "hbase"; break;
+					case 22: type = "sap"; break;
+					case 23: type = "csv"; break;
+					case 24: type = "cassandra"; break;
 					default: type = "unknown";
 				}
 				table.cell("Type", type);
@@ -92,6 +100,7 @@ module.exports = {
 				table.cell("Schema", p.schema_name);
 				table.cell("User", p.user_name);
 				table.cell("URL", p.url);
+				table.cell("IsEditable",p.schema_editable);
 				var comments = p.comments;
 				if ( ! comments) {
 					comments = "";
@@ -101,6 +110,27 @@ module.exports = {
 				}
 				table.cell("Comments", comments);
 				table.newRow();
+				if(cmd.verbose) {
+					verboseDisplay +=  "\n";
+					verboseDisplay += "lacadmin datasource create --db_name " + p.name;
+					verboseDisplay +=  " --prefix "+ p.prefix;
+					verboseDisplay +=  " --dbasetype "+ type;
+					verboseDisplay +=  " --active "+ p.active;
+					verboseDisplay +=  " --url \""+p.url +"\"";
+					if(p.catalog_name) {
+						verboseDisplay +=  " --catalog_name "+p.catalog_name;
+					}
+					if(p.schema_name) {
+						verboseDisplay +=  " --schema_name "+p.schema_name;
+					}
+					verboseDisplay +=  " --user_name "+p.user_name;
+					verboseDisplay +=  " --password somepassword";
+					verboseDisplay +=  " --schema_editable " + p.schema_editable;
+					if( p.comments ) {
+						verboseDisplay +=  " --comments \""+ comments +"\"";
+					}
+					verboseDisplay +=  "\n";
+				}
 			});
 			table.sort(['Active', 'Name']);
 			if (data.length === 0) {
@@ -110,6 +140,9 @@ module.exports = {
 				console.log(table.toString());
 			}
 			printObject.printHeader("# datasources: " + data.length);
+			if(cmd.verbose) {
+				console.log(verboseDisplay);
+			}
 		});
 	},
 	
@@ -145,8 +178,11 @@ module.exports = {
 			console.log('Missing parameter: url'.red);
 			return;
 		}
-		
-		
+
+		var schema_editable = false;
+		if(cmd.schema_editable) {
+			schema_editable = cmd.schema_editable == 'true';
+		}
 		var dbasetype = cmd.dbasetype;
 		if ( ! dbasetype) {
 			console.log('You must specify a database type.'.red);
@@ -170,7 +206,7 @@ module.exports = {
 			case "hbase": dbasetype = 21; break;
 			case "sap": dbasetype = 22; break;
 			case "csv": dbasetype = 23; break;
-			default : console.log('Unknown database type: ' + dbasetype); return;
+			default : console.log('Unknown database type: --dbasetype ' + dbasetype); return;
 		}
 
 		context.getContext(cmd, function() {
@@ -188,7 +224,8 @@ module.exports = {
 				active: true,
 				comments: cmd.comments,
 				dbasetype_ident: dbasetype,
-				project_ident: curProj
+				project_ident: curProj,
+				schema_editable: schema_editable
 			};
 			var startTime = new Date();
 			client.post(loginInfo.url + "/dbaseschemas", {
@@ -200,7 +237,7 @@ module.exports = {
 			}, function(data) {
 				var endTime = new Date();
 				if (data.errorMessage) {
-					console.log(data.errorMessage.red);
+					console.log("Error in create datasource "+data.errorMessage.red);
 					return;
 				}
 				printObject.printHeader('Database connection was created');
@@ -242,6 +279,10 @@ module.exports = {
 			console.log('Missing parameter: managedserver_ident (use lacadmin managedserver list)'.red);
 			return;
 		}
+		var schema_editable = false;
+		if(cmd.schema_editable) {
+			schema_editable = cmd.schema_editable;
+		}
 		var managedServer =	{ managed_data_server_ident: Number(cmd.managedserver_ident) };
 		//console.log(JSON.stringify(managedServer,null,2));
 		client.post(loginInfo.url + "/@databases", {
@@ -276,10 +317,10 @@ module.exports = {
 				   password: database.password,
 				  // port_num: cmd.port_num,
 				   active: true,
-				   schema_editable: true,
 				   comments: 'created by lacadmin command line',
 				   dbasetype_ident: database.dbasetype_ident,
-				   project_ident: curProj
+				   project_ident: curProj,
+				   schema_editable: schema_editable
 			   };
 			   var startTime = new Date();
 			   client.post(loginInfo.url + "/dbaseschemas", {
@@ -396,7 +437,10 @@ module.exports = {
 			 	db.comments = cmd.comments;
 			}
 			if( cmd.active ){
-			 	db.active = cmd.active;
+			 	db.active = cmd.active == 'true';
+			}
+			if(cmd.schema_editable) {
+				db.schema_editable = cmd.schema_editable == 'true';
 			}
 			var startTime = new Date();
 			

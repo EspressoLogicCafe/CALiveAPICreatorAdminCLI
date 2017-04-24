@@ -33,7 +33,7 @@ lac get @resources/2961
 # Show All Store Proc and attribute for sele
 
 
-cted proc (using ident)
+#show stored procs (using ident)
 lac get @procedures
 #lac get @procedures/somename
 

@@ -90,11 +90,11 @@ program
 	.option('--ident [ident]', 'The ident of the specific project (see project list)')
 	.option('--project_name [name]', 'The name of the project')
 	.option('--url_name [name]', 'The name of the project')
-	.option('--status [status]', 'Optional: the status of the project, can be A (for Active) or I for (Inactive)')
-	.option('--authprovider [ident]', 'Optional: the ident of the authentication provider for the project')
-	.option('--comments [comments]', 'Optional: a description of the project')
-	.option('--file [file]', 'Optional: for import/export, the name of a file to read from/save to, if unspecified, use stdin/stdout')
-	.option('--verbose', 'Optional: whether to display detailed results, or just a summary')
+	.option('--status [status]', 'optional: the status of the project, can be A (for Active) or I for (Inactive)')
+	.option('--authprovider [ident]', 'optional: the ident of the authentication provider for the project')
+	.option('--comments [comments]', 'optional: a description of the project')
+	.option('--file [file]', 'optional: for import/export, the name of a file to read from/save to, if unspecified, use stdin/stdout')
+	.option('--verbose', 'optional: whether to display detailed results, or just a summary')
 	.action(project.doProject);
 
 program
@@ -111,7 +111,7 @@ program
 	.option('--verbose', 'Detail debug info')
 	.option('--linkProject','(optional) Link the imported library to the current project')
 	.option('--comments [comment]', '(optional) Comment on Library')
-	.option('--file [fileName]', '[Optional] Name of {JS} file to import/export (if not provided stdout used for export)')
+	.option('--file [fileName]', '(optional) Name of {JS} file to import/export (if not provided stdout used for export)')
 	.action(library.doLibrary);
 
 program
@@ -123,7 +123,7 @@ program
 	.option('--createFunction [bootstrap]', 'Name for Create Function')
 	.option('--paramMap [map]', 'Map of auth provider settings')
 	.option('--comments [comment]', 'Comment on auth provider')
-	.option('--file [fileName]', '[Optional] Name of file to Import/Export auth provider (if not provided stdout used for export)')
+	.option('--file [fileName]', '(optional) Name of file to Import/Export auth provider (if not provided stdout used for export)')
 	.action(authprovider.doAuthProvider);
 
 program
@@ -137,11 +137,14 @@ program
 	.option('--schema_name [schema_name]', 'The schema in the datasource')
 	.option('--user_name [user_name]', 'The name of the datasource user')
 	.option('--password [password]', 'The password of the datasource user')
+	.option('--schema_editable [boolean]', 'Is this datasource marked as editable (i.e. managed datasource) - default: false')
 	.option('--url [url]', 'The JDBC URL for the datasource')
 	.option('--active [true|false]', 'This marks the datasource active or inactive')
 	.option('--project_ident [ident]', 'The ident of a project, (if other than the current project')
 	.option('--managedserver_ident [managedserver_ident]', 'The managed server ident used with command createDatabase (creates both database and datasource)')
-	.option('--file [file]', 'Optional: for import/export, the name of a file to read from/save to, if unspecified, use stdin/stdout')
+	.option('--comments [comment]', 'Comment on datasource')
+	.option('--verbose', '(optional) display list of datasources in detailed create format')
+	.option('--file [file]', 'optional: for import/export, the name of a file to read from/save to, if unspecified, use stdin/stdout')
 	.action(dbase.doDbase);
 
 program
@@ -158,7 +161,7 @@ program
 	.option('--prefix [prefix]', 'The prefix of the table')
 	.option('--apiversion [apiversion]', 'The name of an API version, if there is more than one - default v1')
 	.option('--project_ident [ident]', 'The ident of a project, (if other than the current project')
-	.option('--file [file]', 'Optional: for import/export, the name of a file to read from/save to, if unspecified, use stdin/stdout')
+	.option('--file [file]', 'optional: for import/export, the name of a file to read from/save to, if unspecified, use stdin/stdout')
 	.action(resource.doResource);
 
 program
@@ -173,15 +176,15 @@ program
 	.option('--parent_attribute [name]', 'The name of the parent attribute - required for parent copy')
 	.option('--expression [code]', 'The code for the rule - required for formula, events and validations')
 	.option('--error_message [message]', 'The error mesaage for the rule - required for validations')
-	.option('--rule_name [name]', 'Optional: a name for the rule. If not specified, a name will be generated.')
-	.option('--comments [comments]', 'Optional: a comment for the rule')
-	.option('--active [true|false]', 'Optional: whether the rule should be active, true by default')
+	.option('--rule_name [name]', 'optional: a name for the rule. If not specified, a name will be generated.')
+	.option('--comments [comments]', 'optional: a comment for the rule')
+	.option('--active [true|false]', 'optional: whether the rule should be active, true by default')
 	.option('--project_ident [ident]', 'The ident of a project, if other than the current project')
 	.option('--ident [ident]', 'For delete, the ident of the rule to delete')
 	.option('--jit [true|false]', 'Just in time flag (default false)')
 	.option('--sqlable [true|false]', 'Sqlable flag (default false) - optimize using SQL instead of JavaScript (default false)')
-	.option('--file [file]', 'Optional: for import/export, the name of a file to read from/save to, if unspecified, use stdin/stdout')
-	.option('--verbose', 'Optional: whether to display list of rules in detailed format that can be used to recreate using command line')
+	.option('--file [file]', 'optional: for import/export, the name of a file to read from/save to, if unspecified, use stdin/stdout')
+	.option('--verbose', 'optional: whether to display list of rules in detailed format that can be used to recreate using command line')
 	.action(rule.doRule);
 
 	 
@@ -191,7 +194,7 @@ program
 	.option('--ident [ident]','The ident of the specific project settings object')
 	.option('--option_value [value]','This is the value for the specific setting for the ident')
 	.option('--project_ident [project_ident]','The project ident that will be marked as used' )
-	.option('--file [fileName]', '[Optional] Name of file to settings for import/export (if not provided stdout used for export)')
+	.option('--file [fileName]', '(optional) Name of file to settings for import/export (if not provided stdout used for export)')
 	.action(apioptions.doSettings);
 
 
@@ -201,11 +204,11 @@ program
 	.option('--ident [ident]', 'The ident of the specific named sort object')
 	.option('--sortname [name]', 'The Name of named sort')
 	.option('--sort_text [sorttext]', 'Sort Text to define named sort')
-	.option('--resource_names [name]', '[Optional] Comma seperated list of Resource Names in quotes')
-	.option('--comments [comment]', '[Optional] Comment on named sort')
-	.option('--project_ident [project_ident]', '[Optional] The project ident if not the active project')
-	.option('--file [fileName]', '[Optional] Name of file for import/export (if not provided stdout used for export)')
-	.option('--verbose', '[Optional]  whether to display list of named sorts in detailed format')
+	.option('--resource_names [name]', '(optional) Comma seperated list of Resource Names in quotes')
+	.option('--comments [comment]', '(optional) Comment on named sort')
+	.option('--project_ident [project_ident]', '(optional) The project ident if not the active project')
+	.option('--file [fileName]', '(optional) Name of file for import/export (if not provided stdout used for export)')
+	.option('--verbose', '{optional)  whether to display list of named sorts in detailed format')
 	.action(sorts.doSort);
 	
 program
@@ -214,18 +217,18 @@ program
 	.option('--ident [ident]', 'The ident of the specific named filter object')
 	.option('--filtername [name]', 'The Name of named filter')
 	.option('--filter_text [text]', 'Text to define named filter')
-	.option('--resource_names [name]', '[Optional] Comma seperated list of Resource Names in quotes')
-	.option('--comments [comment]', '[Optional] omment on named filter')
-	.option('--project_ident [project_ident]', '[Optional] The project ident if not the active project')
-	.option('--file [fileName]', '[Optional] Name of file for import/export (if not provided stdin/stdout used for export)')
-	.option('--verbose', '[Optional] whether to display list of named filter in detailed format')
+	.option('--resource_names [name]', '(optional) Comma seperated list of Resource Names in quotes')
+	.option('--comments [comment]', '(optional) omment on named filter')
+	.option('--project_ident [project_ident]', '(optional) The project ident if not the active project')
+	.option('--file [fileName]', '(optional) Name of file for import/export (if not provided stdin/stdout used for export)')
+	.option('--verbose', '(optional) whether to display list of named filter in detailed format')
 	.action(filters.doFilter);
 
 program
 	.command('token <list|import|export>')
 	.description('Administer Auth Tokens for current project.')
 	.option('--project_ident [project_ident]','The project ident that will be marked as used' )
-	.option('--file [fileName]', '[Optional] Name of file to import/export (if not provided stdin/stdout used for export)')
+	.option('--file [fileName]', '(optional) Name of file to import/export (if not provided stdin/stdout used for export)')
 	.action(token.doToken);	
 
 program
@@ -234,7 +237,7 @@ program
 	.option('--ident [ident]', 'The ident of the specific role to delete')
 	.option('--rolename [name]', 'The nam of the specific role to delete')
 	.option('--project_ident [project_ident]','The project ident that will be marked as used' )
-	.option('--file [fileName]', '[Optional] Name of file to import/export (if not provided stdin/stdout used for export)')
+	.option('--file [fileName]', '(optional) Name of file to import/export (if not provided stdin/stdout used for export)')
 	.action(role.doRole);	
 	
 program
@@ -243,7 +246,7 @@ program
 	.option('--project_ident [project_ident]','The project ident that will be marked as used' )
 	.option('--ident [ident]', 'The ident of the specific user')
 	.option('--username [name]', 'The name of the specific user')
-	.option('--file [fileName]', '[Optional] Name of file to import/export (if not provided stdin/stdout used for export)')
+	.option('--file [fileName]', '(optional) Name of file to import/export (if not provided stdin/stdout used for export)')
 	.option('--password [password]','The password for this user' )
 	.option('--fullname [fullname]','User fullname' )
 	.option('--name [name]','User name' )
@@ -257,17 +260,18 @@ program
 	.command('npa <list|delete|export|import>')
 	.description('Administer Non Persistent Attributes for the active API Project.')
 	.option('--ident [ident]', 'The ident of the specific named sort object')
-	.option('--dbschema_ident [ident]', '[Optional] The dbschema ident if not the active project')
-	.option('--file [fileName]', '[Optional] Name of file for import/export (if not provided stdin/stdout used for export)')
-	.option('--verbose', '[Optional]  whether to display list of named sorts in detailed format')
+	.option('--dbschema_ident [ident]', '(optional) The dbschema ident if not the active project')
+	.option('--file [fileName]', '(optional) Name of file for import/export (if not provided stdin/stdout used for export)')
+	.option('--verbose', '(optional)  whether to display list of named sorts in detailed format')
 	.action(npa.doNPAttr);
 	
 program
 	.command('topic <list|delete|import|export>')
 	.description('Administer Topics for current project.')
 	.option('--project_ident [project_ident]','The project ident that will be marked as used' )
+	.option('--name [name]', 'Name of the topic')
 	.option('--ident [ident]', 'The ident of the specific topic to delete')
-	.option('--file [fileName]', '[Optional] Name of file to import/export (if not provided stdin/stdout used for export)')
+	.option('--file [fileName]', '(optional) Name of file to import/export (if not provided stdin/stdout used for export)')
 	.action(topic.doTopic);	
 	
 program
@@ -276,7 +280,7 @@ program
 	.option('--eventname [name]', 'The request or response Name')
 	.option('--ident [ident]', 'The ident of the specific event')
 	.option('--project_ident [project_ident]','The project ident that will be used' )
-	.option('--file [fileName]', '[Optional] Name of file to import/export (if not provided stdin/stdout used for export)')
+	.option('--file [fileName]', '(optional) Name of file to import/export (if not provided stdin/stdout used for export)')
 	.action(event.doEvent);	
 	
 program
@@ -284,14 +288,14 @@ program
 	.description('Administer Custom Endpoints (Handlers) for current project.')
 	.option('--project_ident [project_ident]','The project ident that will be used' )
 	.option('--ident [ident]', 'The ident of the specific handler')
-	.option('--file [fileName]', '[Optional] Name of file to import/export (if not provided stdin/stdout used for export)')
+	.option('--file [fileName]', '(optional) Name of file to import/export (if not provided stdin/stdout used for export)')
 	.action(handler.doHandler);	
 
 program
 	.command('apiversion <list|export|import>')
 	.description('Administer API Versions for Resources for current project.')
 	.option('--project_ident [project_ident]','The project ident that will be used' )
-	.option('--file [fileName]', '[Optional] Name of file to import/export (if not provided stdin/stdout used for export)')
+	.option('--file [fileName]', '(optional) Name of file to import/export (if not provided stdin/stdout used for export)')
 	.action(apiversion.doVersion);	
 	
 program
@@ -299,14 +303,14 @@ program
 	.description('Administer Relationships for current project.')
 	.option('--ident [ident]', 'This is the ident of the relationship')
 	.option('--project_ident [project_ident]','The project ident that will be used' )
-	.option('--file [fileName]', '[Optional] Name of file to import/export (if not provided stdin/stdout used for export)')
+	.option('--file [fileName]', '(optional) Name of file to import/export (if not provided stdin/stdout used for export)')
 	.action(reln.doReln);	
 
 program
 	.command('snapshot <list|start|restore>')
 	.description('List or start a project snapshot (backup) for current project.')
 	.option('--name [name]', 'The snapshot Name used by both start and restore')
-	.option('--project_ident [project_ident]','[optional] The project ident that will be used instead of current selected' )
+	.option('--project_ident [project_ident]','(optional) The project ident that will be used instead of current selected' )
 	.action(snapshot.doSnapshot);	
 
 program
@@ -319,8 +323,9 @@ program
 	.option('--hostname [server]','The gateway server hostname https://myserver:8443/lacman/1.0/publish' )
 	.option('--apiversion [version]','The API version of the swagger document' )
 	.option('--url_name [name]','The API url fragment name (use project list)' )
+	.option('--verbose', '(optional) display list of datasources in detailed create format')
 	.option('--comments [comments]','The gateway definition comments' )
-	.option('--file [fileName]', '[Optional] Name of file to import/export (if not provided stdin/stdout used)')
+	.option('--file [fileName]', '(optional) Name of file to import/export (if not provided stdin/stdout used)')
 	.action(gateway.doGateway);	
 	
 program
@@ -335,7 +340,9 @@ program
 	.option('--url [url]', 'The JDBC URL for the managed data server')
 	.option('--comments [comment]', 'This is the comment for this managed data server')
 	.option('--active [true|false]', 'This marks the managed data server active or inactive')
-	.option('--file [file]', 'Optional: for import/export, the name of a file to read from/save to, if unspecified, use stdin/stdout')
+	.option('--comments [comment]', 'Comment on datasource')
+	.option('--verbose', '(optional) display list of datasources in detailed create format')
+	.option('--file [file]', '(optional): for import/export, the name of a file to read from/save to, if unspecified, use stdin/stdout')
 	.action(managedserver.doDbase);
 	
 program
@@ -354,15 +361,17 @@ program
 	.option('--ignoreconstraintname [true|false]','(optional) The ignoreconstraintname setting is used when moving between database vendors' )
 	.option('--skiprelationships [true|false]','(optional) If true, relationships will not be created - default: false')
 	.option('--skiptablecreation [true|false]','(optional) If true, tables will not be created - default: false')
-	.option('--file [fileName]', '[Optional] Name of file to import/export (if not provided stdin/stdout used)')
+	.option('--file [fileName]', '(optional) Name of file to import/export (if not provided stdin/stdout used)')
 	.action(schema.doSchema);	
 		
 program
 	.command('function <list|delete|export|import>')
 	.description('Administer Functions for current project.')
 	.option('--ident [ident]', 'This is the ident of the function')
-	.option('--project_ident [project_ident]','The project ident that will be used' )
-	.option('--file [fileName]', '[Optional] Name of file to import/export (if not provided stdin/stdout used for export)')
+	.option('--name [name]', 'Name of the function')
+	.option('--project_ident [project_ident]','(optional) The project ident that will be used' )
+	.option('--verbose', '(optional) display list of functions in detailed create format')
+	.option('--file [fileName]', '(optional) Name of file to import/export (if not provided stdin/stdout used for export)')
 	.action(fnction.doFunction);	
 
 program
@@ -376,7 +385,7 @@ program
 	.option('--view_name [name]','The name of the view to attach a virtual primary key' )
 	.option('--keyname [colnamelist]','The comma separated list of column names' )
 	.option('--is_autonum [true|false]','If the keyname of a view column that is an autonum - default false' )
-	.option('--file [fileName]', '[Optional] Name of file to import/export (if not provided stdin/stdout used for export)')
+	.option('--file [fileName]', '(optional) Name of file to import/export (if not provided stdin/stdout used for export)')
 	.action(vkey.doVirtualKey);	
 	
 program
@@ -390,7 +399,7 @@ program
 	.option('--view_name [name]','The name of the view to attach a virtual primary key' )
 	.option('--keyname [colnamelist]','The comma separated list of column names' )
 	.option('--sequence [colnamelist]','The comma separated list of column names' )
-	.option('--file [fileName]', '[Optional] Name of file to import/export (if not provided stdin/stdout used for export)')
+	.option('--file [fileName]', '(optional) Name of file to import/export (if not provided stdin/stdout used for export)')
 	.action(seq.doSequence);	
 
 program.parse(process.argv);

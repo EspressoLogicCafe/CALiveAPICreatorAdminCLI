@@ -255,12 +255,10 @@ module.exports = {
 		var filt = null;
 		if (cmd.ident) {
 			filt = "equal(ident:'" + cmd.ident + "')";
-		}
-		else if (cmd.name) {
-			filt = "equal(name:'" + cmd.name + "')";
-		}
-		else {
-			console.log('Missing parameter: please specify either name or ident'.red);
+		} else if (cmd.filtername) {
+			filt = "equal(name:'" + cmd.filtername + "')";
+		} else {
+			console.log('Missing parameter: please specify either --filtername or --ident'.red);
 			return;
 		}
 		
@@ -276,7 +274,7 @@ module.exports = {
 				return;
 			}
 			if (data.length === 0) {
-				console.log(("Error: no such named filter").red);
+				console.log(("Error: no such named filter using filtername or ident").red);
 				return;
 			}
 			if (data.length > 1) {

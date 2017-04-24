@@ -7,21 +7,26 @@ Usage: datasource [options] <list|create|update|delete|import|export>
 
   Options:
 
-    -h, --help                     output usage information
-    --db_name [name]               The name of the datasource connection
-    --prefix [prefix]              The prefix of the datasource connection
-    --dbasetype [dbasetype]        The type of the datasource connection, can be mysql, oracle, sqlserver,derby, postgres
-    --catalog_name [catalog_name]  The catalog in the datasource
-    --schema_name [schema_name]    The schema in the datasource
-    --user_name [user_name]        The name of the datasource user
-    --password [password]          The password of the datasource user
-    --url [url]                    The JDBC URL for the datasource
-    --project_ident                The ident of a project, if other than the current project
-    --file [file]                  Optional: for import/export, the name of a file to read from/save to, if unspecified, use stdin/stdout
+    -h, --help                                   output usage information
+    --db_name [name]                             The name of the datasource connection
+    --ident [ident]                              For delete or reload, the ident of the datasource
+    --prefix [prefix]                            The prefix of the datasource connection
+    --dbasetype [dbasetype]                      The type of the datasource connection, can be mysql, oracle, sqlserver, derby, postgresql, db2luw, csv, hbase, sap, salesforce, db2zos, sqlserverazure
+    --catalog_name [catalog_name]                The catalog in the datasource
+    --schema_name [schema_name]                  The schema in the datasource
+    --user_name [user_name]                      The name of the datasource user
+    --password [password]                        The password of the datasource user
+    --schema_editable [boolean]                  Is this datasource marked as editable (i.e. managed datasource) - default: false
+    --url [url]                                  The JDBC URL for the datasource
+    --active [true|false]                        This marks the datasource active or inactive
+    --project_ident [ident]                      The ident of a project, (if other than the current project
+    --managedserver_ident [managedserver_ident]  The managed server ident used with command createDatabase (creates both database and datasource)
+    --verbose                                    (optional) display list of datasources in detailed create format
+    --file [file]                                optional: for import/export, the name of a file to read from/save to, if unspecified, use stdin/stdout
 ```
 ***
 ## datasource list
-    liveapicreatoradmin datasource list
+    lacadmin datasource list
 
 The `list` command shows all datasource connections for the current project.
 
@@ -35,15 +40,16 @@ The `list` command shows all datasource connections for the current project.
 
 ***
 ## datasource create
-    liveapicreatoradmin datasource create --name <name> 
+    lacadmin datasource create --db_name <name> 
     	--user_name <db-user-name> 
     	--password <db-password>
-    	[--url <db-url> ]
-    	--dbasetype <type>
-    	[--prefix <prefix>] 
+    	--url <db-url> 
+    	--dbasetype <type> can be: mysql, oracle, sqlserver, derby, postgresql, db2luw, csv, hbase, sap, salesforce, db2zos, sqlserverazure
+    	--prefix <prefix>
     	[--catalog_name <catalog>] 
     	[--schema_name <schema>] 
-    	[--port_num <port>]
+    	[--active <true|false>]
+    	[--schema_editable <true|false>]
     	[--comments <comments>]
 
 The `create` command creates a new connection to a datasource.
@@ -76,19 +82,20 @@ If the `prefix` parameter is not specified, it will default to "main".
 ## datasource update
 
 ```
-liveapicreatoradmin datasource update [--prefix <name> | --name <name> ]
+lacadmin datasource update [--prefix <name> | --db_name <name> ]
 		[--user_name <db-user-name>] 
 		[--password <db-password>]
     	[--url <db-url>] 
     	[--catalog_name <catalog>] 
     	[--schema_name <schema>] 
-    	[--port_num <port>]
+    	[--schema_editable <true|false>]
+    	[--active <true|false>]
     	[--comments <comments>]
 ```
 
 ***
 ## datasource delete
-    liveapicreatoradmin datasource delete [--db_name <name> | --prefix <prefix>]
+    lacadmin datasource delete [--db_name <name> | --prefix <prefix>]
 
 The `delete` command deletes a datasource connection from the current project.
 Either the name of the datasource connection, or its prefix, must be specified.
@@ -99,14 +106,14 @@ Visit the Documentation page on [datasources](http://ca-doc.espressologic.com/do
 ## datasource export
 Provide the name or prefix of the datasource and (optional) the export file name. If not provided - it will be sent to stdout.
 ```
-liveapicreatoradmin datasource export  [--prefix <name> | --name <name> ] --file datasource.json
+lacadmin datasource export  [--prefix <name> | --name <name> ] --file datasource.json
 ```
 The export datasource exports the specified datasource into a JSON file. If the filename parameter is not specified, stdout is used.
 
 ## datasource import
 Import a datasource to the current project (or one specified) using the name of the json file for the datasource you wish to import.
 ```
-liveapicreatoradmin datasource import [--project_ident <ident>] --file datasource.json
+lacadmin datasource import [--project_ident <ident>] --file datasource.json
 ```
 The import datasource imports the specified JSON file. If the filename parameter is not specified, stdin is used. (you can pipe the json file to the import)
 

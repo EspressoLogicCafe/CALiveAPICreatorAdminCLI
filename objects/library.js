@@ -81,10 +81,14 @@ module.exports = {
 		if ( ! loginInfo)
 			return;
 		var filt = null;
+		if (cmd.name) {
+			filt = "equal(name:'" + cmd.name + "')";
+		} 
 		if (cmd.ident) {
 			filt = "equal(ident:" + cmd.ident + ")";
-		} else {
-			console.log('Missing parameter: please specify library ident'.red);
+		} 
+		if(filt === null) {
+			console.log('Missing parameter: please specify library --name or --ident'.red);
 			return;
 		}
 		
@@ -390,7 +394,7 @@ module.exports = {
 		
 		var filter = null;
 		
-		filter = "sysfilter=greater(ident:599)&sysfilter=equal(logic_type:'javascript')";
+		filter = "sysfilter=greater(ident:500)&sysfilter=equal(logic_type:'javascript')";
 		
 		if (cmd.ident) {
 			filter += "&sysfilter=equal(ident:" + cmd.ident + ")";

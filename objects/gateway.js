@@ -43,7 +43,7 @@ module.exports = {
 			return;
 		var url = loginInfo.url;
 		var apiKey = loginInfo.apiKey;
-
+		var verboseDisplay = "";
 		client.get(url + "/admin:gateways?pagesize=100&sysorder=(name:asc_uc,name:desc)", {
 			headers: {
 				Authorization: "CALiveAPICreator " + apiKey + ":1",
@@ -59,7 +59,7 @@ module.exports = {
 			_.each(data, function(p) {
 				table.cell("Ident", p.ident);
 				table.cell("Name", p.name);
-				table.cell("Username", p.username);
+				table.cell("Username", p.default_username);
 				table.cell("URL", p.url);
 				table.cell("Active", p.is_active);
 				var comments = p.comments;
@@ -71,10 +71,23 @@ module.exports = {
 				}
 				table.cell("Comments", comments);
 				table.newRow();
+				if(cmd.verbose) {
+					verboseDisplay +=  "\n";
+					verboseDisplay += "lacadmin gateway create --name \"" + p.name +"\"";
+					verboseDisplay +=  " --username "+ p.default_username;
+					verboseDisplay +=  " --url \""+p.url +"\"";
+					if( p.comments ) {
+						verboseDisplay +=  " --comments \""+ comments +"\"";
+					}
+					verboseDisplay +=  "\n";
+				}
 			});
 			table.sort(['Name']);
 			console.log(table.toString());
 			printObject.printHeader("# gateway: " + data.length);
+			if(cmd.verbose) {
+				console.log(verboseDisplay);
+			}
 		});
 	},
 	
@@ -401,16 +414,19 @@ module.exports = {
 			//console.log('Missing parameter: --project_name'.red);
 			//return;
 		}
-
+		var active = true;
+		if(cmd.active) {
+			active = cmd.active == 'true';
+		}
 		
 		context.getContext(cmd, function() {
 			
 			var newGateway = {
 				 name: cmd.name,
-   				 username: cmd.username,
+   				 default_username: cmd.username,
     			 url: cmd.hostname,
     			 comments: cmd.comments,
-    			 is_active: true,
+    			 is_active: active,
 				 account_ident: context.account.ident
 			};
 			
