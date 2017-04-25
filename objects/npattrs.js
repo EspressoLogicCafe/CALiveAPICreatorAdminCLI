@@ -27,16 +27,16 @@ module.exports = {
 			//program.help();
 		}
 	},
-	
+
 	list: function (cmd) {
 		var client = new Client();
-		
+
 		var loginInfo = login.login(cmd);
 		if ( ! loginInfo)
 			return;
 		var url = loginInfo.url;
 		var apiKey = loginInfo.apiKey;
-		
+
 		var projIdent = cmd.project_ident;
 		if ( ! projIdent) {
 			projIdent = dotfile.getCurrentProject();
@@ -69,8 +69,8 @@ module.exports = {
 				}
 				printObject.printHeader('Non Persistent Attributes Schema Name: '+ schema[0].name );
 				var table = new Table();
+				var verboseDisplay = "";
 				_.each(data, function(p) {
-				
 					var datatype = "";
 					switch( p.data_type) {
 						case 1 : datatype = "Character"; break;
@@ -82,7 +82,7 @@ module.exports = {
 						case 16 : datatype = "Boolean"; break;
 						case 91 : datatype = "Datetime"; break;
 						case 92 : datatype = "Timestamp"; break;
-						default : datatype = "undefined"; 
+						default : datatype = "undefined";
 					}
 					table.cell("Ident", p.ident);
 					table.cell("Table Name", p.table_name);
@@ -106,6 +106,12 @@ module.exports = {
 					console.log(table.toString());
 				}
 				printObject.printHeader("# non persistent attrs: " + data.length);
+				if(cmd.verbose) {
+					verboseDisplay += "\n";
+					verboseDisplay += "lacadmin npa export  --file 'NPA.json'\n";
+					verboseDisplay += "#lacadmin npa import --file 'NPA.json'\n";
+					console.log(verboseDisplay);
+				}
 			});
 		});
 	},
@@ -125,7 +131,7 @@ module.exports = {
 			console.log('Missing parameter: please specify either ident'.red);
 			return;
 		}
-		
+
 		client.get(loginInfo.url + "/admin:np_attributes?sysfilter=" + filt, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
@@ -176,13 +182,13 @@ module.exports = {
 	},
 	export: function(cmd) {
 		var client = new Client();
-		
+
 		var loginInfo = login.login(cmd);
 		if ( ! loginInfo)
 			return;
 		var url = loginInfo.url;
 		var apiKey = loginInfo.apiKey;
-		
+
 		var toStdout = false;
 		if ( ! cmd.file) {
 			toStdout = true;
@@ -205,7 +211,7 @@ module.exports = {
 				}
 			},function(schema) {
 			//console.log(JSON.stringify(schema,null,2));
-			
+
 			client.get(loginInfo.url + "/np_attributes?sysfilter=equal(dbaseschema_ident:" + schema[0].ident+")", {
 				headers: {
 					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
@@ -239,17 +245,17 @@ module.exports = {
 				}
 			});
 		});
-		
+
 	},
 	import: function(cmd) {
 		var client = new Client();
-		
+
 		var loginInfo = login.login(cmd);
 		if ( ! loginInfo)
 			return;
 		var url = loginInfo.url;
 		var apiKey = loginInfo.apiKey;
-		
+
 		if ( ! cmd.file) {
 			cmd.file = '/dev/stdin';
 		}
@@ -278,7 +284,7 @@ module.exports = {
 					return;
 				}
 			json = data;
-		
+
 			fileContent = JSON.parse(json);
 			if(Array.isArray(fileContent)){
 				for(var i = 0 ; i < fileContent.length; i++){
@@ -289,7 +295,7 @@ module.exports = {
 					//fileContent[i].dbaseschemas = { "@metadata": {"action": "LOOKUP", "key": ["prefix","active","project_ident"},"prefix": prefix ,"active": true, "project_ident": projIdent};
 
 					//fileContent[i]["@metadata"] = {action:"MERGE_INSERT", key: ["dbaseschema_ident","table_name","attr_name"]} ;
-				} 
+				}
 			} else {
 				//fileContent.dbaseschema_ident = curProj;
 				delete fileContent.ident;
@@ -312,7 +318,7 @@ module.exports = {
 				var trailer = "Request took: " + (endTime - startTime) + "ms";
 				if(data.statusCode == 200){
 					console.log(trailer);
-				} else { 
+				} else {
 					var newSort = _.find(data.txsummary, function(p) {
 						return p['@metadata'].resource === 'admin:np_attributes';
 					});
@@ -329,8 +335,8 @@ module.exports = {
 						printObject.printObject(newSort, newSort['@metadata'].entity, 0, newSort['@metadata'].verb);
 						console.log(('and ' + (data.txsummary.length - 1) + ' other objects').grey);
 					}
-			
-					
+
+
 					trailer += " - # objects touched: ";
 					if (data.txsummary.length === 0) {
 						console.log('No data returned'.yellow);

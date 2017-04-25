@@ -60,6 +60,7 @@ module.exports = {
 			}
 			printObject.printHeader('All projects');
 			var table = new Table();
+			var verboseDisplay = "";
 			_.each(data, function(p) {
 				table.cell("Ident", p.ident);
 				table.cell("Name", p.name);
@@ -76,10 +77,18 @@ module.exports = {
 				comments = comments.replace("\n"," ");
 				table.cell("Comments", comments);
 				table.newRow();
+				if(cmd.verbose) {
+					 verboseDisplay += "\n";
+					 verboseDisplay += "lacadmin project export --url_name "+p.url_name+"  --file PROJECT_"+p.url_name + ".json\n";
+					 verboseDisplay += "#lacadmin project import --file PROJECT_"+p.url_name + ".json\n";
+				 }
 			});
 			table.sort(['Name']);
 			console.log(table.toString());
 			printObject.printTrailer("# projects: " + data.length);
+			if(cmd.verbose) {
+				console.log(verboseDisplay);
+			}
 		});
 	},
 	

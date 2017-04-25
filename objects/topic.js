@@ -27,16 +27,16 @@ module.exports = {
 			//program.help();
 		}
 	},
-	
+
 	list: function (cmd) {
 		var client = new Client();
-		
+
 		var loginInfo = login.login(cmd);
 		if ( ! loginInfo)
 			return;
 		var url = loginInfo.url;
 		var apiKey = loginInfo.apiKey;
-		
+
 		var projIdent = cmd.project_ident;
 		if ( ! projIdent) {
 			projIdent = dotfile.getCurrentProject();
@@ -70,15 +70,15 @@ module.exports = {
 							else if (comments.length > 50){
 								comments = comments.substring(0, 47) + "...";
 							}
-				
+
 				comments = comments.replace("\n"," ");
 				comments = comments.replace("\n"," ");
 				table.cell("Description", comments);
 				table.newRow();
 				if(cmd.verbose) {
 					verboseDisplay += "\n";
-					verboseDisplay += "lacadmin topic export --name '"+p.name+"' --file  TOPIC_"+p.name + ".json\n";
-					verboseDisplay += "#lacadmin topic import --file  TOPIC_"+p.name + ".json\n";
+					verboseDisplay += "lacadmin topic export --name '"+p.name+"' --file 'TOPIC_"+p.name + ".json'\n";
+					verboseDisplay += "#lacadmin topic import --file 'TOPIC_"+p.name + ".json'\n";
 				}
 			});
 			table.sort(['Name']);
@@ -88,7 +88,7 @@ module.exports = {
 				console.log(verboseDisplay);
 			}
 		});
-			
+
 	},
 	del: function(cmd) {
 		var client = new Client();
@@ -104,14 +104,14 @@ module.exports = {
 				console.log('There is no current project.'.yellow);
 				return;
 			}
-		}		
-		var filt = "sysfilter=equal(project_ident:" + projIdent + ")"; 
+		}
+		var filt = "sysfilter=equal(project_ident:" + projIdent + ")";
 		if (cmd.ident) {
 			filt += "&sysfilter=equal(ident:" + cmd.ident + ")";
 		} else if (cmd.name) {
 			filt += "&sysfilter=equal(name:'" + cmd.name + "')";
-		} 
-		
+		}
+
 		client.get(loginInfo.url + "/admin:topics?	" + filt, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
@@ -162,7 +162,7 @@ module.exports = {
 	},
 	export: function(cmd) {
 		var client = new Client();
-		
+
 		var loginInfo = login.login(cmd);
 		if ( ! loginInfo)
 			return;
@@ -176,7 +176,7 @@ module.exports = {
 				return;
 			}
 		}
-		
+
 		var filter = null;
 		if (projIdent) {
 			filter = "sysfilter=equal(project_ident:" + projIdent + ")";
@@ -189,7 +189,7 @@ module.exports = {
 		} else if(cmd.name) {
 			filter += "&sysfilter=equal(name: '"+ cmd.name +"')";
 		}
-	
+
 		var toStdout = false;
 		if ( ! cmd.file) {
 			toStdout = true;
@@ -214,7 +214,7 @@ module.exports = {
 				delete data[idx]['@metadata']
 				delete data[idx].project_ident;
 			}
-			
+
 			if (toStdout) {
 				console.log(JSON.stringify(data, null, 2));
 			}
@@ -225,7 +225,7 @@ module.exports = {
 			}
 		});
 	},
-	
+
 	import: function(cmd) {
 		var client = new Client();
 		var loginInfo = login.login(cmd);
@@ -253,7 +253,7 @@ module.exports = {
 				return;
 			}
 		json = data;
-	
+
 		fileContent = JSON.parse(json);
 		if(Array.isArray(fileContent) && fileContent.length > 0){
 			for(var i = 0 ; i < fileContent.length ; i++ ){
@@ -265,7 +265,7 @@ module.exports = {
 			fileContent.project_ident = projIdent;
 			fileContent["@metadata"] = {action:"MERGE_INSERT", key: ["name","project_ident"]} ;
 		}
-		
+
 		var startTime = new Date();
 		client.put(loginInfo.url + "/admin:topics", {
 			data: fileContent,
@@ -274,7 +274,7 @@ module.exports = {
 				"Content-Type" : "application/json"
 			}
 		}, function(data) {
-		
+
 			var endTime = new Date();
 			if (data.errorMessage) {
 				console.log(data.errorMessage.red);
@@ -284,7 +284,7 @@ module.exports = {
 			if(data.statusCode == 200 ){
 				console.log("Request took: " + (endTime - startTime) + "ms");
 				return;
-			} 	
+			}
 			var newTopic = _.find( data.txsummary, function(p) {
 				return p['@metadata'].resource === 'admin:topics';
 			});
@@ -301,7 +301,7 @@ module.exports = {
 				printObject.printObject(newTopic, newTopic['@metadata'].entity, 0, newTopic['@metadata'].verb);
 				console.log(('and ' + (data.txsummary.length - 1) + ' other objects').grey);
 			}
-			
+
 			var trailer = "Request took: " + (endTime - startTime) + "ms";
 			trailer += " - # objects touched: ";
 			if (data.txsummary.length === 0) {

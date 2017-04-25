@@ -33,10 +33,10 @@ module.exports = {
 			//program.help();
 		}
 	},
-	
+
 	list: function (cmd) {
 		var client = new Client();
-		
+
 		var loginInfo = login.login(cmd);
 		if ( ! loginInfo)
 			return;
@@ -55,19 +55,20 @@ module.exports = {
 			}
 			printObject.printHeader('Managed Data Server(s)');
 			var table = new Table();
+			var verboseDisplay = "";
 			_.each(data, function(p) {
 				table.cell("Ident", p.ident);
 				table.cell("Name", p.name);
 				var type = "";
 				switch(p.dbasetype_ident) {
-					case 1: type = "MySQL"; break;
-					case 2: type = "Oracle"; break;
+					case 1: type = "mysql"; break;
+					case 2: type = "oracle"; break;
 					case 3: type = "SQL Server (jTDS)"; break;
 					case 4: type = "SQL Server"; break;
-					case 5: type = "SQL Server (Azure)"; break;
-					case 6: type = "NuoDB"; break;
-					case 7: type = "PostgreSQL"; break;
-					case 8: type = "Derby"; break;
+					case 5: type = "sqlserver"; break;
+					case 6: type = "sqlserverazure"; break;
+					case 8: type = "postgresql"; break;
+					case 17: type = "derby"; break;
 					default: type = "unknown";
 				}
 				table.cell("Type", type);
@@ -84,6 +85,21 @@ module.exports = {
 				}
 				table.cell("Comments", comments);
 				table.newRow();
+				if(cmd.verbose) {
+					verboseDisplay += "\n";
+					verboseDisplay += "lacadmin managedserver create --server_name '"+p.name+"'";
+					verboseDisplay += " --dbasetype '"+ type +"'";
+					verboseDisplay += " --url '"+p.url + "'";
+					verboseDisplay += " --active "+p.is_active ;
+					if(p.catalog_name){
+						verboseDisplay += " --catalog "+p.catalog_name;
+				  }
+					verboseDisplay += " --user_name "+p.user_name;
+					verboseDisplay += " --password <password>";
+					if(comments){
+						verboseDisplay += " --comments '"+comments+"'";
+					}
+				}
 			});
 			table.sort(['Active', 'Name']);
 			if (data.length === 0) {
@@ -93,9 +109,12 @@ module.exports = {
 				console.log(table.toString());
 			}
 			printObject.printHeader("# managed_data_servers: " + data.length);
+			if(cmd.verbose) {
+				console.log(verboseDisplay);
+			}
 		});
 	},
-	
+
 	create: function(cmd) {
 		var client = new Client();
 		var loginInfo = login.login(cmd);
@@ -105,7 +124,7 @@ module.exports = {
 			console.log('Missing parameter: server_name'.red);
 			return;
 		}
-		
+
 		if ( ! cmd.user_name) {
 			console.log('Missing parameter: user_name'.red);
 			return;
@@ -122,7 +141,7 @@ module.exports = {
 			console.log('Missing parameter: active'.red);
 			return;
 		}
-		
+
 		var dbasetype = cmd.dbasetype;
 		if ( ! dbasetype) {
 			console.log('You must specify a dbasetype.'.red);
@@ -140,19 +159,20 @@ module.exports = {
 			case "postgres": dbasetype = 8; break;
 			case "postgresql": dbasetype = 8; break;
 			case "derby": dbasetype = 17; break;
-			default : console.log('Unknown database type: ' + dbasetype); return;
+			default : console.log('Unknown database type: ' + dbasetype);
+				return;
 		}
 
 		context.getContext(cmd, function() {
-			
+
 			var newServer = {
 				name: cmd.server_name,
 				url: cmd.url,
 				catalog_name: cmd.catalog_name,
 				user_name: cmd.user_name,
-				password: cmd.password,
-				is_active: cmd.active || true,
-				comments: cmd.comments || "Created by command line service",
+				password: cmd.password || null,
+				is_active: cmd.active == 'true',
+				comments: cmd.comments || "Created by lacadmin command line service",
 				dbasetype_ident: dbasetype,
 				account_ident: context.account.ident
 			};
@@ -166,7 +186,7 @@ module.exports = {
 					"Content-Type" : "application/json"
 				}
 			}, function(data) {
-				
+
 				var endTime = new Date();
 				if (data.errorMessage) {
 					console.log(data.errorMessage.red);
@@ -179,12 +199,12 @@ module.exports = {
 				});
 				var trailer = "Request took: " + (endTime - startTime) + "ms";
 				trailer += " - # objects touched: ";
-				
+
 				printObject.printTrailer(trailer);
 			});
 		});
 	},
-	
+
 	update: function(cmd) {
 		var client = new Client();
 		var loginInfo = login.login(cmd);
@@ -194,11 +214,11 @@ module.exports = {
 		}
 
 		var filter = "";
-		
+
 		if(cmd.ident){
 			filter += "equal(ident: "+ cmd.ident +")" ;
 		} else {
-			
+
 		    if (cmd.serer_name) {
 				filter += "equal(name:'" + cmd.server_name + "')";
 			} else {
@@ -206,7 +226,7 @@ module.exports = {
 				return;
 			}
 		}
-		
+
 		//console.log(filter);
 		client.get(loginInfo.url + "/admin:managed_data_servers?sysfilter=" + filter, {
 			headers: {
@@ -214,7 +234,7 @@ module.exports = {
 				"Content-Type" : "application/json"
 			}
 		}, function(data) {
-			
+
 			if (data.errorMessage) {
 				//console.log(data);
 				console.log(("Error: " + data.errorMessage).red);
@@ -229,11 +249,11 @@ module.exports = {
 				return;
 			}
 			var db = data[0];
-			
+
 			if(cmd.server_name){
 				db.name = cmd.server_name;
 			}
-			
+
 			if( cmd.password) {
 				db.password = cmd.password;
 				delete db.salt;
@@ -241,11 +261,11 @@ module.exports = {
 			if( cmd.user_name){
 				db.user_name = cmd.user_name;
 			}
-			
+
 			if ( cmd.url ){
 				db.url = cmd.url;
 			}
-			
+
 			if( cmd.catalog_name ){
 			 	db.catalog_name = cmd.catalog_name;
 			}
@@ -256,7 +276,7 @@ module.exports = {
 			 	db.is_active = cmd.active;
 			}
 			var startTime = new Date();
-			
+
 			client.put(db['@metadata'].href, {
 				data: db,
 				headers: {
@@ -302,7 +322,7 @@ module.exports = {
 			console.log('Missing parameter: please specify managed_data_servers (use list)  --ident '.red);
 			return;
 		}
-		
+
 		client.get(loginInfo.url + "/admin:managed_data_servers?sysfilter=" + filter, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
@@ -353,7 +373,7 @@ module.exports = {
 	},
 	export: function(cmd) {
 		var client = new Client();
-		
+
 		var loginInfo = login.login(cmd);
 		if ( ! loginInfo)
 			return;
@@ -361,16 +381,16 @@ module.exports = {
 		var apiKey = loginInfo.apiKey;
 		var filter = "";
 
-		
+
 		if (cmd.ident) {
 			filter = "?sysfilter=equal(ident:" + cmd.ident + ")";
 		}
-		
+
 		var toStdout = false;
 		if ( ! cmd.file) {
 			toStdout = true;
 		}
-		
+
 		client.get(loginInfo.url + "/admin:managed_data_servers" + filter, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
@@ -394,7 +414,7 @@ module.exports = {
 					data[i].project_ident = null;
 					delete data[i]["ident"];
 					delete data[i]["@metadata"];
-				} 
+				}
 			} else {
 				data.password = null;
 				data.salt = null;
@@ -413,17 +433,17 @@ module.exports = {
 	},
 	import: function(cmd) {
 		var client = new Client();
-		
+
 		var loginInfo = login.login(cmd);
 		if ( ! loginInfo)
 			return;
 		var url = loginInfo.url;
 		var apiKey = loginInfo.apiKey;
-		
+
 		if ( ! cmd.file) {
 			cmd.file = '/dev/stdin';
 		}
-		
+
 		context.getContext(cmd, function() {
 			var fileContent = JSON.parse(fs.readFileSync(cmd.file));
 			if(Array.isArray(fileContent) && fileContent.length > 0){
@@ -453,7 +473,7 @@ module.exports = {
 				if(data.statusCode == 200 ){
 					console.log("Request took: " + (endTime - startTime) + "ms");
 					return;
-				} 
+				}
 				var newDataSource = _.find(data.txsummary, function(p) {
 					return p['@metadata'].resource === 'admin:managed_data_servers';
 				});
@@ -470,7 +490,7 @@ module.exports = {
 					printObject.printObject(newDataSource, newDataSource['@metadata'].entity, 0, newDataSource['@metadata'].verb);
 					console.log(('and ' + (data.txsummary.length - 1) + ' other objects').grey);
 				}
-			
+
 				var trailer = "Request took: " + (endTime - startTime) + "ms";
 				trailer += " - # objects touched: ";
 				if (data.txsummary.length === 0) {

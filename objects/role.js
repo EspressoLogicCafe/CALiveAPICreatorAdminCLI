@@ -27,16 +27,16 @@ module.exports = {
 			//program.help();
 		}
 	},
-	
+
 	list: function (cmd) {
 		var client = new Client();
-		
+
 		var loginInfo = login.login(cmd);
 		if ( ! loginInfo)
 			return;
 		var url = loginInfo.url;
 		var apiKey = loginInfo.apiKey;
-		
+
 		var projIdent = cmd.project_ident;
 		if ( ! projIdent) {
 			projIdent = dotfile.getCurrentProject();
@@ -74,8 +74,8 @@ module.exports = {
 					 table.newRow();
 					 if(cmd.verbose) {
 						   verboseDisplay += "\n";
-						   verboseDisplay += "lacadmin role export --rolename '"+p.name+"' --file  ROLE_"+p.name + "\n";
-						   verboseDisplay += "#lacadmin role import --file  ROLE_"+p.name + "\n";
+						   verboseDisplay += "lacadmin role export --rolename '"+p.name+"' --file  'ROLE_"+p.name + ".json'\n";
+						   verboseDisplay += "#lacadmin role import --file  'ROLE_"+p.name + ".json'\n";
 					   }
 					});
 				 table.sort(['Name']);
@@ -85,7 +85,7 @@ module.exports = {
 					console.log(verboseDisplay);
 				}
 		});
-			
+
 	},
 	del: function(cmd) {
 		var client = new Client();
@@ -113,7 +113,7 @@ module.exports = {
 			console.log('Missing parameter: please specify either rolename or ident'.red);
 			return;
 		}
-		
+
 		client.get(loginInfo.url + "/admin:roles?sysfilter=" + filt, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
@@ -164,7 +164,7 @@ module.exports = {
 	},
 	export: function(cmd) {
 		var client = new Client();
-		
+
 		var loginInfo = login.login(cmd);
 		if ( ! loginInfo)
 			return;
@@ -178,7 +178,7 @@ module.exports = {
 				return;
 			}
 		}
-		
+
 		var filter = null;
 		if (projIdent) {
 			filter = "sysfilter=equal(project_ident:" + projIdent + ")";
@@ -189,12 +189,12 @@ module.exports = {
 		if(cmd.rolename){
 			filter += "&sysfilter=equal(name:'" + cmd.rolename + "')";
 		}
-	
+
 		var toStdout = false;
 		if ( ! cmd.file) {
 			toStdout = true;
 		}
-		
+
 		client.get(loginInfo.url + "/AllRoles?pagesize=1000&"+filter, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
@@ -215,7 +215,7 @@ module.exports = {
 				delete data[idx]['@metadata']
 				delete data[idx].project_ident;
 			}
-			
+
 			if (toStdout) {
 				console.log(JSON.stringify(data, null, 2));
 			}
@@ -226,7 +226,7 @@ module.exports = {
 			}
 		});
 	},
-	
+
 	import: function(cmd) {
 		var client = new Client();
 		var loginInfo = login.login(cmd);
@@ -245,7 +245,7 @@ module.exports = {
 		if ( ! cmd.file) {
 			cmd.file = '/dev/stdin';
 		}
-		
+
 		var fileContent = JSON.parse(fs.readFileSync(cmd.file));
 		if(Array.isArray(fileContent) && fileContent.length > 0){
 			for(var i = 0 ; i < fileContent.length ; i++ ){
@@ -259,7 +259,7 @@ module.exports = {
 			delete fileContent.ts;
 			fileContent["@metadata"] = {action:"MERGE_INSERT", key: ["project_ident","name"]} ;
 		}
-		
+
 		var startTime = new Date();
 		client.put(loginInfo.url + "/AllRoles", {
 			data: fileContent,
@@ -268,7 +268,7 @@ module.exports = {
 				"Content-Type" : "application/json"
 			}
 		}, function(data) {
-		
+
 			var endTime = new Date();
 			if (data.errorMessage) {
 				console.log(data.errorMessage.red);
@@ -278,7 +278,7 @@ module.exports = {
 			if(data.statusCode == 200 ){
 				console.log("Request took: " + (endTime - startTime) + "ms");
 				return;
-			} 	
+			}
 			var newRole = _.find( data.txsummary, function(p) {
 				return p['@metadata'].resource === 'AllRoles';
 			});
@@ -295,7 +295,7 @@ module.exports = {
 				printObject.printObject(newRole, newRole['@metadata'].entity, 0, newRole['@metadata'].verb);
 				console.log(('and ' + (data.txsummary.length - 1) + ' other objects').grey);
 			}
-			
+
 			var trailer = "Request took: " + (endTime - startTime) + "ms";
 			trailer += " - # objects touched: ";
 			if (data.txsummary.length === 0) {

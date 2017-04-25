@@ -58,6 +58,7 @@ module.exports = {
 						printObject.printHeader('Relationships');
 						var table = new Table();
 						var type = "";
+						var verboseDisplay = "";
 						_.each(data, function(p) {
 						type = p.eventtype_ident == 1 ? "Request":"Response";
 							table.cell("Ident", p.ident);
@@ -68,6 +69,8 @@ module.exports = {
 							table.cell("Parent Cols",p.child_columns);
 							table.cell("Role to Parent",p.role_to_parent);
 							table.cell("Role to Child",p.role_to_child);
+							table.cell("Update Rule",p.update_rule);
+							table.cell("Delete Rule",p.delete_rule);
 							var comments = p.comments;
 							if ( ! comments) {
 								comments = "";
@@ -76,12 +79,20 @@ module.exports = {
 								//replace \n
 								comments = comments.substring(0, 47) + "...";
 							}
-							//table.cell("Comments",comments);
+							table.cell("Comments",comments);
 							table.newRow();
+							 if(cmd.verbose) {
+								verboseDisplay += "\n";
+								verboseDisplay += "lacadmin relationship export --ident " + p.ident + " --file  RELN_"+p.ident + ".json\n";
+								verboseDisplay += "#lacadmin relationship import --file  RELN_"+p.ident + ".json\n";
+							}
 				});
 			table.sort(['Name']);
 			console.log(table.toString());
 			printObject.printHeader("# relationships: " + data.length);
+			if(cmd.verbose) {
+				console.log(verboseDisplay);
+			}
 		});
 			
 	},

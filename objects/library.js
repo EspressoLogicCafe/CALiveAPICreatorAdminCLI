@@ -31,7 +31,7 @@ module.exports = {
 			//program.help();
 		}
 	},
-	
+
 	list: function(cmd) {
 		var client = new Client();
 		var loginInfo = login.login(cmd);
@@ -71,8 +71,8 @@ module.exports = {
 				table.newRow();
 				if(cmd.verbose && p.ident > 511) {
 					verboseDisplay += "\n";
-					verboseDisplay += "lacadmin libraries export --name '"+p.name+"' --file  LIBRARY_"+p.name + ".json\n";
-					verboseDisplay += "lacadmin libraries import --file  LIBRARY_"+p.name + ".json\n";
+					verboseDisplay += "lacadmin libraries export --name '"+p.name+"' --file  'LIBRARY_"+p.name + ".json'\n";
+					verboseDisplay += "#lacadmin libraries import --file  'LIBRARY_"+p.name + ".json'\n";
 				}
 			});
 			table.sort(['Name']);
@@ -83,7 +83,7 @@ module.exports = {
 			}
 		});
 	},
-	
+
 	delete: function(cmd) {
 		var client = new Client();
 		var loginInfo = login.login(cmd);
@@ -92,15 +92,15 @@ module.exports = {
 		var filt = null;
 		if (cmd.name) {
 			filt = "equal(name:'" + cmd.name + "')";
-		} 
+		}
 		if (cmd.ident) {
 			filt = "equal(ident:" + cmd.ident + ")";
-		} 
+		}
 		if(filt === null) {
 			console.log('Missing parameter: please specify library --name or --ident'.red);
 			return;
 		}
-		
+
 		client.get(loginInfo.url + "/logic_libraries?sysfilter=" + filt, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
@@ -133,8 +133,8 @@ module.exports = {
 					return;
 				}
 				printObject.printHeader('Library was deleted, including the following objects:');
-				
-				
+
+
 				var delLibrary = _.find(data2.txsummary, function(p) {
 					return p['@metadata'].resource === 'admin:logic_libraries';
 				});
@@ -151,7 +151,7 @@ module.exports = {
 					printObject.printObject(delLibrary, delLibrary['@metadata'].entity, 0, delLibrary['@metadata'].verb);
 					console.log(('and ' + (data2.txsummary.length - 1) + ' other objects').grey);
 				}
-				
+
 				var trailer = "Request took: " + (endTime - startTime) + "ms";
 				trailer += " - # objects touched: ";
 				if (data2.txsummary.length == 0) {
@@ -163,9 +163,9 @@ module.exports = {
 				printObject.printHeader(trailer);
 			});
 		});
-			
+
 	},
-	
+
 	create: function(cmd) {
 		var client = new Client();
 		var loginInfo = login.login(cmd);
@@ -180,7 +180,7 @@ module.exports = {
 			console.log('Missing parameter: short_name'.red);
 			return;
 		}
-		
+
 		var ver = cmd.ver;
 		if( ! cmd.ver ) {
 			ver = "1.0";
@@ -191,7 +191,7 @@ module.exports = {
 			projIdent = dotfile.getCurrentProject();
 		}
 		context.getContext(cmd, function() {
-			
+
 			var newLibrary = {
 				name: cmd.name,
 				group_name: cmd.short_name ,
@@ -255,21 +255,21 @@ module.exports = {
 					}
 				printObject.printHeader(trailer);
 		       }
-				
+
 				//console.log("project ident "+projIdent );
 				//console.log("logic_library_ident:" +data.txsummary[0].ident);
 				//console.log("LinkProject "+ cmd.linkProject);
 				//console.log("data.txsummary.length ="+data.txsummary.length);
 				if(cmd.linkProject && projIdent && data.txsummary.length > 0){
-					var linkproject = { 
-						//@metadata: {action: 'INSERT'}, 
-						logic_library_ident: data.txsummary[0].ident , 
-						project_ident: projIdent 
+					var linkproject = {
+						//@metadata: {action: 'INSERT'},
+						logic_library_ident: data.txsummary[0].ident ,
+						project_ident: projIdent
 					};
 					linkproject["@metadata"] = {action:"MERGE_INSERT"} ;
 					client.put(loginInfo.url + "/admin:project_libraries", {
 						data: linkproject,
-						headers: { 
+						headers: {
 							Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
 							"Content-Type" : "application/json"
 							}
@@ -282,12 +282,12 @@ module.exports = {
 							console.log(("Error: no such project or library to link").red);
 							return;
 						}
-				  });	
+				  });
 				}
 			});
 		});
 	},
-	
+
 	import: function(cmd) {
 		var client = new Client();
 		var loginInfo = login.login(cmd);
@@ -295,7 +295,7 @@ module.exports = {
 			return;
 		var url = loginInfo.url;
 		var apiKey = loginInfo.apiKey;
-		
+
 		if ( ! cmd.file) {
 			cmd.file = '/dev/stdin';
 		}
@@ -306,8 +306,8 @@ module.exports = {
 		console.log("project ident "+projIdent );
 		console.log("LinkProject "+ cmd.linkProject);
 		context.getContext(cmd, function() {
-		
-			var fileContent = JSON.parse(fs.readFileSync(cmd.file));	
+
+			var fileContent = JSON.parse(fs.readFileSync(cmd.file));
 			var account_ident = context.account.ident;
 			for(var i = 0 ; i < fileContent.length ; i++ ){
 				delete fileContent[i].ident;
@@ -321,7 +321,7 @@ module.exports = {
 				data: fileContent,
 				headers: {
 						Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
-						"Content-Type" : "application/json" 
+						"Content-Type" : "application/json"
 					}
 				}, function(data) {
 				var endTime = new Date();
@@ -332,7 +332,7 @@ module.exports = {
 				printObject.printHeader('Logic Library was created, including:');
 				if(data.statusCode == 200 ){
 					console.log("Request took: " + (endTime - startTime) + "ms");
-				} 
+				}
 				var newLib = _.find(data.txsummary, function(p) {
 					return p['@metadata'].resource === 'admin:logic_libraries';
 				});
@@ -350,7 +350,7 @@ module.exports = {
 					console.log(('and ' + (data.txsummary.length - 1) + ' other objects').grey);
 				}
 				console.log("logic_library_ident:" +data.txsummary[0].ident);
-				
+
 				var trailer = "Request took: " + (endTime - startTime) + "ms";
 				trailer += " - # objects touched: ";
 				if (data.txsummary.length === 0) {
@@ -360,18 +360,18 @@ module.exports = {
 					trailer += data.txsummary.length;
 				}
 				printObject.printHeader(trailer);
-				
+
 				if(cmd.linkProject){
 					console.log("Link Project to "+projIdent);
-					var linkproject = { 
-						//@metadata: {action: 'INSERT'}, 
-						logic_library_ident: data.txsummary[0].ident , 
+					var linkproject = {
+						//@metadata: {action: 'INSERT'},
+						logic_library_ident: data.txsummary[0].ident ,
 						project_ident: projIdent
 					};
 					linkproject["@metadata"] = {action:"INSERT"} ;
 					client.post(loginInfo.url + "/admin:project_libraries", {
 						data: linkproject,
-						headers: { 
+						headers: {
 							Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
 							"Content-Type" : "application/json"
 						}
@@ -385,34 +385,34 @@ module.exports = {
 							return;
 						}
 						printObject.printHeader(trailer);
-				  });	
+				  });
 				}
 			})
-		});	
+		});
 	},
-	
+
 	export: function(cmd) {
 		var client = new Client();
 		var loginInfo = login.login(cmd);
 		if ( ! loginInfo)
 			return;
-			
+
 		var url = loginInfo.url;
 		var apiKey = loginInfo.apiKey;
-		
-		
+
+
 		var filter = null;
-		
+
 		filter = "sysfilter=greater(ident:500)&sysfilter=equal(logic_type:'javascript')";
-		
+
 		if (cmd.ident) {
 			filter += "&sysfilter=equal(ident:" + cmd.ident + ")";
 		} else if (cmd.short_name) {
 			filter += "&sysfilter=equal(short_name:'" + cmd.short_name + "')";
 		} else if (cmd.name) {
 			filter += "&sysfilter=equal(name:'" + cmd.name + "')";
-		} 
-		
+		}
+
 		var toStdout = false;
 		if ( ! cmd.file) {
 			toStdout = true;
@@ -439,7 +439,7 @@ module.exports = {
 				delete data[i]['@metadata'].links;
 				delete data[i]['@metadata'];
 			}
-			
+
 			if (toStdout) {
 				console.log(JSON.stringify(data, null, 2));
 				if (cmd.ident) {
@@ -465,16 +465,16 @@ module.exports = {
 						var exportFile = fs.openSync(filename, 'w+', 0600);
 						fs.writeSync(exportFile, JSON.stringify(fileAsString, null, 2));
 						console.log(('Logic Library as text has been exported to file: ' + filename ).green);
-				   });	
+				   });
 				}
-		
+
 			} else {
 				var exportFile = fs.openSync(cmd.file, 'w+', 0600);
 				fs.writeSync(exportFile, JSON.stringify(data, null, 2));
 				console.log(('Logic Library as JSON has been exported to file: ' + cmd.file).green);
 			}
-			
-		});	
-			
+
+		});
+
 	}
 }

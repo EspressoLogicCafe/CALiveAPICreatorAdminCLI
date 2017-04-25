@@ -98,8 +98,8 @@ module.exports = {
 					table.newRow();
 					if(cmd.verbose) {
 						verboseDisplay += "\n";
-						verboseDisplay += "lacadmin resource export --file  RESOURCE_"+p.name + "\n";
-						verboseDisplay += "#lacadmin resource import --file  RESOURCE_"+p.name + "\n";
+						verboseDisplay += "lacadmin resource export --file  RESOURCE_"+p.name + ".json\n";
+						verboseDisplay += "#lacadmin resource import --file  RESOURCE_"+p.name + ".json\n";
 					}
 				});
 				table.sort(['Name']);

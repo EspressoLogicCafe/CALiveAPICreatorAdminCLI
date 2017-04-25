@@ -27,16 +27,16 @@ module.exports = {
 			//program.help();
 		}
 	},
-	
+
 	list: function (cmd) {
 		var client = new Client();
-		
+
 		var loginInfo = login.login(cmd);
 		if ( ! loginInfo)
 			return;
 		var url = loginInfo.url;
 		var apiKey = loginInfo.apiKey;
-		
+
 		var projIdent = cmd.project_ident;
 		if ( ! projIdent) {
 			projIdent = dotfile.getCurrentProject();
@@ -57,6 +57,7 @@ module.exports = {
 						}
 						printObject.printHeader('Custom Hanlders');
 						var table = new Table();
+						var verboseDisplay = "";
 						var type = "";
 						_.each(data, function(p) {
 						type = p.eventtype_ident == 1 ? "Request":"Response";
@@ -64,25 +65,33 @@ module.exports = {
 							table.cell("Name", p.name);
 							table.cell("Type", type);
 							table.cell("Active", p.active);
-			
+
 							var comments = p.code;
 							if ( ! comments) {
 								comments = "";
 							}
 							else if (comments.length > 50){
-								
+
 								comments = comments.substring(0, 47) + "...";
 							}
 							comments = comments.replace("\n"," ");
 							table.cell("URL Pattern",p.url_pattern);
 							table.cell("Code", comments);
 							table.newRow();
+							if(cmd.verbose) {
+							   verboseDisplay += "\n";
+							   verboseDisplay += "lacadmin handler export --name '"+p.name+"' --file  'HANDLER_"+p.name + ".json'\n";
+							   verboseDisplay += "#lacadmin handler import --file  'HANDLER_"+p.name + ".json'\n";
+						   }
 				});
 			table.sort(['Name']);
 			console.log(table.toString());
 			printObject.printHeader("# hanlders: " + data.length);
+			if(cmd.verbose) {
+				console.log(verboseDisplay);
+			}
 		});
-			
+
 	},
 	del: function(cmd) {
 		var client = new Client();
@@ -98,15 +107,16 @@ module.exports = {
 				console.log('There is no current project.'.yellow);
 				return;
 			}
-		}		
+		}
 		var filt = "equal(project_ident:"+projIdent ;
 		if (cmd.ident) {
 			filt += ",ident:" + cmd.ident + ")";
+		} else if (cmd.name) {
+			filt += ",name:''" + cmd.name + "'')";
 		} else {
-			console.log('Missing parameter: please specify ident'.red);
+			console.log('Missing parameter: please specify ident or name'.red);
 			return;
 		}
-		
 		client.get(loginInfo.url + "/admin:handlers?sysfilter=" + filt, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
@@ -157,7 +167,7 @@ module.exports = {
 	},
 	export: function(cmd) {
 		var client = new Client();
-		
+
 		var loginInfo = login.login(cmd);
 		if ( ! loginInfo)
 			return;
@@ -178,12 +188,12 @@ module.exports = {
 		} else if (projIdent) {
 			filter += sep + "sysfilter=equal(project_ident:" + projIdent + ")";
 		}
-	
+
 		var toStdout = false;
 		if ( ! cmd.file) {
 			toStdout = true;
 		}
-		
+
 		client.get(loginInfo.url + "/admin:handlers?pagesize=1000&"+filter, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
@@ -204,7 +214,7 @@ module.exports = {
 				delete data[idx]['@metadata']
 				delete data[idx].project_ident;
 			}
-			
+
 			if (toStdout) {
 				console.log(JSON.stringify(data, null, 2));
 			}
@@ -215,7 +225,7 @@ module.exports = {
 			}
 		});
 	},
-	
+
 	import: function(cmd) {
 		var client = new Client();
 		var loginInfo = login.login(cmd);
@@ -234,7 +244,7 @@ module.exports = {
 		if ( ! cmd.file) {
 			cmd.file = '/dev/stdin';
 		}
-		
+
 		var fileContent  = null;
 		var json = null;
 		fs.readFile(cmd.file, function read(err,data){
@@ -243,7 +253,7 @@ module.exports = {
 				return;
 			}
 			json = data;
-		
+
 			fileContent = JSON.parse(json);
 			if(Array.isArray(fileContent) && fileContent.length > 0){
 				for(var i = 0; i < fileContent.length; i++){
@@ -256,7 +266,7 @@ module.exports = {
 				delete fileContent.ts;
 				//fileContent["@metadata"] = {action:"MERGE_INSERT", key: "name"} ;
 			}
-		
+
 		var startTime = new Date();
 		client.post(loginInfo.url + "/admin:handlers", {
 			data: fileContent,
@@ -265,7 +275,7 @@ module.exports = {
 				"Content-Type" : "application/json"
 			}
 		}, function(data) {
-		
+
 			var endTime = new Date();
 			if (data.errorMessage) {
 				console.log(data.errorMessage.red);
@@ -275,7 +285,7 @@ module.exports = {
 			if(data.statusCode == 200 ){
 				console.log("Request took: " + (endTime - startTime) + "ms");
 				return;
-			} 	
+			}
 			var newHandler = _.find( data.txsummary, function(p) {
 				return p['@metadata'].resource === 'admin:handlers';
 			});
@@ -292,7 +302,7 @@ module.exports = {
 				printObject.printObject(newHandler, newHandler['@metadata'].entity, 0, newHandler['@metadata'].verb);
 				console.log(('and ' + (data.txsummary.length - 1) + ' other objects').grey);
 			}
-			
+
 			var trailer = "Request took: " + (endTime - startTime) + "ms";
 			trailer += " - # objects touched: ";
 			if (data.txsummary.length === 0) {
