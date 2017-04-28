@@ -9,7 +9,7 @@ var printObject = require('../util/printObject.js');
 var dotfile = require('../util/dotfile.js');
 
 module.exports = {
-	doListener: function(action, cmd) {
+	doConnection: function(action, cmd) {
 		if (action === 'list') {
 			module.exports.list(cmd);
 		}
@@ -84,7 +84,7 @@ module.exports = {
 							table.cell("Name", p.name);
 							table.cell("Type", type);
 							table.cell("Active", p.is_active == true);
-			
+
 							var comments = p.connect_code;
 							if ( ! comments) {
 								comments = "";
@@ -215,6 +215,7 @@ module.exports = {
 	 	if (projIdent) {
 			filter += sep + "sysfilter=equal(project_ident:" + projIdent + ")";
 		}
+
 		var toStdout = false;
 		if ( ! cmd.file) {
 			toStdout = true;
@@ -314,6 +315,10 @@ module.exports = {
 				return p['@metadata'].resource === 'admin:connections';
 			});
 			if ( ! newConnection) {
+			var newHandler = _.find( data.txsummary, function(p) {
+				return p['@metadata'].resource === 'admin:connections';
+			});
+			if ( ! newHandler) {
 				console.log('ERROR: unable to find imported connections'.red);
 				return;
 			}

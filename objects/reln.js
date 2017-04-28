@@ -62,15 +62,15 @@ module.exports = {
 						_.each(data, function(p) {
 						type = p.eventtype_ident == 1 ? "Request":"Response";
 							table.cell("Ident", p.ident);
-							table.cell("Name", p.name);
 							table.cell("Parent Entity",p.parent_entity_name);
 							table.cell("Parent Cols",p.parent_columns);
 							table.cell("Child Entity",p.child_entity_name);
-							table.cell("Parent Cols",p.child_columns);
+							table.cell("Child Cols",p.child_columns);
 							table.cell("Role to Parent",p.role_to_parent);
 							table.cell("Role to Child",p.role_to_child);
 							table.cell("Update Rule",p.update_rule);
 							table.cell("Delete Rule",p.delete_rule);
+							table.cell("Name", p.name);
 							var comments = p.comments;
 							if ( ! comments) {
 								comments = "";

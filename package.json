@@ -31,9 +31,15 @@
     "csv/tsv files",
     "derby",
     "salesforce",
+<<<<<<< HEAD
     "MQTT",
     "Kafka",
     "teradata",
+=======
+    "teradata",
+    "MQTT",
+    "Kafka",
+>>>>>>> fix for relationship by ident
     "IBM MQ",
     "MQ",
     "sqlserver",

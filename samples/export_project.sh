@@ -1,12 +1,13 @@
 #! /bin/bash
-
-#LACSERVER=http://localhost:8080/APIServer
-LACSERVER=http://localhost:8080
+#LACSERVER=http://localhost:8080
+LACSERVER=http://localhost:8080/APIServer
+USERNAME=admin
+PW=Password1
 PROJECT=demo
 
 ## Connect to a local server
 lacadmin logout -a $PROJECT
-lacadmin login -u admin -p Password1 $LACSERVER -a $PROJECT
+lacadmin login -u $USERNAME -p $PW $LACSERVER -a $PROJECT
 lacadmin use $PROJECT
 lacadmin status
 
@@ -22,7 +23,7 @@ lacadmin apioptions export --file $PROJECT/apioptions.json
 lacadmin datasource export --file $PROJECT/datasource.json
 lacadmin libraries export --file $PROJECT/libraries.json
 lacadmin authprovider export --file $PROJECT/authprovider.json
-lacadmin rule export --file $PROJECT/rules.json 
+lacadmin rule export --file $PROJECT/rules.json
 lacadmin resource export --file $PROJECT/resources.json
 lacadmin relationship export --file $PROJECT/relationships.json
 lacadmin token export --file $PROJECT/tokens.json
@@ -36,7 +37,7 @@ lacadmin handler export --file $PROJECT/handlers.json
 lacadmin topic export --file $PROJECT/topic.json
 lacadmin npa export --file $PROJECT/npa.json
 lacadmin gateway export --file $PROJECT/gateway.json
+lacadmin virtualkey export --file $PROJECT/virtualkey.json
 #lacadmin snapshot restore --name snapshot1
 
 lacadmin logout -a $PROJECT
-

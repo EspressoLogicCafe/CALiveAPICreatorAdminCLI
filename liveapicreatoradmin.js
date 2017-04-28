@@ -28,8 +28,6 @@ var event = require('./objects/event.js');
 var reln = require('./objects/reln.js');
 var handler = require('./objects/handler.js');
 var apiversion = require('./objects/version.js');
-//var sequence = require('./objects/sequence.js'); //Oracle
-//var apps = require('./objects/applicaitons.js'); //list | export | import
 // 2.1 features
 var snapshot = require('./objects/snapshot.js');//list | start  | restore --name
 var npa = require('./objects/npattrs.js');// list | create | delete | update | import |export
@@ -51,6 +49,7 @@ var connection = require('./objects/connection.js');
 var timer = require('./objects/timer.js');
 var provider = require('./objects/provider.js');
 var application = require('./objects/application.js');
+
 
 program
 	.version(pkg.version);
@@ -445,7 +444,7 @@ program
 	.option('--project_ident [project_ident]','The project ident that will be used' )
 	.option('--verbose', '(optional) Display list of connection in detailed export/import format')
 	.option('--file [fileName]', '(optional) Name of file to import/export (if not provided stdin/stdout used for export)')
-	.action(connection.doListener);
+	.action(connection.doConnection);
 
 program
 	.command('timer <list|delete|export|import>')
@@ -465,7 +464,7 @@ program
 	.option('--application_name [name]', 'The name of the application')
 	.option('--file [file]', 'optional: for import/export, the name of a file to read from/save to, if unspecified, use stdin/stdout')
 	.action(application.doApplication);
-	
+
 program.parse(process.argv);
 
 if (process.argv.length < 3) {

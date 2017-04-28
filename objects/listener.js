@@ -79,7 +79,6 @@ module.exports = {
 							table.cell("Type", type);
 							table.cell("Logging Level", p.logging_level);
 							table.cell("Active", p.is_active == true);
-			
 							var comments = p.code;
 							if ( ! comments) {
 								comments = "";
@@ -105,7 +104,6 @@ module.exports = {
 							   verboseDisplay += "\n";
 							   verboseDisplay += "lacadmin listener export --listener_name '"+p.name+"' --file  LISTENERS_"+p.name + ".json\n";
 							   verboseDisplay += "#lacadmin listener import --file  LISTENERS_"+p.name + ".json\n";
-						   }
 				});
 			table.sort(['Name']);
 			console.log(table.toString());
