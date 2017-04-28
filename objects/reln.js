@@ -187,19 +187,19 @@ module.exports = {
 		var filter = null;
 		if (projIdent) {
 			filter = "sysfilter=equal(project_ident:" + projIdent + ")";
-		} else if (cmd.ident) {
-			filter = "sysfilter=equal(ident:" + cmd.ident + ")";
-		} else {
+		} 
+		if (cmd.ident) {
+			filter += "&sysfilter=equal(ident:" + cmd.ident + ")";
+		} 
+		if(!filter) {
 			console.log('Missing parameter: please specify project settings (use list) --project_ident or --ident '.red);
 			return;
 		}
 		
-	
 		var toStdout = false;
 		if ( ! cmd.file) {
 			toStdout = true;
 		}
-	
 		client.get(loginInfo.url + "/admin:relationships?pagesize=1000&"+filter, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
