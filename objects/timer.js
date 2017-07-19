@@ -9,12 +9,9 @@ var printObject = require('../util/printObject.js');
 var dotfile = require('../util/dotfile.js');
 
 module.exports = {
-	doListener: function(action, cmd) {
+	doTimer: function(action, cmd) {
 		if (action === 'list') {
 			module.exports.list(cmd);
-		}
-		else if (action === 'delete') {
-			module.exports.del(cmd);
 		}
 		else if (action === 'export') {
 			module.exports.export(cmd);
@@ -22,21 +19,24 @@ module.exports = {
 		else if (action === 'import') {
 			module.exports.import(cmd);
 		}
+		else if (action === 'delete') {
+			module.exports.del(cmd);
+		}
 		else {
 			console.log('You must specify an action: list, delete, import, or  export');
 			//program.help();
 		}
 	},
-	
+
 	list: function (cmd) {
 		var client = new Client();
-		
+
 		var loginInfo = login.login(cmd);
 		if ( ! loginInfo)
 			return;
 		var url = loginInfo.url;
 		var apiKey = loginInfo.apiKey;
-		
+
 		var projIdent = cmd.project_ident;
 		if ( ! projIdent) {
 			projIdent = dotfile.getCurrentProject();
@@ -45,7 +45,7 @@ module.exports = {
 				return;
 			}
 		}
-		client.get(url + "/admin:eventhandlers?sysfilter=equal(project_ident:" + projIdent+")&pagesize=100&&sysorder=(name:asc_uc,name:desc)", {
+		client.get(url + "/admin:schedule_items?sysfilter=equal(project_ident:" + projIdent+")&pagesize=100&&sysorder=(name:asc_uc,name:desc)", {
 						headers: {
 							Authorization: "CALiveAPICreator " + apiKey + ":1",
 							"Content-Type" : "application/json"
@@ -55,52 +55,46 @@ module.exports = {
 							console.log(data.errorMessage.red);
 							return;
 						}
-						printObject.printHeader('Request/Response Events');
+						printObject.printHeader('Topic');
 						var table = new Table();
-						var type = "";
 						var verboseDisplay = "";
+						var scheduleType;
 						_.each(data, function(p) {
-						type = p.eventtype_ident == 1 ? "Request":"Response";
+							scheduleType = p.schedule_type_ident == 2? "Repeating":"Once";
 							table.cell("Ident", p.ident);
 							table.cell("Name", p.name);
-							table.cell("Type", type);
-							table.cell("Active", p.active);
-			
-							var comments = p.code;
+							table.cell("Active", p.is_active);
+							table.cell("Start Time", p.start_time);
+							table.cell("End Time", p.end_time);
+							table.cell("# Servers", p.num_servers);
+							table.cell("Crontab", p.crontab);
+							table.cell("Schedule Type", scheduleType);
+							var comments = p.comments;
 							if ( ! comments) {
 								comments = "";
 							}
 							else if (comments.length > 50){
-								comments = comments.replace("\n"," ");
 								comments = comments.substring(0, 47) + "...";
 							}
-				
-							table.cell("Code", comments);
-							comments = p.description;
-							if ( ! comments) {
-								comments = "";
-							}
-							else if (comments.length > 50){
-								
-								comments = comments.substring(0, 47) + "...";
-							}
-							comments = comments.replace("\n"," ");
-							table.cell("Comments", comments);
-							table.newRow();
-							if(cmd.verbose) {
-							   verboseDisplay += "\n";
-							   verboseDisplay += "lacadmin event export --eventname '"+p.name+"' --file  EVENT_"+p.name + ".json\n";
-							   verboseDisplay += "#lacadmin event import --file  EVENT_"+p.name + ".json\n";
-						   }
-				});
+
+				comments = comments.replace("\n"," ");
+				comments = comments.replace("\n"," ");
+				table.cell("Description", comments);
+				table.newRow();
+				if(cmd.verbose) {
+					verboseDisplay += "\n";
+					verboseDisplay += "lacadmin timer export --timer_name '"+p.name+"' --file 'TIMER_"+p.name + ".json'\n";
+					verboseDisplay += "#lacadmin timer import --file 'TIMER_"+p.name + ".json'\n";
+				}
+			});
 			table.sort(['Name']);
 			console.log(table.toString());
-			printObject.printTrailer("# events: " + data.length);
+			printObject.printHeader("# timer: " + data.length);
 			if(cmd.verbose) {
-				console.log(verboseDisplay); 
+				console.log(verboseDisplay);
 			}
 		});
-			
+
 	},
 	del: function(cmd) {
 		var client = new Client();
@@ -116,16 +110,18 @@ module.exports = {
 				console.log('There is no current project.'.yellow);
 				return;
 			}
-		}		
-		var filt = "equal(project_ident:"+projIdent ;
+		}
+		var filt = "sysfilter=equal(project_ident:" + projIdent + ")";
 		if (cmd.ident) {
-			filt += ",ident:" + cmd.ident + ")";
+			filt += "&sysfilter=equal(ident:" + cmd.ident + ")";
+		} else if (cmd.timer_name) {
+			filt += "&sysfilter=equal(name:'" + cmd.timer_name + "')";
 		} else {
-			console.log('Missing parameter: please specify ident'.red);
+			console.log("Please enter missing timer_name or ident to delete a timer.".red);
 			return;
 		}
-		
-		client.get(loginInfo.url + "/admin:eventhandlers?sysfilter=" + filt, {
+
+		client.get(loginInfo.url + "/admin:schedule_items?	" + filt, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
 				"Content-Type" : "application/json"
@@ -137,11 +133,11 @@ module.exports = {
 				return;
 			}
 			if (data.length === 0) {
-				console.log(("Error: no such event handler ident").red);
+				console.log(("Error: no such timer using name or ident").red);
 				return;
 			}
 			if (data.length > 1) {
-				console.log(("Error: more than one event handler for the given condition: " + filter).red);
+				console.log(("Error: more than one timer for the given condition: " + filter).red);
 				return;
 			}
 			var db = data[0];
@@ -157,7 +153,7 @@ module.exports = {
 					console.log(data2.errorMessage.red);
 					return;
 				}
-				printObject.printHeader('Event Handler was deleted, including the following objects:');
+				printObject.printHeader('Timer was deleted, including the following objects:');
 				_.each(data2.txsummary, function(obj) {
 					printObject.printObject(obj, obj['@metadata'].entity, 0, obj['@metadata'].verb);
 				});
@@ -175,7 +171,7 @@ module.exports = {
 	},
 	export: function(cmd) {
 		var client = new Client();
-		
+
 		var loginInfo = login.login(cmd);
 		if ( ! loginInfo)
 			return;
@@ -184,26 +180,30 @@ module.exports = {
 		var projIdent = cmd.project_ident;
 		if ( ! projIdent) {
 			projIdent = dotfile.getCurrentProject();
+			if ( ! projIdent) {
+				console.log('There is no current project.'.yellow);
+				return;
+			}
 		}
-		var sep = "";
-		var filter = "";
-		if (cmd.ident) {
-			filter += sep + "sysfilter=equal(ident:" + cmd.ident + ")";
-			sep = "&";
-		} else if (cmd.eventname) {
-			filter += sep + "sysfilter=equal(name:'" + cmd.eventname + "')";
-			sep = "&";
-		} 
-	 	if (projIdent) {
-			filter += sep + "sysfilter=equal(project_ident:" + projIdent + ")";
+
+		var filter = null;
+		if (projIdent) {
+			filter = "sysfilter=equal(project_ident:" + projIdent + ")";
+		} else {
+			console.log('Missing parameter: please specify project settings (use list) project_ident '.red);
+			return;
 		}
-		
+		if(cmd.ident) {
+			filter += "&sysfilter=equal(ident: "+ cmd.ident +")";
+		} else if(cmd.timer_name) {
+			filter += "&sysfilter=equal(name: '"+ cmd.timer_name +"')";
+		}
+
 		var toStdout = false;
 		if ( ! cmd.file) {
 			toStdout = true;
 		}
-		
-		client.get(loginInfo.url + "/admin:eventhandlers?pagesize=1000&"+filter, {
+		client.get(loginInfo.url + "/admin:schedule_items?pagesize=1000&"+filter, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
 				"Content-Type" : "application/json"
@@ -215,7 +215,7 @@ module.exports = {
 				return;
 			}
 			if (data.length === 0) {
-				console.log(("No request or response event(s) found").red);
+				console.log(("Error: no such project").red);
 				return;
 			}
 			for(var idx = 0; idx < data.length ; idx++){
@@ -223,18 +223,18 @@ module.exports = {
 				delete data[idx]['@metadata']
 				delete data[idx].project_ident;
 			}
-			
+
 			if (toStdout) {
 				console.log(JSON.stringify(data, null, 2));
 			}
 			else {
 				var exportFile = fs.openSync(cmd.file, 'w+', 0600);
 				fs.writeSync(exportFile, JSON.stringify(data, null, 2));
-				console.log(('Events have been exported to file: ' + cmd.file).green);
+				console.log(('Timers have been exported to file: ' + cmd.file).green);
 			}
 		});
 	},
-	
+
 	import: function(cmd) {
 		var client = new Client();
 		var loginInfo = login.login(cmd);
@@ -253,6 +253,7 @@ module.exports = {
 		if ( ! cmd.file) {
 			cmd.file = '/dev/stdin';
 		}
+
 		var fileContent  = null;
 		var json = null;
 		fs.readFile(cmd.file, function read(err,data){
@@ -260,46 +261,44 @@ module.exports = {
 				console.log("Unable to read file");
 				return;
 			}
-			json = data;
-		
-			fileContent = JSON.parse(json);
-			if(Array.isArray(fileContent) && fileContent.length > 0){
-					for(var i = 0 ; i < fileContent.length; i++){
-						fileContent[i].project_ident = projIdent;
-						delete fileContent[i].ts;
-						delete fileContent[i].ident;
-						fileContent[i]["@metadata"] = {action:"MERGE_INSERT", key:  ["project_ident","name"]};
-					} 
-			} else {
-				fileContent.project_ident = projIdent;
+		json = data;
+
+		fileContent = JSON.parse(json);
+		if(Array.isArray(fileContent) && fileContent.length > 0){
+			for(var i = 0 ; i < fileContent.length ; i++ ){
+				fileContent[i].project_ident = projIdent;
 				delete fileContent.ts;
-				fileContent["@metadata"] = {action:"MERGE_INSERT", key: ["project_ident","name"]};
+				fileContent[i]["@metadata"] = {action:"MERGE_INSERT", key: ["name","project_ident"]} ;
 			}
-		
+		} else {
+			fileContent.project_ident = projIdent;
+			fileContent["@metadata"] = {action:"MERGE_INSERT", key: ["name","project_ident"]} ;
+		}
+
 		var startTime = new Date();
-		client.put(loginInfo.url + "/admin:eventhandlers", {
+		client.put(loginInfo.url + "/admin:schedule_items", {
 			data: fileContent,
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
 				"Content-Type" : "application/json"
 			}
 		}, function(data) {
-		
+
 			var endTime = new Date();
 			if (data.errorMessage) {
 				console.log(data.errorMessage.red);
 				return;
 			}
-			printObject.printHeader('Event Handler(s) created, including:');
+			printObject.printHeader('Topic(s) created, including:');
 			if(data.statusCode == 200 ){
 				console.log("Request took: " + (endTime - startTime) + "ms");
 				return;
-			} 	
-			var newHandler = _.find( data.txsummary, function(p) {
-				return p['@metadata'].resource === 'admin:eventhandlers';
+			}
+			var newTopic = _.find( data.txsummary, function(p) {
+				return p['@metadata'].resource === 'admin:schedule_items';
 			});
-			if ( ! newHandler) {
-				console.log('ERROR: unable to find imported handler'.red);
+			if ( ! newTopic) {
+				console.log('ERROR: unable to find imported topic'.red);
 				return;
 			}
 			if (cmd.verbose) {
@@ -308,10 +307,10 @@ module.exports = {
 				});
 			}
 			else {
-				printObject.printObject(newHandler, newHandler['@metadata'].entity, 0, newHandler['@metadata'].verb);
+				printObject.printObject(newTopic, newTopic['@metadata'].entity, 0, newTopic['@metadata'].verb);
 				console.log(('and ' + (data.txsummary.length - 1) + ' other objects').grey);
 			}
-			
+
 			var trailer = "Request took: " + (endTime - startTime) + "ms";
 			trailer += " - # objects touched: ";
 			if (data.txsummary.length === 0) {
@@ -320,7 +319,7 @@ module.exports = {
 			else {
 				trailer += data.txsummary.length;
 			}
-			printObject.printTrailer(trailer);
+			printObject.printHeader(trailer);
 		});
 	  });
 	}

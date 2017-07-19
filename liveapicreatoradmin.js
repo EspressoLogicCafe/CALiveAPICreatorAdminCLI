@@ -45,6 +45,12 @@ var license = require('./objects/license.js');
 //3.2 features
 var vkey = require('./objects/virtualkey.js');
 var seq = require('./objects/sequence.js');
+//4.0 features
+var listener = require('./objects/listener.js');
+var connection = require('./objects/connection.js');
+var timer = require('./objects/timer.js');
+var provider = require('./objects/provider.js');
+
 
 program
 	.version(pkg.version);
@@ -286,7 +292,7 @@ program
 	.option('--project_ident [project_ident]','The project ident that will be used' )
 	.option('--verbose', '(optional) Display list of events in detailed export/import format')
 	.option('--file [fileName]', '(optional) Name of file to import/export (if not provided stdin/stdout used for export)')
-	.action(event.doEvent);
+	.action(event.doListener);
 
 program
 	.command('handler <list|delete|export|import>')
@@ -411,6 +417,44 @@ program
 	.option('--file [fileName]', '(optional) Name of file to import/export (if not provided stdin/stdout used for export)')
 	.action(seq.doSequence);
 
+program
+	.command('listener <list|delete|export|import>')
+	.description('Administer Listener Events for current project.')
+	.option('--listener_name [name]', 'The Listener Name')
+	.option('--ident [ident]', 'The ident of the specific listener')
+	.option('--project_ident [project_ident]','The project ident that will be used' )
+	.option('--verbose', '(optional) Display list of listeners in detailed export/import format')
+	.option('--file [fileName]', '(optional) Name of file to import/export (if not provided stdin/stdout used for export)')
+	.action(listener.doListener);
+
+program
+	.command('provider <list|delete|export|import>')
+	.description('Administer Listener Provider definitions. (requires login as "sa")')
+	.option('--provider_name [name]', 'The Provider Name')
+	.option('--ident [ident]', 'The ident of the specific provider')
+	.option('--verbose', '(optional) Display list of providers in detailed export/import format')
+	.option('--file [fileName]', '(optional) Name of file to import/export (if not provided stdin/stdout used for export)')
+	.action(provider.doProvider);
+	
+program
+	.command('connection <list|delete|export|import>')
+	.description('Administer Connections for current project.')
+	.option('--connection_name [name]', 'The connection name')
+	.option('--ident [ident]', 'The ident of the specific connection')
+	.option('--project_ident [project_ident]','The project ident that will be used' )
+	.option('--verbose', '(optional) Display list of connection in detailed export/import format')
+	.option('--file [fileName]', '(optional) Name of file to import/export (if not provided stdin/stdout used for export)')
+	.action(connection.doListener);
+
+program
+	.command('timer <list|delete|export|import>')
+	.description('Administer Timer definitions.')
+	.option('--timer_name [name]', 'The Timer Name')
+	.option('--ident [ident]', 'The ident of the specific timer')
+	.option('--verbose', '(optional) Display list of timer in detailed export/import format')
+	.option('--file [fileName]', '(optional) Name of file to import/export (if not provided stdin/stdout used for export)')
+	.action(timer.doTimer);
+	
 program.parse(process.argv);
 
 if (process.argv.length < 3) {

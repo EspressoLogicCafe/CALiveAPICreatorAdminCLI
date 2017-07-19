@@ -27,7 +27,6 @@ module.exports = {
 			//program.help();
 		}
 	},
-	
 	list: function (cmd) {
 		var client = new Client();
 		
@@ -45,7 +44,7 @@ module.exports = {
 				return;
 			}
 		}
-		client.get(url + "/admin:eventhandlers?sysfilter=equal(project_ident:" + projIdent+")&pagesize=100&&sysorder=(name:asc_uc,name:desc)", {
+		client.get(url + "/admin:listeners?sysfilter=equal(project_ident:" + projIdent+")&pagesize=100&&sysorder=(name:asc_uc,name:desc)", {
 						headers: {
 							Authorization: "CALiveAPICreator " + apiKey + ":1",
 							"Content-Type" : "application/json"
@@ -55,16 +54,31 @@ module.exports = {
 							console.log(data.errorMessage.red);
 							return;
 						}
-						printObject.printHeader('Request/Response Events');
+						printObject.printHeader('Listeners');
 						var table = new Table();
 						var type = "";
 						var verboseDisplay = "";
 						_.each(data, function(p) {
-						type = p.eventtype_ident == 1 ? "Request":"Response";
+						   if(p.provider_ident == 1) {
+							   type =  "Startup";
+						   } 
+						   if( p.provider_ident == 2) {
+							   type = "Shutdown";
+						   } 
+						   if ( p.provider_ident == 3) {
+							   type = "MQTT";
+						   } 
+						   if ( p.provider_ident == 4) {
+							   type = "Kafka";
+						   } 
+						   if ( p.provider_ident > 4) {
+							   type = "Other";
+						   }
 							table.cell("Ident", p.ident);
 							table.cell("Name", p.name);
 							table.cell("Type", type);
-							table.cell("Active", p.active);
+							table.cell("Logging Level", p.logging_level);
+							table.cell("Active", p.active == true);
 			
 							var comments = p.code;
 							if ( ! comments) {
@@ -85,17 +99,17 @@ module.exports = {
 								comments = comments.substring(0, 47) + "...";
 							}
 							comments = comments.replace("\n"," ");
-							table.cell("Comments", comments);
+							table.cell("Description", comments);
 							table.newRow();
 							if(cmd.verbose) {
 							   verboseDisplay += "\n";
-							   verboseDisplay += "lacadmin event export --eventname '"+p.name+"' --file  EVENT_"+p.name + ".json\n";
-							   verboseDisplay += "#lacadmin event import --file  EVENT_"+p.name + ".json\n";
+							   verboseDisplay += "lacadmin listeners export --listener_name '"+p.name+"' --file  LISTENERS_"+p.name + ".json\n";
+							   verboseDisplay += "#lacadmin listeners import --file  LISTENERS_"+p.name + ".json\n";
 						   }
 				});
 			table.sort(['Name']);
 			console.log(table.toString());
-			printObject.printTrailer("# events: " + data.length);
+			printObject.printTrailer("# listeners: " + data.length);
 			if(cmd.verbose) {
 				console.log(verboseDisplay); 
 			}
@@ -121,11 +135,15 @@ module.exports = {
 		if (cmd.ident) {
 			filt += ",ident:" + cmd.ident + ")";
 		} else {
-			console.log('Missing parameter: please specify ident'.red);
-			return;
+			if(cmd.listener_name) {
+				filt += ",name:"+ cmd.listener_name + ")";
+			} else {
+				console.log('Missing parameter: please specify listener_name or ident'.red);
+				return;
+			}
 		}
 		
-		client.get(loginInfo.url + "/admin:eventhandlers?sysfilter=" + filt, {
+		client.get(loginInfo.url + "/admin:listeners?sysfilter=" + filt, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
 				"Content-Type" : "application/json"
@@ -137,11 +155,11 @@ module.exports = {
 				return;
 			}
 			if (data.length === 0) {
-				console.log(("Error: no such event handler ident").red);
+				console.log(("Error: no such listener ident").red);
 				return;
 			}
 			if (data.length > 1) {
-				console.log(("Error: more than one event handler for the given condition: " + filter).red);
+				console.log(("Error: more than one listener for the given condition: " + filter).red);
 				return;
 			}
 			var db = data[0];
@@ -157,7 +175,7 @@ module.exports = {
 					console.log(data2.errorMessage.red);
 					return;
 				}
-				printObject.printHeader('Event Handler was deleted, including the following objects:');
+				printObject.printHeader('Listener was deleted, including the following objects:');
 				_.each(data2.txsummary, function(obj) {
 					printObject.printObject(obj, obj['@metadata'].entity, 0, obj['@metadata'].verb);
 				});
@@ -190,8 +208,8 @@ module.exports = {
 		if (cmd.ident) {
 			filter += sep + "sysfilter=equal(ident:" + cmd.ident + ")";
 			sep = "&";
-		} else if (cmd.eventname) {
-			filter += sep + "sysfilter=equal(name:'" + cmd.eventname + "')";
+		} else if (cmd.listener_name) {
+			filter += sep + "sysfilter=equal(name:'" + cmd.listener_name + "')";
 			sep = "&";
 		} 
 	 	if (projIdent) {
@@ -203,7 +221,7 @@ module.exports = {
 			toStdout = true;
 		}
 		
-		client.get(loginInfo.url + "/admin:eventhandlers?pagesize=1000&"+filter, {
+		client.get(loginInfo.url + "/admin:listeners?pagesize=1000&"+filter, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
 				"Content-Type" : "application/json"
@@ -215,7 +233,7 @@ module.exports = {
 				return;
 			}
 			if (data.length === 0) {
-				console.log(("No request or response event(s) found").red);
+				console.log(("No listener(s) found").red);
 				return;
 			}
 			for(var idx = 0; idx < data.length ; idx++){
@@ -230,11 +248,10 @@ module.exports = {
 			else {
 				var exportFile = fs.openSync(cmd.file, 'w+', 0600);
 				fs.writeSync(exportFile, JSON.stringify(data, null, 2));
-				console.log(('Events have been exported to file: ' + cmd.file).green);
+				console.log(('Listeners have been exported to file: ' + cmd.file).green);
 			}
 		});
 	},
-	
 	import: function(cmd) {
 		var client = new Client();
 		var loginInfo = login.login(cmd);
@@ -277,7 +294,7 @@ module.exports = {
 			}
 		
 		var startTime = new Date();
-		client.put(loginInfo.url + "/admin:eventhandlers", {
+		client.put(loginInfo.url + "/admin:listeners", {
 			data: fileContent,
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
@@ -290,16 +307,16 @@ module.exports = {
 				console.log(data.errorMessage.red);
 				return;
 			}
-			printObject.printHeader('Event Handler(s) created, including:');
+			printObject.printHeader('Listener(s) created, including:');
 			if(data.statusCode == 200 ){
 				console.log("Request took: " + (endTime - startTime) + "ms");
 				return;
 			} 	
 			var newHandler = _.find( data.txsummary, function(p) {
-				return p['@metadata'].resource === 'admin:eventhandlers';
+				return p['@metadata'].resource === 'admin:listeners';
 			});
 			if ( ! newHandler) {
-				console.log('ERROR: unable to find imported handler'.red);
+				console.log('ERROR: unable to find imported listeners'.red);
 				return;
 			}
 			if (cmd.verbose) {
