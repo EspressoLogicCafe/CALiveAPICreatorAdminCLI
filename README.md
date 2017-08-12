@@ -87,6 +87,10 @@ $ lacadmin --help
     function [options] <list|delete|export|import>                                        Administer Functions for current project.
     virtualkey [options] <list|create|update|delete|import|export>                        Manage a virtualkey to a table or view.
     sequence [options] <list|create|update|delete|import|export>                          Manage a database sequence on a key column for a table or view.
+    listener [options] <list|delete|export|import>                                        Administer Listener Events for current project.
+    provider [options] <list|delete|export|import>                                        Administer Listener Provider definitions. (requires login as "sa")
+    connection [options] <list|delete|export|import|stop|start>                           Administer Connections for current project.
+    timer [options] <list|delete|export|import>                                           Administer Timer definitions.
     
   Options:
 

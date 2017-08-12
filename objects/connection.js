@@ -22,8 +22,14 @@ module.exports = {
 		else if (action === 'import') {
 			module.exports.import(cmd);
 		}
+		else if (action === 'stop') {
+			module.exports.stop(cmd);
+		}
+		else if (action === 'start') {
+			module.exports.start(cmd);
+		}
 		else {
-			console.log('You must specify an action: list, delete, import, or  export');
+			console.log('You must specify an action: list, delete, import, export, stop, or start');
 			//program.help();
 		}
 	},
@@ -332,5 +338,177 @@ module.exports = {
 			printObject.printTrailer(trailer);
 		});
 	  });
+	},
+	stop: function(cmd) {
+		var client = new Client();
+		var loginInfo = login.login(cmd);
+		if ( ! loginInfo) {
+			return;
+		}
+		var startTime = new Date();
+		var projIdent = cmd.project_ident;
+		if ( ! projIdent) {
+			projIdent = dotfile.getCurrentProject();
+			if ( ! projIdent) {
+				console.log('There is no current project.'.yellow);
+				return;
+			}
+		}
+		var filter = "/" + cmd.ident;
+		if(!cmd.ident && !cmd.connection_name) {
+			console.log("Connection --ident or --connnection_name is required".red);
+			return
+		}
+		if(cmd.connection_name) {
+			filter = "?sysfilter=equal(name:'"+cmd.connection_name+"')";
+		}
+		console.log(loginInfo.url + "/admin:connections"+ filter);
+		client.get(loginInfo.url + "/admin:connections"+ filter, {
+			headers: {
+				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+				"Content-Type" : "application/json"
+			}
+		 }, function(content) {
+		 	if (content.errorMessage) {
+				console.log(content.errorMessage.red);
+				return;
+			}
+			if(cmd.connection_name) {
+			    filter = "/" + content[0].ident;
+			 }
+			 content[0].is_active = false;
+			 client.put(loginInfo.url + "/admin:connections"+ filter, {
+				 data: content,
+				 headers: {
+					 Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+					 "Content-Type" : "application/json"
+				 }
+			  }, function(data) {
+				 console.log(data);
+				 var endTime = new Date();
+				 if (data.errorMessage) {
+					 console.log(data.errorMessage.red);
+					 return;
+				 }
+				 printObject.printHeader('Connection(s) stopped, including:');
+				 if(data.statusCode == 200 ){
+					 console.log("Request took: " + (endTime - startTime) + "ms");
+					 return;
+				 } 	
+				 var newConnection = _.find( data.txsummary, function(p) {
+					 return p['@metadata'].resource === 'admin:connections';
+				 });
+				 if ( ! newConnection) {
+					 console.log('ERROR: unable to find connections'.red);
+					 return;
+				 }
+				 if (cmd.verbose) {
+					 _.each(data.txsummary, function(obj) {
+						 printObject.printObject(obj, obj['@metadata'].entity, 0, obj['@metadata'].verb);
+					 });
+				 }
+				 else {
+					 printObject.printObject(newConnection, newConnection['@metadata'].entity, 0, newHandler['@metadata'].verb);
+					 console.log(('and ' + (data.txsummary.length - 1) + ' other objects').grey);
+				 }
+			
+				 var trailer = "Request took: " + (endTime - startTime) + "ms";
+				 trailer += " - # objects touched: ";
+				 if (data.txsummary.length === 0) {
+					 console.log('No data returned'.yellow);
+				 }
+				 else {
+					 trailer += data.txsummary.length;
+				 }
+				 printObject.printTrailer(trailer);
+			 });
+	    });
+	},
+	start: function(cmd) {
+		var client = new Client();
+		var client = new Client();
+		var loginInfo = login.login(cmd);
+		if ( ! loginInfo) {
+			return;
+		}
+		var startTime = new Date();
+		var projIdent = cmd.project_ident;
+		if ( ! projIdent) {
+			projIdent = dotfile.getCurrentProject();
+			if ( ! projIdent) {
+				console.log('There is no current project.'.yellow);
+				return;
+			}
+		}
+		var filter = "/" + cmd.ident;
+		if(!cmd.ident && !cmd.connection_name) {
+			console.log("Connection --ident or --connnection_name is required".red);
+			return
+		}
+		if(cmd.connection_name) {
+			filter = "?sysfilter=equal(name:'"+cmd.connection_name+"')";
+		}
+		console.log(loginInfo.url + "/admin:connections"+ filter);
+		client.get(loginInfo.url + "/admin:connections"+ filter, {
+			headers: {
+				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+				"Content-Type" : "application/json"
+			}
+		 }, function(content) {
+		 	 if (content.errorMessage) {
+				console.log(content.errorMessage.red);
+				return;
+			  }
+			 if(cmd.connection_name) {
+			    filter = "/" + content[0].ident;
+			 }
+			 console.log("Content "+content);
+			 content[0].is_active = true;
+			 client.put(loginInfo.url + "/admin:connections"+ filter, {
+				 data: content,
+				 headers: {
+					 Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+					 "Content-Type" : "application/json"
+				 }
+			  }, function(data) {
+				 console.log(data);
+				 var endTime = new Date();
+				 if (data.errorMessage) {
+					 console.log(data.errorMessage.red);
+					 return;
+				 }
+				 printObject.printHeader('Connection(s) started, including:');
+				 if(data.statusCode == 200 ){
+					 console.log("Request took: " + (endTime - startTime) + "ms");
+					 return;
+				 } 	
+				 var newConnection = _.find( data.txsummary, function(p) {
+					 return p['@metadata'].resource === 'admin:connections';
+				 });
+				 if ( ! newConnection) {
+					 console.log('ERROR: unable to find connections'.red);
+					 return;
+				 }
+				 if (cmd.verbose) {
+					 _.each(data.txsummary, function(obj) {
+						 printObject.printObject(obj, obj['@metadata'].entity, 0, obj['@metadata'].verb);
+					 });
+				 }
+				 else {
+					 printObject.printObject(newConnection, newConnection['@metadata'].entity, 0, newHandler['@metadata'].verb);
+					 console.log(('and ' + (data.txsummary.length - 1) + ' other objects').grey);
+				 }
+			
+				 var trailer = "Request took: " + (endTime - startTime) + "ms";
+				 trailer += " - # objects touched: ";
+				 if (data.txsummary.length === 0) {
+					 console.log('No data returned'.yellow);
+				 }
+				 else {
+					 trailer += data.txsummary.length;
+				 }
+				 printObject.printTrailer(trailer);
+			 });
+	    });
 	}
 };

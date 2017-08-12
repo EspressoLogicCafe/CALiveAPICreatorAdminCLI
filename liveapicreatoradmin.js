@@ -437,7 +437,7 @@ program
 	.action(provider.doProvider);
 	
 program
-	.command('connection <list|delete|export|import>')
+	.command('connection <list|delete|export|import|stop|start>')
 	.description('Administer Connections for current project.')
 	.option('--connection_name [name]', 'The connection name')
 	.option('--ident [ident]', 'The ident of the specific connection')
