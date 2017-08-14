@@ -362,7 +362,6 @@ module.exports = {
 		if(cmd.connection_name) {
 			filter = "?sysfilter=equal(name:'"+cmd.connection_name+"')";
 		}
-		console.log(loginInfo.url + "/admin:connections"+ filter);
 		client.get(loginInfo.url + "/admin:connections"+ filter, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
@@ -371,6 +370,10 @@ module.exports = {
 		 }, function(content) {
 		 	if (content.errorMessage) {
 				console.log(content.errorMessage.red);
+				return;
+			}
+			if(content.length === 0 ){
+				console.log("Connection not found using filter "+filter);
 				return;
 			}
 			if(cmd.connection_name) {
@@ -448,21 +451,23 @@ module.exports = {
 		if(cmd.connection_name) {
 			filter = "?sysfilter=equal(name:'"+cmd.connection_name+"')";
 		}
-		console.log(loginInfo.url + "/admin:connections"+ filter);
 		client.get(loginInfo.url + "/admin:connections"+ filter, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
 				"Content-Type" : "application/json"
 			}
 		 }, function(content) {
-		 	 if (content.errorMessage) {
+		 	if (content.errorMessage) {
 				console.log(content.errorMessage.red);
 				return;
-			  }
+			}
+			if(content.length === 0 ){
+				console.log("Connection not found using filter "+filter);
+				return;
+			 }
 			 if(cmd.connection_name) {
 			    filter = "/" + content[0].ident;
 			 }
-			 console.log("Content "+content);
 			 content[0].is_active = true;
 			 client.put(loginInfo.url + "/admin:connections"+ filter, {
 				 data: content,
