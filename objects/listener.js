@@ -103,8 +103,8 @@ module.exports = {
 							table.newRow();
 							if(cmd.verbose) {
 							   verboseDisplay += "\n";
-							   verboseDisplay += "lacadmin listeners export --listener_name '"+p.name+"' --file  LISTENERS_"+p.name + ".json\n";
-							   verboseDisplay += "#lacadmin listeners import --file  LISTENERS_"+p.name + ".json\n";
+							   verboseDisplay += "lacadmin listener export --listener_name '"+p.name+"' --file  LISTENERS_"+p.name + ".json\n";
+							   verboseDisplay += "#lacadmin listener import --file  LISTENERS_"+p.name + ".json\n";
 						   }
 				});
 			table.sort(['Name']);

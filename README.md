@@ -264,6 +264,11 @@ lacadmin managedserer list
 lacadmin function list
 lacadmin virtualkey list
 lacadmin sequence list
+lacadmin timer list
+lacadmin listener list
+lacadmin connection list
+# requires sa login (these are the definitions)
+#lacadmin provider list
 lacadmin logout -a local
 ```
 

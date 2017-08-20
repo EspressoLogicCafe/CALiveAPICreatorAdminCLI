@@ -55,7 +55,7 @@ module.exports = {
 							console.log(data.errorMessage.red);
 							return;
 						}
-						printObject.printHeader('Topic');
+						printObject.printHeader('Timer');
 						var table = new Table();
 						var verboseDisplay = "";
 						var scheduleType;
@@ -127,7 +127,6 @@ module.exports = {
 				"Content-Type" : "application/json"
 			}
 		}, function(data) {
-			//console.log('get result: ' + JSON.stringify(data, null, 2));
 			if (data.errorMessage) {
 				console.log(("Error: " + data.errorMessage).red);
 				return;
@@ -298,7 +297,7 @@ module.exports = {
 				return p['@metadata'].resource === 'admin:schedule_items';
 			});
 			if ( ! newTopic) {
-				console.log('ERROR: unable to find imported topic'.red);
+				console.log('ERROR: unable to find imported Timer'.red);
 				return;
 			}
 			if (cmd.verbose) {
