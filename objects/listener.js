@@ -78,7 +78,7 @@ module.exports = {
 							table.cell("Name", p.name);
 							table.cell("Type", type);
 							table.cell("Logging Level", p.logging_level);
-							table.cell("Active", p.active == true);
+							table.cell("Active", p.is_active == true);
 			
 							var comments = p.code;
 							if ( ! comments) {

@@ -83,7 +83,7 @@ module.exports = {
 							table.cell("Ident", p.ident);
 							table.cell("Name", p.name);
 							table.cell("Type", type);
-							table.cell("Active", p.active == true);
+							table.cell("Active", p.is_active == true);
 			
 							var comments = p.connect_code;
 							if ( ! comments) {

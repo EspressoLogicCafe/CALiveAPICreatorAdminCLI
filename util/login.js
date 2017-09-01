@@ -18,7 +18,7 @@ module.exports = {
 			url = loginInfo.url;
 			apiKey = dotfile.getApiKey(loginInfo.url, loginInfo.userName);
 			if ( ! apiKey) {
-				console.log('You cannot run this command because you are not currently logged in.'.red);
+				console.log('You cannot run this command because you are not currently logged in.(lacadmin login --help)'.red);
 				return;
 			}
 		}
