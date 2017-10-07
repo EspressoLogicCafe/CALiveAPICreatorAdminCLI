@@ -1,7 +1,7 @@
 #! /bin/bash
 # Generate the contents of an existing repository
-SERVER=http://localhost:8080/APIServer
-#SERVER=http://localhost:8080
+#SERVER=http://localhost:8080/APIServer
+SERVER=http://localhost:8080
 PROJECT=demo
 
 ## Connect to a local server $SERVER and use API Project $PROEJCT
@@ -36,6 +36,12 @@ lacadmin managedserver list
 lacadmin function list
 lacadmin license list
 lacadmin eula accepted 
+lacadmin virtualkey list
+lacadmin sequence list
+lacadmin timer list
+lacadmin connection list
+lacadmin listener list
+lacadmin provider list
 
 lacadmin logout -a $PROJECT
 

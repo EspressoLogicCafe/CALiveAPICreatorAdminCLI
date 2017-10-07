@@ -71,7 +71,6 @@ module.exports = {
 				//table.cell("Ident", p.ident);
 				var prefix = p.prefix;
 				var active = p.active;
-				console.log(p);
 				if(cmd.verbose) {
 					   verboseDisplay +=  "\n";
 					   verboseDisplay += "lacadmin virtualkey create ";

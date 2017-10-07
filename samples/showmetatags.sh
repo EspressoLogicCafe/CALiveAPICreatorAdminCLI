@@ -2,11 +2,11 @@
 
 # Uses NodeJS and Live API Creator command line interface
 # npm install liveapicreator-cli -g
-# Live API Creator meta @ rest endpoints
+# Live API Creator @meta REST endpoints
 ## add  --format json for a full JSON response
 
 
-SERVER=http://localhost:8080/APIServer/rest/default/demo/v1
+SERVER=http://localhost:8080/rest/default/demo/v1
 #echo 1
 # Note that the URL contains the entire path to the project 
 lac login -u demo -p Password1 $SERVER -a demo
