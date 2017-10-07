@@ -387,7 +387,7 @@ module.exports = {
 					 "Content-Type" : "application/json"
 				 }
 			  }, function(data) {
-				 console.log(data);
+				 //console.log(data);
 				 var endTime = new Date();
 				 if (data.errorMessage) {
 					 console.log(data.errorMessage.red);
@@ -476,7 +476,7 @@ module.exports = {
 					 "Content-Type" : "application/json"
 				 }
 			  }, function(data) {
-				 console.log(data);
+				 //console.log(data);
 				 var endTime = new Date();
 				 if (data.errorMessage) {
 					 console.log(data.errorMessage.red);

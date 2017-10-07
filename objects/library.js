@@ -304,10 +304,13 @@ module.exports = {
 			projIdent = dotfile.getCurrentProject();
 		}
 		console.log("project ident "+projIdent );
-		console.log("LinkProject "+ cmd.linkProject);
+		if (cmd.linkProject) {
+			console.log("LinkProject "+ cmd.linkProject);
+		}
 		context.getContext(cmd, function() {
-
-			var fileContent = JSON.parse(fs.readFileSync(cmd.file));
+			var content = fs.readFileSync(cmd.file,'utf-8');
+			//console.log(content);
+			var fileContent = JSON.parse(content);
 			var account_ident = context.account.ident;
 			for(var i = 0 ; i < fileContent.length ; i++ ){
 				delete fileContent[i].ident;
