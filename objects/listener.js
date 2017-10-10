@@ -221,7 +221,7 @@ module.exports = {
 			toStdout = true;
 		}
 		
-		client.get(loginInfo.url + "/admin:listeners?pagesize=1000&"+filter, {
+		client.get(loginInfo.url + "/ListenerExport?pagesize=1000&"+filter, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
 				"Content-Type" : "application/json"
@@ -294,7 +294,7 @@ module.exports = {
 			}
 		
 		var startTime = new Date();
-		client.put(loginInfo.url + "/admin:listeners", {
+		client.put(loginInfo.url + "/ListenerExport", {
 			data: fileContent,
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
