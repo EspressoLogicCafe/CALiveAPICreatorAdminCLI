@@ -44,65 +44,74 @@ module.exports = {
 				return;
 			}
 		}
+		console.log(url + "/admin:listeners?sysfilter=equal(project_ident:" + projIdent+")&pagesize=100&&sysorder=(name:asc_uc,name:desc)");
 		client.get(url + "/admin:listeners?sysfilter=equal(project_ident:" + projIdent+")&pagesize=100&&sysorder=(name:asc_uc,name:desc)", {
-				headers: {
-					Authorization: "CALiveAPICreator " + apiKey + ":1",
-					"Content-Type" : "application/json"
-				}
-			}, function(data) {
-				if (data.errorMessage) {
-					console.log(data.errorMessage.red);
-					return;
-				}
-				printObject.printHeader('Listeners');
-				var table = new Table();
-				var type = "";
-				var verboseDisplay = "";
-				_.each(data, function(p) {
-				   if(p.provider_ident == 1) {
-					   type =  "Startup";
-				   }
-				   if( p.provider_ident == 2) {
-					   type = "Shutdown";
-				   }
-				   if ( p.provider_ident == 3) {
-					   type = "MQTT";
-				   }
-				   if ( p.provider_ident == 4) {
-					   type = "Kafka";
-				   }
-				   if ( p.provider_ident > 4) {
-					   type = "Other";
-				   }
-					table.cell("Ident", p.ident);
-					table.cell("Name", p.name);
-					table.cell("Type", type);
-					table.cell("Logging Level", p.logging_level);
-					table.cell("Active", p.is_active == true);
-					var comments = p.code;
-					if ( ! comments) {
-						comments = "";
-					}
-					else if (comments.length > 50){
-						comments = comments.replace("\n"," ");
-						comments = comments.substring(0, 47) + "...";
-					}
-					table.cell("Code", comments);
-					comments = p.description;
-					if ( ! comments) {
-						comments = "";
-					}
-					else if (comments.length > 50){
-						comments = comments.substring(0, 47) + "...";
-					}
-					comments = comments.replace("\n"," ");
-					table.cell("Description", comments);
-					table.newRow();
-					if(cmd.verbose) {
-					   verboseDisplay += "\n";
-					   verboseDisplay += "lacadmin listener export --listener_name '"+p.name+"' --file  LISTENERS_"+p.name + ".json\n";
-					   verboseDisplay += "#lacadmin listener import --file  LISTENERS_"+p.name + ".json\n";
-					}
+						headers: {
+							Authorization: "CALiveAPICreator " + apiKey + ":1",
+							"Content-Type" : "application/json"
+						}
+					}, function(data) {
+						if (data.errorMessage) {
+							console.log(data.errorMessage.red);
+							return;
+						}
+						printObject.printHeader('Listeners');
+						var table = new Table();
+						var type = "";
+						var verboseDisplay = "";
+						_.each(data, function(p) {
+							switch(p.provider_ident) {
+							case 1:
+							  	type =  "Shutdown";
+							  	break;
+							case 2:
+							  	type =  "Shutdown";
+							  	break;
+							case 3:
+							  	type =  "MQTT";
+							  	break;
+							case 4:
+							  	type =  "KafkaConsumer";
+							  	break;
+							case 5:
+							  	type =  "KafkaProducer";
+							  	break;
+							default:
+							  	type = 'other';
+							  	break;
+							}
+							table.cell("Ident", p.ident);
+							table.cell("Name", p.name);
+							table.cell("Type", type);
+							table.cell("Logging Level", p.logging_level);
+							table.cell("Active", p.is_active == true);
+			
+							var comments = p.code;
+							if ( ! comments) {
+								comments = "";
+							}
+							else if (comments.length > 50){
+								comments = comments.replace("\n"," ");
+								comments = comments.substring(0, 47) + "...";
+							}
+				
+							table.cell("Code", comments);
+							comments = p.description;
+							if ( ! comments) {
+								comments = "";
+							}
+							else if (comments.length > 50){
+								
+								comments = comments.substring(0, 47) + "...";
+							}
+							comments = comments.replace("\n"," ");
+							table.cell("Description", comments);
+							table.newRow();
+							if(cmd.verbose) {
+							   verboseDisplay += "\n";
+							   verboseDisplay += "lacadmin listener export --listener_name '"+p.name+"' --file  LISTENERS_"+p.name + ".json\n";
+							   verboseDisplay += "#lacadmin listener import --file  LISTENERS_"+p.name + ".json\n";
+						   }
 				});
 			table.sort(['Name']);
 			console.log(table.toString());
@@ -134,8 +143,12 @@ module.exports = {
 		} else if(cmd.listener_name) {
 				filt += ",name:'"+ cmd.listener_name + "')";
 		} else {
+			if(cmd.listener_name) {
+				filt += ",name:'"+ cmd.listener_name + "')";
+			} else {
 				console.log('Missing parameter: please specify listener_name or ident'.red);
 				return;
+			}
 		}
 		client.get(loginInfo.url + "/admin:listeners?sysfilter=" + filt, {
 			headers: {
@@ -229,20 +242,15 @@ module.exports = {
 			}
 			for(var idx = 0; idx < data.length ; idx++){
 				delete data[idx].ident;
-				delete data[idx]['@metadata']
-				delete data[idx].project_ident;
 				delete data[idx].ts;
-				for(var j =0 ; j < data[idx].ListenerParameters.length; j++ ) {
+				delete data[idx].project_ident;
+				delete data[idx].connection_ident;
+				delete data[idx]['@metadata']
+				data[idx]["@metadata"] = {action:"MERGE_INSERT", key:  ["project_ident","name"]};
+				for(var j = 0; j < data[idx].ListenerParameters.length; j++) {
 					delete data[idx].ListenerParameters[j].ident;
-					delete data[idx].ListenerParameters[j].listener_ident;
 					delete data[idx].ListenerParameters[j].ts;
-					delete data[idx].connection_ident;
-					delete data[idx].ListenerParameters[j]["@metadata"];
-				}
-				if ( data[idx].connection) {
-					var connection = { "@metadata": { "action":"LOOKUP",  "key":"name"},"name": data[idx].connection.name };
-					delete data[idx].connection;
-					data[idx].connection = connection;
+					delete data[idx].ListenerParameters[j].listener_ident;
 				}
 			}
 			if (toStdout) {
@@ -287,16 +295,29 @@ module.exports = {
 					for(var i = 0 ; i < fileContent.length; i++){
 						fileContent[i].project_ident = projIdent;
 						delete fileContent[i].ts;
+						delete fileContent[i].connection_ident;
 						delete fileContent[i].ident;
 						fileContent[i]["@metadata"] = {action:"MERGE_INSERT", key:  ["project_ident","name"]};
+						fileContent[i].connection["@metadata"] = {action:"LOOKUP", key:  "name"};
+						for(var j = 0; j < fileContent[i].ListenerParameters.length; j++) {
+							delete fileContent[i].ListenerParameters[j].ident;
+							delete fileContent[i].ListenerParameters[j].ts;
+							delete fileContent[i].ListenerParameters[j].listener_ident;
+						}
 					} 
 			} else {
 				fileContent.project_ident = projIdent;
 				delete fileContent.ts;
 				fileContent["@metadata"] = {action:"MERGE_INSERT", key: ["project_ident","name"]};
+				fileContent.connection["@metadata"] = {action:"LOOKUP", key:  "name"};
+				delete fileContent.ListenerParameters.ident;
+				delete fileContent.ListenerParameters.ts;
+				delete fileContent.connection_ident;
+				delete fileContent.ListenerParameters.listener_ident;
 			}
 		
 		var startTime = new Date();
+		//console.log(JSON.stringify(fileContent));
 		client.put(loginInfo.url + "/ListenerExport", {
 			data: fileContent,
 			headers: {
@@ -304,7 +325,7 @@ module.exports = {
 				"Content-Type" : "application/json"
 			}
 		}, function(data) {
-		
+			//console.log(data);
 			var endTime = new Date();
 			if (data.errorMessage) {
 				console.log(data.errorMessage.red);

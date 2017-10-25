@@ -136,13 +136,12 @@ module.exports = {
 		var filt = "equal(project_ident:"+projIdent ;
 		if (cmd.ident) {
 			filt += ",ident:" + cmd.ident + ")";
-		} else if (cmd.connection_name) {
-			filt += ",name:'"+cmd.connection_name +"')";
+		} else if (cmd.connection_name)  {
+		 	filt += ",name:'" + cmd.connection_name + "')";
 		} else {
-			console.log('Missing parameter: please specify ident or connection_name'.red);
+			console.log('Missing parameter: please specify --ident or --connection_name'.red);
 			return;
 		}
-		
 		client.get(loginInfo.url + "/admin:connections?sysfilter=" + filt, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
@@ -236,13 +235,13 @@ module.exports = {
 			}
 			for(var idx = 0; idx < data.length ; idx++){
 				delete data[idx].ident;
+				delete data[idx].ts;
 				delete data[idx]['@metadata']
 				delete data[idx].project_ident;
-				delete data[idx].ts;
-				for(var j =0 ; j < data[idx].ConnectionParameters.length; j++ ) {
+				for(var j =0; j < data[idx].ConnectionParameters.length ; j++) {
+					delete data[idx].ConnectionParameters[j].ts;
 					delete data[idx].ConnectionParameters[j].ident;
 					delete data[idx].ConnectionParameters[j].connection_ident;
-					delete data[idx].ConnectionParameters[j].ts;
 					delete data[idx].ConnectionParameters[j]["@metadata"];
 				}
 			}
@@ -287,23 +286,31 @@ module.exports = {
 					for(var i = 0 ; i < fileContent.length; i++){
 						fileContent[i].project_ident = projIdent;
 						delete fileContent[i].ts;
+						fileContent[i].is_active = false;
 						delete fileContent[i].ident;
 						fileContent[i]["@metadata"] = {action:"MERGE_INSERT", key:  ["project_ident","name"]};
+						for(var j =0; j < fileContent[i].ConnectionParameters.length ; j++) {
+							delete fileContent[i].ConnectionParameters[j].ts;
+							delete fileContent[i].ConnectionParameters[j].ident;
+							delete fileContent[i].ConnectionParameters[j].connection_ident;
+							delete fileContent[i].ConnectionParameters[j]["@metadata"];
+						}
 					} 
 			} else {
 				fileContent.project_ident = projIdent;
 				delete fileContent.ts;
+				delete fileContent.ident;
 				fileContent["@metadata"] = {action:"MERGE_INSERT", key: ["project_ident","name"]};
 			}
-		
-		   var startTime = new Date();
-		   client.put(loginInfo.url + "/ConnectionExport", {
-			   data: fileContent,
-			   headers: {
-				   Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
-				   "Content-Type" : "application/json"
-			   }
-		   }, function(data) {
+		console.log(JSON.stringify(fileContent,null,2));
+		var startTime = new Date();
+		client.put(loginInfo.url + "/ConnectionExport", {
+			data: fileContent,
+			headers: {
+				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+				"Content-Type" : "application/json"
+			}
+		}, function(data) {
 		
 			   var endTime = new Date();
 			   if (data.errorMessage) {
