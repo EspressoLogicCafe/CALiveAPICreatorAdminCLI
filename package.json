@@ -1,6 +1,6 @@
 {
   "name": "liveapicreator-admin-cli",
-  "version": "4.0.09",
+  "version": "4.0.13",
   "description": "The NodeJS command line utility for CA Live Creator DevOps Administration from CA Technologies",
   "main": "liveapicreatoradmin.js",
   "scripts": {
@@ -42,20 +42,21 @@
   ],
   "preferGlobal": "true",
   "bin": {
-    "liveapicreatoradmin" : "liveapicreatoradmin.js",
-    "lacadmin" : "liveapicreatoradmin.js"
+    "liveapicreatoradmin": "liveapicreatoradmin.js",
+    "lacadmin": "liveapicreatoradmin.js"
   },
   "author": "CA Technologies APIM",
   "license": "Apache",
   "dependencies": {
+    "adm-zip": "^0.4.7",
+    "cli-table": "0.3.1",
     "colors": "^1.0.3",
     "commander": "^2.5.0",
-    "cli-table": "0.3.1",
     "easy-table": "0.3.0",
+    "https": "^1.0.0",
     "node-rest-client": "^1.4.1",
     "osenv": "^0.1.0",
-    "underscore": "^1.7.0",
-     "https":"^1.0.0"
+    "underscore": "^1.7.0"
   },
   "devDependencies": {},
   "repository": {

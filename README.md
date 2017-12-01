@@ -91,6 +91,7 @@ $ lacadmin --help
     provider [options] <list|delete|export|import>                                        Administer Listener Provider definitions. (requires login as "sa")
     connection [options] <list|delete|export|import|stop|start>                           Administer Connections for current project.
     timer [options] <list|delete|export|import>                                           Administer Timer definitions.
+    application [options] <list|delete|import|export>                                     Administer Data Explorer Applications.
     
   Options:
 
@@ -159,7 +160,7 @@ lacadmin project list
 lacadmin project use --url_name nwind
 lacadmin project export --url_name nwind --file nw/project_nwind.json
 
-#API Optins
+#API Options
 lacadmin apioptions list
 lacadmin apioptions export --file nw/apioptions.json
 
@@ -267,6 +268,7 @@ lacadmin sequence list
 lacadmin timer list
 lacadmin listener list
 lacadmin connection list
+lacadmin application list
 # requires sa login (these are the definitions)
 #lacadmin provider list
 lacadmin logout -a local

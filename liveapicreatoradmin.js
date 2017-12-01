@@ -50,7 +50,7 @@ var listener = require('./objects/listener.js');
 var connection = require('./objects/connection.js');
 var timer = require('./objects/timer.js');
 var provider = require('./objects/provider.js');
-
+var application = require('./objects/application.js');
 
 program
 	.version(pkg.version);
@@ -360,9 +360,10 @@ program
 	.action(managedserver.doDbase);
 
 program
-	.command('migrate <exportRepos>')
+	.command('migrate <exportRepos|extract>')
 	.description('Migrate creates a list of user libraries, auth providers, gateways, and projects to a named directory')
 	.option('--directory [directory]', 'Required for export, the name of a directory to save all exported json files')
+	.option('--file [file]', '(optional): for source extract, the name of a file to read from/save to, if unspecified, use stdin/stdout')
 	.action(migrate.doMigrate);
 
 program
@@ -454,6 +455,16 @@ program
 	.option('--verbose', '(optional) Display list of timer in detailed export/import format')
 	.option('--file [fileName]', '(optional) Name of file to import/export (if not provided stdin/stdout used for export)')
 	.action(timer.doTimer);
+
+program
+	.command('application <list|delete|import|export>')
+	.description('Administer Data Explorer Applications.')
+	.option('--ident [ident]', 'The ident of the specific project (see project list)')
+	.option('--project_name [name]', 'The name of the project')
+	.option('--url_name [name]', 'The name of the project')
+	.option('--application_name [name]', 'The name of the application')
+	.option('--file [file]', 'optional: for import/export, the name of a file to read from/save to, if unspecified, use stdin/stdout')
+	.action(application.doApplication);
 	
 program.parse(process.argv);
 
