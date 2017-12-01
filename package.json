@@ -1,6 +1,6 @@
 {
   "name": "liveapicreator-admin-cli",
-  "version": "4.0.13",
+  "version": "4.0.15",
   "description": "The NodeJS command line utility for CA Live Creator DevOps Administration from CA Technologies",
   "main": "liveapicreatoradmin.js",
   "scripts": {
@@ -31,15 +31,9 @@
     "csv/tsv files",
     "derby",
     "salesforce",
-<<<<<<< HEAD
     "MQTT",
     "Kafka",
     "teradata",
-=======
-    "teradata",
-    "MQTT",
-    "Kafka",
->>>>>>> fix for relationship by ident
     "IBM MQ",
     "MQ",
     "sqlserver",

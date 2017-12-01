@@ -51,66 +51,64 @@ module.exports = {
 			}
 		}
 		client.get(url + "/admin:connections?sysfilter=equal(project_ident:" + projIdent+")&pagesize=100&&sysorder=(name:asc_uc,name:desc)", {
-						headers: {
-							Authorization: "CALiveAPICreator " + apiKey + ":1",
-							"Content-Type" : "application/json"
-						}
-					}, function(data) {
-						if (data.errorMessage) {
-							console.log(data.errorMessage.red);
-							return;
-						}
-						printObject.printHeader('Connections');
-						var table = new Table();
-						var type = "";
-						var verboseDisplay = "";
-						_.each(data, function(p) {
-						   if(p.provider_ident == 1) {
-							   type =  "Startup";
-						   } 
-						   if( p.provider_ident == 2) {
-							   type = "Shutdown";
-						   } 
-						   if ( p.provider_ident == 3) {
-							   type = "MQTT";
-						   } 
-						   if ( p.provider_ident == 4) {
-							   type = "Kafka";
-						   } 
-						   if ( p.provider_ident > 4) {
-							   type = "Other";
-						   }
-							table.cell("Ident", p.ident);
-							table.cell("Name", p.name);
-							table.cell("Type", type);
-							table.cell("Active", p.is_active == true);
+				headers: {
+					Authorization: "CALiveAPICreator " + apiKey + ":1",
+					"Content-Type" : "application/json"
+				}
+			}, function(data) {
+				if (data.errorMessage) {
+					console.log(data.errorMessage.red);
+					return;
+				}
+				printObject.printHeader('Connections');
+				var table = new Table();
+				var type = "";
+				var verboseDisplay = "";
+				_.each(data, function(p) {
+				   if(p.provider_ident == 1) {
+					   type =  "Startup";
+				   } 
+				   if( p.provider_ident == 2) {
+					   type = "Shutdown";
+				   } 
+				   if ( p.provider_ident == 3) {
+					   type = "MQTT";
+				   } 
+				   if ( p.provider_ident == 4) {
+					   type = "Kafka";
+				   } 
+				   if ( p.provider_ident > 4) {
+					   type = "Other";
+				   }
+					table.cell("Ident", p.ident);
+					table.cell("Name", p.name);
+					table.cell("Type", type);
+					table.cell("Active", p.is_active == true);
 
-							var comments = p.connect_code;
-							if ( ! comments) {
-								comments = "";
-							}
-							else if (comments.length > 50){
-								comments = comments.replace("\n"," ");
-								comments = comments.substring(0, 47) + "...";
-							}
-				
-							table.cell("Connect Code", comments);
-							comments = p.disconnect_code;
-							if ( ! comments) {
-								comments = "";
-							}
-							else if (comments.length > 50){
-								
-								comments = comments.substring(0, 47) + "...";
-							}
-							comments = comments.replace("\n"," ");
-							table.cell("Disconnect Code", comments);
-							table.newRow();
-							if(cmd.verbose) {
-							   verboseDisplay += "\n";
-							   verboseDisplay += "lacadmin connection export --connection_name '"+p.name+"' --file  CONNECTION_"+p.name + ".json\n";
-							   verboseDisplay += "#lacadmin conneciton import --file  CONNECTION_"+p.name + ".json\n";
-						   }
+					var comments = p.connect_code;
+					if ( ! comments) {
+						comments = "";
+					}
+					else if (comments.length > 50){
+						comments = comments.replace("\n"," ");
+						comments = comments.substring(0, 47) + "...";
+					}
+					table.cell("Connect Code", comments);
+					comments = p.disconnect_code;
+					if ( ! comments) {
+						comments = "";
+					}
+					else if (comments.length > 50){
+						comments = comments.substring(0, 47) + "...";
+					}
+					comments = comments.replace("\n"," ");
+					table.cell("Disconnect Code", comments);
+					table.newRow();
+					if(cmd.verbose) {
+					   verboseDisplay += "\n";
+					   verboseDisplay += "lacadmin connection export --connection_name '"+p.name+"' --file  CONNECTION_"+p.name + ".json\n";
+					   verboseDisplay += "#lacadmin conneciton import --file  CONNECTION_"+p.name + ".json\n";
+				   }
 				});
 			table.sort(['Name']);
 			console.log(table.toString());
@@ -215,12 +213,11 @@ module.exports = {
 	 	if (projIdent) {
 			filter += sep + "sysfilter=equal(project_ident:" + projIdent + ")";
 		}
-
 		var toStdout = false;
 		if ( ! cmd.file) {
 			toStdout = true;
 		}
-		client.get(loginInfo.url + "/admin:connections?pagesize=1000&"+filter, {
+		client.get(loginInfo.url + "/ConnectionExport?pagesize=1000&"+filter, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
 				"Content-Type" : "application/json"
@@ -239,8 +236,14 @@ module.exports = {
 				delete data[idx].ident;
 				delete data[idx]['@metadata']
 				delete data[idx].project_ident;
+				delete data[idx].ts;
+				for(var j =0 ; j < data[idx].ConnectionParameters.length; j++ ) {
+					delete data[idx].ConnectionParameters[j].ident;
+					delete data[idx].ConnectionParameters[j].connection_ident;
+					delete data[idx].ConnectionParameters[j].ts;
+					delete data[idx].ConnectionParameters[j]["@metadata"];
+				}
 			}
-			
 			if (toStdout) {
 				console.log(JSON.stringify(data, null, 2));
 			}
@@ -257,7 +260,6 @@ module.exports = {
 		if ( ! loginInfo) {
 			return;
 		}
-
 		var projIdent = cmd.project_ident;
 		if ( ! projIdent) {
 			projIdent = dotfile.getCurrentProject();
@@ -292,55 +294,55 @@ module.exports = {
 				fileContent["@metadata"] = {action:"MERGE_INSERT", key: ["project_ident","name"]};
 			}
 		
-		var startTime = new Date();
-		client.put(loginInfo.url + "/admin:connections", {
-			data: fileContent,
-			headers: {
-				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
-				"Content-Type" : "application/json"
-			}
-		}, function(data) {
+		   var startTime = new Date();
+		   client.put(loginInfo.url + "/ConnectionExport", {
+			   data: fileContent,
+			   headers: {
+				   Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+				   "Content-Type" : "application/json"
+			   }
+		   }, function(data) {
 		
-			var endTime = new Date();
-			if (data.errorMessage) {
-				console.log(data.errorMessage.red);
-				return;
-			}
-			printObject.printHeader('Connection(s) created, including:');
-			if(data.statusCode == 200 ){
-				console.log("Request took: " + (endTime - startTime) + "ms");
-				return;
-			} 	
-			var newConnection = _.find( data.txsummary, function(p) {
-				return p['@metadata'].resource === 'admin:connections';
-			});
-			if ( ! newConnection) {
-			var newHandler = _.find( data.txsummary, function(p) {
-				return p['@metadata'].resource === 'admin:connections';
-			});
-			if ( ! newHandler) {
-				console.log('ERROR: unable to find imported connections'.red);
-				return;
-			}
-			if (cmd.verbose) {
-				_.each(data.txsummary, function(obj) {
-					printObject.printObject(obj, obj['@metadata'].entity, 0, obj['@metadata'].verb);
-				});
-			}
-			else {
-				printObject.printObject(newConnection, newConnection['@metadata'].entity, 0, newHandler['@metadata'].verb);
-				console.log(('and ' + (data.txsummary.length - 1) + ' other objects').grey);
-			}
-			
-			var trailer = "Request took: " + (endTime - startTime) + "ms";
-			trailer += " - # objects touched: ";
-			if (data.txsummary.length === 0) {
-				console.log('No data returned'.yellow);
-			}
-			else {
-				trailer += data.txsummary.length;
-			}
-			printObject.printTrailer(trailer);
+			   var endTime = new Date();
+			   if (data.errorMessage) {
+				   console.log(data.errorMessage.red);
+				   return;
+			   }
+			   printObject.printHeader('Connection(s) created, including:');
+			   if(data.statusCode == 200 ){
+				   console.log("Request took: " + (endTime - startTime) + "ms");
+				   return;
+			   }
+			   var newConnection = _.find( data.txsummary, function(p) {
+				   return p['@metadata'].resource === 'ConnectionExport';
+			   });
+			   if ( ! newConnection) {
+			   var newHandler = _.find( data.txsummary, function(p) {
+				   return p['@metadata'].resource === 'admin:connections';
+			   });
+			   if ( ! newHandler) {
+				   console.log('ERROR: unable to find imported connections'.red);
+				   return;
+			   }
+			   if (cmd.verbose) {
+				   _.each(data.txsummary, function(obj) {
+					   printObject.printObject(obj, obj['@metadata'].entity, 0, obj['@metadata'].verb);
+				   });
+			   }
+			   else {
+				   printObject.printObject(newConnection, newConnection['@metadata'].entity, 0, newHandler['@metadata'].verb);
+				   console.log(('and ' + (data.txsummary.length - 1) + ' other objects').grey);
+			   }
+			   var trailer = "Request took: " + (endTime - startTime) + "ms";
+			   trailer += " - # objects touched: ";
+			   if (data.txsummary.length === 0) {
+				   console.log('No data returned'.yellow);
+			   }
+			   else {
+				   trailer += data.txsummary.length;
+			   }
+			   printObject.printTrailer(trailer);
+			};
 		});
 	  });
 	},
@@ -419,7 +421,6 @@ module.exports = {
 					 printObject.printObject(newConnection, newConnection['@metadata'].entity, 0, newHandler['@metadata'].verb);
 					 console.log(('and ' + (data.txsummary.length - 1) + ' other objects').grey);
 				 }
-			
 				 var trailer = "Request took: " + (endTime - startTime) + "ms";
 				 trailer += " - # objects touched: ";
 				 if (data.txsummary.length === 0) {
@@ -508,7 +509,6 @@ module.exports = {
 					 printObject.printObject(newConnection, newConnection['@metadata'].entity, 0, newHandler['@metadata'].verb);
 					 console.log(('and ' + (data.txsummary.length - 1) + ' other objects').grey);
 				 }
-			
 				 var trailer = "Request took: " + (endTime - startTime) + "ms";
 				 trailer += " - # objects touched: ";
 				 if (data.txsummary.length === 0) {

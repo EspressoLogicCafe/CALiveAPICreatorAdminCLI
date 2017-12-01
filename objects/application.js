@@ -118,12 +118,12 @@ module.exports = {
 				return;
 			}
 			if (data.length > 1) {
-				console.log(("Error: more than one project for the given condition: " + filter).red);
+				console.log(("Error: more than one application for the given condition: " + filter).red);
 				return;
 			}
-			var project = data[0];
+			var app = data[0];
 			var startTime = new Date();
-			client['delete'](project['@metadata'].href + "?checksum=" + project['@metadata'].checksum, {
+			client['delete'](app['@metadata'].href + "?checksum=" + app['@metadata'].checksum, {
 				headers: {
 					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
 					"Content-Type" : "application/json"
@@ -135,13 +135,12 @@ module.exports = {
 					return;
 				}
 				printObject.printHeader('Application was deleted, including the following objects:');
-				
-				
+
 				var delProj = _.find(data2.txsummary, function(p) {
-					return p['@metadata'].resource === 'admin:projects';
+					return p['@metadata'].resource === 'admin:applications';
 				});
 				if ( ! delProj) {
-					console.log('ERROR: unable to find deleted project'.red);
+					console.log('ERROR: unable to find deleted applications'.red);
 					return;
 				}
 				if (cmd.verbose) {
