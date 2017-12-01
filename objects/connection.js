@@ -136,8 +136,10 @@ module.exports = {
 		var filt = "equal(project_ident:"+projIdent ;
 		if (cmd.ident) {
 			filt += ",ident:" + cmd.ident + ")";
+		} else if (cmd.connection_name) {
+			filt += ",name:'"+cmd.connection_name +"')";
 		} else {
-			console.log('Missing parameter: please specify ident'.red);
+			console.log('Missing parameter: please specify ident or connection_name'.red);
 			return;
 		}
 		

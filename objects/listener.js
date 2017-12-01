@@ -113,8 +113,8 @@ module.exports = {
 		});
 			
 	},
-	del: function(cmd) {
-		var client = new Client();
+	   del: function(cmd) {
+		   var client = new Client();
 		var loginInfo = login.login(cmd);
 		if ( ! loginInfo) {
 			console.log('You are not currently logged into a CA Live API Creator server.'.red);
@@ -131,13 +131,11 @@ module.exports = {
 		var filt = "equal(project_ident:"+projIdent ;
 		if (cmd.ident) {
 			filt += ",ident:" + cmd.ident + ")";
+		} else if(cmd.listener_name) {
+				filt += ",name:'"+ cmd.listener_name + "')";
 		} else {
-			if(cmd.listener_name) {
-				filt += ",name:"+ cmd.listener_name + ")";
-			} else {
 				console.log('Missing parameter: please specify listener_name or ident'.red);
 				return;
-			}
 		}
 		client.get(loginInfo.url + "/admin:listeners?sysfilter=" + filt, {
 			headers: {
