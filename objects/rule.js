@@ -131,6 +131,7 @@ module.exports = {
 			case 'minimum': cmd.ruletype = 11; break;
 			case 'maximum': cmd.ruletype = 12; break;
 			case 'managedparent': cmd.ruletype = 13; break;
+			case 'pre-insert': cmd.ruletype = 10; break;
 			default: console.log('Invalid rule type'.red); return;
 		}
 		if ( ! cmd.entity_name) {
@@ -206,7 +207,7 @@ module.exports = {
 			rule_text2 = cmd.error_message;
 		}
 		// Events
-		if (cmd.ruletype === 7 || cmd.ruletype === 8 || cmd.ruletype === 9) {
+		if (cmd.ruletype === 7 || cmd.ruletype === 8 || cmd.ruletype === 9 || cmd.ruletype === 10) {
 			if ( ! cmd.expression) {
 				console.log('Event is Missing parameter: expression'.red);
 				return;
@@ -405,7 +406,7 @@ module.exports = {
 					break;
 					case 2: type = "count"; 
 					adminCmd += "lacadmin rule create --ruletype count --entity_name "+p.entity_name;
-					adminCmd += " --rule_name "+p.name;
+					adminCmd += " --rule_name '"+p.name+ "'";
 					adminCmd += " --role_name "+p.rule_text1;
 					adminCmd += " --attribute_name "+p.attribute_name;
 					adminCmd += " --clause '"+p.rule_text2+"'";
@@ -417,7 +418,7 @@ module.exports = {
 					break;
 					case 3: type = "formula"; 
 					adminCmd += "lacadmin rule create --ruletype formula --entity_name "+p.entity_name;
-					adminCmd += " --rule_name "+p.name;
+					adminCmd += " --rule_name '"+p.name+ "'";
 					adminCmd += " --attribute_name "+p.attribute_name;
 					adminCmd += " --expression '"+p.rule_text1 + "'";
 					adminCmd += " --active "+ p.active;
@@ -428,7 +429,7 @@ module.exports = {
 					break;
 					case 4: type = "parent copy"; 
 					adminCmd += "lacadmin rule create --ruletype parentcopy --entity_name "+p.entity_name;
-					adminCmd += " --rule_name "+p.name;
+					adminCmd += " --rule_name '"+p.name+ "'";
 					adminCmd += " --attribute_name "+p.attribute_name;
 					adminCmd += " --role_name "+p.rule_text1;
 					adminCmd += " --parent_attribute "+p.rule_text2;
@@ -438,7 +439,7 @@ module.exports = {
 					break;
 					case 5: type = "validation"; 
 					adminCmd += "lacadmin rule create --ruletype validation --entity_name "+p.entity_name;
-					adminCmd += " --rule_name "+p.name;
+					adminCmd += " --rule_name '"+p.name + "'";
 					adminCmd += " --expression '"+p.rule_text1 + "'";
 					adminCmd += " --error_message '"+p.rule_text2 +"'";
 					adminCmd += " --active "+ p.active;
@@ -447,7 +448,7 @@ module.exports = {
 					break;
 					case 6: type = "commit validation"; 
 					adminCmd += "lacadmin rule create --ruletype commitvalidation --entity_name "+p.entity_name;
-					adminCmd += " --rule_name "+p.name + "'";
+					adminCmd += " --rule_name '"+p.name + "'";
 					adminCmd += " --expression '"+p.rule_text1 + "'";
 					adminCmd += " --active "+ p.active;
 					adminCmd += " --comments '"+p.comments +"'";	
@@ -455,7 +456,7 @@ module.exports = {
 					break;
 					case 7: type = "event"; 
 					adminCmd += "lacadmin rule create --ruletype event --entity_name "+p.entity_name;
-					adminCmd += " --rule_name "+p.name;
+					adminCmd += " --rule_name '"+p.name+ "'";
 					adminCmd += " --expression '"+p.rule_text1 +"'";
 					adminCmd += " --active "+ p.active;
 					adminCmd += " --comments '"+p.comments +"'";	
@@ -463,7 +464,7 @@ module.exports = {
 					break;
 					case 8: type = "early event"; 
 					adminCmd += "lacadmin rule create --ruletype earlyevent --entity_name "+p.entity_name;
-					adminCmd += " --rule_name "+p.name;
+					adminCmd += " --rule_name '"+p.name + "'";
 					adminCmd += " --expression '"+p.rule_text1 + "'";
 					adminCmd += " --active "+ p.active;
 					adminCmd += " --comments '"+p.comments +"'";	
@@ -471,7 +472,15 @@ module.exports = {
 					break;
 					case 9: type = "commit event"; 
 					adminCmd += "lacadmin rule create --ruletype commitevent --entity_name "+p.entity_name;
-					adminCmd += " --rule_name "+p.name;
+					adminCmd += " --rule_name '"+p.name+ "'";
+					adminCmd += " --expression '"+p.rule_text1 + "'";
+					adminCmd += " --active "+ p.active;
+					adminCmd += " --comments '"+p.comments +"'";	
+					adminCmd += "\n\n";
+					break;
+					case 10: type = "pre-insert"; 
+					adminCmd += "lacadmin rule create --ruletype pre-insert --entity_name "+p.entity_name;
+					adminCmd += " --rule_name '"+p.name + "'";
 					adminCmd += " --expression '"+p.rule_text1 + "'";
 					adminCmd += " --active "+ p.active;
 					adminCmd += " --comments '"+p.comments +"'";	
@@ -479,7 +488,7 @@ module.exports = {
 					break;
 					case 11: type = "minimum"; 
 					adminCmd += "lacadmin rule create --ruletype minimum --entity_name "+p.entity_name;
-					adminCmd += " --rule_name "+p.name;
+					adminCmd += " --rule_name '"+p.name + "'";
 					adminCmd += " --attribute_name "+p.attribute_name;
 					adminCmd += " --role_name "+p.rule_text1;
 					adminCmd += " --child_attribute "+p.rule_text3;
