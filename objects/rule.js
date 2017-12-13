@@ -66,10 +66,11 @@ module.exports = {
 			var typeWidth = 0;
 			_.each(data, function(p) {
 				table.cell("Ident", p.ident);
+				table.cell("Name", p.name);
 				table.cell("Table", p.entity_name);
 				//console.log("Entity Name "+p.entity_name);
-				tblWidth = p.entity_name.length > tblWidth ? p.entity_name.length : tblWidth;
-				var type = "";
+				tblWidth = (p.entity_name && p.entity_name.length > tblWidth) ? p.entity_name.length : tblWidth;
+				var type = module.exports.getRuleType(p.ruletype_ident);
 				
 				adminCmd += module.exports.show(p);
 				typeWidth = type.length > typeWidth ? type.length : typeWidth;
@@ -78,11 +79,11 @@ module.exports = {
 				var maxColWidth = (maxWidth / 2) - 3;
 				
 				table.cell("Type", type);
-				var autoName = p.auto_name;
-				if (autoName.length > maxColWidth) {
+				var autoName = p.auto_title;
+				if (autoName && autoName.length > maxColWidth) {
 					autoName = autoName.substring(0, (maxColWidth - 3)) + "...";
+					table.cell("Description", autoName.replace(/\n/g, ''));
 				}
-				table.cell("Description", autoName.replace(/\n/g, ''));
 				var comments = p.comments;
 				if (comments) {
 					comments = comments.replace(/\n/g, '');
@@ -260,6 +261,10 @@ module.exports = {
 		if(cmd.active !== null){
 			ruleActive = cmd.active;
 		}
+		var rule_name = null;
+		if (cmd.rule_name) {
+			rule_name = cmd.rule_name;
+		}
 		var sqlable = false;
 		if(cmd.sqlable !== null){
 			sqlable = cmd.sqlable;
@@ -273,6 +278,7 @@ module.exports = {
 		}
 		var rule_name = (cmd.rule_name == 'null')?null:cmd.rule_name;
 		var newRule = {
+			name: rule_name,
 			entity_name: cmd.entity_name,
 			attribute_name: cmd.attribute_name,
 			prop4: prop4,
@@ -387,6 +393,39 @@ module.exports = {
 				printObject.printHeader(trailer);
 			});
 		});
+	},
+	getRuleType: function(ruleType) {
+			var type = null;
+			switch(ruleType){
+				case 1: type = "sum"; 
+					break;
+				case 2: type = "count"; 
+					break;
+				case 3: type = "formula"; 
+					break;
+				case 4: type = "parent copy"; 
+					break;
+				case 5: type = "validation"; 
+					break;
+				case 6: type = "commit validation"; 
+					break;
+				case 7: type = "event"; 
+					break;
+				case 8: type = "early event"; 
+					break;
+				case 9: type = "commit event"; 
+					break;
+				case 10: type = "pre-insert";
+					break;
+				case 11: type = "minimum"; 
+					break;
+				case 12: type = "maximum"; 
+					break;
+				case 13: type = "managed parent"; 
+					break;
+				default: type = "unknown";
+			}
+			return type;
 	},
 	show: function(p){
 	var adminCmd = "";
@@ -547,8 +586,12 @@ module.exports = {
 		var filter = "";
 		if(cmd.ident){
 			filter = "&sysfilter=equal(ident: "+cmd.ident+")";
+		} else {
+			if(cmd.rule_name) {
+				filter = "&sysfilter=equal(name: '"+cmd.rule_name+"')";
+			}
 		}
-		client.get(url + "/rules?sysfilter=equal(project_ident:" + projIdent +")&pagesize=100"+filter, {
+		client.get(url + "/rules?sysfilter=equal(project_ident:" + projIdent +")&pagesize=500"+filter, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
 				"Content-Type" : "application/json"

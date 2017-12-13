@@ -91,15 +91,21 @@ module.exports = {
 					case 22: type = "sap"; break;
 					case 23: type = "csv"; break;
 					case 24: type = "cassandra"; break;
+					case 25: type = "teradata"; break;
 					default: type = "unknown";
 				}
+				var isJndi = p.datasource_name != null;
 				table.cell("Type", type);
 				table.cell("Active", p.active);
 				table.cell("isEditable", p.schema_editable);
-				table.cell("Catalog", p.catalog_name);
-				table.cell("Schema", p.schema_name);
-				table.cell("User", p.user_name);
-				table.cell("URL", p.url);
+				if(isJndi) {
+					 table.cell("JNDI", p.datasource_name);
+				} else {
+				   table.cell("Catalog", p.catalog_name);
+				   table.cell("Schema", p.schema_name);
+				   table.cell("User", p.user_name);
+				   table.cell("URL", p.url);
+				}
 				table.cell("IsEditable",p.schema_editable);
 				var comments = p.comments;
 				if ( ! comments) {
@@ -178,7 +184,7 @@ module.exports = {
 			console.log('Missing parameter: url'.red);
 			return;
 		}
-
+		var isJndi = cmd.jndi_name != null;
 		var schema_editable = false;
 		if(cmd.schema_editable) {
 			schema_editable = cmd.schema_editable == 'true';
@@ -206,27 +212,42 @@ module.exports = {
 			case "hbase": dbasetype = 21; break;
 			case "sap": dbasetype = 22; break;
 			case "csv": dbasetype = 23; break;
+			case "cassandra": dbasetype = 24; break;
+			case "teradata": dbasetype = 25; break;
 			default : console.log('Unknown database type: --dbasetype ' + dbasetype); return;
 		}
 
 		context.getContext(cmd, function() {
 			//console.log('Current account: ' + JSON.stringify(context.account));
-			
-			var newDbase = {
-				name: cmd.db_name,
-				prefix: cmd.prefix,
-				url: cmd.url,
-				catalog_name: cmd.catalog_name,
-				schema_name: cmd.schema_name,
-				user_name: cmd.user_name,
-				password: cmd.password,
-				port_num: cmd.port_num,
-				active: true,
-				comments: cmd.comments,
-				dbasetype_ident: dbasetype,
-				project_ident: curProj,
-				schema_editable: schema_editable
-			};
+			var newDbase;
+			if(isJndi) {
+				newDbase = {
+				   name: cmd.db_name,
+				   prefix: cmd.prefix,
+				   datasource_name: cmd.jndi_name,	
+				   active: true,
+				   comments: cmd.comments,
+				   dbasetype_ident: dbasetype,
+				   project_ident: curProj,
+				   schema_editable: schema_editable
+			   };
+			} else {
+				newDbase = {
+				   name: cmd.db_name,
+				   prefix: cmd.prefix,
+				   url: cmd.url,
+				   catalog_name: cmd.catalog_name,
+				   schema_name: cmd.schema_name,
+				   user_name: cmd.user_name,
+				   password: cmd.password,
+				   port_num: cmd.port_num,
+				   active: true,
+				   comments: cmd.comments,
+				   dbasetype_ident: dbasetype,
+				   project_ident: curProj,
+				   schema_editable: schema_editable
+			   };
+			}
 			var startTime = new Date();
 			client.post(loginInfo.url + "/dbaseschemas", {
 				data: newDbase,
