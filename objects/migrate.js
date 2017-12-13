@@ -7,6 +7,8 @@ var context = require('./context.js');
 var login = require('../util/login.js');
 var printObject = require('../util/printObject.js');
 var dotfile = require('../util/dotfile.js');
+var AdmZip = require('adm-zip');
+var filesToSkip = ["__MACOSX",".DS_Store",".git",".gitignore",".idea"];
 
 module.exports = {
 	doMigrate: function(action, cmd) {
@@ -18,6 +20,9 @@ module.exports = {
 		}
 		else if (action === 'importLib') {
 			module.exports.importLib(cmd);
+		}
+		else if (action === 'extract') {
+			module.exports.extract(cmd);
 		}
 		else if (action === 'importAuth') {
 			module.exports.importAuth(cmd);
@@ -72,7 +77,6 @@ module.exports = {
 			printObject.printTrailer("# projects: " + data.length);
 		});
 	},
-	
 	export: function(cmd) {
 		if (!cmd.directory) {
 			console.log(("--directory must exist and is required  " ).red);

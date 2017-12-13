@@ -90,7 +90,7 @@ program
 	.action(eula.doStatus);
 
 program
-	.command('project <list|create|update|delete|use|import|export>')
+	.command('project <list|create|update|delete|use|import|export|extract>')
 	.description('Administer projects. Actions are: list, create, update, delete, use, export')
 	.option('--ident [ident]', 'The ident of the specific project (see project list)')
 	.option('--project_name [name]', 'The name of the project')
@@ -98,7 +98,10 @@ program
 	.option('--status [status]', 'optional: the status of the project, can be A (for Active) or I for (Inactive)')
 	.option('--authprovider [ident]', 'optional: the ident of the authentication provider for the project')
 	.option('--comments [comments]', 'optional: a description of the project')
-	.option('--file [file]', 'optional: for import/export, the name of a file to read from/save to, if unspecified, use stdin/stdout')
+	.option('-d, --directory [directory]', 'Required for extract, the name of a directory to extract ZIP files')
+	.option('-f, --file [file]', 'optional: for import/export, the name of a file to read from/save to, if unspecified, use stdin/stdout')
+	.option('--format [json|zip]', 'optional: for import/export, this sets the output type of the export default: zip')
+    .option('--synchronize [true|false]', 'optional: Used by extract to synchronize zip file with directory folder (default: false)')
 	.option('--verbose', 'optional: whether to display detailed results, or just a summary')
 	.action(project.doProject);
 
