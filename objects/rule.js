@@ -475,10 +475,10 @@ module.exports = {
 					adminCmd += " --rule_name '"+p.name+ "'";
 					adminCmd += " --expression '"+p.rule_text1 + "'";
 					adminCmd += " --active "+ p.active;
-					adminCmd += " --comments '"+p.comments +"'";	
+					adminCmd += " --comments '"+p.comments +"'";
 					adminCmd += "\n\n";
 					break;
-					case 10: type = "pre-insert"; 
+					case 10: type = "pre-insert";
 					adminCmd += "lacadmin rule create --ruletype pre-insert --entity_name "+p.entity_name;
 					adminCmd += " --rule_name '"+p.name + "'";
 					adminCmd += " --expression '"+p.rule_text1 + "'";
