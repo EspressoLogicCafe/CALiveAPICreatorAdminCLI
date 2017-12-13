@@ -777,19 +777,19 @@ module.exports = {
 		//we could have a switch for JSON or ZIP
 		var format = "zip";
 		if(cmd.format) {
-			format = cmd.format;
+			format = cmd.format;//.toUpperCase();
 		}
 		if(format !== 'zip' && format !== 'json' && format !== 'multi') {
 			console.log('Valid format must be either multi, zip or json'.red);
 			return;
 		}
-		filter += "&extractformat=" + format;
+		filter += "&exportformat=" + format;
 		var contentType = "application/json";
 		if(format == 'zip' ){
-			contentType += ',application/zip';
-			contentType += ',application/octet-stream';
+			contentType = 'application/zip';
+			//contentType += ',application/octet-stream';
 		}
-		
+		console.log(contentType);
 		var toStdout = false;
 		if ( ! cmd.file) {
 			toStdout = true;
@@ -800,11 +800,12 @@ module.exports = {
 				return;
 			}
 		}
-		console.log(exportEndpoint+ filter + " for content-type "+contentType);
-		client.get(loginInfo.url + "/" + exportEndpoint+ filter, {
+		console.log(loginInfo.url + "/" + exportEndpoint + filter);
+		client.get(loginInfo.url + "/" + exportEndpoint + filter, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
-				"Content-Type" : contentType
+				"Content-Type" : contentType,
+				"accept": "*/*"
 			}
 		}, function(data) {
 			//console.log('get result: ' +data);
@@ -813,7 +814,7 @@ module.exports = {
 				return;
 			}
 			if (data.length === 0) {
-				console.log(("Error: no such project extract").red);
+				console.log(("Error: no such project to export").red);
 				return;
 			}
 			if(format == 'zip') {
@@ -824,7 +825,7 @@ module.exports = {
 			   else {
 				   var exportFile = fs.openSync(cmd.file, 'w+', 0600);
 				   fs.writeSync(exportFile, buf);
-				   console.log(('Project extract has been exported to file: ' + cmd.file + ' using format ' + format).green);
+				   console.log(('Project has been exported to file: ' + cmd.file + ' using format ' + format).green);
 			   }
 			} else {
 				if (toStdout) {

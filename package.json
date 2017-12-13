@@ -1,17 +1,70 @@
 {
-  "name": "caliveapicreatoradmincli",
-  "version": "0.0.0",
-  "private": true,
+  "name": "liveapicreator-admin-cli",
+  "version": "4.1.02",
+  "description": "The NodeJS command line utility for CA Live Creator DevOps Administration from CA Technologies",
+  "main": "liveapicreatoradmin.js",
   "scripts": {
-    "start": "node ./bin/www"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "keywords": [
+    "caliveapicreator",
+    "liveapicreator",
+    "liveapicreatoradmin",
+    "apicreatorsdk",
+    "logic",
+    "command",
+    "line",
+    "REST",
+    "JSON",
+    "XML",
+    "SQL",
+    "database",
+    "mysql",
+    "oracle",
+    "nosql",
+    "postgres",
+    "db2luw",
+    "db2zos",
+    "sap netweaver",
+    "apache hbase",
+    "apache cassandra",
+    "csv/tsv files",
+    "derby",
+    "salesforce",
+    "MQTT",
+    "Kafka",
+    "teradata",
+    "IBM MQ",
+    "MQ",
+    "sqlserver",
+    "mobile",
+    "reactive"
+  ],
+  "preferGlobal": "true",
+  "bin": {
+    "liveapicreatoradmin": "liveapicreatoradmin.js",
+    "lacadmin": "liveapicreatoradmin.js"
+  },
+  "author": "CA Technologies APIM",
+  "license": "Apache",
   "dependencies": {
-    "body-parser": "~1.18.2",
-    "cookie-parser": "~1.4.3",
-    "debug": "~2.6.9",
-    "express": "~4.15.5",
-    "jade": "~1.11.0",
-    "morgan": "~1.9.0",
-    "serve-favicon": "~2.4.5"
-  }
+    "adm-zip": "^0.4.7",
+    "cli-table": "0.3.1",
+    "colors": "^1.0.3",
+    "commander": "^2.5.0",
+    "easy-table": "0.3.0",
+    "https": "^1.0.0",
+    "node-rest-client": "^1.4.1",
+    "osenv": "^0.1.0",
+    "underscore": "^1.7.0"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/EspressoLogicCafe/CALiveAPICreatorAdminCLI"
+  },
+  "bugs": {
+    "url": "https://github.com/EspressoLogicCafe/CALiveAPICreatorAdminCLI/issues"
+  },
+  "homepage": "https://github.com/EspressoLogicCafe/CALiveAPICreatorAdminCLI"
 }

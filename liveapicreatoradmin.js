@@ -49,6 +49,7 @@ var connection = require('./objects/connection.js');
 var timer = require('./objects/timer.js');
 var provider = require('./objects/provider.js');
 var application = require('./objects/application.js');
+//4.1 features - changes to project export as zip
 
 
 program
@@ -101,7 +102,7 @@ program
 	.option('-d, --directory [directory]', 'Required for extract, the name of a directory to extract ZIP files')
 	.option('-f, --file [file]', 'optional: for import/export, the name of a file to read from/save to, if unspecified, use stdin/stdout')
 	.option('--format [json|zip]', 'optional: for import/export, this sets the output type of the export default: zip')
-    .option('--synchronize [true|false]', 'optional: Used by extract to synchronize zip file with directory folder (default: false)')
+    .option('--synchronize [true|false]', 'optional: Used by extract & synchronize zip file with directory folder (default: false)')
 	.option('--verbose', 'optional: whether to display detailed results, or just a summary')
 	.action(project.doProject);
 
