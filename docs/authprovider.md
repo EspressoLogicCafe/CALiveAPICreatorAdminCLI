@@ -1,4 +1,5 @@
 # Authentication provider
+For details on how to [create custom authentication provider](https://docops.ca.com/ca-live-api-creator/4-0/en/creating-apis/security/authentication/authentication-providers/create-custom-authentication-providers-using-javascript) using JavaScript.
 
 ```
  Usage: authprovider [options] <list|create|delete|export|import|linkProject>
@@ -37,7 +38,7 @@ The `list` command shows all authentication providers for the current account.
     # authentication providers: 1
 
 The `list` command is currently the only one available from the command line for
-authentication providers. For details on how to create a [custom authentication provider](http://ca-doc.espressologic.com/docs/logic-designer/security/authentication/custom-authentication-provider).
+authentication providers. 
 
 ##Create
 Create needs a name, comment, the create function name and a list of parameters in JSON format 

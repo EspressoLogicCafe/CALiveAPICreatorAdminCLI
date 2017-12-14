@@ -1,5 +1,6 @@
 # Managed Server
 This suite of commands allows you to manipulate the managed database servers prototype connections.
+See [Managed Data Server Administration](https://docops.ca.com/ca-live-api-creator/4-0/en/creating-apis/database-creation/managed-data-server-administration)
 ```
 Usage: managedserver [options] <list|create|update|delete|import|export>
 

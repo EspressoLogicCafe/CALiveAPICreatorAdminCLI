@@ -108,7 +108,7 @@ module.exports = {
 		var loginInfo = login.login(cmd);
 		if ( ! loginInfo)
 			return;
-		if ( ! cmd.filtername) {
+		if ( ! cmd.filter_name) {
 			console.log('Missing parameter: filtername'.red);
 			return;
 		}
@@ -126,7 +126,7 @@ module.exports = {
 			//console.log('Current account: ' + JSON.stringify(context.account));
 			
 			var newSort = {
-				name: cmd.filtername,
+				name: cmd.filter_name,
 				description: cmd.comments,
 				resource_names: cmd.resource_names,
 				filter_text: cmd.filter_text,
@@ -184,10 +184,10 @@ module.exports = {
 		if(cmd.ident){
 			filter += "&sysfilter=equal(ident: "+ cmd.ident +")" ;
 		} else {
-			if (cmd.name) {
-				filter += "&sysfilter=equal(name:'" + cmd.name + "')";
+			if (cmd.filter_name) {
+				filter += "&sysfilter=equal(name:'" + cmd.filter_name + "')";
 			} else {
-				console.log('Missing parameter: please specify either name or ident'.red);
+				console.log('Missing parameter: please specify either filter_name or ident'.red);
 				return;
 			}
 		}
@@ -212,8 +212,8 @@ module.exports = {
 				return;
 			}
 			var db = data[0];
-			if( cmd.name) {
-				db.name = cmd.name;
+			if( cmd.filter_name) {
+				db.name = cmd.filter_name;
 			}
 			if( cmd.comments){
 				db.description = cmd.comments;
@@ -268,10 +268,10 @@ module.exports = {
 		var filt = null;
 		if (cmd.ident) {
 			filt = "equal(ident:'" + cmd.ident + "')";
-		} else if (cmd.filtername) {
-			filt = "equal(name:'" + cmd.filtername + "')";
+		} else if (cmd.filter_name) {
+			filt = "equal(name:'" + cmd.filter_name + "')";
 		} else {
-			console.log('Missing parameter: please specify either --filtername or --ident'.red);
+			console.log('Missing parameter: please specify either --filter_name or --ident'.red);
 			return;
 		}
 		
@@ -287,7 +287,7 @@ module.exports = {
 				return;
 			}
 			if (data.length === 0) {
-				console.log(("Error: no such named filter using filtername or ident").red);
+				console.log(("Error: no such named filter using filter_name or ident").red);
 				return;
 			}
 			if (data.length > 1) {
@@ -340,8 +340,8 @@ module.exports = {
 		if (cmd.ident) {
 			filter += sep + "sysfilter=equal(ident:" + cmd.ident + ")";
 			sep = "&";
-		} else if (cmd.filtername) {
-			filter += sep + "sysfilter=equal(name:'" + cmd.filtername + "')";
+		} else if (cmd.filter_name) {
+			filter += sep + "sysfilter=equal(name:'" + cmd.filter_name + "')";
 			sep = "&";
 		} else if (projIdent) {
 				filter += sep + "sysfilter=equal(project_ident:" + projIdent + ")";

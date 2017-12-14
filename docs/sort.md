@@ -1,4 +1,5 @@
-# Named Sort
+# Structured Sorts
+This feature is for user defined sort definition. For details see [Structured Sorts](https://docops.ca.com/ca-live-api-creator/4-0/en/invoking-apis/get/structured-sorts).
 
 ```
   Usage: namedsort [options] <list|create|update|delete|export|import>
@@ -39,8 +40,7 @@ Ident  Name         Resource       Sort Text  Comments
 # named sorts: 1                                                                                                                                                
 ```
 
-The `list` command is available from the command line for named sorts. For details on how to create a [Structured Sorts](http://ca-doc.espressologic.com/docs/logic-designer/create/structured-sorts).
-
+The `list` command is available from the command line for named sorts. 
 ## Create
 Create needs a name, comment, the create function name and a list of parameters in JSON format 
 ```

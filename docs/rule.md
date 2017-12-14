@@ -1,6 +1,6 @@
 # Rule
 
-This suite of commands allows you to list,add, or remove business rules in your current project. [Learn about Rules](https://docops.ca.com/ca-live-api-creator/4-0/en/creating-apis/logic/learning-rules).  
+This suite of commands allows you to list,add, or remove business rules in your current project. See the documentation page [Learn about Rules](https://docops.ca.com/ca-live-api-creator/4-0/en/creating-apis/logic/learning-rules).  
 
 ## Usage
 ```sh
@@ -154,5 +154,3 @@ note: use rule list to get the name or ident
 	$lacadmin rule delete [--ident <ident> | --rule_name <name>]
 
 The `delete` command deletes the specified rule. You can specify the rule either by its ident or its name.  
-
-Visit our documentation page for more [details.](http://ca-doc.espressologic.com/docs/logic-designer/business-logic)

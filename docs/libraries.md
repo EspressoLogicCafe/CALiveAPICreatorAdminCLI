@@ -1,16 +1,17 @@
-# Libraries
+# Logic Libraries
+Support for JavaScript libraries. See Doc page: [Logic Libraries](https://docops.ca.com/ca-live-api-creator/4-0/en/creating-apis/logic/logic-libraries)
+
 
 ```
- Usage: libraries [options] <list|create|delete|export|import>
-
-  Administer java and javascript libraries for an account.
-
+ Usage: libraries [options] <list|create|delete|export|import> javascript libraries for an active project. 
+ 
   Options:
+  Administer 
 
-    -h, --help                    output usage information
+    -h, --help               output usage information
     --ident [ident]          The ident of the library
     --project_ident [ident]  The project ident of the library that will be marked as used in the project.
-    --name [name]            Name of library
+    --library_name [name]    Name of library
     --libtype [type]         Type of Library [javascript | java]
     --ver [version]          Version of Library JS or Java
     --short_name [shortname] Short Name
@@ -50,7 +51,7 @@ Ident  Name                      Version   Short Name       Type        Comments
 ```
 
 The `list` command is currently the only one available from the command line for
-libraries. For details on how to create a [custom authentication provider](http://ca-doc.espressologic.com/docs/logic-designer/security/authentication/custom-authentication-provider).
+libraries. For details on how to create a [custom authentication provider](https://docops.ca.com/ca-live-api-creator/4-0/en/creating-apis/security/authentication/authentication-providers/create-custom-authentication-providers-using-javascript).
 
 ## Create
 Create needs a name, comment, the create function name and a list of parameters in JSON format.  This requires that the file is in plain ASCII text format
@@ -66,8 +67,9 @@ Simply provide the ident of the library you wish to delete.
 
 ## Export
 Provide the ident of the library and (optional) the export file name. If not provided - it will be sent to stdout.  The exported code will be in hex or base64 format.
+Note: If you select a single library and use stdout (no --file) the library will be written to file as readable text
 ```
-    $lacadmin libraries export  [--ident <ident> | --short_name <name> | --name <name>] --file mylibrary.json
+    $lacadmin libraries export  [--ident <ident> | --short_name <name> | --library_name <name>] [--file mylibrary.json]
 ```
 The export libraries exports the specified library into a JSON file. If the filename parameter is not specified, stdout is used.
 

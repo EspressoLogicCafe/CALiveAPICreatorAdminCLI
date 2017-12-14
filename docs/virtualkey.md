@@ -1,5 +1,6 @@
 # Virtual Primary Key
 This suite of commands allows you to manage virtual primary keys on tables or view within an API project.
+Visit the Documentation page on [Manage Virtual Primary Keys in Tables or Views](https://docops.ca.com/ca-live-api-creator/4-0/en/creating-apis/database-creation/manage-existing-schemas#ManageExistingSchemas-ManageVirtualPrimaryKeysinTables)
 ```
 $lacadmin virtualkey --help
 
@@ -70,8 +71,6 @@ The `create` command creates a new virtual primary key. Note - only views need t
     $lacadmin virtualkey delete [--view_ident <ident> | --table_ident <ident>]
 ```
 The `delete` command deletes a specific virtual primary key for a view or table using the ident (use lacadmin virtualkey list)
-
-Visit the Documentation page on [virtualkey](https://docops.ca.com/ca-live-api-creator/3-2/en/creating-apis/customize-your-api/access-and-invoke-view-resources)
 
 
 ## Export

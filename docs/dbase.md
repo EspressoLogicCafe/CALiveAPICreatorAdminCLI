@@ -1,5 +1,7 @@
 # datasource
-This suite of commands allows you to manipulate the datasource connection(s) in your projects.
+This suite of commands allows you to manipulate the datasource connection(s) in your projects. 
+Visit the Documentation page on [Database Connectivity](https://docops.ca.com/ca-live-api-creator/4-0/en/creating-apis/database-connectivity)
+                                                                                               
 ```
 Usage: datasource [options] <list|create|update|delete|import|export>
 
@@ -105,8 +107,6 @@ lacadmin datasource update [--prefix <name> | --db_name <name> ]
 
 The `delete` command deletes a datasource connection from the current project.
 Either the name of the datasource connection, or its prefix, must be specified.
-
-Visit the Documentation page on [datasources](http://ca-doc.espressologic.com/docs/logic-designer/datasource)
 
 
 ## Export

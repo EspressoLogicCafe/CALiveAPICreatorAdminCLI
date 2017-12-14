@@ -1,4 +1,5 @@
 # Authentication Token
+For details see [Auth Tokens](https://docops.ca.com/ca-live-api-creator/4-0/en/managing-apis/programmatic-api-creation/api-creation-endpoints/auth-tokens)
 
 ```
   Usage: token [options] <list|export|import>
@@ -35,8 +36,7 @@ Ident  Name         Resource       Sort Text  Comments
 # auth token(s): 1                                                                                                                                                
 ```
 
-The `list` command is available from the command line for auth tokens. For details on how to create a [Structured Sorts](http://ca-doc.espressologic.com/docs/logic-designer/create/structured-sorts).
-
+The `list` command is available from the command line for auth tokens. 
 ## Export
 Provide the ident of the auth tokens and (optional) the export file name. If [--file] is not provided output will be sent to stdout.
 ```

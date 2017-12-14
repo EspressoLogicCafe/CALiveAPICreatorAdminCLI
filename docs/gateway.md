@@ -1,5 +1,7 @@
 # Publish to CA Gateway
 This suite of commands allows you to manage and publish project API Swagger documentation to the CA Gateway.
+See documentation to [Publish an API to CA API Gateway](https://docops.ca.com/ca-live-api-creator/4-0/en/managing-apis/integrate-with-ca-api-gateway/publish-an-api-to-api-gateway) 
+
 ```
  Usage: gateway [options] <list|create|import|export|publish>
 
@@ -45,8 +47,7 @@ Ident  Name          Username  URL                                             A
     --comments [comments]  The gateway definition comments
 ```
 
-The `create` command creates a new gateway connection definition. See documentation for /@gateway_publish 
-
+The `create` command creates a new gateway connection definition. 
 
 ## Export
 Provide the ident or the gateway definition name and (optional) the export file name. If not provided - it will be sent to stdout.

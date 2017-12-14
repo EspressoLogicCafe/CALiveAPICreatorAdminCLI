@@ -1,6 +1,6 @@
 # Project
 
-This suite of commands allows you to manipulate your CA Live API Creator API projects.
+This suite of commands allows you to manipulate your CA Live API Creator API projects. See [Creating an API](https://docops.ca.com/ca-live-api-creator/4-0/en/creating-apis)
 ## Project Options
 ```
 Usage: project [options] <list|create|update|delete|use|import|export|extract>
