@@ -20,7 +20,7 @@
 List of commands allows you to list your CA Live API Creator project specific settings. 
 
 ```
-    liveapicreatoradmin apioptions list
+    $lacadmin apioptions list
 ```
 
 The `list` command shows all api options for the current account.
@@ -56,23 +56,23 @@ Ident  Project  Name                                            Value
 The `list` command is currently the only one available from the command line for
 settings. For details on how to create a [API Project Settings](http://ca-doc.espressologic.com/docs/logic-designer/create/api-properties).
 
-## Settings update
+##Update
 Create needs a name, comment, the create function name and a list of parameters in JSON format 
 ```
-liveapicreatoradmin apioptions update --ident <ident> [--project_ident <ident>] --option_value <somevalue>
+$lacadmin apioptions update --ident <ident> [--project_ident <ident>] --option_value <somevalue>
 ```
 
-## Library export
+##Export
 Provide the ident of the apioptions and (optional) the export file name. If not provided - it will be sent to stdout.
 ```
-liveapicreatoradmin apioptions export  [--project_ident <ident>] [--ident <ident>] --file apioptions.json
+$lacadmin apioptions export  [--project_ident <ident>] [--ident <ident>] --file apioptions.json
 ```
 The export project apioptions exports the specified project settings optins into a JSON file. If the filename parameter is not specified, stdout is used.
 
-## Library import
+##Import
 Provide the name of the json file for the api options you wish to import.
 ```
-liveapicreatoradmin apioptions import [--project_ident <ident>] --file apioptions.json
+$lacadmin apioptions import [--project_ident <ident>] --file apioptions.json
 ```
 The import apioptions imports the specified JSON file. If the filename parameter is not specified, stdin is used. (you can pipe the json file to the import)
 

@@ -19,8 +19,8 @@ This suite of commands allows you to manipulate the resources (custom endpoints)
 ```
 
 ***
-## Resource list
-    liveapicreatoradmin resource list
+## List
+    $lacadmin resource list
 
 The `list` command shows all resources for the current project.
 
@@ -38,23 +38,23 @@ The `list` command shows all resources for the current project.
 
 
 ***
-## Resource delete
-    liveapicreatoradmin resource delete --resource_name <name>
+## Delete
+    $lacadmin resource delete --resource_name <name>
 
 The `delete` command deletes the specified resource.
 
-## Resource export
+## Export
 Provide the ident of the resource and the export file name. If the project_ident is not provided it will use the current one.
 ```
-lacadmin resource export  [--project_ident <ident>] [--ident <ident>] [--resource_name <name>] --file resources.json
+    $lacadmin resource export  [--project_ident <ident>] [--ident <ident>] [--resource_name <name>] --file resources.json
 ```
 The export resource exports to the specified JSON file. If the filename parameter is not specified, stdout is used.
 
 
-## Resource import
+## Import
 Provide the file name of the json file for the resource you wish to import.
 ```
-lacadmin resource import  [--project_ident <ident>] --file resources.json
+    $lacadmin resource import  [--project_ident <ident>] --file resources.json
 
 The import functions imports the specified JSON resource file. If the filename (--file) parameter is not specified, stdin is used. (you can pipe the json file to the import)
 

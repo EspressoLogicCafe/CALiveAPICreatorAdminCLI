@@ -24,11 +24,11 @@
 
 
 ***
-## Libraries list
+## list
 List of commands allows you to list your CA Live API Creator libraries. 
 
 ```
-    liveapicreatoradmin libraries list
+    $lacadmin libraries list
 ```
 
 The `list` command shows all libraries for the current account.
@@ -52,30 +52,30 @@ Ident  Name                      Version   Short Name       Type        Comments
 The `list` command is currently the only one available from the command line for
 libraries. For details on how to create a [custom authentication provider](http://ca-doc.espressologic.com/docs/logic-designer/security/authentication/custom-authentication-provider).
 
-## Library Create
+## Create
 Create needs a name, comment, the create function name and a list of parameters in JSON format.  This requires that the file is in plain ASCII text format
 ```
-liveapicreatoradmin libraries create --name customJSLib [--project_ident 1005] --linkProject --comments 'my js lib' --short_name mylib --ver 2.1 --file mycustomjslib.js
+    $lacadmin libraries create --name customJSLib [--project_ident 1005] --linkProject --comments 'my js lib' --short_name mylib --ver 2.1 --file mycustomjslib.js
 ```
 
-## libraries delete
+## Delete
 Simply provide the ident of the library you wish to delete.
 ```
-liveapicreatoradmin libraries delete --ident 2007
+    $lacadmin libraries delete --ident 2007
 ```
 
-## Library export
+## Export
 Provide the ident of the library and (optional) the export file name. If not provided - it will be sent to stdout.  The exported code will be in hex or base64 format.
 ```
-liveapicreatoradmin libraries export  [--ident <ident> | --short_name <name> | --name <name>] --file mylibrary.json
+    $lacadmin libraries export  [--ident <ident> | --short_name <name> | --name <name>] --file mylibrary.json
 ```
 The export libraries exports the specified library into a JSON file. If the filename parameter is not specified, stdout is used.
 
-## Library import
+## Import
 Provide the name of the json file for the library you wish to import.  This will only allow import of files that have been exported using lacadmin (the code is in hex or base64 format)
 The project_ident is only required if you intend to link the library to a specific (or active) project.
 ```
-liveapicreatoradmin libraries import [--project_ident 1005] --linkProject  --file mylibrary.json
+    $lacadmin libraries import [--project_ident 1005] --linkProject  --file mylibrary.json
 ```
 The import library imports the specified JSON file. If the filename parameter is not specified, stdin is used. (you can pipe the json file to the import)
 

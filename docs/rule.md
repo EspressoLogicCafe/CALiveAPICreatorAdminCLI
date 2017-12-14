@@ -1,6 +1,6 @@
 # Rule
 
-This suite of commands allows you to list,add, or remove business rules in your current project. [Learn about Rules](http://ca-doc.espressologic.com/docs/logic-designer/business-logic/learning-rules).  
+This suite of commands allows you to list,add, or remove business rules in your current project. [Learn about Rules](https://docops.ca.com/ca-live-api-creator/4-0/en/creating-apis/logic/learning-rules).  
 
 ## Usage
 ```sh
@@ -28,7 +28,7 @@ Usage: rule [options] <list|create|delete>
 
 ***
 ## Rule list
-    liveapicreatoradmin rule list
+    $lacadmin rule list
 
 The `list` command shows all rules for the current project.
 
@@ -44,10 +44,16 @@ The `list` command shows all rules for the current project.
 	demo:customer       validation   Validation return row.balance <= row.credit_limit;                                            balance cannot exceed credit limit, else throw exception
 	
 	# rules: 6
-
 ***
+## list --verbose
+The addition of this flag will display a list of each rule in 'create' format for devops command line usage
+```$xslt
+#lacadmin rule create --ruletype pre-insert --entity_name admin:rules --rule_name 'rule0110' --expression 'com.kahuna.admin.logic.RuleLogic' --active true --comments 'PreInsert Event to set name, title, is_auto_title if not provided'
+#lacadmin rule create --ruletype validation --entity_name admin:dbaseschemas --rule_name 'rule0042' --expression 'return row.prefix.length <= 20;' --error_message 'Prefix must be 20 characters or less.' --active true --comments 'null'
+```
+
 ## Rule create
-    liveapicreatoradmin rule create --ruletype <type> --entity_name <prefix:name> 
+    $lacadmin rule create --ruletype <type> --entity_name <prefix:name> 
     	[--attribute_name <name>] [--role_name <name>] [--child_attribute <attribute>]
     	[--clause <clause>] [--expression <expression>] [--error_message <message>]
     	[--role_name <name>] [--parent_attribute <attribute>] [--active <true|false>]
@@ -63,7 +69,7 @@ Visit the documentation site for expanded [details](http://docs.espressologic.co
 A sum must specify an `attribute_name` to hold the value of the sum, a `role_name` and a 
 `child_attribute`. It may also specify a `clause` to qualify the sum.
 ```
-liveapicreatoradmin rule create --ruletype sum 
+$lacadmin rule create --ruletype sum 
 	--rule_name balance= SUM PurchaseOrder.amountTotal where paid=false'
 	--entity_name demo:customer 
 	--attribute_name balance 
@@ -76,7 +82,7 @@ liveapicreatoradmin rule create --ruletype sum
 A count must specify an `attribute_name` to hold the value of the sum, and a `role_name`.
 It may also specify a `clause` to qualify the count.
 ```
-liveapicreatoradmin rule create --ruletype count 
+$lacadmin rule create --ruletype count 
 	--rule_name 'item_count = count sample:orders'
 	--entity_name sample:orders 
 	--attribute_name item_count 
@@ -87,19 +93,18 @@ liveapicreatoradmin rule create --ruletype count
 A formula must specify an `attribute_name` to hold the value of the formula, and an `expression`
 with the code.
 ```
- liveapicreatoradmin rule create --ruletype formula 
+ $lacadmin rule create --ruletype formula 
  	--rule_name 'Formula Test' 
  	--entity_name sample:lineitems 
  	--attribute_name amount 
- 	--expression '//this is a test' 
+ 	--expression '//comment'
  	--active true	
-```	
-
-### `parentcopy`
+```
+### parentcopy
 A parent copy must specify an `attribute_name` to hold the value, a `role_name` pointing to the
 parent table, and a `parent_attribute` in that parent table.
 ```
-liveapicreatoradmin rule create --ruletype parentcopy 
+$lacadmin rule create --ruletype parentcopy 
 	--rule_name 'Copy Parent Product Price' 
 	--entity_name demo:LineItem 
 	--attribute_name product_price 
@@ -112,17 +117,17 @@ liveapicreatoradmin rule create --ruletype parentcopy
 A validation must specify an `expression` with the code for the validation. It may also specify
 an `error_message`.
 ```
-liveapicreatoradmin rule create --ruletype validation 
+$lacadmin rule create --ruletype validation 
 	--rule_name 'Validation Test' 
 	--entity_name demo:customer 
 	--expression 'return true;'  
 	--error_message 'This is an error Message'
 	--active true
 ```
-### `event`, `earlyevent` and `commitevent`
+### `event`, `earlyevent`, 'pre-insert', and `commitevent`
 An event must specify an `expression` with the code.
 ```
-liveapicreatoradmin rule create --ruletype event 
+$lacadmin rule create --ruletype event 
 	--rule_name 'Event'
 	- entity_name demo:customer
 	--expression '//My JavaScript here'
@@ -132,7 +137,7 @@ liveapicreatoradmin rule create --ruletype event
 A minimum or maximum must specify an `attribute_name` to hold the value of the minimum/maximum,
 a `role_name` and a `child_attribute` to be watched. It may also specify a `clause` to qualify the sum.
 ```
-liveapicreatoradmin rule create --ruletype [min|max] 
+$lacadmin rule create --ruletype [min|max] 
 	--rule_name 'Max/Min'
 	--entity_name sample:orders
 	--role_name customer 
@@ -143,10 +148,10 @@ A managed parent must specify a `role_name` to the parent table. It may also spe
 
 ***
 
-## Rule delete
+## Delete
 note: use rule list to get the name or ident
 
-	liveapicreatoradmin rule delete [--ident <ident> | --rule_name <name>]
+	$lacadmin rule delete [--ident <ident> | --rule_name <name>]
 
 The `delete` command deletes the specified rule. You can specify the rule either by its ident or its name.  
 

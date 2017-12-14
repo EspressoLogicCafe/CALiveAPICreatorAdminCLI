@@ -20,11 +20,11 @@
 
 
 ***
-## Named filter list
+## List
 List of commands allows you to list your CA Live API Creator named filters. 
 
 ```
-    liveapicreatoradmin namedfilter list
+    $lacadmin namedfilter list
 ```
 
 The `list` command shows all named filters for the current account.
@@ -41,33 +41,33 @@ Ident  Name           Resource       Filter Text          Comments
 
 The `list` command is available from the command line for named filters. For details on how to create a [Structured Sorts](http://ca-doc.espressologic.com/docs/logic-designer/create/structured-filters).
 
-## Named Filter create
+## Create
 Create needs a name, comment, the create function name and a list of parameters in JSON format 
 ```
-liveapicreatoradmin namedfilter create --name myNamedFilter[--project_ident <ident>] --comments 'my named filter' --resource_names <resourceNames> --filter_text <filter_text>
+   $lacadmin namedfilter create --name myNamedFilter[--project_ident <ident>] --comments 'my named filter' --resource_names <resourceNames> --filter_text <filter_text>
 ```
-## Named Filter update
+## Update
 Create needs a name, comment, the create function name and a list of parameters in JSON format 
 ```
-liveapicreatoradmin namedfilter update --name myNamedFilter [--project_ident <ident>] --comments 'my named filter' --resource_names <resourceNames> --filter_text <filter_text>
+   $lacadmin namedfilter update --name myNamedFilter [--project_ident <ident>] --comments 'my named filter' --resource_names <resourceNames> --filter_text <filter_text>
 ```
-## Named Filter delete
+##Delete
 Simply provide the ident of the named filter you wish to delete.
 ```
-liveapicreatoradmin namedfilter delete --ident 2007
+   $lacadmin namedfilter delete --ident 2007
 ```
 
-## Named Filter export
+## Export
 Provide the ident of the named filter and (optional) the export file name. If [--file] is not provided output will be sent to stdout.
 ```
-liveapicreatoradmin namedfilter export  [--ident <ident>  --name <name>] --file namedSort.json
+   $lacadmin namedfilter export  [--ident <ident>  --name <name>] --file namedSort.json
 ```
 The export namedfilter exports the specified named filter into a JSON file. If the filename parameter is not specified, stdout is used.
 
-## Named Filter import
+## Import
 Provide the name of the json file for the named filter(s) you wish to import. If a project_ident is not provided - the current project is used.
 ```
-liveapicreatoradmin namedfilter import [--project_ident <ident> ] --link_project true --file namedSort.json
+   $lacadmin namedfilter import [--project_ident <ident> ] --link_project true --file namedSort.json
 ```
 The import library imports the specified JSON file. If the filename parameter is not specified, stdin is used. (you can pipe the json file to the import)
 

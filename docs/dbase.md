@@ -73,13 +73,19 @@ The `type` parameter must have one of the following values:
 * `sqlserver`
 * `oracle`
 * `sqlserverazure` (for Azure SQL)
-* `nuodb`
 * `postgres`
 * `derby`
+* `teradata`
+* `csv`
+* `sap`
+* `salesforce`
+* `db2luw`
+* `db2zos`
+* `cassandra`
 
 If the `prefix` parameter is not specified, it will default to "main".
 
-## datasource update
+##Update
 
 ```
 lacadmin datasource update [--prefix <name> | --db_name <name> ]
@@ -94,7 +100,7 @@ lacadmin datasource update [--prefix <name> | --db_name <name> ]
 ```
 
 ***
-## datasource delete
+## Delete
     lacadmin datasource delete [--db_name <name> | --prefix <prefix>]
 
 The `delete` command deletes a datasource connection from the current project.
@@ -103,14 +109,14 @@ Either the name of the datasource connection, or its prefix, must be specified.
 Visit the Documentation page on [datasources](http://ca-doc.espressologic.com/docs/logic-designer/datasource)
 
 
-## datasource export
+## Export
 Provide the name or prefix of the datasource and (optional) the export file name. If not provided - it will be sent to stdout.
 ```
 lacadmin datasource export  [--prefix <name> | --name <name> ] --file datasource.json
 ```
 The export datasource exports the specified datasource into a JSON file. If the filename parameter is not specified, stdout is used.
 
-## datasource import
+## Import
 Import a datasource to the current project (or one specified) using the name of the json file for the datasource you wish to import.
 ```
 lacadmin datasource import [--project_ident <ident>] --file datasource.json

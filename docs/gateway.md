@@ -20,8 +20,8 @@ This suite of commands allows you to manage and publish project API Swagger docu
 
 ```
 ***
-## gateway list
-    liveapicreatoradmin gateway list
+## List
+    $lacadmin gateway list
 
 The `list` command shows all gateway connection definitions.
 
@@ -36,9 +36,9 @@ Ident  Name          Username  URL                                             A
 # gateway: 2         
 ```
 ***
-## gateway create
+## Create
 ```
-    liveapicreatoradmin gateway create 
+    $lacadmin gateway create 
     --name [name]          The name for the gateway definition
     --username [name]      The username for the gateway login
     --hostname [server]    The gateway server full hostname (https://server/lacman/1.0/publish)
@@ -48,23 +48,23 @@ Ident  Name          Username  URL                                             A
 The `create` command creates a new gateway connection definition. See documentation for /@gateway_publish 
 
 
-## gateway export
+## Export
 Provide the ident or the gateway definition name and (optional) the export file name. If not provided - it will be sent to stdout.
 ```
-liveapicreatoradmin gateway export  [--ident <name> | --name <name> ] [--file gateway.json]
+    $lacadmin gateway export  [--ident <name> | --name <name> ] [--file gateway.json]
 ```
 The export datasource exports the specified datasource into a JSON file. If the filename parameter is not specified, stdout is used.
 
-## gateway import
+## Import
 Import a gateway definition - if the name already exists -it will do a merge_insert.
 ```
-liveapicreatoradmin gateway import --file gateway.json
+    $lacadmin gateway import --file gateway.json
 ```
 The import gateway imports the specified JSON file. If the filename parameter is not specified, stdin is used. (you can pipe the json file to the import)
 
-## gateway publish
+## Publish
 This command will publish to the gateway and use the file parameter to read the swagger file from disk.
 ```
-lliveapicreatoradmin gateway publish --username <username> --password <password> --hostname <somesgatewayerver> --url_name <urlfragment> --apiversion <apiversion> 
+    $lacadmin gateway publish --username <username> --password <password> --hostname <somesgatewayerver> --url_name <urlfragment> --apiversion <apiversion> 
 
 ```

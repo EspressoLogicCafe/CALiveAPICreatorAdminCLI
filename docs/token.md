@@ -16,11 +16,11 @@
 
 
 ***
-## Token List
+## List
 List of commands allows you to list your CA Live API Creator authentication tokens. 
 
 ```
-    liveapicreatoradmin token list
+    $lacadmin token list
 ```
 
 The `list` command shows all auth token for the current account. Use 'lacadmin roles list' to see a detailed list of roles.
@@ -37,17 +37,17 @@ Ident  Name         Resource       Sort Text  Comments
 
 The `list` command is available from the command line for auth tokens. For details on how to create a [Structured Sorts](http://ca-doc.espressologic.com/docs/logic-designer/create/structured-sorts).
 
-## Token Export
+## Export
 Provide the ident of the auth tokens and (optional) the export file name. If [--file] is not provided output will be sent to stdout.
 ```
-liveapicreatoradmin token export  [--ident <ident>  --name <name>] [--file  | > ] namedSort.json
+$lacadmin token export  [--ident <ident>  --name <name>] [--file  | > ] namedSort.json
 ```
 The export token exports the specified auth tokens into a JSON file. If the filename parameter is not specified, stdout is used.
 
-## Token Import
+## Import
 Provide the name of the json file for the auth tokens you wish to import. If a project_ident is not provided - the current project is used.
 ```
-liveapicreatoradmin token import [--project_ident <ident> ] [--file | < ] namedSort.json
+$lacadmin token import [--project_ident <ident> ] [--file | < ] namedSort.json
 ```
 The import library imports the specified JSON file. If the filename parameter is not specified, stdin is used. (you can pipe the json file to the import)
 

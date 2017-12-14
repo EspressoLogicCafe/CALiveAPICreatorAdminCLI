@@ -1,7 +1,7 @@
 # Virtual Primary Key
 This suite of commands allows you to manage virtual primary keys on tables or view within an API project.
 ```
-lacadmin virtualkey --help
+$lacadmin virtualkey --help
 
   Usage: virtualkey [options] <list|create|update|delete|import|export>
 
@@ -21,8 +21,8 @@ lacadmin virtualkey --help
     --file [fileName]                [Optional] Name of file to import/export (if not provided stdin/stdout used for export)
 ```
 ***
-## virtualkey list
-    lacadmin virtualkey list
+## list
+    $lacadmin virtualkey list
 
 The `list` command shows all virtual keys for both tables and views.
 
@@ -42,59 +42,49 @@ demo     true                                       "login"                  201
 finance  true                                                                                                  
 ```
 ***
-## virtualkey create (view)
+## Create (view)
 The `create` command creates a new virtual primary key. Note - only views need to indicate if the column is defined as an autonum (boolean).
 ```
-    lacadmin virtualkey create --view_name v_LineItem
-    --keyname LineItemId 
-    --prefix demo  
-    --is_autonum true
+    $lacadmin virtualkey create --view_name v_LineItem --keyname LineItemId  --prefix demo --is_autonum true
 ```
-## virtualkey create (table)
+## Create (table)
 ```
-    lacadmin virtualkey create --table_name v_LineItem
-    --keyname LineItemId 
-    --prefix demo  
+    $lacadmin virtualkey create --table_name v_LineItem --keyname LineItemId --prefix demo  
 ```
 
-## virtualkey update (view)
+## Uupdate (view)
 
 ```
-lacadmin virtualkey update --view_ident 2016
---view_name v_LineItem
---keyname LineItemID  
---is_autonum false 
+    $lacadmin virtualkey update --view_ident 2016 --view_name v_LineItem--keyname <name>  --is_autonum false 
 
 ```
-## virtualkey update (table)
+## Update (table)
 
 ```
-lacadmin virtualkey update --table_ident 2015
---table_name STRESS_NO_PRIMARY_KEY
---keyname id  
+    $lacadmin virtualkey update --table_ident 2015 --table_name STRESS_NO_PRIMARY_KEY --keyname <name>  
 
 ```
 ***
-## virtualkey delete
+## Delete
 ```
-    lacadmin virtualkey delete [--view_ident <ident> | --table_ident <ident>]
+    $lacadmin virtualkey delete [--view_ident <ident> | --table_ident <ident>]
 ```
 The `delete` command deletes a specific virtual primary key for a view or table using the ident (use lacadmin virtualkey list)
 
 Visit the Documentation page on [virtualkey](https://docops.ca.com/ca-live-api-creator/3-2/en/creating-apis/customize-your-api/access-and-invoke-view-resources)
 
 
-## virtualkey export
+## Export
 Provide the optional prefix of the AllEntitiesInfo and (optional) the export file name. If not provided - it will be sent to stdout.
 ```
-lacadmin virtualkey export  [--prefix <name> ] --file datasource.json
+    $lacadmin virtualkey export  [--prefix <name> ] --file datasource.json
 ```
 The export virtual primary key exports the specified definitions into a JSON file. If the filename parameter is not specified, stdout is used.
 
-## virtualkey import
+## Import
 Import a virtual key definition to the current project (or one specified) using the name of the json file.
 ```
-lacadmin virtuakey import [--project_ident <ident>] --file datasource.json
+    $lacadmin virtuakey import [--project_ident <ident>] --file datasource.json
 ```
 The import command will import virtual primary key from the specified JSON file. If the filename parameter is not specified, stdin is used. (you can pipe the json file to the import)
 

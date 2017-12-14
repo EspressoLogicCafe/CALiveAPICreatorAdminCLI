@@ -352,7 +352,7 @@ program
 	.description('Administer a managed data server (used by @databases to create datasources).')
 	.option('--server_name [name]', 'The name of the datasource connection')
 	.option('--ident [ident]', 'For delete or reload, the ident of the managed data server')
-	.option('--dbasetype [dbasetype]', 'The type of the managed data server connection, can be mysql, derby, postgres')
+	.option('--dbasetype [dbasetype]', 'The type of the managed data server connection, can be mysql, derby, postgres, sqlserver, oracle')
 	.option('--catalog_name [catalog_name]', 'The catalog in the managed data server')
 	.option('--user_name [user_name]', 'The name of the managed data server user')
 	.option('--password [password]', 'The password of the managed data server user')

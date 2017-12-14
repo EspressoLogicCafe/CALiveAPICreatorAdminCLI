@@ -277,6 +277,7 @@ lacadmin logout -a local
 ## Object-specific commands
 Follow the links below for detailed documentation on specific administrator commands.
 * [Projects](docs/project.md)
+* [Applications](docs/application.md)
 * [Authentication Providers](docs/authprovider.md)
 * [Datasources](docs/dbase.md)
 * [Resources](docs/resource.md)

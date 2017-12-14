@@ -1,9 +1,9 @@
-# datasource
-This suite of commands allows you to manipulate the managed_data_servers .
+# Managed Server
+This suite of commands allows you to manipulate the managed database servers prototype connections.
 ```
 Usage: managedserver [options] <list|create|update|delete|import|export>
 
-  Administer datasources within a project.
+  Administer managed database server within a project.
 
   Options:
 
@@ -18,8 +18,8 @@ Usage: managedserver [options] <list|create|update|delete|import|export>
     --file [file]                  Optional: for import/export, the name of a file to read from/save to, if unspecified, use stdin/stdout
 ```
 ***
-## managedserver list
-    lcadmin managedserver list
+## List
+    lacadmin managedserver list
 
 The `list` command shows all datasource connections for the current project.
 
@@ -30,8 +30,8 @@ The `list` command shows all datasource connections for the current project.
 	2000   test           MySQL           user1  jdbc:derby:foo;create=true    
 
 ***
-## managedserver create
-    liveapicreatoradmin datasource create --name <name> 
+## Create
+    $lacadmin datasource create --name <name> 
     	--user_name <db-user-name> 
     	--password <db-password>
     	[--url <db-url> ]
@@ -49,6 +49,8 @@ The `url` parameter should be a valid JDBC URL, such as:
     MySQL	    jdbc:mysql://<server-name>[:port-number (default 3306)]/[datasource-name]	
     Postgres	jdbc:postgresql://<server-name>[:port-number (default 5432)]/<datasource-name>	
     Derby	    jdbc:derby://<server-dirname>[/<datasource-name>;create=true	
+    SQLServer   jdbc:sqlserver://<server-name>[instance-name][:port-number]][;property=value[;property=value]]
+    Oracle      jdbc:oracle:thin:@<server-name>:<port-number>:<sid> 
     
 
 The `dbasetype` parameter must have one of the following values:
@@ -56,11 +58,13 @@ The `dbasetype` parameter must have one of the following values:
 * `mysql`
 * `postgres`
 * `derby`
+* `sqlserver`
+* `oracle`
 
-## managedserver update
+## Update
 
 ```
-lacadmin managedserver update 
+    $lacadmin managedserver update 
 		[ --server_name <name> ]
 		[--user_name <db-user-name>] 
 		[--password <db-password>]
@@ -71,23 +75,23 @@ lacadmin managedserver update
 ```
 
 ***
-## managedserver delete
-    lacadmin datasource delete [--server_name <name> | --ident <ident>]
+## Delete
+    $lacadmin datasource delete [--server_name <name> | --ident <ident>]
 
 The `delete` command deletes a managed data server from the current account.
 Either the name of the or ident, must be specified (use list to get ident).
 
-## managedserver export
+## Export
 Provide the ident of the managed data server and (optional) the export file name. If not provided - it will be sent to stdout.
 ```
-lacadmin managedserver export  [--ident <ident> | --server_name <name> ] --file managedserver.json
+    $lacadmin managedserver export  [--ident <ident> | --server_name <name> ] --file managedserver.json
 ```
 This exports the specified managed data server(s) into a JSON file. If the filename parameter is not specified, stdout is used.
 
-## managedserver import
+## Import
 Import a managed data server to the current account server (or one specified) using the name of the json file for the datasource you wish to import.
 ```
-lacadmin managedserver import --file managedserver.json
+    $lacadmin managedserver import --file managedserver.json
 ```
 This imports the specified JSON file. If the filename parameter is not specified, stdin is used. (you can pipe the json file to the import)
 
