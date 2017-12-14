@@ -90,10 +90,9 @@ module.exports = {
 		if ( ! loginInfo)
 			return;
 		var filt = null;
-		if (cmd.name) {
-			filt = "equal(name:'" + cmd.name + "')";
-		}
-		if (cmd.ident) {
+		if (cmd.library_name) {
+			filt = "equal(name:'" + cmd.library_name + "')";
+		} else if (cmd.ident) {
 			filt = "equal(ident:" + cmd.ident + ")";
 		}
 		if(filt === null) {
@@ -165,15 +164,14 @@ module.exports = {
 		});
 
 	},
-
 	create: function(cmd) {
 		var client = new Client();
 		var loginInfo = login.login(cmd);
 		if ( ! loginInfo)
 			return;
 
-		if ( ! cmd.name) {
-			console.log('Missing parameter: name'.red);
+		if ( ! cmd.library_name) {
+			console.log('Missing parameter: library_name'.red);
 			return;
 		}
 		if ( ! cmd.short_name) {
@@ -193,7 +191,7 @@ module.exports = {
 		context.getContext(cmd, function() {
 
 			var newLibrary = {
-				name: cmd.name,
+				name: cmd.library_name,
 				group_name: cmd.short_name ,
 				lib_name: cmd.short_name ,
 				version: ver  ,
@@ -203,7 +201,7 @@ module.exports = {
 				code: "",
 				system_only: false,
 				logic_type:  "javascript" ,
-				account_ident: context.account.ident
+				project_ident: projIdent
 			};
 			if( ! cmd.file){
 			   cmd.file = '/dev/stdin';
@@ -287,7 +285,6 @@ module.exports = {
 			});
 		});
 	},
-
 	import: function(cmd) {
 		var client = new Client();
 		var loginInfo = login.login(cmd);
@@ -393,7 +390,6 @@ module.exports = {
 			})
 		});
 	},
-
 	export: function(cmd) {
 		var client = new Client();
 		var loginInfo = login.login(cmd);
@@ -403,50 +399,51 @@ module.exports = {
 		var url = loginInfo.url;
 		var apiKey = loginInfo.apiKey;
 
-
 		var filter = null;
 
-		filter = "sysfilter=greater(ident:500)&sysfilter=equal(logic_type:'javascript')";
+		filter = "&sysfilter=greater(ident:999)&sysfilter=equal(logic_type:'javascript')";
 
 		if (cmd.ident) {
 			filter += "&sysfilter=equal(ident:" + cmd.ident + ")";
 		} else if (cmd.short_name) {
 			filter += "&sysfilter=equal(short_name:'" + cmd.short_name + "')";
-		} else if (cmd.name) {
-			filter += "&sysfilter=equal(name:'" + cmd.name + "')";
+		} else if (cmd.library_name) {
+			filter += "&sysfilter=equal(name:'" + cmd.library_name + "')";
 		}
 
 		var toStdout = false;
 		if ( ! cmd.file) {
 			toStdout = true;
 		}
-
-		client.get(loginInfo.url + "/admin:logic_libraries?" + filter, {
+		client.get(loginInfo.url + "/admin:logic_libraries?nometa=true" + filter, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
 				"Content-Type" : "application/json"
 			}
 		}, function(data) {
-			//console.log('get result: ' + JSON.stringify(data, null, 2));
+			console.log('get result: ' + JSON.stringify(data, null, 2));
 			if (data.errorMessage) {
 				console.log(("Error: " + data.errorMessage).red);
 				return;
 			}
 			if (data.length === 0) {
-				console.log(("Error: no such library found").red);
+				console.log(("Error: no libraries found using filter "+filter).red);
 				return;
 			}
+			var select_ident = null;
 			for(var i = 0; i < data.length ; i++){
+				select_ident = data[i].ident;
 				delete data[i].ident;
-				data[i].account_ident = null;
-				delete data[i]['@metadata'].links;
-				delete data[i]['@metadata'];
+				data[i].project_ident = null;
 			}
 
 			if (toStdout) {
-				console.log(JSON.stringify(data, null, 2));
-				if (cmd.ident) {
-				   filter = "/" + cmd.ident + "/code";
+				//console.log(JSON.stringify(data, null, 2));
+				if(cmd.ident) {
+					select_ident = cmd.ident;
+				}
+				if (select_ident) {
+				   filter = "/" + select_ident + "/code";
 				   var dataUrl = loginInfo.url;
 				   dataUrl = dataUrl.replace("rest","data");
 				   client.get(dataUrl + "/admin:logic_libraries" + filter, {
@@ -455,19 +452,20 @@ module.exports = {
 					  "Content-Type" : "application/json"
 				   }
 					  }, function(code) {
-					  if (code.errorMessage) {
-							  console.log(("Error: " + code.errorMessage).red);
-							  return;
-						  }
-						  if (code.length === 0) {
-							  console.log(("Error: no such library code").red);
-							  return;
-						  }
-						var filename = data[0].name + ".js";
-						var fileAsString = new Buffer(code).toString('utf8');
-						var exportFile = fs.openSync(filename, 'w+', 0600);
-						fs.writeSync(exportFile, JSON.stringify(fileAsString, null, 2));
-						console.log(('Logic Library as text has been exported to file: ' + filename ).green);
+						  if (code.errorMessage) {
+								  console.log(("Error: " + code.errorMessage).red);
+								  return;
+							  }
+							  if (code.length === 0) {
+								  console.log(("Error: no such library code").red);
+								  return;
+							  }
+							var filename = data[0].name + ".js";
+							var fileAsString = new Buffer(code).toString('utf8');
+							//console.log(filename + ":" + fileAsString);
+							var exportFile = fs.openSync(filename, 'w+', 0600);
+							fs.writeSync(exportFile, JSON.stringify(fileAsString, null, 2));
+							console.log(('Logic Library as text has been exported to file: ' + filename ).green);
 				   });
 				}
 

@@ -111,7 +111,7 @@ program
 	.description('Administer javascript libraries for an account.')
 	.option('--ident [ident]','The ident of the library - used by update, delete, export')
 	.option('--project_ident [projectId]','The project ident that this library will be marked as used' )
-	.option('--name [name]', 'Name of library')
+	.option('--library_name [name]', 'Name of library')
 	.option('--libtype [type]', 'optional: Type of Library javascript (as of 3.0.x)')
 	.option('--ver [version]', 'optional: Version # of Library')
 	.option('--short_name [shortname]', 'Short Name')
