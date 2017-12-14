@@ -277,12 +277,11 @@ lacadmin logout -a local
 ## Object-specific commands
 Follow the links below for detailed documentation on specific administrator commands.
 * [Projects](docs/project.md)
-* [Applications](docs/application.md)
+* [Libraries](docs/libraries.md)
+* [Rules](docs/rule.md)
 * [Authentication Providers](docs/authprovider.md)
 * [Datasources](docs/dbase.md)
 * [Resources](docs/resource.md)
-* [Rules](docs/rule.md)
-* [Libraries](docs/libraries.md)
 * [API Options](docs/apioptions.md)
 * [Auth Tokens](docs/token.md)
 * [Named Sorts](docs/sort.md)
@@ -291,4 +290,7 @@ Follow the links below for detailed documentation on specific administrator comm
 * [License files](docs/license.md)
 * [Virtual Primary Keys](docs/virtualkey.md)
 * [Managed Server](docs/managedserver.md)
+* [Connction](docs/connection.md)
+* [Listener](docs/listener.md)
+* [Applications](docs/application.md)
 
