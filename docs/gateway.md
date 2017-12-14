@@ -11,7 +11,7 @@ See documentation to [Publish an API to CA API Gateway](https://docops.ca.com/ca
 
     -h, --help             output usage information
     --ident [ident]        The ident for the saved gateway definition
-    --name [name]          The name for the gateway definition
+    --gatgeway_name [name] The name for the gateway definition
     --username [name]      The username for the gateway
     --password [password]  The gateway password.
     --hostname [server]    The gateway server hostname or IP
@@ -41,7 +41,7 @@ Ident  Name          Username  URL                                             A
 ## Create
 ```
     $lacadmin gateway create 
-    --name [name]          The name for the gateway definition
+    --gateway_name [name]  The name for the gateway definition
     --username [name]      The username for the gateway login
     --hostname [server]    The gateway server full hostname (https://server/lacman/1.0/publish)
     --comments [comments]  The gateway definition comments
@@ -52,7 +52,7 @@ The `create` command creates a new gateway connection definition.
 ## Export
 Provide the ident or the gateway definition name and (optional) the export file name. If not provided - it will be sent to stdout.
 ```
-    $lacadmin gateway export  [--ident <name> | --name <name> ] [--file gateway.json]
+    $lacadmin gateway export  [--ident <name> | --gateway_name <name> ] [--file gateway.json]
 ```
 The export datasource exports the specified datasource into a JSON file. If the filename parameter is not specified, stdout is used.
 

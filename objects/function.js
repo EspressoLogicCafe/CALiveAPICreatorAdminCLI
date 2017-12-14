@@ -119,8 +119,8 @@ module.exports = {
 		var filt = null;
 		if (cmd.ident) {
 			filt = "equal(ident:" + cmd.ident + ")";
-		} else if (cmd.name) {
-			filt = "equal(name:'" + cmd.name + "')";
+		} else if (cmd.function_name) {
+			filt = "equal(name:'" + cmd.function_name + "')";
 		}
 		if(filt === null) {
 			console.log('Missing parameter: please specify either --name or --ident'.red);
@@ -198,8 +198,8 @@ module.exports = {
 		var filt = "";
 		if (cmd.ident) {
 			filt = "&sysfilter=equal(ident:" + cmd.ident + ")";
-		} else if(cmd.name) {
-			filt += "&sysfilter=equal(name:'"+cmd.name+"')";
+		} else if(cmd.function_name) {
+			filt += "&sysfilter=equal(name:'"+cmd.function_name+"')";
 		}
 		var output = [];
 		var filter = "/AllFunctions?sysfilter=equal(project_ident:"+projIdent+")" + filt;

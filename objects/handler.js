@@ -111,10 +111,10 @@ module.exports = {
 		var filt = "equal(project_ident:"+projIdent ;
 		if (cmd.ident) {
 			filt += ",ident:" + cmd.ident + ")";
-		} else if (cmd.name) {
-			filt += ",name:''" + cmd.name + "'')";
+		} else if (cmd.handler_name) {
+			filt += ",name:''" + cmd.handler_name + "'')";
 		} else {
-			console.log('Missing parameter: please specify ident or name'.red);
+			console.log('Missing parameter: please specify ident or handler_name'.red);
 			return;
 		}
 		client.get(loginInfo.url + "/admin:handlers?sysfilter=" + filt, {

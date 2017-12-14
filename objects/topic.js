@@ -108,8 +108,8 @@ module.exports = {
 		var filt = "sysfilter=equal(project_ident:" + projIdent + ")";
 		if (cmd.ident) {
 			filt += "&sysfilter=equal(ident:" + cmd.ident + ")";
-		} else if (cmd.name) {
-			filt += "&sysfilter=equal(name:'" + cmd.name + "')";
+		} else if (cmd.topic_name) {
+			filt += "&sysfilter=equal(name:'" + cmd.topic_name + "')";
 		}
 
 		client.get(loginInfo.url + "/admin:topics?	" + filt, {
@@ -186,8 +186,8 @@ module.exports = {
 		}
 		if(cmd.ident) {
 			filter += "&sysfilter=equal(ident: "+ cmd.ident +")";
-		} else if(cmd.name) {
-			filter += "&sysfilter=equal(name: '"+ cmd.name +"')";
+		} else if(cmd.topic_name) {
+			filter += "&sysfilter=equal(name: '"+ cmd.topic_name +"')";
 		}
 
 		var toStdout = false;

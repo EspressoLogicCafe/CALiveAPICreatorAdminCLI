@@ -1,4 +1,4 @@
-var Client = require('node-rest-client').Client;
+ rvar Client = require('node-rest-client').Client;
 var colors = require('colors');
 var _ = require('underscore');
 var fs = require('fs');
@@ -49,8 +49,8 @@ module.exports = {
 		var filter = null;
 		if ( cmd.ident) {
 		   filter = 'sysfilter=equal(ident:'+cmd.ident+')';
-		} else if(cmd.name){
-			filter = "sysfilter=equal(name:'"+cmd.name+"')";
+		} else if(cmd.auth_name){
+			filter = "sysfilter=equal(name:'"+cmd.auth_name+"')";
 		} else {
 			console.log('Missing parameter: ident or name'.red);
 			return;
@@ -166,7 +166,7 @@ module.exports = {
 				table.newRow();
 				if(cmd.verbose && p.ident > 1000) {
 					verboseDisplay += "\n";
-					verboseDisplay += "lacadmin authprovider create --name '"+p.name+"'";
+					verboseDisplay += "lacadmin authprovider create cmd.auth_name '"+p.name+"'";
 					verboseDisplay += " --createFunction '"+p.bootstrap_config_value+"'";
 					verboseDisplay += " --paramMap '"+p.param_map+"'";
 					if(comments){
@@ -191,8 +191,8 @@ module.exports = {
 		var url = loginInfo.url;
 		var apiKey = loginInfo.apiKey;
 
-		if ( ! cmd.name) {
-			console.log('Missing parameter: name'.red);
+		if ( ! cmd.auth_name) {
+			console.log('Missing parameter: auth_name'.red);
 			return;
 		}
 
@@ -207,7 +207,7 @@ module.exports = {
 
 		context.getContext(cmd, function() {
 			var authProvider = {
-				name: cmd.name,
+				name: cmd.auth_name,
 				bootstrap_config_value: cmd.createFunction,
 				param_map: cmd.paramMap,
 				auth_type_ident:2,
@@ -267,10 +267,10 @@ module.exports = {
 		var filt = null;
 		if (cmd.ident) {
 			filt = "equal(ident:" + cmd.ident + ")";
-		} else if (cmd.name) {
-			filt = "equal(name:'" + cmd.name + "')";
+		} else if (cmd.auth_name) {
+			filt = "equal(name:'" + cmd.auth_name + "')";
 		} else {
-			console.log('Missing parameter: please specify auth provider name or ident '.red);
+			console.log('Missing parameter: please specify auth provider auth_name or ident '.red);
 			return;
 		}
 
@@ -348,8 +348,8 @@ module.exports = {
 		filter = "sysfilter=greater(ident:1000)";
 		if (cmd.ident) {
 			filter += "&sysfilter=equal(ident:" + cmd.ident + ")";
-		} else if (cmd.name) {
-			//filter += "&sysfilter=equal(name:'" + cmd.name + "')";
+		} else if (cmd.auth_name) {
+			//filter += "&sysfilter=equal(name:'" + cmd.auth_name + "')";
 		}
 
 		var toStdout = false;

@@ -324,10 +324,10 @@ module.exports = {
 		if(cmd.ident){
 			filter += "&sysfilter=equal(ident: "+ cmd.ident +")" ;
 		} else {
-			if (cmd.name) {
-				filter += "&sysfilter=equal(name:'" + cmd.name + "')";
+			if (cmd.user_name) {
+				filter += "&sysfilter=equal(name:'" + cmd.user_name + "')";
 			} else {
-				console.log('Missing parameter: please specify either name or ident'.red);
+				console.log('Missing parameter: please specify either user_name or ident'.red);
 				return;
 			}
 		}
@@ -353,8 +353,8 @@ module.exports = {
 				return;
 			}
 			var db = data[0];
-			if( cmd.name) {
-				db.name = cmd.name;
+			if( cmd.user_name) {
+				db.name = cmd.user_name;
 			}
 			if( cmd.fullname) {
 				db.fullname = cmd.fullname;

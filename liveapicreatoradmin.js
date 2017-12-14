@@ -29,8 +29,8 @@ var reln = require('./objects/reln.js');
 var handler = require('./objects/handler.js');
 var apiversion = require('./objects/version.js');
 // 2.1 features
-var snapshot = require('./objects/snapshot.js');//list | start  | restore --name
-var npa = require('./objects/npattrs.js');// list | create | delete | update | import |export
+var snapshot = require('./objects/snapshot.js');
+var npa = require('./objects/npattrs.js');
 var gateway = require('./objects/gateway.js');
 //3.0 features
 var managedserver = require('./objects/managedserver.js');
@@ -128,7 +128,7 @@ program
 	.description('Administer authentication providers for an account.')
 	.option('--ident [ident]','The ident of the auth provider')
 	.option('--project_ident [ident]','The project ident used to link this auth provider')
-	.option('--name [name]', 'Name of auth provider')
+	.option('--auth_name [name]', 'Name of auth provider')
 	.option('--createFunction [bootstrap]', 'Name for Create Function')
 	.option('--paramMap [map]', 'Map of auth provider settings')
 	.option('--comments [comment]', 'Comment on auth provider')
@@ -263,7 +263,7 @@ program
 	.option('--file [fileName]', 'optional: Name of file to import/export (if not provided stdin/stdout used for export)')
 	.option('--password [password]','The password for this user' )
 	.option('--fullname [fullname]','User fullname' )
-	.option('--name [name]','User name' )
+	.option('--user_name [name]','User name (only if using default auth provider)' )
 	.option('--status [status]','Status active A or inactive I' )
 	.option('--roles [roles]','Comma separated list of role names' )
 	.option('--comments [comments]','User comments' )
@@ -273,8 +273,9 @@ program
 program
 	.command('npa <list|delete|export|import>')
 	.description('Administer Non Persistent Attributes for the active API Project.')
-	.option('--ident [ident]', 'The ident of the specific named sort object')
-	.option('--dbschema_ident [ident]', 'optional: The dbschema ident if not the active project')
+	.option('--ident [ident]', 'The ident of the specific named npa object')
+    .option('--npa_name [name]', 'The name of the specific named npa object')
+	.option('--dbschema_ident [ident]', 'optional: The dbschema ident of the projects datasource')
 	.option('--file [fileName]', 'optional: Name of file for import/export (if not provided stdin/stdout used for export)')
 	.option('--verbose', 'optional: Display non persistent attribute in import/export format')
 	.action(npa.doNPAttr);
@@ -283,7 +284,7 @@ program
 	.command('topic <list|delete|import|export>')
 	.description('Administer Topics for current project.')
 	.option('--project_ident [project_ident]','The project ident that will be marked as used' )
-	.option('--name [name]', 'Name of the topic')
+	.option('--topic_name [name]', 'Name of the topic')
 	.option('--ident [ident]', 'The ident of the specific topic to delete')
 	.option('--verbose', 'optional: Display list of topics in an import/export format')
 	.option('--file [fileName]', 'optional: Name of file to import/export (if not provided stdin/stdout used for export)')
@@ -304,7 +305,7 @@ program
 	.description('Administer Custom Endpoints (Handlers) for current project.')
 	.option('--project_ident [project_ident]','The project ident that will be used' )
 	.option('--ident [ident]', 'The ident of the specific handler')
-	.option('--name [name]', 'The name of the Custom Endpoint')
+	.option('--handler_name [name]', 'The name of the Custom Endpoint')
 	.option('--verbose', 'optional: Display Custom Endpoints with import/export statements')
 	.option('--file [fileName]', 'optional: Name of file to import/export (if not provided stdin/stdout used for export)')
 	.action(handler.doHandler);
@@ -328,7 +329,7 @@ program
 program
 	.command('snapshot <list|start|restore>')
 	.description('List or start a project snapshot (backup) for current project.')
-	.option('--name [name]', 'The snapshot Name used by both start and restore')
+	.option('--snapshot_name [name]', 'The snapshot Name used by both start and restore')
 	.option('--project_ident [project_ident]','optional: The project ident that will be used instead of current selected' )
 	.action(snapshot.doSnapshot);
 
@@ -336,7 +337,7 @@ program
 	.command('gateway <list|create|delete|import|export|publish>')
 	.description('Publish Swagger document for current project to CA Gateway.')
 	.option('--ident [ident]', 'The ident for the saved gateway definition')
-	.option('--name [name]', 'The name for the gateway definition')
+	.option('--gateway_name [name]', 'The name for the gateway definition')
 	.option('--username [name]', 'The username for the gateway')
 	.option('--password [password]','The gateway password.')
 	.option('--hostname [server]','The gateway server hostname https://myserver:8443/lacman/1.0/publish' )
@@ -388,7 +389,7 @@ program
 	.command('function <list|delete|export|import>')
 	.description('Administer Functions for current project.')
 	.option('--ident [ident]', 'This is the ident of the function')
-	.option('--name [name]', 'Name of the function')
+	.option('--function_name [name]', 'Name of the function')
 	.option('--project_ident [project_ident]','optional: The project ident that will be used' )
 	.option('--verbose', 'optional: display list of functions in detailed create format')
 	.option('--file [fileName]', 'optional: Name of file to import/export (if not provided stdin/stdout used for export)')

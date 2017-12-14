@@ -10,7 +10,7 @@ For details on how to [create custom authentication provider](https://docops.ca.
 
     -h, --help                    output usage information
     --ident [ident]               The ident of the auth provider
-    --name [name]                 Name of auth provider
+    --auth_name [name]            Name of auth provider
     --createFunction [bootstrap]  Name for Create Function
     --paramMap [map]              Map of auth provider settings (comma separated list of required config values)
     --comments [comment]          Comment on auth provider
@@ -55,7 +55,7 @@ Simply provide the ident of the auth provider you wish to delete.
 ##Export
 Provide the ident of the auth provider and the export file name.
 ```
-    $lacadmin authprovider export  [--ident <ident> | --name <name>] --file myauthprovider.json
+    $lacadmin authprovider export  [--ident <ident> | --auht_name <name>] --file myauthprovider.json
 ```
 The export auth provider exports the specified provider into a JSON file. If the filename parameter is not specified, stdout is used.
 
@@ -69,6 +69,6 @@ The import auth provider imports the specified auth provider JSON file. If the f
 ##linkProject
 Provide the name or auth provider ident and this will set the authprovider in API Project/Settings for the active project. (or project ident)
 ```
-    $lacadmin authprovider linkProject [--name <name> | --ident <ident>]  [--project_ident <ident>] 
+    $lacadmin authprovider linkProject [--auth_name <name> | --ident <ident>]  [--project_ident <ident>] 
 ```
 

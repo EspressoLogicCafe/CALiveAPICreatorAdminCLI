@@ -96,8 +96,8 @@ module.exports = {
 				return;
 			}
 		}
-		if(! cmd.name ){
-			console.log('Missing parameter: please specify snapshot --name to start'.red);
+		if(! cmd.snapshot_name ){
+			console.log('Missing parameter: please specify snapshot --snapshot_name to start'.red);
 			return;
 
 		}
@@ -110,7 +110,7 @@ module.exports = {
 		}
 		var snapshot = {
 			format_ident: 1,
-			name: cmd.name,
+			name: cmd.snapshot_name,
 			project_ident: projIdent
 		};
 		var startTime = new Date();
@@ -157,8 +157,8 @@ module.exports = {
 				return;
 			}
 		}
-		if(! cmd.name ){
-			console.log('Missing parameter: please specify snapshot --name  to restore'.red);
+		if(! cmd.snapshot_name ){
+			console.log('Missing parameter: please specify snapshot --snapshot_name  to restore'.red);
 			return;
 
 		}
@@ -170,7 +170,7 @@ module.exports = {
 			return;
 		}
 		var snapshot = {
-			name: cmd.name,
+			name: cmd.snapshot_name,
 			project_ident: projIdent
 		};
 		var startTime = new Date();

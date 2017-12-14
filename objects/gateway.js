@@ -402,8 +402,8 @@ module.exports = {
 		if ( ! loginInfo)
 			return;
 
-		if ( ! cmd.name) {
-			console.log('Missing parameter: --name'.red);
+		if ( ! cmd.gateway_name) {
+			console.log('Missing parameter: --gateway_name'.red);
 			return;
 		}
 		if ( ! cmd.hostname) {
@@ -422,7 +422,7 @@ module.exports = {
 		context.getContext(cmd, function() {
 			
 			var newGateway = {
-				 name: cmd.name,
+				 name: cmd.gateway_name,
    				 default_username: cmd.username,
     			 url: cmd.hostname,
     			 comments: cmd.comments,
