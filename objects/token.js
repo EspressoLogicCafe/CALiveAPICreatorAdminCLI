@@ -158,7 +158,7 @@ module.exports = {
 				return;
 			}
 			if (data.length === 0) {
-				console.log(("Error: no such project").red);
+				console.log(("Token not found").red);
 				return;
 			}
 			for(var idx = 0; idx < data.length ; idx++){
@@ -211,7 +211,7 @@ module.exports = {
 				return;
 			}
 			if (data.length === 0) {
-				console.log(("Error: no such apikey ident").red);
+				console.log(("Apikey not found").red);
 				return;
 			}
 			if (data.length > 1) {

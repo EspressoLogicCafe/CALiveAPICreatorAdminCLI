@@ -159,7 +159,7 @@ module.exports = {
 				return;
 			}
 			if (data.length === 0) {
-				console.log(("Error: no such datasource").red);
+				console.log(("Error: no such sequence").red);
 				return;
 			}
 			if (data.length > 1) {
@@ -401,7 +401,7 @@ module.exports = {
 				return;
 			}
 			if (data.length === 0) {
-				console.log(("Error: no such project entity").red);
+				console.log(("Error: no such sequence found").red);
 				return;
 			}
 			//do not export passwords

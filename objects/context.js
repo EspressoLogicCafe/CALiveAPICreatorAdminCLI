@@ -20,7 +20,7 @@ module.exports = {
 				return;
 			}
 			if (data.length === 0) {
-				console.log("Error: unable to find an account".red);
+				console.log("Account context not found".red);
 			}
 			else if (data.length > 1) {
 				console.log("Error: more than one account was found -- are you logging as sa?".red);

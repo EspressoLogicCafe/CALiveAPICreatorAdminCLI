@@ -205,7 +205,7 @@ module.exports = {
 				return;
 			}
 			if (data.length === 0) {
-				console.log(("Error: no such named sort").red);
+				console.log(("Named sort(s) not found").red);
 				return;
 			}
 			if (data.length > 1) {

@@ -203,7 +203,7 @@ module.exports = {
 				return;
 			}
 			if (data.length === 0) {
-				console.log(("Error: no such project").red);
+				console.log(("User not found").red);
 				return;
 			}
 			for(var idx = 0; idx < data.length ; idx++){
@@ -345,7 +345,7 @@ module.exports = {
 				return;
 			}
 			if (data.length === 0) {
-				console.log(("Error: user found").red);
+				console.log(("User not found").red);
 				return;
 			}
 			if (data.length > 1) {

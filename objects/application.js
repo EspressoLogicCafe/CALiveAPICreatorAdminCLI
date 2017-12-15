@@ -208,7 +208,7 @@ module.exports = {
 				return;
 			}
 			if (data.length === 0) {
-				console.log(("Error: no such project").red);
+				console.log(("Application not found or defined").red);
 				return;
 			}
 			var output = [];

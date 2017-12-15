@@ -368,7 +368,7 @@ module.exports = {
 				return;
 			}
 			if (data.length === 0) {
-				console.log(("Error: no such resource").red);
+				console.log(("Resource(s) not found").red);
 				return;
 			}
 			if (data.length > 1) {
@@ -517,7 +517,7 @@ module.exports = {
 			}
 			
 			if (data.length === 0) {
-				console.log(("Error: no such resource").red);
+				console.log(("Resource not found").red);
 				return;
 			}
 			 var toStdout = false;
@@ -576,7 +576,7 @@ module.exports = {
 			}
 			
 			if (versionident.length === 0) {
-				console.log(("Error: no such apiversion").red);
+				console.log(("API version not found for resources").red);
 				return;
 			}
 			console.log("Version "+ JSON.stringify(versionident[0].name,null,2));

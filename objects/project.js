@@ -227,7 +227,7 @@ module.exports = {
 			}
 			
 			if (data.length === 0) {
-				console.log(("Error: no such project").red);
+				console.log(("Project not found").red);
 				return;
 			}
 			if (data.length > 1) {
@@ -400,7 +400,7 @@ module.exports = {
 				return;
 			}
 			if (data.length === 0) {
-				console.log(("Error: no such project").red);
+				console.log(("Project not found").red);
 				return;
 			}
 			if (data.length > 1) {

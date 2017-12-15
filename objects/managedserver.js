@@ -240,7 +240,7 @@ module.exports = {
 				return;
 			}
 			if (data.length === 0) {
-				console.log(("Error: no such managed data server").red);
+				console.log(("Managed data server not found").red);
 				return;
 			}
 			if (data.length > 1) {
@@ -334,7 +334,7 @@ module.exports = {
 				return;
 			}
 			if (data.length === 0) {
-				console.log(("Error: no such managed_data_server found").red);
+				console.log(("Managed data server not found").red);
 				return;
 			}
 			if (data.length > 1) {
@@ -402,7 +402,7 @@ module.exports = {
 				return;
 			}
 			if (data.length === 0) {
-				console.log(("Error: no such datasource").red);
+				console.log(("Managed Server not found").red);
 				return;
 			}
 			//do not export passwords

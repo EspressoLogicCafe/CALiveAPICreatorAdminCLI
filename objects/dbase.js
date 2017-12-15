@@ -419,7 +419,7 @@ module.exports = {
 				return;
 			}
 			if (data.length === 0) {
-				console.log(("Error: no such datasource").red);
+				console.log(("Datasource not found").red);
 				return;
 			}
 			if (data.length > 1) {
@@ -615,7 +615,7 @@ module.exports = {
 				return;
 			}
 			if (data.length === 0) {
-				console.log(("Error: no such database").red);
+				console.log(("Datasource not found using sysfilter="+filt).red);
 				return;
 			}
 			if (data.length > 1) {
@@ -700,7 +700,7 @@ module.exports = {
 				return;
 			}
 			if (data.length === 0) {
-				console.log(("Error: no such datasource").red);
+				console.log(("Datasource not found").red);
 				return;
 			}
 			//do not export passwords

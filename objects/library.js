@@ -112,7 +112,7 @@ module.exports = {
 				return;
 			}
 			if (data.length === 0) {
-				console.log(("Error: no such library").red);
+				console.log(("Library not found").red);
 				return;
 			}
 			if (data.length > 1) {
@@ -457,7 +457,7 @@ module.exports = {
 								  return;
 							  }
 							  if (code.length === 0) {
-								  console.log(("Error: no such library code").red);
+								  console.log(("Library {JS} code not found").red);
 								  return;
 							  }
 							var filename = data[0].name + ".js";

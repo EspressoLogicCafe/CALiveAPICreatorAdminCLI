@@ -52,14 +52,14 @@ module.exports = {
 		} else if(cmd.auth_name){
 			filter = "sysfilter=equal(name:'"+cmd.auth_name+"')";
 		} else {
-			console.log('Missing parameter: ident or name'.red);
+			console.log('Missing parameter: ident or auht_name'.red);
 			return;
 		}
 		var projIdent = cmd.project_ident;
 		if ( ! projIdent) {
 			projIdent = dotfile.getCurrentProject();
 			if ( ! projIdent) {
-				console.log('There is no current project.'.yellow);
+				console.log('There is no current project selected.'.yellow);
 				return;
 			}
 		}
@@ -89,7 +89,7 @@ module.exports = {
 						console.log(data.errorMessage.red);
 						return;
 					} else if (data.length === 0){
-						console.log("Ident not found".red);
+						console.log("Auth Provider not found for project_ident ="+projIdent.red);
 						return;
 					}
 
@@ -285,7 +285,7 @@ module.exports = {
 				return;
 			}
 			if (data.length === 0) {
-				console.log(("Error: no such auth provider").red);
+				console.log(("auth provider not found").red);
 				return;
 			}
 			if (data.length > 1) {
@@ -312,7 +312,7 @@ module.exports = {
 					return p['@metadata'].resource === 'admin:authproviders';
 				});
 				if ( ! delProj) {
-					console.log('ERROR: unable to find deleted project'.red);
+					console.log('ERROR: unable to find deleted auth provider'.red);
 					return;
 				}
 				if (cmd.verbose) {
@@ -369,7 +369,7 @@ module.exports = {
 				return;
 			}
 			if (data.length === 0) {
-				console.log(("Error: no such project").red);
+				console.log(("Auth provider(s) not found").red);
 				return;
 			}
 			for(var i = 0; i < data.length ; i++){

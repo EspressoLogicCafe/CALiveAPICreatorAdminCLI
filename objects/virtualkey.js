@@ -184,7 +184,7 @@ module.exports = {
 				return;
 			}
 			if (data.length === 0) {
-				console.log(("Error: no such datasource").red);
+				console.log(("Virtual key not found").red);
 				return;
 			}
 			if (data.length > 1) {
@@ -347,7 +347,7 @@ module.exports = {
 				return;
 			}
 			if (data.length === 0) {
-				console.log(("Error: no such virtual key").red);
+				console.log(("Virtual key(s) not found").red);
 				return;
 			}
 			if (data.length > 1) {
@@ -426,7 +426,7 @@ module.exports = {
 				return;
 			}
 			if (data.length === 0) {
-				console.log(("Error: no such project entity").red);
+				console.log(("Error: no such project virtualkey").red);
 				return;
 			}
 			//do not export passwords

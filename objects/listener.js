@@ -299,7 +299,7 @@ module.exports = {
 						delete fileContent[i].ident;
 						fileContent[i]["@metadata"] = {action:"MERGE_INSERT", key:  ["project_ident","name"]};
 						if(fileContent[i].connection !== null) {
-							fileContent[i].connection["@metadata"] = {action:"LOOKUP", key:  "name"};
+							fileContent[i].connection["@metadata"] = {action:"LOOKUP", key:  ["project_ident","name"]};
 						}
 						for(var j = 0; j < fileContent[i].ListenerParameters.length; j++) {
 							delete fileContent[i].ListenerParameters[j].ident;
@@ -311,7 +311,9 @@ module.exports = {
 				fileContent.project_ident = projIdent;
 				delete fileContent.ts;
 				fileContent["@metadata"] = {action:"MERGE_INSERT", key: ["project_ident","name"]};
-				fileContent.connection["@metadata"] = {action:"LOOKUP", key:  "name"};
+				if(fileContent.connection !== null) {
+					fileContent.connection["@metadata"] = {action:"LOOKUP", key:  ["project_ident","name"]};
+				}
 				delete fileContent.ListenerParameters.ident;
 				delete fileContent.ListenerParameters.ts;
 				delete fileContent.connection_ident;

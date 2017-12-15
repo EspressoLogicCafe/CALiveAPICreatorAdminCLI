@@ -343,7 +343,7 @@ module.exports = {
 				return;
 			}
 			if (data.length === 0) {
-				console.log(("Error: no such library").red);
+				console.log(("Library not found").red);
 				return;
 			}
 			if (data.length > 1) {

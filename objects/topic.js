@@ -206,7 +206,7 @@ module.exports = {
 				return;
 			}
 			if (data.length === 0) {
-				console.log(("Error: no such project").red);
+				console.log(("Error: no such topic found").red);
 				return;
 			}
 			for(var idx = 0; idx < data.length ; idx++){

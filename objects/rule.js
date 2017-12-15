@@ -358,7 +358,7 @@ module.exports = {
 				return;
 			}
 			if (data.length === 0) {
-				console.log(("Error: no such database").red);
+				console.log(("Rule(s) not found").red);
 				return;
 			}
 			if (data.length > 1) {
@@ -607,7 +607,7 @@ module.exports = {
 				toStdout = true;
 			}
 			if (data.length === 0) {
-				console.log(("Error: no such project").red);
+				console.log(("Rule(s) not found").red);
 				return;
 			}
 			for(var i = 0; i < data.length ; i++){

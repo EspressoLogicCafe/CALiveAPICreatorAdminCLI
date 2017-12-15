@@ -327,7 +327,7 @@ module.exports = {
 			   });
 			   if ( ! newConnection) {
 			   var newHandler = _.find( data.txsummary, function(p) {
-				   return p['@metadata'].resource === 'admin:connections';
+				   return p['@metadata'].resource === 'ConnectionExport';
 			   });
 			   if ( ! newHandler) {
 				   console.log('ERROR: unable to find imported connections'.red);
