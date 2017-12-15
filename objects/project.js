@@ -703,8 +703,8 @@ module.exports = {
 		var filesToDelete = [];
 		var foundFiles = [];
 		var filename;
+        var zip = new AdmZip(cmd.file);
 		if (fs.existsSync(path) && synchronize) {
-		   var zip = new AdmZip(cmd.file);
 		   var zipEntries = zip.getEntries();
 		   zipEntries.forEach(function(zipEntry) {
 			 // get a list of files from the zip file

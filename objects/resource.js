@@ -118,7 +118,6 @@ module.exports = {
 		
 		module.exports.getApiVersionAndDoSomething(cmd, listResources);		
 	},
-	
 	create: function(cmd) {
 		var client = new Client();
 		var loginInfo = login.login(cmd);
@@ -277,7 +276,6 @@ module.exports = {
 			});
 		});		
 	},
-	
 	update: function(cmd) {
 		var client = new Client();
 		var loginInfo = login.login(cmd);
@@ -494,7 +492,7 @@ module.exports = {
 		var projIdent = cmd.project_ident;
 		var rootIdent = cmd.ident;
 		if ( !cmd.ident) {
-			console.log("You must specifiy a specific resource using --ident (use lacadmin resource list)".red);
+			console.log("You must specifiy a specific specfic resource using --ident (use lacadmin resource list)".red);
 			return;
 		}
 		if ( ! projIdent) {

@@ -238,7 +238,7 @@ module.exports = {
 				if (toStdout) {
 					console.log(JSON.stringify(output, null, 2));
 				} else {
-					var filename = schema[0].name + "_" + cmd.file;
+					var filename = cmd.file;
 					var exportFile = fs.openSync(filename, 'w+', 0600);
 					fs.writeSync(exportFile, JSON.stringify(output, null, 2));
 					console.log(('Non Persistent Attrs have been exported to file: ' + filename).green);
@@ -302,7 +302,7 @@ module.exports = {
 				//fileContent["@metadata"] = {action:"MERGE_INSERT", key:  ["dbaseschema_ident","table_name","attr_name"]} ;
 			}
 			var startTime = new Date();
-			client.post(loginInfo.url + "/ALLNpaAttributes", {
+			client.post(loginInfo.url + "/admin:np_attributes", {
 				data: fileContent,
 				headers: {
 					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
@@ -335,7 +335,6 @@ module.exports = {
 						printObject.printObject(newSort, newSort['@metadata'].entity, 0, newSort['@metadata'].verb);
 						console.log(('and ' + (data.txsummary.length - 1) + ' other objects').grey);
 					}
-
 
 					trailer += " - # objects touched: ";
 					if (data.txsummary.length === 0) {

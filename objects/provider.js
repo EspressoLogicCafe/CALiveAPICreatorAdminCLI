@@ -172,9 +172,7 @@ module.exports = {
 			filter += sep + "sysfilter=equal(name:'" + cmd.provider_name + "')";
 			sep = "&";
 		} 
-	 	if (projIdent) {
-			filter += sep + "sysfilter=equal(project_ident:" + projIdent + ")";
-		}
+
 		
 		var toStdout = false;
 		if ( ! cmd.file) {

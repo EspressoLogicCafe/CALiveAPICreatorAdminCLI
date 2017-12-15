@@ -511,7 +511,7 @@ module.exports = {
 					});
 				}
 				else {
-					printObject.printObject(newDataSource, newDataSource['@metadata'].entity, 0, newDataSource['@metadata'].verb);
+					printObject.printObject(cd , newDataSource['@metadata'].entity, 0, newDataSource['@metadata'].verb);
 					console.log(('and ' + (data.txsummary.length - 1) + ' other objects').grey);
 				}
 			

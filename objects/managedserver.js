@@ -204,7 +204,6 @@ module.exports = {
 			});
 		});
 	},
-
 	update: function(cmd) {
 		var client = new Client();
 		var loginInfo = login.login(cmd);
@@ -448,12 +447,12 @@ module.exports = {
 			var fileContent = JSON.parse(fs.readFileSync(cmd.file));
 			if(Array.isArray(fileContent) && fileContent.length > 0){
 				for(var i = 0; i < fileContent.length ; i++ ){
-					fileContent[i].ccount_ident = context.account.ident;
+					fileContent[i].account_ident = context.account.ident;
 					delete fileContent[i].ident;
 					delete fileContent[i].ts;
 					delete fileContent[i].project_ident;
 					delete fileContent[i].salt;
-					fileContent[i]["@metadata"] = { action: "MERGE_INSERT", key:"name" };
+					fileContent[i]["@metadata"] = { action: "MERGE_INSERT", key:["name","account_ident"] };
 				}
 			}
 			var startTime = new Date();

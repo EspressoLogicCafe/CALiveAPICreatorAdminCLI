@@ -298,7 +298,9 @@ module.exports = {
 						delete fileContent[i].connection_ident;
 						delete fileContent[i].ident;
 						fileContent[i]["@metadata"] = {action:"MERGE_INSERT", key:  ["project_ident","name"]};
-						fileContent[i].connection["@metadata"] = {action:"LOOKUP", key:  "name"};
+						if(fileContent[i].connection !== null) {
+							fileContent[i].connection["@metadata"] = {action:"LOOKUP", key:  "name"};
+						}
 						for(var j = 0; j < fileContent[i].ListenerParameters.length; j++) {
 							delete fileContent[i].ListenerParameters[j].ident;
 							delete fileContent[i].ListenerParameters[j].ts;

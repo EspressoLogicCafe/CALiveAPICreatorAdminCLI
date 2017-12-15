@@ -687,7 +687,7 @@ module.exports = {
 		if ( ! cmd.file) {
 			toStdout = true;
 		}
-		console.log("Filter "+ filter);
+		//console.log("Filter "+ filter);
 		client.get(loginInfo.url + "/dbaseschemas?" + filter, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",

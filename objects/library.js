@@ -210,7 +210,7 @@ module.exports = {
 			var data = fileContent.toString('base64');//hex
 			newLibrary.code  = "b64:" + data;//"0x"+data; //
 			var startTime = new Date();
-			newLibrary["@metadata"] = {action:"MERGE_INSERT", key: ["name","account_ident"]} ;
+			newLibrary["@metadata"] = {action:"MERGE_INSERT", key: ["name","project_ident"]} ;
 			client.put(loginInfo.url + "/admin:logic_libraries", {
 				data: newLibrary,
 				headers: {
@@ -312,9 +312,9 @@ module.exports = {
 			for(var i = 0 ; i < fileContent.length ; i++ ){
 				delete fileContent[i].ident;
 				fileContent[i].logic_type = "javascript";
-				fileContent[i].account_ident = account_ident;
+				fileContent[i].project_ident = projIdent;
 				delete fileContent[i].ts;
-				fileContent[i]["@metadata"] = {action:"MERGE_INSERT", key: ["name","account_ident"]} ;
+				fileContent[i]["@metadata"] = {action:"MERGE_INSERT", key: ["name","project_ident"]} ;
 			}
 			var startTime = new Date();
 			client.put(loginInfo.url + "/logic_libraries", {
@@ -421,7 +421,7 @@ module.exports = {
 				"Content-Type" : "application/json"
 			}
 		}, function(data) {
-			console.log('get result: ' + JSON.stringify(data, null, 2));
+			//console.log('get result: ' + JSON.stringify(data, null, 2));
 			if (data.errorMessage) {
 				console.log(("Error: " + data.errorMessage).red);
 				return;

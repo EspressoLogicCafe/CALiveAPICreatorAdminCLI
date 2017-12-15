@@ -302,7 +302,7 @@ module.exports = {
 				delete fileContent.ident;
 				fileContent["@metadata"] = {action:"MERGE_INSERT", key: ["project_ident","name"]};
 			}
-		console.log(JSON.stringify(fileContent,null,2));
+		//console.log(JSON.stringify(fileContent,null,2));
 		var startTime = new Date();
 		client.put(loginInfo.url + "/ConnectionExport", {
 			data: fileContent,

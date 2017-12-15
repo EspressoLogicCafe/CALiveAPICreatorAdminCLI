@@ -1,4 +1,4 @@
- rvar Client = require('node-rest-client').Client;
+var Client = require('node-rest-client').Client;
 var colors = require('colors');
 var _ = require('underscore');
 var fs = require('fs');
@@ -345,11 +345,11 @@ module.exports = {
 			return;
 		var url = loginInfo.url;
 		var apiKey = loginInfo.apiKey;
-		filter = "sysfilter=greater(ident:1000)";
+		filter = "sysfilter=greater(ident:1000)"; //this is the built-in
 		if (cmd.ident) {
 			filter += "&sysfilter=equal(ident:" + cmd.ident + ")";
 		} else if (cmd.auth_name) {
-			//filter += "&sysfilter=equal(name:'" + cmd.auth_name + "')";
+			filter += "&sysfilter=equal(name:'" + cmd.auth_name + "')";
 		}
 
 		var toStdout = false;
