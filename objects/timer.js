@@ -115,13 +115,13 @@ module.exports = {
 		if (cmd.ident) {
 			filt += ",ident:" + cmd.ident + ")";
 		} else if (cmd.timer_name) {
-			filt += ",name:\"" + cmd.timer_name + "\")";
+			filt += ",name:'" + cmd.timer_name + "')";
 		} else {
 			console.log("Please enter missing timer_name or ident.".red);
 			return;
 		}
 
-		client.get(loginInfo.url + "/admin:schedule_items?	" + filt, {
+		client.get(loginInfo.url + "/admin:schedule_items?" + filt, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
 				"Content-Type" : "application/json"
@@ -288,7 +288,7 @@ module.exports = {
 				console.log(data.errorMessage.red);
 				return;
 			}
-			printObject.printHeader('Topic(s) created, including:');
+			printObject.printHeader('Timer(s) created, including:');
 			if(data.statusCode == 200 ){
 				console.log("Request took: " + (endTime - startTime) + "ms");
 				return;

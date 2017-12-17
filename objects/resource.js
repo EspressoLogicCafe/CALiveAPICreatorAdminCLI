@@ -360,14 +360,13 @@ module.exports = {
         }
         filt = "project_ident:"+projIdent
 		if(cmd.ident) {
-            filt = ",ident:" + cmd.ident + ")";
+            filt += ",ident:" + cmd.ident + ")";
         } else if ( cmd.resource_name) {
-			filt = ",name:'" + cmd.resource_name + "')";
+			filt += ",name:'" + cmd.resource_name + "')";
         } else {
 			console.log('Missing parameter: please specify a resource_name or ident'.red);
 			return;
 		}
-
 		client.get(loginInfo.url + "/resources?sysfilter=equal(container_ident: null," + filt, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",

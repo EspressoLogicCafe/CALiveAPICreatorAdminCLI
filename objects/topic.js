@@ -115,7 +115,7 @@ module.exports = {
 			console.log("Please provide topic_name or ident".red);
 			return;
 		}
-		client.get(loginInfo.url + "/admin:topics?	" + filt, {
+		client.get(loginInfo.url + "/admin:topics?" + filt, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
 				"Content-Type" : "application/json"

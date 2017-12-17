@@ -66,8 +66,8 @@ node ../liveapicreatoradmin.js handler delete --handler_name "New custom endpoin
 node ../liveapicreatoradmin.js topic import --file $PROJECT/topic.json
 node ../liveapicreatoradmin.js topic delete --topic_name "Check Credit"
 
-node ../liveapicreatoradmin.js npa import --file $PROJECT/npa.json
-node ../liveapicreatoradmin.js npa delete --ident 2000
+#node ../liveapicreatoradmin.js npa import --file $PROJECT/npa.json
+#node ../liveapicreatoradmin.js npa delete --ident 2000 <<there is no unique name for npa table/attr
 
 node ../liveapicreatoradmin.js gateway import --file $PROJECT/gateway.json
 node ../liveapicreatoradmin.js gateway delete --gateway_name "New CA API Gateway xuycy"

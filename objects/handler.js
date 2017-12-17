@@ -112,7 +112,7 @@ module.exports = {
 		if (cmd.ident) {
 			filt += ",ident:" + cmd.ident + ")";
 		} else if (cmd.handler_name) {
-			filt += ",name:'" + cmd.handler_name + "'')";
+			filt += ",name:'" + cmd.handler_name + "')";
 		} else {
 			console.log('Missing parameter: please specify ident or handler_name'.red);
 			return;
