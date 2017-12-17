@@ -350,13 +350,25 @@ module.exports = {
 			console.log('You are not currently logged into any API Creator server.'.red);
 			return;
 		}
-		
-		if ( ! cmd.resource_name) {
-			console.log('Missing parameter: please specify a name'.red);
+        var projIdent = cmd.project_ident;
+        if ( ! projIdent) {
+            projIdent = dotfile.getCurrentProject();
+            if ( ! projIdent) {
+                console.log('There is no current project.'.yellow);
+                return;
+            }
+        }
+        filt = "project_ident:"+projIdent
+		if(cmd.ident) {
+            filt = ",ident:" + cmd.ident + ")";
+        } else if ( cmd.resource_name) {
+			filt = ",name:'" + cmd.resource_name + "')";
+        } else {
+			console.log('Missing parameter: please specify a resource_name or ident'.red);
 			return;
 		}
 
-		client.get(loginInfo.url + "/resources?sysfilter=equal(container_ident: null, name:'" + cmd.resource_name + "')", {
+		client.get(loginInfo.url + "/resources?sysfilter=equal(container_ident: null," + filt, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
 				"Content-Type" : "application/json"
@@ -372,7 +384,7 @@ module.exports = {
 				return;
 			}
 			if (data.length > 1) {
-				console.log(("Error: more than one resource with the given name: " + cmd.resource_name).red);
+				console.log(("Error: more than one resource with the given filter =: " + filt).red);
 				return;
 			}
 			var db = data[0];

@@ -120,8 +120,11 @@ module.exports = {
 		var filt = "equal(project_ident:"+projIdent ;
 		if (cmd.ident) {
 			filt += ",ident:" + cmd.ident + ")";
-		} else {
-			console.log('Missing parameter: please specify ident'.red);
+		} else if(cmd.event_name){
+			filt += ",name:'"+ cmd.event_name +"')";
+		}
+		else {
+			console.log('Missing parameter: please specify event_name or ident'.red);
 			return;
 		}
 		
@@ -141,7 +144,7 @@ module.exports = {
 				return;
 			}
 			if (data.length > 1) {
-				console.log(("Error: more than one event handler for the given condition: " + filter).red);
+				console.log(("Error: more than one event handler for the given condition: " + filts).red);
 				return;
 			}
 			var db = data[0];

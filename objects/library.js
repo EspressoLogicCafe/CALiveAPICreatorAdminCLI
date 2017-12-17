@@ -33,14 +33,21 @@ module.exports = {
 	},
 
 	list: function(cmd) {
-		var client = new Client();
-		var loginInfo = login.login(cmd);
-		if ( ! loginInfo)
-			return;
-		var url = loginInfo.url;
-		var apiKey = loginInfo.apiKey;
-
-		client.get(url + "/logic_libraries?pagesize=100&sysorder=(name:asc_uc,name:desc)", {
+        var client = new Client();
+        var loginInfo = login.login(cmd);
+        if (!loginInfo)
+            return;
+        var url = loginInfo.url;
+        var apiKey = loginInfo.apiKey;
+        var projIdent = cmd.project_ident;
+        var filter = "";
+        if (!projIdent) {
+            projIdent = dotfile.getCurrentProject();
+        }
+        if (projIdent) {
+        	filter = "&sysfilter=equal(project_ident:" + projIdent + ")";
+    	}
+		client.get(url + "/logic_libraries?pagesize=100&sysorder=(name:asc_uc,name:desc)"+filter, {
 			headers: {
 				Authorization: "CALiveAPICreator " + apiKey + ":1",
 				"Content-Type" : "application/json"
@@ -89,17 +96,25 @@ module.exports = {
 		var loginInfo = login.login(cmd);
 		if ( ! loginInfo)
 			return;
+        var projIdent = cmd.project_ident;
+        if ( ! projIdent) {
+            projIdent = dotfile.getCurrentProject();
+        }
+        if(!projIdent) {
+        	console.log("No current project selected".red);
+        	return;
+		}
 		var filt = null;
 		if (cmd.library_name) {
-			filt = "equal(name:'" + cmd.library_name + "')";
+			filt = "equal(name:'" + cmd.library_name + "'";
 		} else if (cmd.ident) {
-			filt = "equal(ident:" + cmd.ident + ")";
+			filt = "equal(ident:" + cmd.ident;
 		}
 		if(filt === null) {
 			console.log('Missing parameter: please specify library --name or --ident'.red);
 			return;
 		}
-
+		filt += ",project_ident:"+ projIdent +")";
 		client.get(loginInfo.url + "/logic_libraries?sysfilter=" + filt, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
@@ -116,7 +131,7 @@ module.exports = {
 				return;
 			}
 			if (data.length > 1) {
-				console.log(("Error: more than one libraries for the given condition: " + filter).red);
+				console.log(("Error: more than one libraries for the given condition: " + filt).red);
 				return;
 			}
 			var library = data[0];

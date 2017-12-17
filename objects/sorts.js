@@ -265,17 +265,24 @@ module.exports = {
 			console.log('You are not currently logged into any API Creator server.'.red);
 			return;
 		}
-
-		var filt = null;
+		var projIdent = cmd.project_ident;
+        if ( ! projIdent) {
+            projIdent = dotfile.getCurrentProject();
+            if ( ! projIdent) {
+                console.log('There is no current project.'.yellow);
+                return;
+            }
+        }
+		var filt = "equal(project_ident:"+projIdent;
 		if (cmd.ident) {
-			filt = "equal(ident:'" + cmd.ident + "')";
-		} else if (cmd.sortname) {
-			filt = "equal(name:'" + cmd.sortname + "')";
+			filt += ",ident:'" + cmd.ident + "')";
+		} else if (cmd.sort_name) {
+			filt += ",name:'" + cmd.sort_name + "')";
 		} else {
-			console.log('Missing parameter: please specify either --sortname or --ident'.red);
+			console.log('Missing parameter: please specify either --sort_name or --ident'.red);
 			return;
 		}
-		
+
 		client.get(loginInfo.url + "/admin:named_sorts?sysfilter=" + filt, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",

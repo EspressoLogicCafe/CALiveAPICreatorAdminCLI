@@ -112,7 +112,7 @@ module.exports = {
 		if (cmd.ident) {
 			filt += ",ident:" + cmd.ident + ")";
 		} else if (cmd.handler_name) {
-			filt += ",name:''" + cmd.handler_name + "'')";
+			filt += ",name:'" + cmd.handler_name + "'')";
 		} else {
 			console.log('Missing parameter: please specify ident or handler_name'.red);
 			return;
@@ -133,7 +133,7 @@ module.exports = {
 				return;
 			}
 			if (data.length > 1) {
-				console.log(("Error: more than one custom endpoint (handler) for the given condition: " + filter).red);
+				console.log(("Error: more than one custom endpoint (handler) for the given condition: " + filt).red);
 				return;
 			}
 			var db = data[0];

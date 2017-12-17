@@ -316,9 +316,11 @@ module.exports = {
 		var filter = null;
 	   if (cmd.ident) {
 			filter = "equal(ident:" + cmd.ident + ")";
-		}
+		} else if(cmd.server_name) {
+	   		filter = "equal(name:'"+cmd.server_name +"')";
+	   }
 		else {
-			console.log('Missing parameter: please specify managed_data_servers (use list)  --ident '.red);
+			console.log('Missing parameter: please specify managed_data_servers --server_name or  --ident '.red);
 			return;
 		}
 

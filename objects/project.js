@@ -472,12 +472,11 @@ module.exports = {
 		if(cmd.directory) {
 			module.exports.importFromDir(cmd);
 			return;
-		}
-		if(cmd.file) {
+		} else {
 			module.exports.importFromFile(cmd);
 			return;
 		}
-		console.log("import requires either --file (type zip or json) or --directory".red);
+		//console.log("import requires either --file (type zip or json) or --directory".red);
 	},
 	importFromDir: function(cmd) {
 	//we will read from a source directory and build the zip file to send to LAC
@@ -609,7 +608,7 @@ module.exports = {
 		});
 	},
 	importFromFile: function(cmd) {
-		console.log("import using file " + cmd.file);
+		console.log("Project @import using file " + cmd.file);
 		var client = new Client();
 		var loginInfo = login.login(cmd);
 		if ( ! loginInfo) {
@@ -619,17 +618,24 @@ module.exports = {
 		if ( ! cmd.file) {
 			cmd.file = '/dev/stdin';
 		}
-		
-		var fileContent = JSON.parse(fs.readFileSync(cmd.file));
+		var isZIPFile = false;
+		if(cmd.file) {
+			isZIPFile = cmd.file.endsWith(".zip");
+		}
+		var fileContent = fs.readFileSync(cmd.file);
+		if(!isZIPFile) {
+			fileContent = JSON.parse(fileContent);
+		}
+
 		if (cmd.project_name) {
 			fileContent[0].name = cmd.project_name;
 		}
 		if (cmd.url_name) {
 			fileContent[0].url_name = cmd.url_name;
 		}
-		
+		console.log("endpint ="+loginInfo.url + "/@import");
 		var startTime = new Date();
-		client.post(loginInfo.url + "/" + importEndpoint, {
+		client.post(loginInfo.url + "/@import" , {
 			data: fileContent,
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",

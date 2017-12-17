@@ -587,22 +587,29 @@ module.exports = {
 			console.log('You are not currently logged into any API Creator server.'.red);
 			return;
 		}
-
+        var projIdent = cmd.project_ident;
+        if ( ! projIdent) {
+            projIdent = dotfile.getCurrentProject();
+            if ( ! projIdent) {
+                console.log('There is no current project.'.yellow);
+                return;
+            }
+        }
 		var filt = null;
 		if (cmd.prefix) {
-			filt = "equal(prefix:'" + cmd.prefix + "')";
+			filt = "equal(prefix:'" + cmd.prefix + "'";
 		}
 		else if (cmd.db_name) {
-			filt = "equal(name:'" + cmd.db_name + "')";
+			filt = "equal(name:'" + cmd.db_name + "'";
 		}
 		else if (cmd.ident) {
-			filt = "equal(ident:" + cmd.ident + ")";
+			filt = "equal(ident:" + cmd.ident;
 		}
 		else {
 			console.log('Missing parameter: please specify either --db_name, --ident or --prefix'.red);
 			return;
 		}
-		
+		filt += ",project_ident:"+projIdent +")";
 		client.get(loginInfo.url + "/dbaseschemas?sysfilter=" + filt, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
@@ -619,7 +626,7 @@ module.exports = {
 				return;
 			}
 			if (data.length > 1) {
-				console.log(("Error: more than one database for the given condition: " + filter).red);
+				console.log(("Error: more than one database for the given condition: " + filt).red);
 				return;
 			}
 			var db = data[0];

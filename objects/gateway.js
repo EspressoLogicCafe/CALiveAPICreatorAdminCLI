@@ -90,8 +90,6 @@ module.exports = {
 			}
 		});
 	},
-	
-	
 	export: function(cmd) {
 		var client = new Client();
 		
@@ -326,10 +324,12 @@ module.exports = {
 		var filt = null;
 		if (cmd.ident) {
 			filt = "equal(ident:" + cmd.ident + ")";
-		} else {
-			console.log('Missing parameter: please specify gateway ident'.red);
-			return;
-		}
+		} else if(cmd.gateway_name) {
+			filt = "equal(name:'" + cmd.gateway_name +"')";
+        } else {
+                console.log('Missing parameter: please specify gateway_name or ident'.red);
+                return;
+        }
 		
 		client.get(loginInfo.url + "/admin:gateways?sysfilter=" + filt, {
 			headers: {
@@ -347,7 +347,7 @@ module.exports = {
 				return;
 			}
 			if (data.length > 1) {
-				console.log(("Error: more than one gateways for the given condition: " + filter).red);
+				console.log(("Error: more than one gateways for the given condition: " + filt).red);
 				return;
 			}
 			var library = data[0];

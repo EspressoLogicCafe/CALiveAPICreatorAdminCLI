@@ -104,11 +104,11 @@ module.exports = {
 		if (cmd.ident) {
 			filt += ",ident:" + cmd.ident + ")";
 		}
-		else if (cmd.username) {
-			filt += ",name:'" + cmd.username + "')";
+		else if (cmd.user_name) {
+			filt += ",name:'" + cmd.user_name + "')";
 		}
 		else {
-			console.log('Missing parameter: please specify either username or ident'.red);
+			console.log('Missing parameter: please specify either user_name or ident'.red);
 			return;
 		}
 		
@@ -124,11 +124,11 @@ module.exports = {
 				return;
 			}
 			if (data.length === 0) {
-				console.log(("Error: no such role ident or name").red);
+				console.log(("Error: no such user ident or user_name").red);
 				return;
 			}
 			if (data.length > 1) {
-				console.log(("Error: more than one user for the given condition: " + filter).red);
+				console.log(("Error: more than one user for the given condition: " + filt).red);
 				return;
 			}
 			var db = data[0];

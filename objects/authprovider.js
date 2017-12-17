@@ -260,10 +260,6 @@ module.exports = {
 		var url = loginInfo.url;
 		var apiKey = loginInfo.apiKey;
 
-		if ( ! cmd.ident) {
-			console.log('Missing parameter: ident'.red);
-			return;
-		}
 		var filt = null;
 		if (cmd.ident) {
 			filt = "equal(ident:" + cmd.ident + ")";
@@ -289,7 +285,7 @@ module.exports = {
 				return;
 			}
 			if (data.length > 1) {
-				console.log(("Error: more than one auth provider for the given name or ident: " + filter).red);
+				console.log(("Error: more than one auth provider for the given auth_name or ident: " + filt).red);
 				return;
 			}
 			var provider = data[0];

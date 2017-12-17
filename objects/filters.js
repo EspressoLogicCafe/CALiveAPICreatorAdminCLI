@@ -264,12 +264,19 @@ module.exports = {
 			console.log('You are not currently logged into any API Creator server.'.red);
 			return;
 		}
-
-		var filt = null;
+        var projIdent = cmd.project_ident;
+        if ( ! projIdent) {
+            projIdent = dotfile.getCurrentProject();
+            if ( ! projIdent) {
+                console.log('There is no current project.'.yellow);
+                return;
+            }
+        }
+        var filt = "equal(project_ident:"+projIdent;
 		if (cmd.ident) {
-			filt = "equal(ident:'" + cmd.ident + "')";
+			filt += ",ident:'" + cmd.ident + "')";
 		} else if (cmd.filter_name) {
-			filt = "equal(name:'" + cmd.filter_name + "')";
+			filt += ",name:'" + cmd.filter_name + "')";
 		} else {
 			console.log('Missing parameter: please specify either --filter_name or --ident'.red);
 			return;
@@ -291,7 +298,7 @@ module.exports = {
 				return;
 			}
 			if (data.length > 1) {
-				console.log(("Error: more than one named filter for the given condition: " + filter).red);
+				console.log(("Error: more than one named filter for the given condition: " + filt).red);
 				return;
 			}
 			var db = data[0];

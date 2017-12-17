@@ -111,13 +111,13 @@ module.exports = {
 				return;
 			}
 		}
-		var filt = "sysfilter=equal(project_ident:" + projIdent + ")";
+		var filt = "sysfilter=equal(project_ident:" + projIdent;
 		if (cmd.ident) {
-			filt += "&sysfilter=equal(ident:" + cmd.ident + ")";
+			filt += ",ident:" + cmd.ident + ")";
 		} else if (cmd.timer_name) {
-			filt += "&sysfilter=equal(name:'" + cmd.timer_name + "')";
+			filt += ",name:\"" + cmd.timer_name + "\")";
 		} else {
-			console.log("Please enter missing timer_name or ident to delete a timer.".red);
+			console.log("Please enter missing timer_name or ident.".red);
 			return;
 		}
 
@@ -136,7 +136,7 @@ module.exports = {
 				return;
 			}
 			if (data.length > 1) {
-				console.log(("Error: more than one timer for the given condition: " + filter).red);
+				console.log(("Error: more than one timer for the given condition: " + filt).red);
 				return;
 			}
 			var db = data[0];

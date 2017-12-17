@@ -106,11 +106,11 @@ module.exports = {
 		if (cmd.ident) {
 			filt += ",ident:" + cmd.ident + ")";
 		}
-		else if (cmd.rolename) {
-			filt += ",name:'" + cmd.rolename + "')";
+		else if (cmd.role_name) {
+			filt += ",name:'" + cmd.role_name + "')";
 		}
 		else {
-			console.log('Missing parameter: please specify either rolename or ident'.red);
+			console.log('Missing parameter: please specify either role_name or ident'.red);
 			return;
 		}
 
@@ -126,11 +126,11 @@ module.exports = {
 				return;
 			}
 			if (data.length === 0) {
-				console.log(("Error: no such role ident or name").red);
+				console.log(("Error: no such role ident or role_name").red);
 				return;
 			}
 			if (data.length > 1) {
-				console.log(("Error: more than one role for the given condition: " + filter).red);
+				console.log(("Error: more than one role for the given condition: " + filt).red);
 				return;
 			}
 			var db = data[0];

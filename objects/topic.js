@@ -105,13 +105,16 @@ module.exports = {
 				return;
 			}
 		}
-		var filt = "sysfilter=equal(project_ident:" + projIdent + ")";
+		var filt = "sysfilter=equal(project_ident:" + projIdent;
 		if (cmd.ident) {
-			filt += "&sysfilter=equal(ident:" + cmd.ident + ")";
+			filt += ",ident:" + cmd.ident + ")";
 		} else if (cmd.topic_name) {
-			filt += "&sysfilter=equal(name:'" + cmd.topic_name + "')";
+			filt += ",name:'" + cmd.topic_name + "')";
 		}
-
+		if(!cmd.ident && !cmd.topic_name) {
+			console.log("Please provide topic_name or ident".red);
+			return;
+		}
 		client.get(loginInfo.url + "/admin:topics?	" + filt, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
@@ -128,7 +131,7 @@ module.exports = {
 				return;
 			}
 			if (data.length > 1) {
-				console.log(("Error: more than one topic for the given condition: " + filter).red);
+				console.log(("Error: more than one topic for the given condition: " + filt).red);
 				return;
 			}
 			var db = data[0];

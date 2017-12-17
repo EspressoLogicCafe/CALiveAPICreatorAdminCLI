@@ -334,19 +334,27 @@ module.exports = {
 			return;
 		}
 
-		var filt = null;
+        var projIdent = cmd.project_ident;
+        if ( ! projIdent) {
+            projIdent = dotfile.getCurrentProject();
+            if ( ! projIdent) {
+                console.log('There is no current project.'.yellow);
+                return;
+            }
+        }
+        filt = "equal(project_ident:"+projIdent;
 		if (cmd.ident) {
-			filt = "equal(ident:'" + cmd.ident + "')";
+			filt += ",ident:" + cmd.ident +")";
 		}
 		else if (cmd.rule_name) {
-			filt = "equal(name:'" + cmd.rule_name + "')";
+			filt += ",name:'" + cmd.rule_name + "')";
 		}
 		else {
-			console.log('Missing parameter: please specify either name or ident'.red);
+			console.log('Missing parameter: please specify either rule_name or ident'.red);
 			return;
 		}
-		
-		client.get(loginInfo.url + "/rules?sysfilter=" + filt, {
+
+		client.get(loginInfo.url + "/admin:rules?sysfilter=" + filt, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
 				"Content-Type" : "application/json"
@@ -362,7 +370,7 @@ module.exports = {
 				return;
 			}
 			if (data.length > 1) {
-				console.log(("Error: more than one database for the given condition: " + filter).red);
+				console.log(("Error: more than one rule returned for the given condition: " + filt).red);
 				return;
 			}
 			var db = data[0];
