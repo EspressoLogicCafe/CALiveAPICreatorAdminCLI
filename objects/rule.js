@@ -49,7 +49,7 @@ module.exports = {
 			}
 		}
 
-		client.get(url + "/rules?sysfilter=equal(project_ident:" + projIdent +")&pagesize=100", {
+		client.get(url + "/rules?sysfilter=equal(project_ident:" + projIdent +")&pagesize=100&sysorder=(name:asc)", {
 			headers: {
 				Authorization: "CALiveAPICreator " + apiKey + ":1",
 				"Content-Type" : "application/json"
@@ -68,21 +68,28 @@ module.exports = {
 				table.cell("Ident", p.ident);
 				table.cell("Name", p.name);
 				table.cell("Table", p.entity_name);
+				if(p.attribute_name) {
+					table.cell("Attr",p.attribute_name);
+				} else {
+					table.cell("Attr","");
+				}
 				//console.log("Entity Name "+p.entity_name);
 				tblWidth = (p.entity_name && p.entity_name.length > tblWidth) ? p.entity_name.length : tblWidth;
 				var type = module.exports.getRuleType(p.ruletype_ident);
-				
+                table.cell("Type", type);
 				adminCmd += module.exports.show(p);
 				typeWidth = type.length > typeWidth ? type.length : typeWidth;
 				
 				var maxWidth = printObject.getScreenWidth() - (tblWidth + typeWidth + 11+ 2);
-				var maxColWidth = (maxWidth / 2) - 3;
-				
-				table.cell("Type", type);
-				var autoName = p.auto_title;
+				var maxColWidth = (maxWidth / 3) - 3;
+
+
+				var autoName = p.title;
 				if (autoName && autoName.length > maxColWidth) {
 					autoName = autoName.substring(0, (maxColWidth - 3)) + "...";
-					table.cell("Description", autoName.replace(/\n/g, ''));
+					table.cell("Title", autoName.replace(/\n/g, ''));
+				} else {
+                    table.cell("Title","");
 				}
 				var comments = p.comments;
 				if (comments) {

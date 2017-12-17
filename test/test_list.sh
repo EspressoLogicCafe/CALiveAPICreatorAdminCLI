@@ -42,6 +42,9 @@ node ../liveapicreatoradmin.js timer list
 node ../liveapicreatoradmin.js connection list
 node ../liveapicreatoradmin.js listener list
 node ../liveapicreatoradmin.js provider list
+ECHO 'is user license accepted'
+node ../liveapicreatoradmin.js eula accepted
+node ../liveapicreatoradmin.js license list
 
 node ../liveapicreatoradmin.js logout -a $PROJECT
 
