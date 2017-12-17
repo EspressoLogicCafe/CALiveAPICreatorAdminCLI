@@ -47,51 +47,53 @@ Regardless, this command sets your *current server* -- see [the use command](/us
     You are now using server http://api.acme.com/rest/abl/admin/v2 as user fred
 
 ***
-## Command Line Service
-```sh
+## Admin Command Line Service
+## Help
+```
 $ lacadmin --help
 
-  Usage: lacadmin [options] [command]
-
-  Commands:
-
-    login [options] [url]                                                                 Login to an API server
-    logout [options] [url]                                                                Logout from the current server, or a specific server
-    use <alias>                                                                           Use the specified server by default
-    status                                                                                Show the current server, and any defined server aliases
-    license [options] <list|import>                                                       Administer server License for connected server.
-    eula <accepted>                                                                       Returns true or false - end user license agreement must be accepted before any script will run
-    project [options] <list|create|update|delete|use|import|export>                       Administer projects. Actions are: list, create, update, delete, use, export
-    libraries [options] <list|create|update|delete|export|import>                         Administer javascript libraries for an account.
-    authprovider [options] <list|create|linkProject|delete|export|import>                 Administer authentication providers for an account.
-    datasource [options] <list|create|createDatabase|update|delete|import|reload|export>  Administer datasources within a project.
-    resource [options] <list|delete|update|export|import>                                 Administer resources within a project.
-    rule [options] <list|create|delete|import|export>                                     Administer rules within a project.
-    apioptions [options] <list|update|import|export>                                      Administer API project options for an account.
-    namedsort [options] <list|create|update|delete|import|export>                         Administer Named Sorts for the active API Project.
-    namedfilter [options] <list|create|delete|update|import|export>                       Administer Named Filter for the active API Project.
-    token [options] <list|import|export>                                                  Administer Auth Tokens for current project.
-    role [options] <list|delete|import|export>                                            Administer Roles for current project.
-    user [options] <list|delete|update|import|export>                                     Administer Users for current project.
-    npa [options] <list|delete|export|import>                                             Administer Non Persistent Attributes for the active API Project.
-    topic [options] <list|delete|import|export>                                           Administer Topics for current project.
-    event [options] <list|delete|export|import>                                           Administer Request & Response Events for current project.
-    handler [options] <list|delete|export|import>                                         Administer Custom Endpoints (Handlers) for current project.
-    apiversion [options] <list|export|import>                                             Administer API Versions for Resources for current project.
-    relationship [options] <list|delete|export|import>                                    Administer Relationships for current project.
-    snapshot [options] <list|start|restore>                                               List or start a project snapshot (backup) for current project.
-    gateway [options] <list|create|delete|import|export|publish>                          Publish Swagger document for current project to CA Gateway.
-    managedserver [options] <list|create|delete|update|import|export>                     Administer a managed data server (used by @databases to create datasources).
-    migrate [options] <exportRepos>                                                       Migrate creates a list of user libraries, auth providers, gateways, and projects to a named directory
-    schema [options] <create>                                                             Create new table/columns/relationships using @schema format and managed data server datasource.
-    function [options] <list|delete|export|import>                                        Administer Functions for current project.
-    virtualkey [options] <list|create|update|delete|import|export>                        Manage a virtualkey to a table or view.
-    sequence [options] <list|create|update|delete|import|export>                          Manage a database sequence on a key column for a table or view.
-    listener [options] <list|delete|export|import>                                        Administer Listener Events for current project.
-    provider [options] <list|delete|export|import>                                        Administer Listener Provider definitions. (requires login as "sa")
-    connection [options] <list|delete|export|import|stop|start>                           Administer Connections for current project.
-    timer [options] <list|delete|export|import>                                           Administer Timer definitions.
-    application [options] <list|delete|import|export>                                     Administer Data Explorer Applications.
+  Usage: liveapicreatoradmin [options] [command]
+  
+  
+    Commands:
+  
+      login [options] [url]                                                                 Login to an API server
+      logout [options] [url]                                                                Logout from the current server, or a specific server
+      use <alias>                                                                           Use the specified server by default
+      status                                                                                Show the current server, and any defined server aliases
+      license [options] <list|import>                                                       Administer server License for connected server.
+      eula <accepted>                                                                       End user license agreement status (must be accepted before any script will run)
+      project [options] <list|create|update|delete|use|import|export|extract>               Administer projects. Actions are: list, create, update, delete, use, export
+      libraries [options] <list|create|update|delete|export|import>                         Administer javascript libraries for an account.
+      authprovider [options] <list|create|linkProject|delete|export|import>                 Administer authentication providers for an account.
+      datasource [options] <list|create|createDatabase|update|delete|import|reload|export>  Administer datasources within a project.
+      resource [options] <list|delete|update|export|import>                                 Administer resources within a project.
+      rule [options] <list|create|delete|import|export>                                     Administer rules within a project.
+      apioptions [options] <list|update|import|export>                                      Administer API project options for an account.
+      namedsort [options] <list|create|update|delete|import|export>                         Administer Named Sorts for the active API Project.
+      namedfilter [options] <list|create|delete|update|import|export>                       Administer Named Filter for the active API Project.
+      token [options] <list|import|export>                                                  Administer Auth Tokens for current project.
+      role [options] <list|delete|import|export>                                            Administer Roles for current project.
+      user [options] <list|delete|update|import|export>                                     Administer Users for current project.
+      npa [options] <list|delete|export|import>                                             Administer Non Persistent Attributes for the active API Project.
+      topic [options] <list|delete|import|export>                                           Administer Topics for current project.
+      event [options] <list|delete|export|import>                                           Administer Request & Response Events for current project.
+      handler [options] <list|delete|export|import>                                         Administer Custom Endpoints (Handlers) for current project.
+      apiversion [options] <list|export|import>                                             Administer API Versions for Resources for current project.
+      relationship [options] <list|delete|export|import>                                    Administer Relationships for current project.
+      snapshot [options] <list|start|restore>                                               List or start a project snapshot (backup) for current project.
+      gateway [options] <list|create|delete|import|export|publish>                          Publish Swagger document for current project to CA Gateway.
+      managedserver [options] <list|create|delete|update|import|export>                     Administer a managed data server (used by @databases to create datasources).
+      migrate [options] <exportRepos|extract>                                               Migrate creates a export script all projects to a named directory
+      schema [options] <create>                                                             Create new databse using @schema format and a managed data server datasource.
+      function [options] <list|delete|export|import>                                        Administer Functions for current project.
+      virtualkey [options] <list|create|update|delete|import|export>                        Manage a virtualkey to a table or view.
+      sequence [options] <list|create|update|delete|import|export>                          Manage a database sequence on a key column for a table or view.
+      listener [options] <list|delete|export|import>                                        Administer Listener Events for current project.
+      provider [options] <list|delete|export|import>                                        Administer Listener Provider definitions. (requires login as "sa")
+      connection [options] <list|delete|export|import|stop|start>                           Administer Connections for current project.
+      timer [options] <list|delete|export|import>                                           Administer Timer definitions.
+      application [options] <list|delete|import|export>                                     Administer Data Explorer Applications.
     
   Options:
 
@@ -100,36 +102,53 @@ $ lacadmin --help
 
 ```
 
-## login
+## Login
+This will log you in to one or more LAC API Servers - the alias allows multiple connections to be used at the same time (see use command)
 
+```
     lacadmin login -u admin -p myAdminPassword http://localhost:8080 [-a <alias>]
+    Logging in...
+    This server licensed to: CA Technologies license_type: TRIAL
+    Login successful, API key will expire on: 2017-12-18T14:03:48.464Z
 
-This will log you in to one of the current servers - the alias allows multiple connections to be used at the same time (see use command)
+```
 
 ***
 ## Logout
-
-    lacadmin logout [-a <alias>]
-
-This will log you out of the current server, unless you specify an alias,
+This will log you out of the select LAC API server, unless you specify an alias,
 in which case you will be logged out of that server.
+```
+    lacadmin logout [-a <alias>]
+```
+
 
 ***
 ## Use
-The use command will switch between one or more active server connections 
-
+The use command will switch between one or more active server connections. The status command will show you all connections.
+```
     lacadmin use <alias>
+```
 
 This switches the current server to the specified alias.
 
 ***
 ## Status
-
-    lacadmin status
-    
 Prints which server is the current server (if any) and project, and what aliases are defined (if any).
 
-### Output
+```
+    $lacadmin status
+    No aliases currently defined
+    You are not currently logged in to any admin server
+    You cannot run this command because you are not currently logged in.(lacadmin login --help)
+    OR
+    $lacadmin status
+    No aliases currently defined
+    You are currently logged in to admin server: http://localhost:8080/rest/abl/admin/v2 as user admin
+    There is no current project.
+
+```
+
+### Status Output
 
     Defined aliases:
     ┌───────┬───────────────────────────────────────────────────────┬───────┐
@@ -158,7 +177,7 @@ lacadmin use localnw
 # Projects
 lacadmin project list
 lacadmin project use --url_name nwind
-lacadmin project export --url_name nwind --file nw/project_nwind.json
+lacadmin project export --url_name nwind --file nw/project_nwind.json --format json
 
 #API Options
 lacadmin apioptions list
@@ -188,7 +207,7 @@ lacadmin resource export --file nw/resources.json
 
 ```
 
-##Import
+## Sample Import Script
 ```
 #! /bin/bash
 # import Script for Northwind Jetty
@@ -198,11 +217,6 @@ lacadmin logout -a localnw
 lacadmin login -u admin -p Password1 http://localhost:8080 -a localnw
 lacadmin use localnw
 
-#Libraries - need to import these before import of JSON project
-#We can create the Library and use an existing JS library.  To update / delete and recreate.
-#lacadmin libraries create --name RestAuthProviderJS  --comments RESTAuthProvider js Demo --shortName restauth --libtype javascript --ver 1.0 --file nw/RESTAuthSecurityProvider.js
-lacadmin libraries import --file nw/auth_libraries.json
-lacadmin libraries list
 
 # Projects - this is the default NorthWind JSON project
 lacadmin project import --file nw/project_nwind.json
@@ -269,8 +283,7 @@ lacadmin timer list
 lacadmin listener list
 lacadmin connection list
 lacadmin application list
-# requires sa login (these are the definitions)
-#lacadmin provider list
+
 lacadmin logout -a local
 ```
 

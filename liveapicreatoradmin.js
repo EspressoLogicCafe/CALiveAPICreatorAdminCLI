@@ -87,7 +87,7 @@ program
 
 program
 	.command('eula <accepted>')
-	.description('Returns true or false - end user license agreement must be accepted before any script will run')
+	.description('End user license agreement status (must be accepted before any script will run)')
 	.action(eula.doStatus);
 
 program
@@ -368,14 +368,14 @@ program
 
 program
 	.command('migrate <exportRepos|extract>')
-	.description('Migrate creates a list of user libraries, auth providers, gateways, and projects to a named directory')
+	.description('Migrate creates a export script all projects to a named directory')
 	.option('--directory [directory]', 'Required for export, the name of a directory to save all exported json files')
 	.option('--file [file]', 'optional:: for source extract, the name of a file to read from/save to, if unspecified, use stdin/stdout')
 	.action(migrate.doMigrate);
 
 program
 	.command('schema <create>')
-	.description('Create new table/columns/relationships using @schema format and managed data server datasource.')
+	.description('Create new databse using @schema format and a managed data server datasource.')
 	.option('--project_ident [project_ident]','The project ident that will be marked as used' )
 	.option('--prefix [prefix]','The datasource prefix used for export. Note for import, the prefix must be marked as schema isEditable' )
 	.option('--ignoredbcolumntype [true|false]','optional: The ignoredbcolumntype setting is used when moving between database vendors' )

@@ -1,4 +1,4 @@
-# Project
+# API Project
 
 This suite of commands allows you to manipulate your CA Live API Creator API projects. See [Creating an API](https://docops.ca.com/ca-live-api-creator/4-0/en/creating-apis)
 ## Project Options
@@ -23,10 +23,13 @@ Usage: project [options] <list|create|update|delete|use|import|export|extract>
     --verbose                    optional: whether to display detailed results, or just a summary
 ```
 ***
-## list
-    $lacadmin project list
+## List
+The `list` command shows all projects in the LAC connected server.
 
-The `list` command shows all projects in the current server.
+```
+    $lacadmin project list
+```
+
 
 #### Output
     All projects
@@ -50,12 +53,13 @@ Includes sample scripts which can be used by devops developers.
 #lacadmin project import --file PROJECT_admin.zip
 ```
 ## Create
+The create command creates a new project with the given values. Status is active by default, it can be specified
+as A(ctive) or I(nactive).  The url_name (aka url fragement) is required.
 
+```
     $lacadmin project create --project_name <name> --url_name <url_name> [--status <A|I>] [--authprovider <ident>]
         [--comments <comments>] [--verbose]
-
-The create command creates a new project with the given values. Status is active by default, it can be specified
-as A(ctive) or I(nactive).
+```
 
 If the `--verbose` option is specified, the output will include all created objects instead of a summary.
 
@@ -96,21 +100,9 @@ The use command makes the specified project the current project.
 The project can be specified either by its name or by its URL name.
 
 ***
-## Import
-Import an existing API project to LAC server.  File type may be either a zip or json file. 
-The import command imports a project from the specified JSON export file.
-If the `filename` parameter is not specified, stdin is used. This allows you to pipe in content from another command.
 
-You can optionally give the new project a different name or URL name.
-
-If the `--verbose` option is specified, the output will include all created objects instead of a summary.
-
-
-    $lacadmin project import --file <filename> [--verbose]
-     
-***
 ## Export
-The export project exports the specified project into a JSON ir ZIP file.  The format flag will default to ZIP if not supplied.
+The export project exports the specified project into a JSON or ZIP file (use format flag).  The format flag will default to ZIP if not supplied.
 If the `filename` parameter is not specified, stdout is used.
 
 The project can be specified either by its name or by its URL name.
@@ -121,6 +113,19 @@ If the `--verbose` option is specified, the output will include all created obje
     $lacadmin project export  [--project_name <name> | --url_name <url_name>] --file <filename>
          [--format [zip|json] [--verbose]
  
+```
+
+## Import
+Import an existing API project to LAC server.  File type may be either a zip or json file. 
+The import command imports a project from the specified JSON export file.
+If the `filename` parameter is not specified, stdin is used. This allows you to pipe in content from another command.
+
+You can optionally give the new project a different name or URL name.
+
+If the `--verbose` option is specified, the output will include all created objects instead of a summary.
+
+```
+    $lacadmin project import --file <filename> [--verbose]
 ```
 
 ##Extract
