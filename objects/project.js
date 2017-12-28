@@ -618,6 +618,7 @@ module.exports = {
 		if ( ! cmd.file) {
 			cmd.file = '/dev/stdin';
 		}
+		var endPoint = "/@import"; //4.1 style
 		var isZIPFile = false;
 		if(cmd.file) {
 			isZIPFile = cmd.file.endsWith(".zip");
@@ -625,6 +626,9 @@ module.exports = {
 		var fileContent = fs.readFileSync(cmd.file);
 		if(!isZIPFile) {
 			fileContent = JSON.parse(fileContent);
+			if(fileContent.length > 0) {
+				endPoint = "/ProjectExport"; // 4.0 and earlier style
+			}
 		}
 
 		if (cmd.project_name) {
@@ -633,9 +637,10 @@ module.exports = {
 		if (cmd.url_name) {
 			fileContent[0].url_name = cmd.url_name;
 		}
-		console.log("endpint ="+loginInfo.url + "/@import");
+
+		console.log("endPoint: "+loginInfo.url + endPoint);
 		var startTime = new Date();
-		client.post(loginInfo.url + "/@import" , {
+		client.post(loginInfo.url + endPoint , {
 			data: fileContent,
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
@@ -654,23 +659,14 @@ module.exports = {
 				return;
 			} 	
 
-			if (cmd.verbose) {
-				_.each(data.txsummary, function(obj) {
-					printObject.printObject(obj, obj['@metadata'].entity, 0, obj['@metadata'].verb);
-				});
-			}
-			else {
-				printObject.printObject(newProj, newProj['@metadata'].entity, 0, newProj['@metadata'].verb);
-				console.log(('and ' + (data.txsummary.length - 1) + ' other objects').grey);
-			}
-			
+			console.log("project import completed using edpoint: "+endPoint);
 			var trailer = "Request took: " + (endTime - startTime) + "ms";
 			trailer += " - # objects touched: ";
-			if (data.txsummary.length === 0) {
+			if (data.length === 0) {
 				console.log('No data returned'.yellow);
 			}
 			else {
-				trailer += data.txsummary.length;
+				trailer += " size: "+ data.length;
 			}
 			
 			//set the imported project to be the current selected project
