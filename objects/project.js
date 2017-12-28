@@ -653,13 +653,7 @@ module.exports = {
 				console.log("Request took: " + (endTime - startTime) + "ms");
 				return;
 			} 	
-			var newProj = _.find( data.txsummary, function(p) {
-				return p['@metadata'].resource === 'ProjectExport';
-			});
-			if ( ! newProj) {
-				console.log('ERROR: unable to find imported project'.red);
-				return;
-			}
+
 			if (cmd.verbose) {
 				_.each(data.txsummary, function(obj) {
 					printObject.printObject(obj, obj['@metadata'].entity, 0, obj['@metadata'].verb);
@@ -680,9 +674,9 @@ module.exports = {
 			}
 			
 			//set the imported project to be the current selected project
-			dotfile.setCurrentProject(newProj.ident, newProj.name, newProj.url_name);
+			//dotfile.setCurrentProject(newProj.ident, newProj.name, newProj.url_name);
 			printObject.printHeader(trailer);
-			console.log("You are now using project ident: "+newProj.ident +" name: "+ newProj.name);
+			//console.log("You are now using project ident: "+newProj.ident +" name: "+ newProj.name);
 		});
 	},
 	extract: function(cmd) {
@@ -768,7 +762,7 @@ module.exports = {
 		var projIdent = cmd.ident;
 		filter = "";
 		if(cmd.url_name) {
-			filter = "?urlfrag="+cmd.url_name;
+			filter = "?urlfragment="+cmd.url_name;
 		} else if ( ! projIdent) {
 			projIdent = dotfile.getCurrentProject();
 			 if(! projIdent){
