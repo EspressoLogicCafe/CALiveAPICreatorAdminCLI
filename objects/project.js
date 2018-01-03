@@ -779,18 +779,16 @@ module.exports = {
 			console.log('Valid format must be either multi, zip or json'.red);
 			return;
 		}
-		filter += "&exportformat=" + format;
+		filter += "&responseformat=" + format;
 		var contentType = "application/json";
 		if(format == 'zip' ){
 			contentType = 'application/zip';
-			//contentType += ',application/octet-stream';
 		}
 		console.log(contentType);
 		var toStdout = false;
 		if ( ! cmd.file) {
 			toStdout = true;
 		} else {
-			//should we check for the file extension s/b .zip or .json?
 			if(!cmd.file.endsWith(".zip") && !cmd.file.endsWith(".json")) {
 				console.log('File Name extension must end with .zip or .json'.red);
 				return;
