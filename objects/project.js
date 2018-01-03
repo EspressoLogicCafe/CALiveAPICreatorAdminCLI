@@ -623,13 +623,32 @@ module.exports = {
 		if(cmd.file) {
 			isZIPFile = cmd.file.endsWith(".zip");
 		}
+		var args ="";
+		var collision = "rename_new"; //original behavior
+		var passwordStyle = "skip";
+		var errorhandling = "standard";
+		if(cmd.namecollision) {
+			collision = cmd.namecollision.toLowerCase();
+		}
+		if(cmd.passwordstyle) {
+			passwordStyle = cmd.passwordstyle;
+		}
+		if(cmd.errorhandling) {
+			errorhandling = cmd.errorhandling;
+		}
+		args = "?namecollision="+collision+"&errorhandling="+errorhandling +"&passwordstyle="+passwordStyle;
 		var fileContent = fs.readFileSync(cmd.file);
+		var contentType = "application/json";
 		if(!isZIPFile) {
 			fileContent = JSON.parse(fileContent);
 			if(fileContent.length > 0) {
 				endPoint = "/ProjectExport"; // 4.0 and earlier style
+				args = ""; //not hondred
 			}
+		} else {
+			contentType = "applicaiton/zip";
 		}
+
 
 		if (cmd.project_name) {
 			fileContent[0].name = cmd.project_name;
@@ -638,13 +657,13 @@ module.exports = {
 			fileContent[0].url_name = cmd.url_name;
 		}
 
-		console.log("endPoint: "+loginInfo.url + endPoint);
+		console.log("endPoint: "+loginInfo.url + endPoint + args);
 		var startTime = new Date();
-		client.post(loginInfo.url + endPoint , {
+		client.post(loginInfo.url + endPoint +args , {
 			data: fileContent,
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
-				"Content-Type" : "application/json"
+				"Content-Type" : contentType
 			}
 		}, function(data) {
 		
@@ -666,7 +685,7 @@ module.exports = {
 				console.log('No data returned'.yellow);
 			}
 			else {
-				trailer += " size: "+ data.length;
+				trailer += " : "+ JSON.stringify(data ,null ,2);
 			}
 			
 			//set the imported project to be the current selected project

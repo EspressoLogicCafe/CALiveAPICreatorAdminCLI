@@ -1,6 +1,6 @@
 {
   "name": "liveapicreator-admin-cli",
-  "version": "4.1.04",
+  "version": "4.1.05",
   "description": "The NodeJS command line utility for CA Live Creator DevOps Administration from CA Technologies",
   "main": "liveapicreatoradmin.js",
   "scripts": {
@@ -33,6 +33,7 @@
     "salesforce",
     "MQTT",
     "Kafka",
+    "Apache",
     "teradata",
     "IBM MQ",
     "MQ",
