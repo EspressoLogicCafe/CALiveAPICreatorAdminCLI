@@ -49,7 +49,7 @@ var connection = require('./objects/connection.js');
 var timer = require('./objects/timer.js');
 var provider = require('./objects/provider.js');
 var application = require('./objects/application.js');
-//4.1 features - changes to project export as zip
+//4.1 features - changes to project import/export as zip
 
 
 program

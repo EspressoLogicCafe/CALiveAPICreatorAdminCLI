@@ -7,20 +7,23 @@ Usage: project [options] <list|create|update|delete|use|import|export|extract>
 
   Administer projects. Actions are: list, create, update, delete, use, export
 
-  Options:
-
-    -h, --help                   output usage information
-    --ident [ident]              The ident of the specific project (see project list)
-    --project_name [name]        The name of the project
-    --url_name [name]            The name of the project
-    --status [status]            optional: the status of the project, can be A (for Active) or I for (Inactive)
-    --authprovider [ident]       optional: the ident of the authentication provider for the project
-    --comments [comments]        optional: a description of the project
-    -d, --directory [directory]  Required for extract, the name of a directory to extract ZIP files
-    -f, --file [file]            optional: for import/export, the name of a file to read from/save to, if unspecified, use stdin/stdout
-    --format [json|zip]          optional: for import/export, this sets the output type of the export default: zip
-    --synchronize [true|false]   optional: Used by extract & synchronize zip file with directory folder (default: false)
-    --verbose                    optional: whether to display detailed results, or just a summary
+   -h, --help                                                                      output usage information
+      --ident [ident]                                                                 The ident of the specific project (see project list)
+      --project_name [name]                                                           The name of the project
+      --url_name [name]                                                               The name of the project
+      --status [status]                                                               optional: create or update the status of the project, can be A (for Active) or I for (Inactive)
+      --authprovider [ident]                                                          optional: create or update the ident of the authentication provider for the project
+      --comments [comments]                                                           optional: create or update a description of the project
+      -d, --directory [directory]                                                     Required for extract, the name of a directory to extract ZIP files
+      -f, --file [file]                                                               optional: for import/export, the name of a file to read from/save to, if unspecified, use stdin/stdout
+      --format [json|zip]                                                             optional: for import/export, this sets the output type of the export default: zip
+      --namecollision [fail|rename_new|replace_existing|disable_and_rename_existing]  optional: for import, determines how to handle existing API projects(default rename_new)
+      --errorhandling [standard|fail_on_warning|best_efforts]                         optional: for import, sets the error level response hanling (default: standard
+      --passwordstyle [skip|encrypted|plaintext]                                      optional: for export, sets the password style of exported API datasources (default: skip)
+      --librarystyle [emit_all|in_use_only]                                           optional: for export, sets the library style  (default: emit_all)
+      --apioptionsstyle [emit_all|skip_default]                                       optional: for export, sets the api options (default: emit_all)
+      --synchronize [true|false]                                                      optional: Used by extract & synchronize zip file with directory folder (default: false)
+      -v, --verbose                                                                   optional: whether to display detailed results, or just a summary
 ```
 ***
 ## List
@@ -111,25 +114,29 @@ If the `--verbose` option is specified, the output will include all created obje
 ```
 
     $lacadmin project export  [--project_name <name> | --url_name <url_name>] --file <filename>
-         [--format [zip|json] [--verbose]
+         [--format [zip|json] [--format zip|json] 
+         [ --passwordstytle skip --librarystyle in_use_only --apioptionsstyle emit_all] [--verbose] 
  
 ```
 
 ## Import
-Import an existing API project to LAC server.  File type may be either a zip or json file. 
+Import an existing API project to LAC server.  File type may be either a zip or json file.
 The import command imports a project from the specified JSON export file.
 If the `filename` parameter is not specified, stdin is used. This allows you to pipe in content from another command.
 
 You can optionally give the new project a different name or URL name.
 
 If the `--verbose` option is specified, the output will include all created objects instead of a summary.
-
+Note: The json format can either be the new 4.1 style or the original project export type.
 ```
-    $lacadmin project import --file <filename> [--verbose]
+    $lacadmin project import --file <filename[.json|.zip]> 
+        [ --namecollision rename_new --errorhandling standard ] [--verbose]
 ```
 
 ##Extract
-This will take the content of a downloaded ZIP fil and compare it with the selected directory.  If the directory does not exist, the zip file will be exploded into this directory.  If the directory exist and the synchronize flag is set to true (default is false) the system will remove any files found in the directory that are not in the ZIP file.
+This will take the content of a downloaded ZIP file and compare it with the selected directory.  
+If the directory does not exist, the zip file will be exploded into this directory.  If the directory exist and the synchronize flag is set to true (default is false) 
+the system will remove any files found in the directory that were not found in the ZIP file.
 
 ```
     $lacadmin project extract --file <filename.zip> --directory </tmp/path/>  --synchronize [true|false]

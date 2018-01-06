@@ -2,9 +2,11 @@ var Client = require('node-rest-client').Client;
 var colors = require('colors');
 var _ = require('underscore');
 var fs = require('fs');
+var request = require('request');
 var CLITable = require('cli-table');
 var Table = require('easy-table');
-
+//var FormData = require('form-data');
+//var http = require('http');
 var context = require('./context.js');
 var login = require('../util/login.js');
 var printObject = require('../util/printObject.js');
@@ -12,8 +14,7 @@ var dotfile = require('../util/dotfile.js');
 //ZIP Support for 4.1
 var AdmZip = require('adm-zip');
 var filesToSkip = ["__MACOSX",".DS_Store",".git",".gitignore",".idea"];
-var exportEndpoint = "@export";
-var importEndpoint = "@import";
+
 
 module.exports = {
 	doProject: function(action, cmd) {
@@ -473,7 +474,20 @@ module.exports = {
 			module.exports.importFromDir(cmd);
 			return;
 		} else {
-			module.exports.importFromFile(cmd);
+
+			var isZIPFile = false;
+			if(cmd.format && cmd.format.toLowerCase() == "zip") {
+				isZIPFile = true;
+			} else {
+				if(cmd.file) {
+					isZIPFile = cmd.file.endsWith(".zip");
+				}
+			}
+			if(isZIPFile) {
+				module.exports.importFromZIPFile(cmd);
+			} else {
+				module.exports.importFromJSONFile(cmd);
+			}
 			return;
 		}
 		//console.log("import requires either --file (type zip or json) or --directory".red);
@@ -607,7 +621,68 @@ module.exports = {
 			}
 		});
 	},
-	importFromFile: function(cmd) {
+	importFromZIPFile: function(cmd) {
+		console.log("Project @import using file " + cmd.file);
+		var client = new Client();
+		var loginInfo = login.login(cmd);
+		if (!loginInfo) {
+			return;
+		}
+
+		if (!cmd.file) {
+			console.log("ZIP file name is required".red);
+			return;
+		}
+		var endPoint = "/@import";
+		var url = loginInfo.url;
+
+		var args ="";
+		var collision = "rename_new"; //original behavior
+		var errorhandling = "standard";
+		if(cmd.namecollision) {
+			collision = cmd.namecollision.toLowerCase();
+			if(collision !== 'rename_new' && collision !== 'replace_existing' && collision !== 'fail'
+					&& collision !== 'disable_and_rename_existing') {
+				console.log("invalid namecollision value "+ collision);
+				return;
+			}
+		}
+		if(cmd.errorhandling) {
+			errorhandling = cmd.errorhandling.toLowerCase();
+			if(errorhandling !== 'standard' && errorhandling !== 'fail_on_warning' && errorhandling !== 'best_efforts') {
+				console.log("invalid errorhandling value "+ collision);
+				return;
+			}
+		}
+		args = "?namecollision="+collision+"&errorhandling="+errorhandling;
+		console.log(url + endPoint + args);
+
+		var fileName = cmd.file;
+		var readStream = fs.createReadStream(fileName);
+		readStream.on('data', function (chunk) {
+			console.log("reading chunk .. "+ chunk.length);
+		})
+
+		var uploadOptions = {
+			name: 'foo.zip',
+			file: readStream
+		};
+		request.post({
+			url: url + endPoint + args,
+			headers:  {
+				"Authorization" : "CALiveAPICreator " + loginInfo.apiKey + ":1",
+				"Content-Type" : 'multipart/form-data'
+			},
+			formData: uploadOptions,},
+			function(err, resp, body) {
+				if (err) {
+					console.log('Error ', err);
+				} else {
+					console.log('@import successful', body);
+				}
+			});
+	},
+	importFromJSONFile: function(cmd) {
 		console.log("Project @import using file " + cmd.file);
 		var client = new Client();
 		var loginInfo = login.login(cmd);
@@ -625,18 +700,23 @@ module.exports = {
 		}
 		var args ="";
 		var collision = "rename_new"; //original behavior
-		var passwordStyle = "skip";
 		var errorhandling = "standard";
 		if(cmd.namecollision) {
 			collision = cmd.namecollision.toLowerCase();
-		}
-		if(cmd.passwordstyle) {
-			passwordStyle = cmd.passwordstyle;
+			if(collision !== 'rename_new' && collision !== 'replace_existing' && collision !== 'fail'
+				&& collision !== 'disable_and_rename_existing') {
+				console.log("invalid namecollision value "+ collision);
+				return;
+			}
 		}
 		if(cmd.errorhandling) {
-			errorhandling = cmd.errorhandling;
+			errorhandling = cmd.errorhandling.toLowerCase();
+			if(errorhandling !== 'standard' && errorhandling !== 'fail_on_warning' && errorhandling !== 'best_efforts') {
+				console.log("invalid errorhandling value "+ collision);
+				return;
+			}
 		}
-		args = "?namecollision="+collision+"&errorhandling="+errorhandling +"&passwordstyle="+passwordStyle;
+		args = "?namecollision="+collision+"&errorhandling="+errorhandling;
 		var fileContent = fs.readFileSync(cmd.file);
 		var contentType = "application/json";
 		if(!isZIPFile) {
@@ -645,10 +725,7 @@ module.exports = {
 				endPoint = "/ProjectExport"; // 4.0 and earlier style
 				args = ""; //not hondred
 			}
-		} else {
-			contentType = "applicaiton/zip";
 		}
-
 
 		if (cmd.project_name) {
 			fileContent[0].name = cmd.project_name;
@@ -772,7 +849,7 @@ module.exports = {
 		var loginInfo = login.login(cmd);
 		if ( ! loginInfo)
 			return;
-
+		var exportEndpoint = "@export";
 		var filter = null;
 		var projIdent = cmd.ident;
 		filter = "";
@@ -790,21 +867,29 @@ module.exports = {
 			return;
 		}
 		//we could have a switch for JSON or ZIP
-		var format = "zip";
+		var contentType = "application/json";
+		var format = "json";
 		if(cmd.format) {
-			format = cmd.format;//.toUpperCase();
+			format = cmd.format.toLowerCase();
 		}
-		if(format !== 'zip' && format !== 'json' && format !== 'multi') {
-			console.log('Valid format must be either multi, zip or json'.red);
+		if(format !== 'zip' && format !== 'json') {
+			console.log('Valid format must be either zip or json'.red);
 			return;
 		}
-		filter += "&responseformat=" + format;
-		var contentType = "application/json";
-		if(format == 'zip' ){
-			contentType = 'application/zip';
-		}
+
+		var passwordStyle = cmd.passwordstyle || "skip";
+		var authTokenStyle = cmd.authTokenstyle || "skip_auto";
+		var apiOptionsStyle = cmd.apioptionsstyle ||  "emit_all";
+		var libraryStyle = cmd.librarystyle || "emit_all";
+		filter += "&responseformat=" + format
+			+ "&passwordstyle=" + passwordStyle
+			+ "&authtokenstyle="  + authTokenStyle
+			+ "&apioptionsstyle=" + apiOptionsStyle
+			+ "&librarystyle=" + libraryStyle;
+
 		console.log(contentType);
 		var toStdout = false;
+		var filename;
 		if ( ! cmd.file) {
 			toStdout = true;
 		} else {
@@ -812,6 +897,9 @@ module.exports = {
 				console.log('File Name extension must end with .zip or .json'.red);
 				return;
 			}
+		}
+		if(format == 'zip' || (cmd.file && cmd.file.endsWith(".zip")) ){
+			contentType = 'application/zip';
 		}
 		console.log(loginInfo.url + "/" + exportEndpoint + filter);
 		client.get(loginInfo.url + "/" + exportEndpoint + filter, {
