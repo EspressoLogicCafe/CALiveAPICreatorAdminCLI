@@ -44,7 +44,6 @@ module.exports = {
 				return;
 			}
 		}
-		console.log(url + "/admin:listeners?sysfilter=equal(project_ident:" + projIdent+")&pagesize=100&&sysorder=(name:asc_uc,name:desc)");
 		client.get(url + "/admin:listeners?sysfilter=equal(project_ident:" + projIdent+")&pagesize=100&&sysorder=(name:asc_uc,name:desc)", {
 						headers: {
 							Authorization: "CALiveAPICreator " + apiKey + ":1",

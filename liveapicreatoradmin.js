@@ -9,6 +9,7 @@ var path = require('path');
 var pkg = require( path.join(__dirname, 'package.json') );
 
 var login = require('./objects/login.js');
+var api = require('./objects/api.js');
 var project = require('./objects/project.js');
 var dbase = require('./objects/dbase.js');
 var resource = require('./objects/resource.js');
@@ -93,9 +94,9 @@ program
 program
 	.command('project <list|create|update|delete|use|import|export|extract>')
 	.description('Administer projects. Actions are: list, create, update, delete, use, export')
-	.option('--ident [ident]', 'The ident of the specific project (see project list)')
+	.option('--ident [ident]', 'The ident of the specific project (use $lacadmin api list)')
 	.option('--project_name [name]', 'The name of the project')
-	.option('--url_name [name]', 'The name of the project')
+	.option('--url_name [name]', 'The url fragment name of the project')
 	.option('--status [status]', 'optional: create or update the status of the project, can be A (for Active) or I for (Inactive)')
 	.option('--authprovider [ident]', 'optional: create or update the ident of the authentication provider for the project')
 	.option('--comments [comments]', 'optional: create or update a description of the project')
@@ -110,6 +111,24 @@ program
 	.option('--synchronize [true|false]', 'optional: Used by extract & synchronize zip file with directory folder (default: false)')
 	.option('-v, --verbose', 'optional: whether to display detailed results, or just a summary')
 	.action(project.doProject);
+
+program
+	.command('api <list|delete|use|export|extract>')
+	.description('Administer API export. Actions are: list, create, update, delete, use, export')
+	.option('--ident [ident]', 'The ident of the specific API ($lacadmin api list)')
+	.option('--api_name [name]', 'The name of the API')
+	.option('--url_name [name]', 'The url fragment name of the API')
+	.option('--section [name]', '(optional) The section of the API you wish to export (e.g. resources, functions, datasources)')
+	.option('--section_filter [filter]', '(optional) The section filter of the API you wish to export (name=foo&version=v1)')
+	.option('-d, --directory [directory]', 'Required for extract, the name of a directory to extract ZIP files')
+	.option('-f, --file [file]', 'optional: for import/export, the name of a file to read from/save to, if unspecified, use stdin/stdout')
+	.option('--format [json|zip]', 'optional: for import/export, this sets the output type of the export default: zip')
+	.option('--passwordstyle [skip|encrypted|plaintext]', 'optional: for export, sets the password style of exported API datasources (default: skip)')
+	.option('--librarystyle [emit_all|in_use_only]', 'optional: for export, sets the library style  (default: emit_all)')
+	.option('--apioptionsstyle [emit_all|skip_default]', 'optional: for export, sets the api options (default: emit_all)')
+	.option('--synchronize [true|false]', 'optional: Used by extract & synchronize zip file with directory folder (default: false)')
+	.option('-v, --verbose', 'optional: whether to display detailed results, or just a summary')
+	.action(api.doProject);
 
 program
 	.command('libraries <list|create|update|delete|export|import>')
@@ -217,8 +236,8 @@ program
 
 
 program
-	.command('namedsort <list|create|update|delete|import|export>')
-	.description('Administer Named Sorts for the active API Project.')
+	.command('sort <list|create|update|delete|import|export>')
+	.description('Administer Sorts for the active API Project.')
 	.option('--ident [ident]', 'The ident of the specific named sort object')
 	.option('--sort_name [name]', 'The Name of named sort')
 	.option('--sort_text [sorttext]', 'Sort Text to define named sort')
@@ -230,8 +249,8 @@ program
 	.action(sorts.doSort);
 
 program
-	.command('namedfilter <list|create|delete|update|import|export>')
-	.description('Administer Named Filter for the active API Project.')
+	.command('filter <list|create|delete|update|import|export>')
+	.description('Administer Filters for the active API Project.')
 	.option('--ident [ident]', 'The ident of the specific named filter object')
 	.option('--filter_name [name]', 'The Name of named filter')
 	.option('--filter_text [text]', 'Text to define named filter')
@@ -243,8 +262,9 @@ program
 	.action(filters.doFilter);
 
 program
-	.command('token <list|import|export>')
+	.command('authtoken <list|import|export>')
 	.description('Administer Auth Tokens for current project.')
+	.option('--token_name [name]','The name of the auth token')
 	.option('--project_ident [project_ident]','The project ident that will be marked as used' )
 	.option('--file [fileName]', 'optional: Name of file to import/export (if not provided stdin/stdout used for export)')
 	.action(token.doToken);
@@ -296,8 +316,8 @@ program
 	.action(topic.doTopic);
 
 program
-	.command('event <list|delete|export|import>')
-	.description('Administer Request & Response Events for current project.')
+	.command('request_event <list|delete|export|import>')
+	.description('Administer Request, Response, & CORS Option events for current project.')
 	.option('--event_name [name]', 'The request or response Name')
 	.option('--ident [ident]', 'The ident of the specific event')
 	.option('--project_ident [project_ident]','The project ident that will be used' )
@@ -306,7 +326,7 @@ program
 	.action(event.doListener);
 
 program
-	.command('handler <list|delete|export|import>')
+	.command('custom_endpoints <list|delete|export|import>')
 	.description('Administer Custom Endpoints (Handlers) for current project.')
 	.option('--project_ident [project_ident]','The project ident that will be used' )
 	.option('--ident [ident]', 'The ident of the specific handler')
@@ -318,6 +338,7 @@ program
 program
 	.command('apiversion <list|export|import>')
 	.description('Administer API Versions for Resources for current project.')
+	.option('--version_name [name]', 'The API version name')
 	.option('--project_ident [project_ident]','The project ident that will be used' )
 	.option('-f, --file [fileName]', 'optional: Name of file to import/export (if not provided stdin/stdout used for export)')
 	.action(apiversion.doVersion);
@@ -348,7 +369,7 @@ program
 	.option('--password [password]','The gateway password.')
 	.option('--hostname [server]','The gateway server hostname https://myserver:8443/lacman/1.0/publish' )
 	.option('--apiversion [version]','The API version of the swagger document' )
-	.option('--url_name [name]','The API url fragment name (use project list)' )
+	.option('--url_name [name]','The API url fragment name (use $lacadmin api list)' )
 	.option('-v, --verbose', 'optional: display list of datasources in detailed create format')
 	.option('--comments [comments]','The gateway definition comments' )
 	.option('--file [fileName]', 'optional: Name of file to import/export (if not provided stdin/stdout used)')
@@ -470,8 +491,8 @@ program
 
 program
 	.command('application <list|delete|import|export>')
-	.description('Administer Data Explorer Applications.')
-	.option('--ident [ident]', 'The ident of the specific project (see project list)')
+	.description('Administer Data Explorer Applications (meta data).')
+	.option('--ident [ident]', 'The ident of the specific project (use $lacadmin api list)')
 	.option('--project_name [name]', 'The name of the project')
 	.option('--url_name [name]', 'The name of the project')
 	.option('--application_name [name]', 'The name of the application')

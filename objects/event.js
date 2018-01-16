@@ -57,10 +57,14 @@ module.exports = {
 						}
 						printObject.printHeader('Request/Response Events');
 						var table = new Table();
-						var type = "";
 						var verboseDisplay = "";
 						_.each(data, function(p) {
-						type = p.eventtype_ident == 1 ? "Request":"Response";
+						var type = "Request"
+						if( p.eventtype_ident == 2){
+							type ="Response";
+						} else if ( p.eventtype_ident == 3) {
+							type = "Option";
+						}
 							table.cell("Ident", p.ident);
 							table.cell("Name", p.name);
 							table.cell("Type", type);
