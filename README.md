@@ -290,6 +290,7 @@ lacadmin logout -a local
 ## Object-specific commands
 Follow the links below for detailed documentation on specific administrator commands.
 * [Projects](docs/project.md)
+* [API](docs/api.md)
 * [Libraries](docs/libraries.md)
 * [Rules](docs/rule.md)
 * [Authentication Providers](docs/authprovider.md)
