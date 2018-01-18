@@ -21,11 +21,20 @@ module.exports = {
 		if (action === 'list') {
 			module.exports.list(cmd);
 		}
+		else if (action === 'create') {
+			module.exports.create(cmd);
+		}
+		else if (action === 'update') {
+			module.exports.update(cmd);
+		}
 		else if (action === 'delete') {
 			module.exports.del(cmd);
 		}
 		else if (action === 'use') {
 			module.exports.use(cmd);
+		}
+		else if (action === 'import') {
+			module.exports.import(cmd);
 		}
 		else if (action === 'export') {
 			module.exports.exportToFile(cmd);
@@ -34,7 +43,7 @@ module.exports = {
 			module.exports.extract(cmd);
 		}
 		else {
-			console.log('You must specify an API action: list, delete, use, export or extract');
+			console.log('You must specify an API action: list, create, update, delete, use, import, export or extract');
 			//program.help();
 		}
 	},
@@ -82,6 +91,9 @@ module.exports = {
 					 verboseDisplay += "lacadmin api export --url_name "+p.url_name+"  --file API_"+p.url_name + ".json --format json\n";
                      verboseDisplay += "#lacadmin api export --url_name "+p.url_name+"  --file API_"+p.url_name + ".zip --format zip\n";
                      verboseDisplay += "#lacadmin api extract --file API_"+p.url_name + ".zip --directory /temp/ --synchronize true\n";
+                     verboseDisplay += "#lacadmin api import --file API_"+p.url_name + ".json\n";
+                     verboseDisplay += "#lacadmin api import --file API_"+p.url_name + ".zip\n";
+                     //verboseDisplay += "#lacadmin api import --directory /temp/ \n";
 				 }
 			});
 			table.sort(['Name']);
@@ -90,6 +102,190 @@ module.exports = {
 			if(cmd.verbose) {
 				console.log(verboseDisplay);
 			}
+		});
+	},
+	
+	create: function(cmd) {
+		var client = new Client();
+		var loginInfo = login.login(cmd);
+		if ( ! loginInfo)
+			return;
+		if ( ! cmd.project_name) {
+			console.log('Missing parameter: project_name'.red);
+			return;
+		}
+		if ( ! cmd.url_name) {
+			console.log('Missing parameter: url_name'.red);
+			return;
+		}
+		if ( ! cmd.authprovider) {
+			console.log('You did not specify an authentication provider -- you will not be able to log into this project until you do so.'.yellow);
+		}
+		context.getContext(cmd, function() {
+			//console.log('Current account: ' + JSON.stringify(context.account));
+			
+			var newProject = {
+				name: cmd.project_name,
+				url_name: cmd.url_name,
+				is_active: true,
+				authprovider_ident: cmd.authprovider || 1000,
+				account_ident: context.account.ident,
+				comments: cmd.comments
+			};
+			
+			if (cmd.status) {
+				if (cmd.status !== 'A' && cmd.status !== 'I') {
+					console.log('Project status must be either A (for active) or I (for inactive). Default is A if unspecified.'.red);
+					return;
+				}
+				newProject.status = cmd.status;
+			}
+
+			var startTime = new Date();
+			client.post(loginInfo.url + "/projects", {
+				data: newProject,
+				headers: {
+					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+					"Content-Type" : "application/json"
+				}
+			}, function(data) {
+				var endTime = new Date();
+				if (data.errorMessage) {
+					console.log(data.errorMessage.red);
+					return;
+				}
+				printObject.printHeader('Project was created, including:');
+				var newProj = _.find(data.txsummary, function(p) {
+					return p['@metadata'].resource === 'admin:projects';
+				});
+				if ( ! newProj) {
+					console.log('ERROR: unable to find newly created project'.red);
+					return;
+				}
+				if (cmd.verbose) {
+					_.each(data.txsummary, function(obj) {
+						printObject.printObject(obj, obj['@metadata'].entity, 0, obj['@metadata'].verb);
+					});
+				}
+				else {
+					printObject.printObject(newProj, newProj['@metadata'].entity, 0, newProj['@metadata'].verb);
+					console.log(('and ' + (data.txsummary.length - 1) + ' other objects').grey);
+				}
+				var trailer = "Request took: " + (endTime - startTime) + "ms";
+				trailer += " - # objects touched: ";
+				if (data.txsummary.length == 0) {
+					console.log('No data returned'.yellow);
+				}
+				else {
+					trailer += data.txsummary.length;
+				}
+				printObject.printTrailer(trailer);
+				
+				dotfile.setCurrentProject(newProj.ident, cmd.project_name, data.url_name);
+			});
+		});
+	},
+	
+	update: function(cmd) {
+		var client = new Client();
+		var loginInfo = login.login(cmd);
+		if ( ! loginInfo)
+			return;
+
+		var apiKey = loginInfo.apiKey;
+		if ( ! apiKey){
+			console.log(("Error: Login apiKey is missing or empty").red);
+			return;
+		}
+			
+		var filter = null;
+		var projIdent = cmd.project_ident;
+		
+		if (cmd.ident) {
+			filter = "?sysfilter=equal(ident:" + cmd.ident + ")";
+		} else if ( ! projIdent) {
+				projIdent = dotfile.getCurrentProject();
+				if ( ! projIdent) {
+					console.log('There is no current project.'.yellow);
+					return;
+				}
+				filter = "/" + projIdent;
+		}
+		if( ! filter) {
+			console.log('Missing parameter: please specify either ident or use a specific project'.red);
+			return;
+		}
+		client.get(loginInfo.url + "/AllProjects" + filter, {
+			headers: {
+				Authorization: "CALiveAPICreator " + apiKey + ":1",
+				"Content-Type" : "application/json"
+			}
+		}, function(data) {
+			//console.log('get result: ' + JSON.stringify(data, null, 2));
+			if (data.errorMessage) {
+				console.log(("Project Update Error: " + data.errorMessage).red);
+				return;
+			}
+			
+			if (data.length === 0) {
+				console.log(("Project not found").red);
+				return;
+			}
+			if (data.length > 1) {
+				console.log(("Project Update Error: more than one project for the given condition: " + filter).red);
+				return;
+			}
+			var project = data[0];
+			if (cmd.project_name) {
+				project.name = cmd.project_name;
+			}
+			if (cmd.url_name) {
+				project.url_name = cmd.url_name;
+			}
+			if (cmd.url) {
+				project.url = cmd.url;
+			}
+			if (cmd.comments) {
+				project.comments = cmd.comments;
+			}
+			if (cmd.authprovider) {
+				project.authprovider_ident = cmd.authprovider;
+			}
+			if (cmd.status) {
+				if (cmd.status !== 'A' && cmd.status !== 'I') {
+					console.log('Project status must be either A (for active) or I (for inactive). Default is A if unspecified.'.red);
+					return;
+				}
+				project.is_active = cmd.status == "A";
+			}
+			//{"@metadata" : {"action":"MERGE_INSERT", "key":"ident"}
+			var startTime = new Date();
+			client.put(project['@metadata'].href, {
+				data: project,
+				headers: {
+					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+					"Content-Type" : "application/json"
+				}
+			}, function(data) {
+				var endTime = new Date();
+				if (data.errorMessage) {
+					console.log(data.errorMessage.red);
+					return;
+				}
+				printObject.printHeader('Project was updated, including the following objects:');
+				_.each(data.txsummary, function(obj) {
+					printObject.printObject(obj, obj['@metadata'].entity, 0, obj['@metadata'].verb);
+				});
+				var trailer = "Request took: " + (endTime - startTime) + "ms";
+				trailer += " - # objects touched: ";
+				if (data.txsummary.length == 0) {
+					console.log('No data returned'.yellow);
+				}
+				else {
+					trailer += data.txsummary.length;
+				}
+				printObject.printTrailer(trailer);
+			});
 		});
 	},
 	del : function(cmd) {
@@ -216,6 +412,114 @@ module.exports = {
 			dotfile.setCurrentProject(project.ident, project.name, project.url_name);
 		});
 	},
+	export: function(cmd) {
+		var client = new Client();
+		var loginInfo = login.login(cmd);
+		if ( ! loginInfo)
+			return;
+
+		var filter = null;
+		var projIdent = cmd.ident;
+		filter = "equal(ident:" + projIdent + ")";
+		if (cmd.url_name) {
+			filter = "equal(url_name:'" + cmd.url_name + "')";
+		} else if (cmd.project_name) {
+			filter = "equal(name:'" + cmd.project_name + "')";
+		} else if ( ! projIdent) {
+			projIdent = dotfile.getCurrentProject();
+			 if(! projIdent){
+				console.log('No current project selected'.red);
+				return;
+			 }
+			 filter = "equal(ident:" + projIdent + ")";
+		} else {
+			console.log('Missing parameter: please specify either project_name or url_name'.red);
+			return;
+		}
+		//add support for export format from JSON to ZIP (default:json)
+		var toStdout = false;
+		if ( ! cmd.file) {
+			toStdout = true;
+		}
+		
+		client.get(loginInfo.url + "/ProjectExport?sysfilter=" + filter, {
+			headers: {
+				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+				"Content-Type" : "application/json"
+			}
+		}, function(data) {
+			//console.log('get result: ' + JSON.stringify(data, null, 2));
+			if (data.errorMessage) {
+				console.log(("Error: " + data.errorMessage).red);
+				return;
+			}
+			if (data.length === 0) {
+				console.log(("Error: no such project").red);
+				return;
+			}
+			
+			if (toStdout) {
+				console.log(JSON.stringify(data, null, 2));
+			}
+			else {
+				var exportFile = fs.openSync(cmd.file, 'w+', 0600);
+				fs.writeSync(exportFile, JSON.stringify(data, null, 2));
+				console.log(('Project has been exported to file: ' + cmd.file).green);
+			}
+		});
+	},
+	import: function(cmd) {
+		console.log("import called");
+		if(cmd.directory) {
+			module.exports.importFromDir(cmd);
+			return;
+		} else {
+
+			var isZIPFile = false;
+			if(cmd.format && cmd.format.toLowerCase() == "zip") {
+				isZIPFile = true;
+			} else {
+				if(cmd.file) {
+					isZIPFile = cmd.file.endsWith(".zip");
+				}
+			}
+			if(isZIPFile) {
+				module.exports.importFromZIPFile(cmd);
+			} else {
+				module.exports.importFromJSONFile(cmd);
+			}
+			return;
+		}
+		//console.log("import requires either --file (type zip or json) or --directory".red);
+	},
+	importFromDir: function(cmd) {
+	//we will read from a source directory and build the zip file to send to LAC
+		console.log("import called on directory " +cmd.directory);
+		
+		var client = new Client();
+		var loginInfo = login.login(cmd);
+		if ( ! loginInfo) {
+			return;
+		}
+		var path = cmd.directory;
+		var filesToRead = [];
+		var dirToRead = [];
+		var slash = cmd.directory.endsWith("/")?"":"/";
+		var startPath = cmd.directory + slash;
+		var stats = fs.lstatSync(startPath);
+		var zip = null;
+		if (stats.isDirectory()){
+			zip = module.exports.readFromDirectory(dirToRead, filesToRead, startPath , "/");
+		}
+		////modules.export.addDirToZip(dirToRead,zip);
+		//modules.export.addFileToZip(filesToRead,zip);
+		if (zip) {
+			var willSendthis = zip.toBuffer();
+			fs.writeFileSync("/Users/banty01/test.zip", willSendthis);
+		//zip.writeZip(/*target file name*/"/Users/banty01/test.zip");
+			console.log("zip file written to /Users/banty01/test.zip");
+		}
+	},
 	readFromDirectory: function(dirToRead, filesToRead, fullpath, path){
 		console.log("readDirectory fullPath:" +fullpath + " ,path:" + path);
 		var zip = new AdmZip();
@@ -315,6 +619,156 @@ module.exports = {
 				   }
 				}
 			}
+		});
+	},
+	importFromZIPFile: function(cmd) {
+		console.log("Project @import using file " + cmd.file);
+		var client = new Client();
+		var loginInfo = login.login(cmd);
+		if (!loginInfo) {
+			return;
+		}
+
+		if (!cmd.file) {
+			console.log("ZIP file name is required".red);
+			return;
+		}
+		var endPoint = "/@import";
+		var url = loginInfo.url;
+
+		var args ="";
+		var collision = "rename_new"; //original behavior
+		var errorhandling = "standard";
+		if(cmd.namecollision) {
+			collision = cmd.namecollision.toLowerCase();
+			if(collision !== 'rename_new' && collision !== 'replace_existing' && collision !== 'fail'
+					&& collision !== 'disable_and_rename_existing') {
+				console.log("invalid namecollision value "+ collision);
+				return;
+			}
+		}
+		if(cmd.errorhandling) {
+			errorhandling = cmd.errorhandling.toLowerCase();
+			if(errorhandling !== 'standard' && errorhandling !== 'fail_on_warning' && errorhandling !== 'best_efforts') {
+				console.log("invalid errorhandling value "+ collision);
+				return;
+			}
+		}
+		args = "?namecollision="+collision+"&errorhandling="+errorhandling;
+		console.log(url + endPoint + args);
+
+		var fileName = cmd.file;
+		var readStream = fs.createReadStream(fileName);
+		readStream.on('data', function (chunk) {
+			console.log("reading chunk .. "+ chunk.length);
+		})
+
+		var uploadOptions = {
+			name: 'foo.zip',
+			file: readStream
+		};
+		request.post({
+			url: url + endPoint + args,
+			headers:  {
+				"Authorization" : "CALiveAPICreator " + loginInfo.apiKey + ":1",
+				"Content-Type" : 'multipart/form-data'
+			},
+			formData: uploadOptions,},
+			function(err, resp, body) {
+				if (err) {
+					console.log('Error ', err);
+				} else {
+					console.log('@import successful', body);
+				}
+			});
+	},
+	importFromJSONFile: function(cmd) {
+		console.log("Project @import using file " + cmd.file);
+		var client = new Client();
+		var loginInfo = login.login(cmd);
+		if ( ! loginInfo) {
+			return;
+		}
+
+		if ( ! cmd.file) {
+			cmd.file = '/dev/stdin';
+		}
+		var endPoint = "/@import"; //4.1 style
+		var isZIPFile = false;
+		if(cmd.file) {
+			isZIPFile = cmd.file.endsWith(".zip");
+		}
+		var args ="";
+		var collision = "rename_new"; //original behavior
+		var errorhandling = "standard";
+		if(cmd.namecollision) {
+			collision = cmd.namecollision.toLowerCase();
+			if(collision !== 'rename_new' && collision !== 'replace_existing' && collision !== 'fail'
+				&& collision !== 'disable_and_rename_existing') {
+				console.log("invalid namecollision value "+ collision);
+				return;
+			}
+		}
+		if(cmd.errorhandling) {
+			errorhandling = cmd.errorhandling.toLowerCase();
+			if(errorhandling !== 'standard' && errorhandling !== 'fail_on_warning' && errorhandling !== 'best_efforts') {
+				console.log("invalid errorhandling value "+ collision);
+				return;
+			}
+		}
+		args = "?namecollision="+collision+"&errorhandling="+errorhandling;
+		var fileContent = fs.readFileSync(cmd.file);
+		var contentType = "application/json";
+		if(!isZIPFile) {
+			fileContent = JSON.parse(fileContent);
+			if(fileContent.length > 0) {
+				endPoint = "/ProjectExport"; // 4.0 and earlier style
+				args = ""; //not hondred
+			}
+		}
+
+		if (cmd.project_name) {
+			fileContent[0].name = cmd.project_name;
+		}
+		if (cmd.url_name) {
+			fileContent[0].url_name = cmd.url_name;
+		}
+
+		console.log("endPoint: "+loginInfo.url + endPoint + args);
+		var startTime = new Date();
+		client.post(loginInfo.url + endPoint +args , {
+			data: fileContent,
+			headers: {
+				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+				"Content-Type" : contentType
+			}
+		}, function(data) {
+		
+			var endTime = new Date();
+			if (data.errorMessage) {
+				console.log(data.errorMessage.red);
+				return;
+			}
+			printObject.printHeader('Project was created, including:');
+			if(data.statusCode == 200 ){
+				console.log("Request took: " + (endTime - startTime) + "ms");
+				return;
+			} 	
+
+			console.log("project import completed using edpoint: "+endPoint);
+			var trailer = "Request took: " + (endTime - startTime) + "ms";
+			trailer += " - # objects touched: ";
+			if (data.length === 0) {
+				console.log('No data returned'.yellow);
+			}
+			else {
+				trailer += " : "+ JSON.stringify(data ,null ,2);
+			}
+			
+			//set the imported project to be the current selected project
+			//dotfile.setCurrentProject(newProj.ident, newProj.name, newProj.url_name);
+			printObject.printHeader(trailer);
+			//console.log("You are now using project ident: "+newProj.ident +" name: "+ newProj.name);
 		});
 	},
 	extract: function(cmd) {

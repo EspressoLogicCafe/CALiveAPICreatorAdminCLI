@@ -63,15 +63,15 @@ $ lacadmin --help
       status                                                                                Show the current server, and any defined server aliases
       license [options] <list|import>                                                       Administer server License for connected server.
       eula <accepted>                                                                       End user license agreement status (must be accepted before any script will run)
-      project [options] <list|create|update|delete|use|import|export|extract>               Administer projects. Actions are: list, create, update, delete, use, export
+      api [options] <list|create|update|delete|use|import|export|extract>                   Administer projects. Actions are: list, create, update, delete, use, export
       libraries [options] <list|create|update|delete|export|import>                         Administer javascript libraries for an account.
       authprovider [options] <list|create|linkProject|delete|export|import>                 Administer authentication providers for an account.
       datasource [options] <list|create|createDatabase|update|delete|import|reload|export>  Administer datasources within a project.
       resource [options] <list|delete|update|export|import>                                 Administer resources within a project.
       rule [options] <list|create|delete|import|export>                                     Administer rules within a project.
       apioptions [options] <list|update|import|export>                                      Administer API project options for an account.
-      namedsort [options] <list|create|update|delete|import|export>                         Administer Named Sorts for the active API Project.
-      namedfilter [options] <list|create|delete|update|import|export>                       Administer Named Filter for the active API Project.
+      sort [options] <list|create|update|delete|import|export>                              Administer Named Sorts for the active API Project.
+      filter [options] <list|create|delete|update|import|export>                            Administer Named Filter for the active API Project.
       token [options] <list|import|export>                                                  Administer Auth Tokens for current project.
       role [options] <list|delete|import|export>                                            Administer Roles for current project.
       user [options] <list|delete|update|import|export>                                     Administer Users for current project.
@@ -175,9 +175,9 @@ lacadmin login -u admin -p Password1 http://localhost:8080 -a localnw
 lacadmin use localnw
 
 # Projects
-lacadmin project list
-lacadmin project use --url_name nwind
-lacadmin project export --url_name nwind --file nw/project_nwind.json --format json
+lacadmin api list
+lacadmin api use --url_name nwind
+lacadmin api export --url_name nwind --file nw/project_nwind.json --format json
 
 #API Options
 lacadmin apioptions list
@@ -219,7 +219,9 @@ lacadmin use localnw
 
 
 # Projects - this is the default NorthWind JSON project
-lacadmin project import --file nw/project_nwind.json
+lacadmin api export --file project_nwind.json --format json
+#lacadmin api export --file project_nwind.zip --format zip
+lacadmin api import --file project_nwind.json --namecollision replace_existing
 lacadmin project list
 
 #API API Options [Optional]
@@ -255,9 +257,10 @@ lacadmin login -u admin -p Password1 http://localhost:8080 -a local
 lacadmin use local
 lacadmin status
 
-# Select A Project
-lacadmin project use --url_name demo
-lacadmin project list
+# Select An API using url fragment name
+lacadmin api use --url_name demo
+
+lacadmin api list
 lacadmin apioptions list
 lacadmin datasource list
 lacadmin libraries list
@@ -268,8 +271,8 @@ lacadmin relationship list
 lacadmin token list
 lacadmin role list
 lacadmin user list
-lacadmin namedsort list
-lacadmin namedfilter list
+lacadmin sort list
+lacadmin filter list
 lacadmin apiversion list
 lacadmin event list
 lacadmin handler list
@@ -289,7 +292,6 @@ lacadmin logout -a local
 
 ## Object-specific commands
 Follow the links below for detailed documentation on specific administrator commands.
-* [Projects](docs/project.md)
 * [API](docs/api.md)
 * [Libraries](docs/libraries.md)
 * [Rules](docs/rule.md)

@@ -58,20 +58,20 @@ program
 
 program
 	.command('login [url]')
-	.description('Login to an API server')
+	.description('Login to an API server (e.g. lacadmin login -u admin -p secret http://localhost:8080 -a demo)')
 	.option('-u, --username <username>', 'API Server admin user name')
 	.option('-p, --password <password>', 'API Server admin password')
 	.option('-a, --serverAlias <serverAlias>', 'Alias for this connection')
 	.action(login.commandLogin);
 
 program
-	.command('logout [url]')
+	.command('logout [url] (lacadmin logout -a demo)')
 	.description('Logout from the current server, or a specific server')
 	.option('-a, --serverAlias <serverAlias>', 'Alias from which to logout')
 	.action(login.commandLogout);
 
 program
-	.command('use <alias>')
+	.command('use <alias> (lacadmin use demo)')
 	.description('Use the specified server by default')
 	.action(login.commandUseAlias);
 
@@ -92,37 +92,32 @@ program
 	.action(eula.doStatus);
 
 program
-	.command('project <list|create|update|delete|use|import|export|extract>')
+	.command('project <list|create|update|delete|use|import|export>')
 	.description('Administer projects. Actions are: list, create, update, delete, use, export')
-	.option('--ident [ident]', 'The ident of the specific project (use $lacadmin api list)')
+	.option('--ident [ident]', 'The ident of the specific project (see project list)')
 	.option('--project_name [name]', 'The name of the project')
-	.option('--url_name [name]', 'The url fragment name of the project')
-	.option('--status [status]', 'optional: create or update the status of the project, can be A (for Active) or I for (Inactive)')
-	.option('--authprovider [ident]', 'optional: create or update the ident of the authentication provider for the project')
-	.option('--comments [comments]', 'optional: create or update a description of the project')
-	.option('-d, --directory [directory]', 'Required for extract, the name of a directory to extract ZIP files')
-	.option('-f, --file [file]', 'optional: for import/export, the name of a file to read from/save to, if unspecified, use stdin/stdout')
-	.option('--format [json|zip]', 'optional: for import/export, this sets the output type of the export default: zip')
-	.option('--namecollision [fail|rename_new|replace_existing|disable_and_rename_existing]', 'optional: for import, determines how to handle existing API projects(default rename_new)')
-	.option('--errorhandling [standard|fail_on_warning|best_efforts]', 'optional: for import, sets the error level response hanling (default: standard')
-	.option('--passwordstyle [skip|encrypted|plaintext]', 'optional: for export, sets the password style of exported API datasources (default: skip)')
-	.option('--librarystyle [emit_all|in_use_only]', 'optional: for export, sets the library style  (default: emit_all)')
-	.option('--apioptionsstyle [emit_all|skip_default]', 'optional: for export, sets the api options (default: emit_all)')
-	.option('--synchronize [true|false]', 'optional: Used by extract & synchronize zip file with directory folder (default: false)')
-	.option('-v, --verbose', 'optional: whether to display detailed results, or just a summary')
+	.option('--url_name [name]', 'The name of the project')
+	.option('--status [status]', 'optional: the status of the project, can be A (for Active) or I for (Inactive)')
+	.option('--authprovider [ident]', 'optional: the ident of the authentication provider for the project')
+	.option('--comments [comments]', 'optional: a description of the project')
+	.option('--file [file]', 'optional: for import/export, the name of a file to read from/save to, if unspecified, use stdin/stdout')
+	.option('--verbose', 'optional: whether to display detailed results, or just a summary')
 	.action(project.doProject);
 
 program
-	.command('api <list|delete|use|export|extract>')
-	.description('Administer API export. Actions are: list, create, update, delete, use, export')
-	.option('--ident [ident]', 'The ident of the specific API ($lacadmin api list)')
-	.option('--api_name [name]', 'The name of the API')
+	.command('api <list|create|update|delete|use|import|export|extract>')
+	.description('Administer API. Actions are: list, create, update, delete, use, import, export, extract')
+	.option('--ident [ident]', 'The ident of the specific project (use $lacadmin api list)')
+	.option('--project_name [name]', 'The name of the API')
 	.option('--url_name [name]', 'The url fragment name of the API')
-	.option('--section [name]', '(optional) The section of the API you wish to export (e.g. resources, functions, datasources)')
-	.option('--section_filter [filter]', '(optional) The section filter of the API you wish to export (name=foo&version=v1)')
+	.option('--status [status]', 'optional: create or update the status of the API, can be A (for Active) or I for (Inactive)')
+	.option('--authprovider [ident]', 'optional: create or update the ident of the authentication provider for the API')
+	.option('--comments [comments]', 'optional: create or update a description of the API')
 	.option('-d, --directory [directory]', 'Required for extract, the name of a directory to extract ZIP files')
 	.option('-f, --file [file]', 'optional: for import/export, the name of a file to read from/save to, if unspecified, use stdin/stdout')
 	.option('--format [json|zip]', 'optional: for import/export, this sets the output type of the export default: zip')
+	.option('--namecollision [fail|rename_new|replace_existing|disable_and_rename_existing]', 'optional: for import, determines how to handle existing API (default: rename_new)')
+	.option('--errorhandling [standard|fail_on_warning|best_efforts]', 'optional: for import, sets the error level response hanling (default: standard')
 	.option('--passwordstyle [skip|encrypted|plaintext]', 'optional: for export, sets the password style of exported API datasources (default: skip)')
 	.option('--librarystyle [emit_all|in_use_only]', 'optional: for export, sets the library style  (default: emit_all)')
 	.option('--apioptionsstyle [emit_all|skip_default]', 'optional: for export, sets the api options (default: emit_all)')

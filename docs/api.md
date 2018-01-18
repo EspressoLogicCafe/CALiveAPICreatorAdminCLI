@@ -8,16 +8,16 @@ Usage: API [options] <list|create|update|delete|use|import|export|extract>
   Administer API's. Actions are: list, create, update, delete, use, export
 
    -h, --help                                                                      output usage information
-      --ident [ident]                                                                 The ident of the specific project (see project list)
-      --project_name [name]                                                           The name of the project
-      --url_name [name]                                                               The name of the project
-      --status [status]                                                               optional: create or update the status of the project, can be A (for Active) or I for (Inactive)
-      --authprovider [ident]                                                          optional: create or update the ident of the authentication provider for the project
-      --comments [comments]                                                           optional: create or update a description of the project
-      --section [name]                                                                (optional) The section of the API you wish to export (e.g. resources, functions, datasources)
-      --section_filter [filter]                                                       (optional) The section filter of the API you wish to export (name=foo&version=v1)  
+      --ident [ident]                                                                 The ident of the specific API (see: lacadmin api list)
+      --project_name [name]                                                           The name of the API
+      --url_name [name]                                                               The url fragment name of the API
+      --status [status]                                                               optional: create or update the status of the API, can be A (for Active) or I for (Inactive)
+      --authprovider [ident]                                                          optional: create or update the ident of the authentication provider for the API
+      --comments [comments]                                                           optional: create or update a description of the API
+      --section [name]                                                                optional: The section of the API you wish to export (e.g. resources, functions, datasources)
+      --section_filter [filter]                                                       optional: The section filter of the API you wish to export (name=foo&version=v1)  
       -d, --directory [directory]                                                     Required for extract, the name of a directory to extract ZIP files
-      -f, --file [file]                                                               optional: for import/export, the name of a file to read from/save to, if unspecified, use stdin/stdout
+      -f, --file [file]                                                               optional: for import/export/extract, the name of a file to read from/save to, if unspecified, use stdin/stdout
       --format [json|zip]                                                             optional: for import/export, this sets the output type of the export default: zip
       --namecollision [fail|rename_new|replace_existing|disable_and_rename_existing]  optional: for import, determines how to handle existing API projects(default rename_new)
       --errorhandling [standard|fail_on_warning|best_efforts]                         optional: for import, sets the error level response hanling (default: standard
@@ -100,7 +100,7 @@ If the `--verbose` option is specified, the output will include all deleted obje
 ## Use
 The use command will associate all future lacadmin calls with the selected API which can be selected by name or url_name.
 
-    $lacadmin api use [--project_name <name> | --url_name <url_name>]
+    $lacadmin api use [--project_name '<name>' | --url_name <url_name>]
 
 The use command makes the specified API the current project.
 The API can be specified either by its name or by its URL name.
