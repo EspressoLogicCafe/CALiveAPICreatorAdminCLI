@@ -107,7 +107,7 @@ program
 	.command('api <list|create|update|delete|use|import|export|extract>')
 	.description('Administer API. Actions are: list, create, update, delete, use, import, export, extract')
 	.option('--ident [ident]', 'The ident of the specific project (use $lacadmin api list)')
-	.option('--project_name [name]', 'The name of the API')
+	.option('--api_name [name]', 'The name of the API')
 	.option('--url_name [name]', 'The url fragment name of the API')
 	.option('--status [status]', 'optional: create or update the status of the API, can be A (for Active) or I for (Inactive)')
 	.option('--authprovider [ident]', 'optional: create or update the ident of the authentication provider for the API')

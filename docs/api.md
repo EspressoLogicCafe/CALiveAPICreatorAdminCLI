@@ -9,7 +9,7 @@ Usage: API [options] <list|create|update|delete|use|import|export|extract>
 
    -h, --help                                                                      output usage information
       --ident [ident]                                                                 The ident of the specific API (see: lacadmin api list)
-      --project_name [name]                                                           The name of the API
+      --api_name [name]                                                               The name of the API
       --url_name [name]                                                               The url fragment name of the API
       --status [status]                                                               optional: create or update the status of the API, can be A (for Active) or I for (Inactive)
       --authprovider [ident]                                                          optional: create or update the ident of the authentication provider for the API

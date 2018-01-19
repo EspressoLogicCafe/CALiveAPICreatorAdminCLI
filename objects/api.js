@@ -110,8 +110,8 @@ module.exports = {
 		var loginInfo = login.login(cmd);
 		if ( ! loginInfo)
 			return;
-		if ( ! cmd.project_name) {
-			console.log('Missing parameter: project_name'.red);
+		if ( ! cmd.api_name) {
+			console.log('Missing parameter: api_name'.red);
 			return;
 		}
 		if ( ! cmd.url_name) {
@@ -125,7 +125,7 @@ module.exports = {
 			//console.log('Current account: ' + JSON.stringify(context.account));
 			
 			var newProject = {
-				name: cmd.project_name,
+				name: cmd.api_name,
 				url_name: cmd.url_name,
 				is_active: true,
 				authprovider_ident: cmd.authprovider || 1000,
@@ -181,7 +181,7 @@ module.exports = {
 				}
 				printObject.printTrailer(trailer);
 				
-				dotfile.setCurrentProject(newProj.ident, cmd.project_name, data.url_name);
+				dotfile.setCurrentProject(newProj.ident, cmd.api_name, data.url_name);
 			});
 		});
 	},
@@ -236,8 +236,8 @@ module.exports = {
 				return;
 			}
 			var project = data[0];
-			if (cmd.project_name) {
-				project.name = cmd.project_name;
+			if (cmd.api_name) {
+				project.name = cmd.api_name;
 			}
 			if (cmd.url_name) {
 				project.url_name = cmd.url_name;
@@ -423,8 +423,8 @@ module.exports = {
 		filter = "equal(ident:" + projIdent + ")";
 		if (cmd.url_name) {
 			filter = "equal(url_name:'" + cmd.url_name + "')";
-		} else if (cmd.project_name) {
-			filter = "equal(name:'" + cmd.project_name + "')";
+		} else if (cmd.api_name) {
+			filter = "equal(name:'" + cmd.api_name + "')";
 		} else if ( ! projIdent) {
 			projIdent = dotfile.getCurrentProject();
 			 if(! projIdent){
@@ -433,7 +433,7 @@ module.exports = {
 			 }
 			 filter = "equal(ident:" + projIdent + ")";
 		} else {
-			console.log('Missing parameter: please specify either project_name or url_name'.red);
+			console.log('Missing parameter: please specify either api_name or url_name'.red);
 			return;
 		}
 		//add support for export format from JSON to ZIP (default:json)
@@ -727,8 +727,8 @@ module.exports = {
 			}
 		}
 
-		if (cmd.project_name) {
-			fileContent[0].name = cmd.project_name;
+		if (cmd.api_name) {
+			fileContent[0].name = cmd.api_name;
 		}
 		if (cmd.url_name) {
 			fileContent[0].url_name = cmd.url_name;
