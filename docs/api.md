@@ -48,7 +48,7 @@ The `list` command shows all API's in the LAC connected server.
     # API's: 4
 
 ***
-###adding the --verbose flag to project list 
+### adding the --verbose flag to project list 
 Includes sample scripts which can be used by devops developers.
 ```
 #lacadmin api export --url_name admin  --file PROJECT_admin.json --format json
@@ -80,7 +80,7 @@ Note that creating a project also creates a number of other default objects.
 Once the project is created, it becomes the current project.
 
 ***
-##Update
+## Update
 The update command updates one or more attribute of the specified project.
 The project can be specified either by its name or by its URL name.
 
@@ -88,7 +88,7 @@ The project can be specified either by its name or by its URL name.
     $lacadmin api update [--project_name <name> | --url_name <url_name>] 
         [--status <A-I>] [--authprovider <ident>] [--comments <comments>]
 ***
-##Delete
+## Delete
 The delete command deletes the specified project and everything it contains.
 The project can be specified either by its name or by its URL name.
 
@@ -136,7 +136,7 @@ Note: The json format can either be the new 4.1 style or the original API export
         [ --namecollision rename_new --errorhandling standard ] [--verbose]
 ```
 
-##Extract
+## Extract
 This will take the content of a downloaded ZIP file and compare it with the selected directory.  
 If the directory does not exist, the zip file will be exploded into this directory.  If the directory exist and the synchronize flag is set to true (default is false) 
 the system will remove any files found in the directory that were not found in the ZIP file.
@@ -145,7 +145,7 @@ the system will remove any files found in the directory that were not found in t
     $lacadmin api extract --file <filename.zip> --directory </tmp/path/>  --synchronize [true|false]
 
 ```
-##Section 
+## Section 
 The export of an api can be reduced to a single section or a single object within a section using the section filter.
 ```
 EXPORT PROJECT=demo
@@ -174,7 +174,7 @@ $lacadmin api export --section rules --file temp/rules.json
 $lacadmin api export --section apioptions --file temp/apioptions.json
 ```
 
-##Section Filter
+## Section Filter
 You can further refine the section by using a specific section filter. 
 ```
 EXPORT PROJECT=demo
