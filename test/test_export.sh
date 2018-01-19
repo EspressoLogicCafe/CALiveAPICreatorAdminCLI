@@ -17,7 +17,6 @@ node ../liveapicreatoradmin.js project use --url_name $PROJECT
 ## Export everything
 mkdir -p $PROJECT
 
-node ../liveapicreatoradmin.js snapshot start --snapshot_name snapshot1
 #node ../liveapicreatoradmin.js project export --file $PROJECT/$PROJECT.json --format json
 node ../liveapicreatoradmin.js apioptions export --file $PROJECT/apioptions.json
 node ../liveapicreatoradmin.js datasource export --file $PROJECT/datasource.json
@@ -38,7 +37,6 @@ node ../liveapicreatoradmin.js topic export --file $PROJECT/topic.json
 node ../liveapicreatoradmin.js npa export --file $PROJECT/npa.json
 node ../liveapicreatoradmin.js gateway export --file $PROJECT/gateway.json
 node ../liveapicreatoradmin.js virtualkey export --file $PROJECT/virtualkey.json
-#node ../liveapicreatoradmin.js snapshot restore --name snapshot1
 node ../liveapicreatoradmin.js connection export --file $PROJECT/connection.json
 node ../liveapicreatoradmin.js listener export --file $PROJECT/listener.json
 node ../liveapicreatoradmin.js timer export --file $PROJECT/timer.json

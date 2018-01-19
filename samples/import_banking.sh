@@ -39,7 +39,6 @@ lacadmin apiversion import --file $PROJECT/apiversions.json
 lacadmin event import --file $PROJECT/events.json
 lacadmin handler import --file $PROJECT/handlers.json
 #lacadmin npa import --file $PROJECT/npa.json
-lacadmin snapshot start --name 'first project'
 
 lacadmin project list
 lacadmin logout  -a $PROJECT

@@ -19,7 +19,6 @@ mkdir -p $PROJECT
 rm -rf temp2
 mkdir -p temp2
 
-node ../liveapicreatoradmin.js snapshot start --snapshot_name snapshot1
 node ../liveapicreatoradmin.js api export -section api --file temp2/api.json --format json --url_name $PROJECT
 node ../liveapicreatoradmin.js api export --section connections --section_filter "name=MQTTConn" --file temp2/connections.json
 node ../liveapicreatoradmin.js api export --section custom_endpoints --section_filter "name=New custom endpoint 2" --file temp2/custom_endpoints.json

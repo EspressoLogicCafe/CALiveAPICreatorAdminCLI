@@ -21,7 +21,6 @@ node ../liveapicreatoradmin.js project create --project_name $PROJECT_NEW --url_
 node ../liveapicreatoradmin.js project use --url_name $PROJECT_NEW
 
 
-node ../liveapicreatoradmin.js snapshot start --snapshot_name snapshotStart
 //node ../liveapicreatoradmin.js project import --file $PROJECT/$PROJECT.json
 node ../liveapicreatoradmin.js apioptions import --file $PROJECT/apioptions.json
 node ../liveapicreatoradmin.js datasource import --file $PROJECT/datasource.json
@@ -42,7 +41,6 @@ node ../liveapicreatoradmin.js topic import --file $PROJECT/topic.json
 node ../liveapicreatoradmin.js npa import --file $PROJECT/npa.json
 node ../liveapicreatoradmin.js gateway import --file $PROJECT/gateway.json
 node ../liveapicreatoradmin.js virtualkey import --file $PROJECT/virtualkey.json
-#node ../liveapicreatoradmin.js snapshot restore --name snapshot1
 node ../liveapicreatoradmin.js connection import --file $PROJECT/connection.json
 node ../liveapicreatoradmin.js listener import --file $PROJECT/listener.json
 node ../liveapicreatoradmin.js timer import --file $PROJECT/timer.json
@@ -50,5 +48,4 @@ node ../liveapicreatoradmin.js managedserver import --file $PROJECT/managedserve
 # provider requires an sa login (project_ident=3)
 node ../liveapicreatoradmin.js provider import --provider_name Startup --file $PROJECT/provider.json
 node ../liveapicreatoradmin.js sequence import --file $PROJECT/sequence.json
-node ../liveapicreatoradmin.js snapshot start --snapshot_name snapshotEnd
 node ../liveapicreatoradmin.js logout -a $PROJECT

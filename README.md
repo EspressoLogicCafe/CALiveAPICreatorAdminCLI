@@ -81,7 +81,6 @@ $ lacadmin --help
       handler [options] <list|delete|export|import>                                         Administer Custom Endpoints (Handlers) for current project.
       apiversion [options] <list|export|import>                                             Administer API Versions for Resources for current project.
       relationship [options] <list|delete|export|import>                                    Administer Relationships for current project.
-      snapshot [options] <list|start|restore>                                               List or start a project snapshot (backup) for current project.
       gateway [options] <list|create|delete|import|export|publish>                          Publish Swagger document for current project to CA Gateway.
       managedserver [options] <list|create|delete|update|import|export>                     Administer a managed data server (used by @databases to create datasources).
       migrate [options] <exportRepos|extract>                                               Migrate creates a export script all projects to a named directory

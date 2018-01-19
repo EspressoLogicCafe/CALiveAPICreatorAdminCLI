@@ -13,7 +13,6 @@ call lacadmin project use --url_name nwindb2b
 REM  Export everything
 mkdir -p nwind
 
-call lacadmin snapshot start --name snapshot1
 call lacadmin project export --file nwind/nwind.json
 call lacadmin apioptions export --file nwind/apioptions.json
 call lacadmin datasource export --file nwind/datasource.json
@@ -32,7 +31,6 @@ call lacadmin event export --file nwind/events.json
 call lacadmin handler export --file nwind/handlers.json
 call lacadmin topic export --file nwind/topic.json
 call lacadmin npa export --file nwind/npa.json
-call lacadmin snapshot restore --name snapshot1
 
 call lacadmin logout -a nwind
 

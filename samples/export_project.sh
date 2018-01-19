@@ -17,7 +17,6 @@ lacadmin project use --url_name $PROJECT
 ## Export everything
 mkdir -p $PROJECT
 
-lacadmin snapshot start --name snapshot1
 lacadmin project export --file $PROJECT/$PROJECT.json
 lacadmin apioptions export --file $PROJECT/apioptions.json
 lacadmin datasource export --file $PROJECT/datasource.json
@@ -38,7 +37,6 @@ lacadmin topic export --file $PROJECT/topic.json
 lacadmin npa export --file $PROJECT/npa.json
 lacadmin gateway export --file $PROJECT/gateway.json
 lacadmin virtualkey export --file $PROJECT/virtualkey.json
-#lacadmin snapshot restore --name snapshot1
 lacadmin connection export --file $PROJECT/connection.json
 lacadmin listener export --file $PROJECT/listener.json
 lacadmin timer export --file $PROJECT/timer.json

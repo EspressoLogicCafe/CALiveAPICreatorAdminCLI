@@ -31,7 +31,6 @@ node ../liveapicreatoradmin.js custom_endpoint list
 node ../liveapicreatoradmin.js topic list
 node ../liveapicreatoradmin.js npa list
 node ../liveapicreatoradmin.js gateway list
-node ../liveapicreatoradmin.js snapshot list
 node ../liveapicreatoradmin.js managedserver list
 node ../liveapicreatoradmin.js function list
 node ../liveapicreatoradmin.js license list

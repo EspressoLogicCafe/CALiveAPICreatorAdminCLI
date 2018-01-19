@@ -31,7 +31,6 @@ lacadmin handler list
 lacadmin topic list
 lacadmin npa list
 lacadmin gateway list
-lacadmin snapshot list
 lacadmin managedserver list
 lacadmin function list
 lacadmin license list

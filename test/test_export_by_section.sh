@@ -19,7 +19,6 @@ mkdir -p $PROJECT
 rm -rf temp
 mkdir -p temp
 
-node ../liveapicreatoradmin.js snapshot start --snapshot_name snapshot1
 node ../liveapicreatoradmin.js api export --section api --file temp/api.json --format json
 node ../liveapicreatoradmin.js api export --file temp/API.zip --format zip
 node ../liveapicreatoradmin.js api export --section connections --file temp/connections.json

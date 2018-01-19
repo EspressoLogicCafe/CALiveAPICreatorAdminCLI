@@ -29,10 +29,8 @@ call lacadmin event list
 call lacadmin handler list
 call lacadmin topic list
 call lacadmin npa list
-call lacadmin snapshot list
 call lacadmin license list
 call lacadmin gateway list
-call lacadmin snapshot list
 call lacadmin managedserver list
 call lacadmin function list
 call lacadmin virtualkey list

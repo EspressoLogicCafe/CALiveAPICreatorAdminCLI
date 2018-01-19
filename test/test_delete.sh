@@ -20,8 +20,6 @@ node ../liveapicreatoradmin.js project create --project_name $PROJECT_NEW --url_
 # Select a Project
 node ../liveapicreatoradmin.js project use --url_name test
 
-
-node ../liveapicreatoradmin.js snapshot start --snapshot_name snapshotStart
 node ../liveapicreatoradmin.js apioptions import --file $PROJECT/apioptions.json
 # IMPORT Datasource and delete by name
 node ../liveapicreatoradmin.js datasource import --file $PROJECT/datasource.json
@@ -74,7 +72,6 @@ node ../liveapicreatoradmin.js gateway delete --gateway_name "New CA API Gateway
 
 #node ../liveapicreatoradmin.js virtualkey import --file $PROJECT/virtualkey.json
 
-#node ../liveapicreatoradmin.js snapshot restore --name snapshot1
 node ../liveapicreatoradmin.js connection import --file $PROJECT/connection.json
 node ../liveapicreatoradmin.js connection delete  --connection_name MQTTConnection
 
@@ -89,5 +86,4 @@ node ../liveapicreatoradmin.js managedserver delete --server_name "New managed d
 # provider requires an sa login (project_ident=3)
 #node ../liveapicreatoradmin.js provider import --provider_name Startup --file $PROJECT/provider.json
 #node ../liveapicreatoradmin.js sequence import --file $PROJECT/sequence.json
-node ../liveapicreatoradmin.js snapshot start --snapshot_name snapshotEnd
 node ../liveapicreatoradmin.js logout -a $PROJECT_NEW

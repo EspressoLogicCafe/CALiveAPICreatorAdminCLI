@@ -30,7 +30,6 @@ var reln = require('./objects/reln.js');
 var handler = require('./objects/handler.js');
 var apiversion = require('./objects/version.js');
 // 2.1 features
-var snapshot = require('./objects/snapshot.js');
 var npa = require('./objects/npattrs.js');
 var gateway = require('./objects/gateway.js');
 //3.0 features
@@ -347,13 +346,6 @@ program
 	.option('-v, --verbose', 'optional: Display list of relationships in import/export format')
 	.option('-f, --file [fileName]', 'optional: Name of file to import/export (if not provided stdin/stdout used for export)')
 	.action(reln.doReln);
-
-program
-	.command('snapshot <list|start|restore>')
-	.description('List or start a project snapshot (backup) for current project.')
-	.option('--snapshot_name [name]', 'The snapshot Name used by both start and restore')
-	.option('--project_ident [project_ident]','optional: The project ident that will be used instead of current selected' )
-	.action(snapshot.doSnapshot);
 
 program
 	.command('gateway <list|create|delete|import|export|publish>')
