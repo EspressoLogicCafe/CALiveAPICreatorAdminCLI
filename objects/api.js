@@ -764,11 +764,22 @@ module.exports = {
 			else {
 				trailer += " : "+ JSON.stringify(data ,null ,2);
 			}
-			
-			//set the imported project to be the current selected project
-			//dotfile.setCurrentProject(newProj.ident, newProj.name, newProj.url_name);
+			if(data && data.success) {
+				var imported = data.imported;
+				if (Array.isArray(imported)) {
+					var i = 0;
+					//Only process the first one -there may be multiple
+					if (i < imported.length) {
+						var newIdent = imported[i].projectIdent;
+						var projName = imported[i].projectName;
+						var url_name = imported[i].projectUrlFragment;
+						//set the imported project to be the current selected project
+						dotfile.setCurrentProject(newIdent, projName,url_name);
+						console.log("You are now using project ident: "+newIdent +" name: "+ projName + ' url_name:'+url_name);
+					}
+				}
+			}
 			printObject.printHeader(trailer);
-			//console.log("You are now using project ident: "+newProj.ident +" name: "+ newProj.name);
 		});
 	},
 	extract: function(cmd) {
