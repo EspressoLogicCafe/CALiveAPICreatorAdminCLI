@@ -51,18 +51,18 @@ The `list` command shows all API's in the LAC connected server.
 ### adding the --verbose flag to project list 
 Includes sample scripts which can be used by devops developers.
 ```
-#lacadmin api export --url_name admin  --file PROJECT_admin.json --format json
-#lacadmin api export --url_name admin  --file PROJECT_admin.zip --format zip
-#lacadmin api extract --file PROJECT_admin.zip --directory /temp/ --synchronize true
-#lacadmin api import --file PROJECT_admin.json
-#lacadmin api import --file PROJECT_admin.zip
+#lacadmin api export --url_name admin  --file API_admin.json --format json
+#lacadmin api export --url_name admin  --file API_admin.zip --format zip
+#lacadmin api extract --file API_admin.zip --directory /temp/ --synchronize true
+#lacadmin api import --file API_admin.json
+#lacadmin api import --file API_admin.zip
 ```
 ## Create
 The create command creates a new project with the given values. Status is active by default, it can be specified
 as A(ctive) or I(nactive).  The url_name (aka url fragement) is required.
 
 ```
-    $lacadmin api create --project_name <name> --url_name <url_name> [--status <A|I>] [--authprovider <ident>]
+    $lacadmin api create --api_name <name> --url_name <url_name> [--status <A|I>] [--authprovider <ident>]
         [--comments <comments>] [--verbose]
 ```
 
@@ -70,14 +70,14 @@ If the `--verbose` option is specified, the output will include all created obje
 
 ### Output
 
-	Project was created, including:
+	API was created, including:
 	I admin:projects/1007 ident:1007 ts:2014-11-26T14:21:... name:My Project3 url_name:myproj3 comments:[null] status:A is_active:true account_ident:1000 authprovider_ident:[null]
 	and 20 other objects
 	Request took: 470ms - # objects touched: 21
 	Current project is now: My Project3 (1007)
 
-Note that creating a project also creates a number of other default objects.
-Once the project is created, it becomes the current project.
+Note that creating an API also creates a number of other default objects.
+Once the project is created, it becomes the current API.
 
 ***
 ## Update
@@ -85,7 +85,7 @@ The update command updates one or more attribute of the specified project.
 The project can be specified either by its name or by its URL name.
 
 
-    $lacadmin api update [--project_name <name> | --url_name <url_name>] 
+    $lacadmin api update [--api_name <name> | --url_name <url_name>] 
         [--status <A-I>] [--authprovider <ident>] [--comments <comments>]
 ***
 ## Delete
@@ -94,13 +94,13 @@ The project can be specified either by its name or by its URL name.
 
 If the `--verbose` option is specified, the output will include all deleted objects instead of a summary.
 ```
-    $lacadmin api delete [--project_name <name> | --url_name <url_name>] [--verbose]
+    $lacadmin api delete [--api_name <name> | --url_name <url_name>] [--verbose]
 
 ```
 ## Use
 The use command will associate all future lacadmin calls with the selected API which can be selected by name or url_name.
 
-    $lacadmin api use [--project_name '<name>' | --url_name <url_name>]
+    $lacadmin api use [--api_name '<name>' | --url_name <url_name>]
 
 The use command makes the specified API the current project.
 The API can be specified either by its name or by its URL name.

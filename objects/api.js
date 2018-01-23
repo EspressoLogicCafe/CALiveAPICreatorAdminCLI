@@ -212,7 +212,7 @@ module.exports = {
 				filter = "/" + projIdent;
 		}
 		if( ! filter) {
-			console.log('Missing parameter: please specify either ident or use a specific project'.red);
+			console.log('Missing parameter: please specify either ident or use a specific API (lacadmin api use --url_name myAPI)'.red);
 			return;
 		}
 		client.get(loginInfo.url + "/AllProjects" + filter, {
@@ -223,16 +223,16 @@ module.exports = {
 		}, function(data) {
 			//console.log('get result: ' + JSON.stringify(data, null, 2));
 			if (data.errorMessage) {
-				console.log(("Project Update Error: " + data.errorMessage).red);
+				console.log(("API Update Error: " + data.errorMessage).red);
 				return;
 			}
 			
 			if (data.length === 0) {
-				console.log(("Project not found").red);
+				console.log(("API not found").red);
 				return;
 			}
 			if (data.length > 1) {
-				console.log(("Project Update Error: more than one project for the given condition: " + filter).red);
+				console.log(("API Update Error: more than one API for the given condition: " + filter).red);
 				return;
 			}
 			var project = data[0];
@@ -253,7 +253,7 @@ module.exports = {
 			}
 			if (cmd.status) {
 				if (cmd.status !== 'A' && cmd.status !== 'I') {
-					console.log('Project status must be either A (for active) or I (for inactive). Default is A if unspecified.'.red);
+					console.log('API status must be either A (for active) or I (for inactive). Default is A if unspecified.'.red);
 					return;
 				}
 				project.is_active = cmd.status == "A";
@@ -272,7 +272,7 @@ module.exports = {
 					console.log(data.errorMessage.red);
 					return;
 				}
-				printObject.printHeader('Project was updated, including the following objects:');
+				printObject.printHeader('API was updated, including the following objects:');
 				_.each(data.txsummary, function(obj) {
 					printObject.printObject(obj, obj['@metadata'].entity, 0, obj['@metadata'].verb);
 				});
@@ -622,7 +622,7 @@ module.exports = {
 		});
 	},
 	importFromZIPFile: function(cmd) {
-		console.log("Project @import using file " + cmd.file);
+		console.log("Import API using zip file " + cmd.file);
 		var client = new Client();
 		var loginInfo = login.login(cmd);
 		if (!loginInfo) {
@@ -683,7 +683,7 @@ module.exports = {
 			});
 	},
 	importFromJSONFile: function(cmd) {
-		console.log("Project @import using file " + cmd.file);
+		console.log("Import JSON API using file " + cmd.file);
 		var client = new Client();
 		var loginInfo = login.login(cmd);
 		if ( ! loginInfo) {
@@ -749,13 +749,13 @@ module.exports = {
 				console.log(data.errorMessage.red);
 				return;
 			}
-			printObject.printHeader('Project was created, including:');
+			printObject.printHeader('API was created, including:');
 			if(data.statusCode == 200 ){
 				console.log("Request took: " + (endTime - startTime) + "ms");
 				return;
 			} 	
 
-			console.log("project import completed using edpoint: "+endPoint);
+			console.log("API import completed using edpoint: "+endPoint);
 			var trailer = "Request took: " + (endTime - startTime) + "ms";
 			trailer += " - # objects touched: ";
 			if (data.length === 0) {
@@ -775,7 +775,7 @@ module.exports = {
 						var url_name = imported[i].projectUrlFragment;
 						//set the imported project to be the current selected project
 						dotfile.setCurrentProject(newIdent, projName,url_name);
-						console.log("You are now using project ident: "+newIdent +" name: "+ projName + ' url_name:'+url_name);
+						console.log("API is now using project ident: "+newIdent +" name: "+ projName + ' url_name:'+url_name);
 					}
 				}
 			}

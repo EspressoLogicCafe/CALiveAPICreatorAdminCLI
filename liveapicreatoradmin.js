@@ -115,6 +115,8 @@ program
 	.option('-d, --directory [directory]', 'Required for extract, the name of a directory to extract ZIP files')
 	.option('-f, --file [file]', 'optional: for import/export, the name of a file to read from/save to, if unspecified, use stdin/stdout')
 	.option('--format [json|zip]', 'optional: for import/export, this sets the output type of the export default: zip')
+	.option('--section [name]', '(optional) The section of the API you wish to export (e.g. resources, functions, datasources)')
+	.option('--section_filter [filter]', '(optional) The section filter of the API you wish to export (name=foo&version=v1)')
 	.option('--namecollision [fail|rename_new|replace_existing|disable_and_rename_existing]', 'optional: for import, determines how to handle existing API (default: rename_new)')
 	.option('--errorhandling [standard|fail_on_warning|best_efforts]', 'optional: for import, sets the error level response hanling (default: standard')
 	.option('--passwordstyle [skip|encrypted|plaintext]', 'optional: for export, sets the password style of exported API datasources (default: skip)')
