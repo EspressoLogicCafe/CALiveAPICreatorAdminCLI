@@ -54,7 +54,7 @@ Provide the ident or the gateway definition name and (optional) the export file 
 ```
     $lacadmin gateway export  [--ident <name> | --gateway_name <name> ] [--file gateway.json]
 ```
-The export datasource exports the specified datasource into a JSON file. If the filename parameter is not specified, stdout is used.
+The export datasource exports the specified data source into a JSON file. If the filename parameter is not specified, stdout is used.
 
 ## Import
 Import a gateway definition - if the name already exists -it will do a merge_insert.

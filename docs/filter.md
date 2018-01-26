@@ -28,7 +28,7 @@ List of commands allows you to list your CA Live API Creator named filters.
     $lacadmin namedfilter list
 ```
 
-The `list` command shows all named filters for the current account.
+The `list` command shows all named filters for the current TeamSpace.
 
 #### Output
 ```

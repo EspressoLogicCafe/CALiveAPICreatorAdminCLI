@@ -14,7 +14,7 @@ $lacadmin virtualkey --help
     --table_ident [ident]            For delete or update, the ident of the listed table
     --view_ident [ident]             For delete or update, the ident of the listed view
     --project_ident [project_ident]  The project ident that will be used to list all datasources
-    --prefix [prefix]                The datasource prefix for this table or view virtual primary key
+    --prefix [prefix]                The data source prefix for this table or view virtual primary key
     --table_name [name]              The name of the table to attach a virtual primary key
     --view_name [name]               The name of the view to attach a virtual primary key
     --keyname [colnamelist]          The comma separated list of column names

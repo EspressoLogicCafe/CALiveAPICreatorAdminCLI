@@ -140,7 +140,7 @@ module.exports = {
 			});
 			table.sort(['Active', 'Name']);
 			if (data.length === 0) {
-				console.log('There is no database defined for this project'.yellow);
+				console.log('Database not defined for this project'.yellow);
 			}
 			else {
 				console.log(table.toString());
@@ -191,7 +191,7 @@ module.exports = {
 		}
 		var dbasetype = cmd.dbasetype;
 		if ( ! dbasetype) {
-			console.log('You must specify a database type.'.red);
+			console.log('You must specify a data source --dbaseetype.'.red);
 			return;
 		}
 		dbasetype = dbasetype.toLowerCase();
@@ -214,7 +214,7 @@ module.exports = {
 			case "csv": dbasetype = 23; break;
 			case "cassandra": dbasetype = 24; break;
 			case "teradata": dbasetype = 25; break;
-			default : console.log('Unknown database type: --dbasetype ' + dbasetype); return;
+			default : console.log('Unknown data source type: --dbasetype ' + dbasetype); return;
 		}
 
 		context.getContext(cmd, function() {
@@ -547,7 +547,7 @@ module.exports = {
 				return;
 			}
 			if (data.length > 1) {
-				console.log(("Error: more than one database for the given condition: " + filter).red);
+				console.log(("Error: more than one data source for the given condition: " + filter).red);
 				return;
 			}
 			var db = data[0];
@@ -626,7 +626,7 @@ module.exports = {
 				return;
 			}
 			if (data.length > 1) {
-				console.log(("Error: more than one database for the given condition: " + filt).red);
+				console.log(("Error: more than one data source for the given condition: " + filt).red);
 				return;
 			}
 			var db = data[0];

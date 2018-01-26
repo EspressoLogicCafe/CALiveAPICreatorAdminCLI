@@ -4,7 +4,7 @@ See [API Properties](https://docops.ca.com/ca-live-api-creator/4-0/en/managing-a
 ```
  Usage: apioptions [options] <list|update|delete|export|import>
 
-  Administer API project options for an account.
+  Administer API project options for a TeamSpace.
 
   Options:
 
@@ -24,7 +24,7 @@ List of commands allows you to list your CA Live API Creator project specific se
     $lacadmin apioptions list
 ```
 
-The `list` command shows all api options for the current account.
+The `list` command shows all api options for the current TeamSpace.
 
 #### Output
 ```

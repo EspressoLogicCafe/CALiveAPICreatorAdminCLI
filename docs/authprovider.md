@@ -4,7 +4,7 @@ For details on how to [create custom authentication provider](https://docops.ca.
 ```
  Usage: authprovider [options] <list|create|delete|export|import|linkProject>
 
-  Administer authentication providers for an account.
+  Administer authentication providers for an TeamSpace.
 
   Options:
 
@@ -27,7 +27,7 @@ List of commands allows you to list your CA Live API Creator authentication prov
     $lacadmin authprovider list
 ```
 
-The `list` command shows all authentication providers for the current account.
+The `list` command shows all authentication providers for the current TeamSpace.
 
 #### Output
     All authentication providers

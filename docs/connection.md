@@ -26,7 +26,7 @@ List of commands allows you to list your CA Live API Creator project specific co
     $lacadmin connection list
 ```
 
-The `list` command shows all defined connections for the current account.
+The `list` command shows all defined connections for the current TeamSpace.
 
 #### Output
 ```

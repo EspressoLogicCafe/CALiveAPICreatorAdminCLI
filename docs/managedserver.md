@@ -22,7 +22,7 @@ Usage: managedserver [options] <list|create|update|delete|import|export>
 ## List
     lacadmin managedserver list
 
-The `list` command shows all datasource connections for the current project.
+The `list` command shows all data source connections for the current project.
 
 #### Output
     Managed Data Server(s)
@@ -79,7 +79,7 @@ The `dbasetype` parameter must have one of the following values:
 ## Delete
     $lacadmin datasource delete [--server_name <name> | --ident <ident>]
 
-The `delete` command deletes a managed data server from the current account.
+The `delete` command deletes a managed data server from the current TeamSpace.
 Either the name of the or ident, must be specified (use list to get ident).
 
 ## Export
@@ -90,7 +90,7 @@ Provide the ident of the managed data server and (optional) the export file name
 This exports the specified managed data server(s) into a JSON file. If the filename parameter is not specified, stdout is used.
 
 ## Import
-Import a managed data server to the current account server (or one specified) using the name of the json file for the datasource you wish to import.
+Import a managed data server to the current TeamSpace server (or one specified) using the name of the json file for the data source you wish to import.
 ```
     $lacadmin managedserver import --file managedserver.json
 ```

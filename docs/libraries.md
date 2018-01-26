@@ -32,7 +32,7 @@ List of commands allows you to list your CA Live API Creator libraries.
     $lacadmin libraries list
 ```
 
-The `list` command shows all libraries for the current account.
+The `list` command shows all libraries for the current TeamSpace.
 
 #### Output
 ```

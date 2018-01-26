@@ -50,7 +50,7 @@ var timer = require('./objects/timer.js');
 var provider = require('./objects/provider.js');
 var application = require('./objects/application.js');
 //4.1 features - changes to project import/export as zip
-
+var teampspace = require('./objects/teamspace.js');
 
 program
 	.version(pkg.version);
@@ -115,11 +115,11 @@ program
 	.option('-d, --directory [directory]', 'Required for extract, the name of a directory to extract ZIP files')
 	.option('-f, --file [file]', 'optional: for import/export, the name of a file to read from/save to, if unspecified, use stdin/stdout')
 	.option('--format [json|zip]', 'optional: for import/export, this sets the output type of the export default: zip')
-	.option('--section [name]', '(optional) The section of the API you wish to export (e.g. resources, functions, datasources)')
+	.option('--section [name]', '(optional) The section of the API you wish to export (e.g. resources, functions, data sources)')
 	.option('--section_filter [filter]', '(optional) The section filter of the API you wish to export (name=foo&version=v1)')
 	.option('--namecollision [fail|rename_new|replace_existing|disable_and_rename_existing]', 'optional: for import, determines how to handle existing API (default: rename_new)')
 	.option('--errorhandling [standard|fail_on_warning|best_efforts]', 'optional: for import, sets the error level response hanling (default: standard')
-	.option('--passwordstyle [skip|encrypted|plaintext]', 'optional: for export, sets the password style of exported API datasources (default: skip)')
+	.option('--passwordstyle [skip|encrypted|plaintext]', 'optional: for export, sets the password style of exported API data sources (default: skip)')
 	.option('--librarystyle [emit_all|in_use_only]', 'optional: for export, sets the library style  (default: emit_all)')
 	.option('--apioptionsstyle [emit_all|skip_default]', 'optional: for export, sets the api options (default: emit_all)')
 	.option('--synchronize [true|false]', 'optional: Used by extract & synchronize zip file with directory folder (default: false)')
@@ -128,7 +128,7 @@ program
 
 program
 	.command('libraries <list|create|update|delete|export|import>')
-	.description('Administer javascript libraries for an account.')
+	.description('Administer javascript libraries for a specific API.')
 	.option('--ident [ident]','The ident of the library - used by update, delete, export')
 	.option('--project_ident [projectId]','The project ident that this library will be marked as used' )
 	.option('--library_name [name]', 'Name of library')
@@ -145,7 +145,7 @@ program
 
 program
 	.command('authprovider <list|create|linkProject|delete|export|import>')
-	.description('Administer authentication providers for an account.')
+	.description('Administer authentication providers for a TeamSpace.')
 	.option('--ident [ident]','The ident of the auth provider')
 	.option('--project_ident [ident]','The project ident used to link this auth provider')
 	.option('--auth_name [name]', 'Name of auth provider')
@@ -158,23 +158,23 @@ program
 
 program
 	.command('datasource <list|create|createDatabase|update|delete|import|reload|export>')
-	.description('Administer datasources within a project.')
-	.option('--db_name [name]', 'The name of the datasource connection')
-	.option('--ident [ident]', 'For delete or reload, the ident of the datasource')
-	.option('--prefix [prefix]', 'The prefix of the datasource connection')
-	.option('--jndi_name [jndiname]', 'The JNDI name of the datasource connection')
-	.option('--dbasetype [dbasetype]', 'The type of the datasource: mysql, oracle, sqlserver, derby, postgresql, db2luw, db2zos, csv, hbase, sap, salesforce, sqlserverazure, teradata')
-	.option('--catalog_name [catalog_name]', 'The catalog in the datasource')
-	.option('--schema_name [schema_name]', 'The schema in the datasource')
-	.option('--user_name [user_name]', 'The name of the datasource user')
-	.option('--password [password]', 'The password of the datasource user')
-	.option('--schema_editable [boolean]', 'Is this datasource marked as editable (i.e. managed datasource) - default: false')
-	.option('--url [url]', 'The JDBC URL for the datasource')
-	.option('--active [true|false]', 'This marks the datasource active or inactive')
+	.description('Administer data sources within a project.')
+	.option('--db_name [name]', 'The name of the data source connection')
+	.option('--ident [ident]', 'For delete or reload, the ident of the data source')
+	.option('--prefix [prefix]', 'The prefix of the data source connection')
+	.option('--jndi_name [jndiname]', 'The JNDI name of the data source connection')
+	.option('--dbasetype [dbasetype]', 'The type of the data source: mysql, oracle, sqlserver, derby, postgresql, db2luw, db2zos, csv, hbase, sap, salesforce, sqlserverazure, teradata')
+	.option('--catalog_name [catalog_name]', 'The catalog in the data source')
+	.option('--schema_name [schema_name]', 'The schema in the data source')
+	.option('--user_name [user_name]', 'The name of the data source user')
+	.option('--password [password]', 'The password of the data source user')
+	.option('--schema_editable [boolean]', 'Is this data source marked as editable (i.e. managed data source) - default: false')
+	.option('--url [url]', 'The JDBC URL for the data source')
+	.option('--active [true|false]', 'This marks the data source active or inactive')
 	.option('--project_ident [ident]', 'The ident of a project, (if other than the current project')
-	.option('--managedserver_ident [managedserver_ident]', 'The managed server ident used with command createDatabase (creates both database and datasource)')
-	.option('--comments [comment]', 'Comment on datasource')
-	.option('-v, --verbose', 'optional: display list of datasources in detailed create format')
+	.option('--managedserver_ident [managedserver_ident]', 'The managed server ident used with command createDatabase (creates both database and data source)')
+	.option('--comments [comment]', 'Comment on data source')
+	.option('-v, --verbose', 'optional: display list of data sources in detailed create format')
 	.option('-f, --file [file]', 'optional: for import/export, the name of a file to read from/save to, if unspecified, use stdin/stdout')
 	.action(dbase.doDbase);
 
@@ -223,7 +223,7 @@ program
 
 program
 	.command('apioptions <list|update|import|export>')
-	.description('Administer API project options for an account.')
+	.description('Administer API  options for a selected API.')
 	.option('--ident [ident]','The ident of the specific project settings object')
 	.option('--option_value [value]','This is the value for the specific setting for the ident')
 	.option('--project_ident [project_ident]','The project ident that will be marked as used' )
@@ -296,7 +296,7 @@ program
 	.description('Administer Non Persistent Attributes for the active API Project.')
 	.option('--ident [ident]', 'The ident of the specific named npa object')
     .option('--npa_name [name]', 'The name of the specific named npa object')
-	.option('--dbschema_ident [ident]', 'optional: The dbschema ident of the projects datasource')
+	.option('--dbschema_ident [ident]', 'optional: The dbschema ident of the projects data source')
 	.option('-f, --file [fileName]', 'optional: Name of file for import/export (if not provided stdin/stdout used for export)')
 	.option('-v, --verbose', 'optional: Display non persistent attribute in import/export format')
 	.action(npa.doNPAttr);
@@ -359,15 +359,15 @@ program
 	.option('--hostname [server]','The gateway server hostname https://myserver:8443/lacman/1.0/publish' )
 	.option('--apiversion [version]','The API version of the swagger document' )
 	.option('--url_name [name]','The API url fragment name (use $lacadmin api list)' )
-	.option('-v, --verbose', 'optional: display list of datasources in detailed create format')
+	.option('-v, --verbose', 'optional: display list of data sources in detailed create format')
 	.option('--comments [comments]','The gateway definition comments' )
 	.option('--file [fileName]', 'optional: Name of file to import/export (if not provided stdin/stdout used)')
 	.action(gateway.doGateway);
 
 program
 	.command('managedserver <list|create|delete|update|import|export>')
-	.description('Administer a managed data server (used by @databases to create datasources).')
-	.option('--server_name [name]', 'The name of the datasource connection')
+	.description('Administer a managed data server (used by @databases to create data sources).')
+	.option('--server_name [name]', 'The name of the data source connection')
 	.option('--ident [ident]', 'For delete or reload, the ident of the managed data server')
 	.option('--dbasetype [dbasetype]', 'The type of the managed data server connection, can be mysql, derby, postgres, sqlserver, oracle')
 	.option('--catalog_name [catalog_name]', 'The catalog in the managed data server')
@@ -376,8 +376,8 @@ program
 	.option('--url [url]', 'The JDBC URL for the managed data server')
 	.option('--comments [comment]', 'This is the comment for this managed data server')
 	.option('--active [true|false]', 'This marks the managed data server active or inactive')
-	.option('--comments [comment]', 'Comment on datasource')
-	.option('-v, --verbose', 'optional: Display list of datasources in detailed create format')
+	.option('--comments [comment]', 'Comment on data source')
+	.option('-v, --verbose', 'optional: Display list of data sources in detailed create format')
 	.option('-f, --file [file]', 'optional:: for import/export, the name of a file to read from/save to, if unspecified, use stdin/stdout')
 	.action(managedserver.doDbase);
 
@@ -390,9 +390,9 @@ program
 
 program
 	.command('schema <create>')
-	.description('Create new databse using @schema format and a managed data server datasource.')
+	.description('Create new databse using @schema format and a managed data server data source.')
 	.option('--project_ident [project_ident]','The project ident that will be marked as used' )
-	.option('--prefix [prefix]','The datasource prefix used for export. Note for import, the prefix must be marked as schema isEditable' )
+	.option('--prefix [prefix]','The data source prefix used for export. Note for import, the prefix must be marked as schema isEditable' )
 	.option('--ignoredbcolumntype [true|false]','optional: The ignoredbcolumntype setting is used when moving between database vendors' )
 	.option('--ignoreprimarykeyname [true|false]','optional: The ignoreprimarykeyname setting is used when moving between database vendors' )
 	.option('--ignoreconstraintname [true|false]','optional: The ignoreconstraintname setting is used when moving between database vendors' )
@@ -416,8 +416,8 @@ program
 	.description('Manage a virtualkey to a table or view.')
 	.option('--table_ident [ident]', 'For delete or update, the ident of the listed table')
 	.option('--view_ident [ident]', 'For delete or update, the ident of the listed view')
-	.option('--project_ident [project_ident]','The project ident that will be used to list all datasources' )
-	.option('--prefix [prefix]','The datasource prefix for this table or view virtual primary key' )
+	.option('--project_ident [project_ident]','The project ident that will be used to list all data sources' )
+	.option('--prefix [prefix]','The data source prefix for this table or view virtual primary key' )
 	.option('--table_name [name]','The name of the table to attach a virtual primary key' )
 	.option('--view_name [name]','The name of the view to attach a virtual primary key' )
 	.option('--keyname [colnamelist]','The comma separated list of column names' )
@@ -431,8 +431,8 @@ program
 	.description('Manage a database sequence on a key column for a table or view.')
 	.option('--table_ident [ident]', 'For delete or update, the ident of the listed table')
 	.option('--view_ident [ident]', 'For delete or update, the ident of the listed view')
-	.option('--project_ident [project_ident]','The project ident that will be used to list all datasources' )
-	.option('--prefix [prefix]','The datasource prefix for this table or view virtual primary key' )
+	.option('--project_ident [project_ident]','The project ident that will be used to list all data sources' )
+	.option('--prefix [prefix]','The data source prefix for this table or view virtual primary key' )
 	.option('--table_name [name]','The name of the table to attach a virtual primary key' )
 	.option('--view_name [name]','The name of the view to attach a virtual primary key' )
 	.option('--keyname [colnamelist]','The comma separated list of column names' )
@@ -487,6 +487,13 @@ program
 	.option('--application_name [name]', 'The name of the application')
 	.option('--file [file]', 'optional: for import/export, the name of a file to read from/save to, if unspecified, use stdin/stdout')
 	.action(application.doApplication);
+
+program
+	.command('teamspace <list|import|export>')
+	.description('Administer TeamSpace for current server.')
+	.option('--teamspace_name [name]','The name of the TeamSpace')
+	.option('--file [fileName]', 'optional: Name of file to import/export (if not provided stdin/stdout used for export)')
+	.action(teampspace.doTeamSpace);
 
 program.parse(process.argv);
 

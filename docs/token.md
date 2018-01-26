@@ -24,7 +24,7 @@ List of commands allows you to list your CA Live API Creator authentication toke
     $lacadmin token list
 ```
 
-The `list` command shows all auth token for the current account. Use 'lacadmin roles list' to see a detailed list of roles.
+The `list` command shows all auth token for the current TeamSpace. Use 'lacadmin roles list' to see a detailed list of roles.
 
 #### Output
 ```

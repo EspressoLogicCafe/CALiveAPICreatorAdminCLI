@@ -23,7 +23,7 @@ module.exports = {
 				console.log("Account context not found".red);
 			}
 			else if (data.length > 1) {
-				console.log("Error: more than one account was found -- are you logging as sa?".red);
+				console.log("Error: more than one TeamSpace was found -- are you logging as sa?".red);
 			}
 			module.exports.account = data[0];
 			

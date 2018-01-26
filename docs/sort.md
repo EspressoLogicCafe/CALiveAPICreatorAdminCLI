@@ -28,7 +28,7 @@ List of commands allows you to list your CA Live API Creator named sorts.
     $lacadmin namedsort list
 ```
 
-The `list` command shows all named sorts for the current account.
+The `list` command shows all named sorts for the current TeamSpace.
 
 #### Output
 ```
