@@ -1,10 +1,10 @@
 # Authentication provider
-For details on how to [create custom authentication provider](https://docops.ca.com/ca-live-api-creator/4-0/en/creating-apis/security/authentication/authentication-providers/create-custom-authentication-providers-using-javascript) using JavaScript.
+For details on how to [create custom authentication provider](https://docops.ca.com/ca-live-api-creator/4-1/en/creating-apis/security/authentication/authentication-providers/create-custom-authentication-providers-using-javascript) using JavaScript.
 
 ```
  Usage: authprovider [options] <list|create|delete|export|import|linkProject>
 
-  Administer authentication providers for an TeamSpace.
+  Administer authentication providers for a TeamSpace.
 
   Options:
 

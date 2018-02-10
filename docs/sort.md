@@ -1,5 +1,5 @@
 # Structured Sorts
-This feature is for user defined sort definition. For details see [Structured Sorts](https://docops.ca.com/ca-live-api-creator/4-0/en/invoking-apis/get/structured-sorts).
+This feature is for user defined sort definition. For details see [Structured Sorts](https://docops.ca.com/ca-live-api-creator/4-1/en/invoking-apis/get/structured-sorts).
 
 ```
   Usage: namedsort [options] <list|create|update|delete|export|import>

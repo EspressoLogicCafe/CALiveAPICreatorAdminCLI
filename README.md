@@ -64,12 +64,12 @@ $ lacadmin --help
       license [options] <list|import>                                                       Administer server License for connected server.
       eula <accepted>                                                                       End user license agreement status (must be accepted before any script will run)
       api [options] <list|create|update|delete|use|import|export|extract>                   Administer projects. Actions are: list, create, update, delete, use, export
-      libraries [options] <list|create|update|delete|export|import>                         Administer javascript libraries for an account.
-      authprovider [options] <list|create|linkProject|delete|export|import>                 Administer authentication providers for an account.
+      libraries [options] <list|create|update|delete|export|import>                         Administer javascript libraries for a TeamSpace.
+      authprovider [options] <list|create|linkProject|delete|export|import>                 Administer authentication providers for an TeamSpace.
       datasource [options] <list|create|createDatabase|update|delete|import|reload|export>  Administer datasources within a project.
       resource [options] <list|delete|update|export|import>                                 Administer resources within a project.
       rule [options] <list|create|delete|import|export>                                     Administer rules within a project.
-      apioptions [options] <list|update|import|export>                                      Administer API project options for an account.
+      apioptions [options] <list|update|import|export>                                      Administer API project options for a TeamSpace.
       sort [options] <list|create|update|delete|import|export>                              Administer Named Sorts for the active API Project.
       filter [options] <list|create|delete|update|import|export>                            Administer Named Filter for the active API Project.
       token [options] <list|import|export>                                                  Administer Auth Tokens for current project.

@@ -1,5 +1,5 @@
 # Authentication Token
-For details see [Auth Tokens](https://docops.ca.com/ca-live-api-creator/4-0/en/managing-apis/programmatic-api-creation/api-creation-endpoints/auth-tokens)
+For details see [Auth Tokens](https://docops.ca.com/ca-live-api-creator/4-1/en/managing-apis/programmatic-api-creation/api-creation-endpoints/auth-tokens)
 
 ```
   Usage: token [options] <list|export|import>

@@ -1,7 +1,7 @@
 # Resource
 
 This suite of commands allows you to manipulate the resources (user defined endpoints) in your project. 
-For more details visit the [Customize your API](https://docops.ca.com/ca-live-api-creator/4-0/en/creating-apis/customize-your-api) page.
+For more details visit the [Customize your API](https://docops.ca.com/ca-live-api-creator/4-1/en/creating-apis/customize-your-api) page.
 
 ## Usage
 ```sh

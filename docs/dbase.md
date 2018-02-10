@@ -1,6 +1,6 @@
 # data source
 This suite of commands allows you to manipulate the data source connection(s) in your projects. 
-Visit the Documentation page on [Database Connectivity](https://docops.ca.com/ca-live-api-creator/4-0/en/creating-apis/database-connectivity)
+Visit the Documentation page on [Database Connectivity](https://docops.ca.com/ca-live-api-creator/4-1/en/creating-apis/database-connectivity)
                                                                                                
 ```
 Usage: datasource [options] <list|create|update|delete|import|export>

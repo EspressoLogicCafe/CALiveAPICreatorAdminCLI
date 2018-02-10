@@ -1,5 +1,5 @@
 # Logic Libraries
-Support for JavaScript libraries. See Doc page: [Logic Libraries](https://docops.ca.com/ca-live-api-creator/4-0/en/creating-apis/logic/logic-libraries)
+Support for JavaScript libraries. See Doc page: [Logic Libraries](https://docops.ca.com/ca-live-api-creator/4-1/en/creating-apis/logic/logic-libraries)
 
 
 ```
@@ -51,7 +51,7 @@ Ident  Name                      Version   Short Name       Type        Comments
 ```
 
 The `list` command is currently the only one available from the command line for
-libraries. For details on how to create a [custom authentication provider](https://docops.ca.com/ca-live-api-creator/4-0/en/creating-apis/security/authentication/authentication-providers/create-custom-authentication-providers-using-javascript).
+libraries. For details on how to create a [custom authentication provider](https://docops.ca.com/ca-live-api-creator/4-1/en/creating-apis/security/authentication/authentication-providers/create-custom-authentication-providers-using-javascript).
 
 ## Create
 Create needs a name, comment, the create function name and a list of parameters in JSON format.  This requires that the file is in plain ASCII text format

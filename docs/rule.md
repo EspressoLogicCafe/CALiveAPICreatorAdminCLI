@@ -1,6 +1,6 @@
 # Rule
 
-This suite of commands allows you to list,add, or remove business rules in your current project. See the documentation page [Learn about Rules](https://docops.ca.com/ca-live-api-creator/4-0/en/creating-apis/logic/learning-rules).  
+This suite of commands allows you to list,add, or remove business rules in your current project. See the documentation page [Learn about Rules](https://docops.ca.com/ca-live-api-creator/4-1/en/creating-apis/logic/learning-rules).  
 
 ## Usage
 ```sh

@@ -1,6 +1,6 @@
 # Connection
 Connections to message service providers like MQTT and Kafak.
-See [Create Connections](https://docops.ca.com/ca-live-api-creator/4-0/en/creating-listeners/create-connections)
+See [Create Connections](https://docops.ca.com/ca-live-api-creator/4-1/en/creating-listeners/create-connections)
 ```
  $lacadmin connection --help
  Usage: connection [options] <list|delete|export|import|stop|start>
