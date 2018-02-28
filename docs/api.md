@@ -111,14 +111,21 @@ The API can be specified either by its name or by its URL name.
 The export command exports the specified API into a JSON or ZIP file (use format flag).  The format flag will default to ZIP if not supplied.
 If the `filename` parameter is not specified, stdout is used.
 
-The API can be specified either by its name or by its URL name.
+The API can be specified either by its name or by its URL name. The JSON output is in an
+enhanced format which prefaces files with {f} and directories with {d}.  This new
+format and organization is easier to read and manage individual team development components.
 
 If the `--verbose` option is specified, the output will include all created objects instead of a summary.
 ```
 
-    $lacadmin api export  [--api_name <name> | --url_name <url_name>] --file <filename>
-         [--format [zip|json] [--format zip|json] 
-         [ --passwordstytle skip --librarystyle in_use_only --apioptionsstyle emit_all] [--verbose] 
+    $lacadmin api export  
+         [ --api_name <name> | --url_name <url_name>] 
+         [ --file <filename> ]
+         [ --format [zip|json] ] 
+         [ --passwordstytle [skip|encrypted|plaintext] ] 
+         [ --librarystyle [emit_all|in_use_only]  ]
+         [ --apioptionsstyle [emit_all|skip_default] ] 
+         [ --verbose] 
  
 ```
 
@@ -133,7 +140,9 @@ If the `--verbose` option is specified, the output will include all created obje
 Note: The json format can either be the new 4.1 style or the original API export type.
 ```
     $lacadmin api import --file <filename[.json|.zip]> 
-        [ --namecollision rename_new --errorhandling standard ] [--verbose]
+        [ --namecollision [fail|rename_new|replace_existing|disable_and_rename_existing] ]
+        [ --errorhandling standard ] 
+        [ --verbose]
 ```
 
 ## Extract
@@ -142,11 +151,16 @@ If the directory does not exist, the zip file will be exploded into this directo
 the system will remove any files found in the directory that were not found in the ZIP file.
 
 ```
-    $lacadmin api extract --file <filename.zip> --directory </tmp/path/>  --synchronize [true|false]
+    $lacadmin api extract 
+        --file <filename.zip> 
+        --directory </tmp/path/>  
+        --synchronize [true|false]
 
 ```
 ## Section 
-The export of an api can be reduced to a single section or a single object within a section using the section filter.
+The export of an api can be reduced to a single section within a section using the section argument.
+Note: The output of the file can be either in JSON or ZIP and will use the new enhanced format.  This
+means that these values cannot be used with other lacadmin import commands.
 ```
 EXPORT PROJECT=demo
 mkdir temp

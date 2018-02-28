@@ -678,7 +678,7 @@ module.exports = {
 				if (err) {
 					console.log('Error ', err);
 				} else {
-					console.log('@import successful', body);
+					console.log('@import message', body);
 				}
 			});
 	},

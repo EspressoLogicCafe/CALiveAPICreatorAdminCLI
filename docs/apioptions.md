@@ -60,20 +60,27 @@ settings. For details on how to create a [API Project Settings](http://ca-doc.es
 ##Update
 Create needs a name, comment, the create function name and a list of parameters in JSON format 
 ```
-$lacadmin apioptions update --ident <ident> [--project_ident <ident>] --option_value <somevalue>
+$lacadmin apioptions update --ident <ident> 
+    [--project_ident <ident>] 
+    --option_value <somevalue>
 ```
 
 ##Export
 Provide the ident of the apioptions and (optional) the export file name. If not provided - it will be sent to stdout.
 ```
-$lacadmin apioptions export  [--project_ident <ident>] [--ident <ident>] --file apioptions.json
+$lacadmin apioptions export  
+    [--project_ident <ident>] 
+    [--ident <ident>] 
+    --file <filename>.json
 ```
 The export project apioptions exports the specified project settings optins into a JSON file. If the filename parameter is not specified, stdout is used.
 
 ##Import
 Provide the name of the json file for the api options you wish to import.
 ```
-$lacadmin apioptions import [--project_ident <ident>] --file apioptions.json
+$lacadmin apioptions import 
+    [--project_ident <ident>] 
+    --file <filename>.json
 ```
 The import apioptions imports the specified JSON file. If the filename parameter is not specified, stdin is used. (you can pipe the json file to the import)
 

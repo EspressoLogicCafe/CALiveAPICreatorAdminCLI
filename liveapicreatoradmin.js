@@ -60,13 +60,13 @@ program
 	.description('Login to an API server (e.g. lacadmin login -u admin -p secret http://localhost:8080 -a demo)')
 	.option('-u, --username <username>', 'API Server admin user name')
 	.option('-p, --password <password>', 'API Server admin password')
-	.option('-a, --serverAlias <serverAlias>', 'Alias for this connection')
+	.option('-a, --serverAlias <serverAlias>', 'optional: Alias for a named connection')
 	.action(login.commandLogin);
 
 program
 	.command('logout [url] (lacadmin logout -a demo)')
 	.description('Logout from the current server, or a specific server')
-	.option('-a, --serverAlias <serverAlias>', 'Alias from which to logout')
+	.option('-a, --serverAlias <serverAlias>', 'optional: named connection alias to logout')
 	.action(login.commandLogout);
 
 program
@@ -82,12 +82,12 @@ program
 program
 	.command('license <list|import>')
 	.description('Administer server License for connected server.')
-	.option('-f, --file [fileName]', ' Name of file to import (if not provided stdin used for import)')
+	.option('-f, --file [fileName]', 'Name of file to import (if not provided stdin used for import)')
 	.action(license.doLicense);
 
 program
 	.command('eula <accepted>')
-	.description('End user license agreement status (must be accepted before any script will run)')
+	.description('End user license agreement status (note: must be accepted before any script will run) returns true or false')
 	.action(eula.doStatus);
 
 program
