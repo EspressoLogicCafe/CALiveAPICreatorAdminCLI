@@ -7,20 +7,21 @@ var context = require('./context.js');
 var login = require('../util/login.js');
 var printObject = require('../util/printObject.js');
 var dotfile = require('../util/dotfile.js');
+var api = require("./api.js");
 
 module.exports = {
 	doTeamSpace: function(action, cmd) {
 		if (action === 'list') {
 			module.exports.list(cmd);
 		}
-		else if (action === 'export') {
-			module.exports.export(cmd);
+		else if (action === 'exportRepos') {
+			module.exports.exportRepos(cmd);
 		}
 		else if (action === 'import') {
 			module.exports.import(cmd);
 		}
 		else {
-			console.log('You must specify an action: list, import, or  export');
+			console.log('You must specify an action: list or exportRepos');
 			//program.help();
 		}
 	},
@@ -68,6 +69,69 @@ module.exports = {
 			printObject.printHeader("# teamspace(s): " + data.length);
 		});
 			
+	},
+	exportRepos: function(cmd) {
+		var client = new Client();
+		//console.log(api.list(cmd));
+		var loginInfo = login.login(cmd);
+		if ( ! loginInfo)
+			return;
+		var url = loginInfo.url;
+		var apiKey = loginInfo.apiKey;
+		var filter = "";
+		var dir = "";
+		if(cmd.directory){
+			dir = cmd.directory;
+		}
+		var format = cmd.format || "zip";
+		var passwordStyle = cmd.passwordstyle || "skip";
+		var authTokenStyle = cmd.authTokenstyle || "skip_auto";
+		var apiOptionsStyle = cmd.apioptionsstyle ||  "emit_all";
+		var libraryStyle = cmd.librarystyle || "emit_all";
+		var filename = cmd.file || "ALL_REPOS." + format;
+
+		function exportAPIPromisified(cmd){
+			return new Promise(function (resolve, reject){
+				api.exportToFile(cmd , function (err, res){
+					if (err) {
+						reject(err);
+					}
+					else {
+						resolve(res);
+					}
+				});
+			});
+		}
+		client.get(url + "/projects"+"?pagesize=100&sysorder=(ident)", {
+			headers: {
+				Authorization: "CALiveAPICreator " + apiKey + ":1",
+				"Content-Type" : "application/json"
+			}
+		}, function(projects) {
+			if (projects.errorMessage) {
+				console.log(projects.errorMessage.red);
+				return;
+			}
+			var listOfUrls = "";
+			var sep = "";
+			_.each(projects, function(p) {
+				cmd.ident = p.ident;
+				listOfUrls += sep + p.url_name;
+				sep = ",";
+			});
+			// setup the defaults for export
+			cmd.format = format;
+			cmd.directory = dir;
+			cmd.url_name += listOfUrls;
+			cmd.file =  filename;
+			cmd.passwordstyle = passwordStyle;
+			cmd.authTokenstyle =   authTokenStyle;
+			cmd.apioptionsstyle = apiOptionsStyle;
+			cmd.librarystyle = libraryStyle;
+
+			exportAPIPromisified(cmd);
+		});
+		//printObject.printTrailer("# projects exported: " + projects.length);
 	},
 	export: function(cmd) {
 		var client = new Client();

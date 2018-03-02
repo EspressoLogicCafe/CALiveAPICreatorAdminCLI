@@ -493,10 +493,15 @@ program
 	.action(application.doApplication);
 
 program
-	.command('teamspace <list|export>')
-	.description('Administer TeamSpace for current server.')
+	.command('teamspace <list|exportRepos>')
+	.description('List or Export TeamSpace content for current server.')
 	.option('--teamspace_name [name]','The name of the TeamSpace')
-	.option('--file [fileName]', 'optional: Name of file to import/export (if not provided stdin/stdout used for export)')
+	.option('-d, --directory [directory]', 'Required for export, the name of a directory to save all exported json or zip files')
+	.option('-f, --file [file]', 'optional:: for source extract, the name of a file to read from/save to, if unspecified, use stdin/stdout')
+	.option('--format [json|zip]', 'optional: for import/export, this sets the output type of the export default: zip')
+	.option('--passwordstyle [skip|encrypted|plaintext]', 'optional: for export, sets the password style of exported API data sources (default: skip)')
+	.option('--librarystyle [emit_all|in_use_only]', 'optional: for export, sets the library style  (default: emit_all)')
+	.option('--apioptionsstyle [emit_all|skip_default]', 'optional: for export, sets the api options (default: emit_all)')
 	.action(teampspace.doTeamSpace);
 
 program.parse(process.argv);

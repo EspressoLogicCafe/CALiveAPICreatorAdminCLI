@@ -365,11 +365,12 @@ module.exports = {
 				return;
 			}
 			if (data.length === 0) {
-				console.log(("Auth provider(s) not found").red);
+				console.log(("Auth provider(s) not found filter: " +filter).red);
 				return;
 			}
 			for(var i = 0; i < data.length ; i++){
 				delete data[i].ident;
+				delete data[i].ts;
 				data[i].account_ident = null;
 				delete data[i]['@metadata'];
 			}
