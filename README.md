@@ -56,44 +56,46 @@ $ lacadmin --help
   
   
     Commands:
+   
+       login [options] [url]                                                                 Login to an API server (e.g. lacadmin login -u admin -p secret http://localhost:8080 -a demo)
+       logout [options] [url]                                                                Logout from the current server, or a specific server
+       use <alias>                                                                           Use the specified server by default
+       status                                                                                Show the current server, and any defined server aliases
+       license [options] <list|import>                                                       Administer server License for connected server.
+       eula <accepted>                                                                       End user license agreement status (note: must be accepted before any script will run) returns true or false
+       project [options] <list|create|update|delete|use|import|export>                       [Deprecated] Administer 4.0 and earlier projects. Actions are: list, create, update, delete, use, export
+       api [options] <list|create|update|delete|use|import|export|extract>                   Administer API. Actions are: list, create, update, delete, use, import, export, extract
+       libraries [options] <list|create|update|delete|export|import>                         Administer javascript libraries for a specific API.
+       authprovider [options] <list|create|linkProject|delete|export|import>                 Administer authentication providers for a TeamSpace.
+       datasource [options] <list|create|createDatabase|update|delete|import|reload|export>  Administer data sources within a project.
+       resource [options] <list|delete|update|export|import>                                 Administer resources within a project.
+       rule [options] <list|create|delete|import|export>                                     Administer rules within a project.
+       apioptions [options] <list|update|import|export>                                      Administer API  options for a selected API.
+       sort [options] <list|create|update|delete|import|export>                              Administer Sorts for the active API Project.
+       filter [options] <list|create|delete|update|import|export>                            Administer Filters for the active API Project.
+       authtoken [options] <list|import|export>                                              Administer Auth Tokens for current project.
+       role [options] <list|delete|import|export>                                            Administer Roles for current project.
+       user [options] <list|delete|update|import|export>                                     Administer Users for current project.
+       npa [options] <list|delete|export|import>                                             Administer Non Persistent Attributes for the active API Project.
+       topic [options] <list|delete|import|export>                                           Administer Topics for current project.
+       request_event [options] <list|delete|export|import>                                   Administer Request, Response, & CORS Option events for current project.
+       custom_endpoints [options] <list|delete|export|import>                                Administer Custom Endpoints (Handlers) for current project.
+       apiversion [options] <list|export|import>                                             Administer API Versions for Resources for current project.
+       relationship [options] <list|delete|export|import>                                    Administer Relationships for current project.
+       gateway [options] <list|create|delete|import|export|publish>                          Publish Swagger document for current project to CA Gateway.
+       managedserver [options] <list|create|delete|update|import|export>                     Administer a managed data server (used by @databases to create data sources).
+       migrate [options] <exportRepos>                                                       Migrate creates a export of all projects in a TeamSpace to a named directory
+       schema [options] <create>                                                             Create new databse using @schema format and a managed data server data source.
+       function [options] <list|delete|export|import>                                        Administer Functions for current project.
+       virtualkey [options] <list|create|update|delete|import|export>                        Manage a virtualkey to a table or view.
+       sequence [options] <list|create|update|delete|import|export>                          Manage a database sequence on a key column for a table or view.
+       listener [options] <list|delete|export|import>                                        Administer Listener Events for current project.
+       provider [options] <list|delete|export|import>                                        Administer Listener Provider definitions. (requires login as "sa")
+       connection [options] <list|delete|export|import|stop|start>                           Administer Connections for current project.
+       timer [options] <list|delete|export|import>                                           Administer Timer definitions.
+       application [options] <list|delete|import|export>                                     Administer Data Explorer Applications (meta data).
+       teamspace [options] <list|exportRepos>                                                List or Export TeamSpace content for current server.    
   
-      login [options] [url]                                                                 Login to an API server
-      logout [options] [url]                                                                Logout from the current server, or a specific server
-      use <alias>                                                                           Use the specified server by default
-      status                                                                                Show the current server, and any defined server aliases
-      license [options] <list|import>                                                       Administer server License for connected server.
-      eula <accepted>                                                                       End user license agreement status (must be accepted before any script will run)
-      api [options] <list|create|update|delete|use|import|export|extract>                   Administer projects. Actions are: list, create, update, delete, use, export
-      libraries [options] <list|create|update|delete|export|import>                         Administer javascript libraries for a TeamSpace.
-      authprovider [options] <list|create|linkProject|delete|export|import>                 Administer authentication providers for an TeamSpace.
-      datasource [options] <list|create|createDatabase|update|delete|import|reload|export>  Administer datasources within a project.
-      resource [options] <list|delete|update|export|import>                                 Administer resources within a project.
-      rule [options] <list|create|delete|import|export>                                     Administer rules within a project.
-      apioptions [options] <list|update|import|export>                                      Administer API project options for a TeamSpace.
-      sort [options] <list|create|update|delete|import|export>                              Administer Named Sorts for the active API Project.
-      filter [options] <list|create|delete|update|import|export>                            Administer Named Filter for the active API Project.
-      token [options] <list|import|export>                                                  Administer Auth Tokens for current project.
-      role [options] <list|delete|import|export>                                            Administer Roles for current project.
-      user [options] <list|delete|update|import|export>                                     Administer Users for current project.
-      npa [options] <list|delete|export|import>                                             Administer Non Persistent Attributes for the active API Project.
-      topic [options] <list|delete|import|export>                                           Administer Topics for current project.
-      event [options] <list|delete|export|import>                                           Administer Request & Response Events for current project.
-      handler [options] <list|delete|export|import>                                         Administer Custom Endpoints (Handlers) for current project.
-      apiversion [options] <list|export|import>                                             Administer API Versions for Resources for current project.
-      relationship [options] <list|delete|export|import>                                    Administer Relationships for current project.
-      gateway [options] <list|create|delete|import|export|publish>                          Publish Swagger document for current project to CA Gateway.
-      managedserver [options] <list|create|delete|update|import|export>                     Administer a managed data server (used by @databases to create datasources).
-      migrate [options] <exportRepos|extract>                                               Migrate creates a export script all projects to a named directory
-      schema [options] <create>                                                             Create new databse using @schema format and a managed data server datasource.
-      function [options] <list|delete|export|import>                                        Administer Functions for current project.
-      virtualkey [options] <list|create|update|delete|import|export>                        Manage a virtualkey to a table or view.
-      sequence [options] <list|create|update|delete|import|export>                          Manage a database sequence on a key column for a table or view.
-      listener [options] <list|delete|export|import>                                        Administer Listener Events for current project.
-      provider [options] <list|delete|export|import>                                        Administer Listener Provider definitions. (requires login as "sa")
-      connection [options] <list|delete|export|import|stop|start>                           Administer Connections for current project.
-      timer [options] <list|delete|export|import>                                           Administer Timer definitions.
-      application [options] <list|delete|import|export>                                     Administer Data Explorer Applications.
-    
   Options:
 
     -h, --help     output usage information
