@@ -92,7 +92,7 @@ program
 
 program
 	.command('project <list|create|update|delete|use|import|export>')
-	.description('Administer projects. Actions are: list, create, update, delete, use, export')
+	.description('[Deprecated] Administer 4.0 and earlier projects. Actions are: list, create, update, delete, use, export')
 	.option('--ident [ident]', 'The ident of the specific project (see project list)')
 	.option('--project_name [name]', 'The name of the project')
 	.option('--url_name [name]', 'The name of the project')
@@ -124,7 +124,7 @@ program
 	.option('--apioptionsstyle [emit_all|skip_default]', 'optional: for export, sets the api options (default: emit_all)')
 	.option('--synchronize [true|false]', 'optional: Used by extract & synchronize zip file with directory folder (default: false)')
 	.option('-v, --verbose', 'optional: whether to display detailed results, or just a summary')
-	.action(api.doProject);
+	.action(api.doAPI);
 
 program
 	.command('libraries <list|create|update|delete|export|import>')
@@ -382,10 +382,14 @@ program
 	.action(managedserver.doDbase);
 
 program
-	.command('migrate <exportRepos|extract>')
-	.description('Migrate creates a export script all projects to a named directory')
-	.option('--directory [directory]', 'Required for export, the name of a directory to save all exported json files')
+	.command('migrate <exportRepos>')
+	.description('Migrate creates a export of all projects in a TeamSpace to a named directory')
+	.option('-d, --directory [directory]', 'Required for export, the name of a directory to save all exported json or zip files')
 	.option('-f, --file [file]', 'optional:: for source extract, the name of a file to read from/save to, if unspecified, use stdin/stdout')
+	.option('--format [json|zip]', 'optional: for import/export, this sets the output type of the export default: zip')
+	.option('--passwordstyle [skip|encrypted|plaintext]', 'optional: for export, sets the password style of exported API data sources (default: skip)')
+	.option('--librarystyle [emit_all|in_use_only]', 'optional: for export, sets the library style  (default: emit_all)')
+	.option('--apioptionsstyle [emit_all|skip_default]', 'optional: for export, sets the api options (default: emit_all)')
 	.action(migrate.doMigrate);
 
 program
@@ -489,7 +493,7 @@ program
 	.action(application.doApplication);
 
 program
-	.command('teamspace <list|import|export>')
+	.command('teamspace <list|export>')
 	.description('Administer TeamSpace for current server.')
 	.option('--teamspace_name [name]','The name of the TeamSpace')
 	.option('--file [fileName]', 'optional: Name of file to import/export (if not provided stdin/stdout used for export)')

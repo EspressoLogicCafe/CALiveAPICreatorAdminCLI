@@ -7,8 +7,7 @@ var context = require('./context.js');
 var login = require('../util/login.js');
 var printObject = require('../util/printObject.js');
 var dotfile = require('../util/dotfile.js');
-var AdmZip = require('adm-zip');
-var filesToSkip = ["__MACOSX",".DS_Store",".git",".gitignore",".idea"];
+var api = require("./api.js");
 
 module.exports = {
 	doMigrate: function(action, cmd) {
@@ -16,13 +15,10 @@ module.exports = {
 			module.exports.list(cmd);
 		}
 		else if (action === 'exportRepos') {
-			module.exports.export(cmd);
+			module.exports.exportProjects(cmd);
 		}
 		else if (action === 'importLib') {
 			module.exports.importLib(cmd);
-		}
-		else if (action === 'extract') {
-			module.exports.extract(cmd);
 		}
 		else if (action === 'importAuth') {
 			module.exports.importAuth(cmd);
@@ -31,12 +27,12 @@ module.exports = {
 			module.exports.importProject(cmd);
 		}
 		else {
-			console.log('You must specify an action: list, importProject, importAuth, importLib,  or exportRepos');
+			console.log('You must specify an action: exportRepos');
 		}
 	},
 	list: function (cmd) {
 		var client = new Client();
-		
+
 		var loginInfo = login.login(cmd);
 		if ( ! loginInfo)
 			return;
@@ -77,11 +73,12 @@ module.exports = {
 			printObject.printTrailer("# projects: " + data.length);
 		});
 	},
-	export: function(cmd) {
+	exportRepos: function(cmd) {
 		if (!cmd.directory) {
 			console.log(("--directory must exist and is required  " ).red);
 			return;
 		}
+
 		var path = "lacmigration";
 		if(cmd.directory){
 			path = cmd.directory;
@@ -98,7 +95,7 @@ module.exports = {
 			}
 		});
 		var client = new Client();
-		
+
 		var loginInfo = login.login(cmd);
 		if ( ! loginInfo)
 			return;
@@ -111,7 +108,7 @@ module.exports = {
 		module.exports.exportMDS(cmd); //NOT IN 2.1
 		module.exports.exportGateway(cmd);
 		//console.log("lacadmin logout migrate");
-	
+
 	},
 	exportlibraries: function(cmd) {
 		var client = new Client();
@@ -138,10 +135,10 @@ module.exports = {
 			//printObject.printHeader('All Libraries');
 			var table = new Table();
 			_.each(data, function(p) {
-				
+
 				var filter = "sysfilter=equal(ident:" + p.ident + ")";
 				var exportFileName = dir + "/LIBRARY_"+p.name+".json";
-				
+
 				client.get(loginInfo.url + "/logic_libraries?" + filter, {
 					headers: {
 						Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
@@ -158,13 +155,13 @@ module.exports = {
 						return;
 					}
 					console.log("lacadmin libraries export --ident " + p.ident + " --file '" + exportFileName +"'");
-				});	
+				});
 			});
 		});
 	},
 	exportAuthProviders: function(cmd) {
 		var client = new Client();
-		
+
 		var loginInfo = login.login(cmd);
 		if ( ! loginInfo)
 			return;
@@ -187,10 +184,10 @@ module.exports = {
 			//printObject.printHeader('All authentication providers');
 			var table = new Table();
 			_.each(data, function(p) {
-				
+
 				var filter = "sysfilter=equal(ident:" + p.ident + ")";
 				var exportFileName = dir + "/AUTHPROVIDER_"+p.name+".json";
-				
+
 				client.get(loginInfo.url + "/authproviders?" + filter, {
 					headers: {
 						Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
@@ -206,16 +203,16 @@ module.exports = {
 						//console.log(("Error: no such auth provider").red);
 						return;
 					}
-				
+
 					console.log("lacadmin authprovider export --ident " + p.ident + " --file '" + exportFileName +"'");
-				
+
 				});
 			});
 		});
 	},
 	exportProjects: function(cmd) {
 		var client = new Client();
-		
+		//console.log(api.list(cmd));
 		var loginInfo = login.login(cmd);
 		if ( ! loginInfo)
 			return;
@@ -225,6 +222,25 @@ module.exports = {
 		var dir = "";
 		if(cmd.directory){
 			dir = cmd.directory;
+		}
+		var format = cmd.format || "zip";
+		var passwordStyle = cmd.passwordstyle || "skip";
+		var authTokenStyle = cmd.authTokenstyle || "skip_auto";
+		var apiOptionsStyle = cmd.apioptionsstyle ||  "emit_all";
+		var libraryStyle = cmd.librarystyle || "emit_all";
+		var filename = cmd.file || "ALL_REPOS." + format;
+
+		function exportAPIPromisified(cmd){
+			return new Promise(function (resolve, reject){
+				api.exportToFile(cmd , function (err, res){
+					if (err) {
+						reject(err);
+					}
+					 else {
+						resolve(res);
+					}
+				});
+			});
 		}
 		client.get(url + "/projects"+"?pagesize=100&sysorder=(ident)", {
 			headers: {
@@ -236,32 +252,26 @@ module.exports = {
 						console.log(projects.errorMessage.red);
 						return;
 					}
+					var listOfUrls = "";
+					var sep = "";
 				_.each(projects, function(p) {
-				
-				var projIdent = p.ident;
-				var url_name = p.url_name;
-				filter = "equal(ident:" + projIdent + ")";
-				var exportFileName = dir + "/PROJECT_" + url_name + ".json";
-		
-				client.get(loginInfo.url + "/ProjectExport?sysfilter=" + filter, {
-					headers: {
-						Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
-						"Content-Type" : "application/json"
-					}
-				}, function(data) {
-					if (data.errorMessage) {
-						console.log(("Error: " + data.errorMessage).red);
-						return;
-					}
-					if (data.length === 0) {
-						console.log(("Error: no such project").red);
-						return;
-					}
-					console.log("lacadmin project export --url_name " + url_name + " --file '" + exportFileName +"'");
-				}); 
-			});
+					cmd.ident = p.ident;
+					listOfUrls += sep + p.url_name;
+					sep = ",";
+				});
+			// setup the defaults for export
+			cmd.format = format;
+			cmd.directory = dir;
+			cmd.url_name += listOfUrls;
+			cmd.file =  filename;
+			cmd.passwordstyle = passwordStyle;
+			cmd.authTokenstyle =   authTokenStyle;
+			cmd.apioptionsstyle = apiOptionsStyle;
+			cmd.librarystyle = libraryStyle;
+
+			exportAPIPromisified(cmd);
+		});
 			//printObject.printTrailer("# projects exported: " + projects.length);
-		});// end get list of projects
 	},
 	importLib: function(cmd) {
 		var path = "lacmigration";
@@ -297,11 +307,11 @@ module.exports = {
 				console.log(e);
 			}
 		});
-		
+
 		cmd.libType = "AUTHPROVIDER_";
 		cmd.Table = "authproviders";
 		module.exports.importLibraries(cmd);
-		
+
 	},
 	importProject: function(cmd) {
 		var path = "lacmigration";
@@ -318,7 +328,7 @@ module.exports = {
 				console.log(e);
 			}
 		});
-		
+
 		cmd.libType = "PROJECT_";
 		cmd.Table = "ProjectExport";
 		module.exports.importLibraries(cmd);
@@ -349,7 +359,7 @@ module.exports = {
 			_.each(data, function(p) {
 				var filter = "sysfilter=equal(ident:" + p.ident + ")";
 				var exportFileName = dir + "/MANAGED_SERVERS.json";
-				
+
 				client.get(loginInfo.url + "/admin:managed_data_servers?" + filter, {
 					headers: {
 						Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
@@ -367,9 +377,9 @@ module.exports = {
 					}
 					console.log("lacadmin managedserver export --file '" + exportFileName +"'");
 					return;
-				});	
+				});
 			});
-		
+
 		});
 	},
 	exportGateway: function(cmd) {
@@ -398,7 +408,7 @@ module.exports = {
 			_.each(data, function(p) {
 				var filter = "sysfilter=equal(ident:" + p.ident + ")";
 				var exportFileName = dir + "/GATEWAYS.json";
-				
+
 				client.get(loginInfo.url + "/admin:gateways?" + filter, {
 					headers: {
 						Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
@@ -420,24 +430,24 @@ module.exports = {
 						delete mdsData[i]['@metadata'].links;
 						delete mdsData[i]['@metadata'];
 					}
-			
+
 					//var exportFile = fs.openSync(exportFileName, 'w+', 0600);
 					console.log("lacadmin gateway export --file '" + exportFileName +"'");
 					return;
-					
-				});	
+
+				});
 			});
 		});
 	},
 	importLibraries: function(cmd) {
 		var client = new Client();
-		
+
 		var loginInfo = login.login(cmd);
 		if ( ! loginInfo)
 			return;
 		var url = loginInfo.url;
 		var apiKey = loginInfo.apiKey;
-		
+
 		console.log("Import files starting with: "+ cmd.libType +" in directory: "+cmd.directory);
 		//need to read each file in directory starting with LibType_
 		//POST to server
@@ -467,15 +477,15 @@ module.exports = {
 					});
 			});
 		};
-		readDirPromisified(cmd.directory) 
+		readDirPromisified(cmd.directory)
 			.then(items => {
 			  for (var i=0; i<items.length; i++) {
         	    if(items[i].startsWith(cmd.libType)) {
-        	 		
+
         	    	var fileName = cmd.directory + "/" + items[i];
         	    	console.log("FileName: " + fileName);
         	    	var startTime = new Date();
-        	    
+
 					readFilePromisified(fileName)
 					.then(text => {
 						//console.log(text);
@@ -493,7 +503,7 @@ module.exports = {
 						  		"Content-Type" : "application/json"
 					  		},
 							data:fileContent
-						};			
+						};
 						client.post(loginInfo.url + "/${id}" , args, function (postData, response) {
 						  //console.log(response);
 						  //console.log(postData);
@@ -506,7 +516,7 @@ module.exports = {
 						  if(postData.statusCode < 205 ){
 							  console.log("Request took: " + (endTime - startTime) + "ms");
 							  return;
-						  } 	
+						  }
 						});
 					})
 					.catch(error => {

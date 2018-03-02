@@ -5,8 +5,6 @@ var fs = require('fs');
 var request = require('request');
 var CLITable = require('cli-table');
 var Table = require('easy-table');
-//var FormData = require('form-data');
-//var http = require('http');
 var context = require('./context.js');
 var login = require('../util/login.js');
 var printObject = require('../util/printObject.js');
@@ -17,7 +15,7 @@ var filesToSkip = ["__MACOSX",".DS_Store",".git",".gitignore",".idea"];
 
 
 module.exports = {
-	doProject: function(action, cmd) {
+	doAPI: function(action, cmd) {
 		if (action === 'list') {
 			module.exports.list(cmd);
 		}
@@ -863,9 +861,14 @@ module.exports = {
 		var exportEndpoint = "@export";
 		var filter = null;
 		var projIdent = cmd.ident;
-		filter = "";
+		filter = "?";
 		if(cmd.url_name) {
-			filter = "?urlfragment="+cmd.url_name;
+			var sep = "";
+			var urlfrags = cmd.url_name.split(",");
+			for(var i = 1; i < urlfrags.length ; i++) {
+				filter += sep + "urlfragment=" + urlfrags[i];
+				sep = "&";
+			}
 		} else if ( ! projIdent) {
 			projIdent = dotfile.getCurrentProject();
 			 if(! projIdent){
