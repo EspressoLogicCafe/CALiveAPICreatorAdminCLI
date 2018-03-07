@@ -141,7 +141,7 @@ module.exports = {
 			// setup the defaults for export
 			cmd.format = format;
 			cmd.directory = dir;
-			cmd.url_name += listOfUrls;
+			cmd.url_name = listOfUrls;
 			cmd.file = filename;
 			cmd.passwordstyle = passwordStyle;
 			cmd.authTokenstyle = authTokenStyle;
