@@ -864,8 +864,8 @@ module.exports = {
 		filter = "?";
 		if(cmd.url_name) {
 			var sep = "";
-			var urlfrags = cmd.url_name.split(",");
-			for(var i = 1; i < urlfrags.length ; i++) {
+			var urlfrags = cmd.url_name.split(",")
+			for(var i = 0; i < urlfrags.length ; i++) {
 				filter += sep + "urlfragment=" + urlfrags[i];
 				sep = "&";
 			}

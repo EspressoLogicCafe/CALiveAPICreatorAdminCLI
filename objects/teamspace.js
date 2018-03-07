@@ -10,7 +10,7 @@ var dotfile = require('../util/dotfile.js');
 var api = require("./api.js");
 
 module.exports = {
-	doTeamSpace: function(action, cmd) {
+	doTeamSpace: function (action, cmd) {
 		if (action === 'list') {
 			module.exports.list(cmd);
 		}
@@ -25,23 +25,22 @@ module.exports = {
 			//program.help();
 		}
 	},
-	
 	list: function (cmd) {
 		var client = new Client();
-		
+
 		var loginInfo = login.login(cmd);
-		if ( ! loginInfo)
+		if (!loginInfo)
 			return;
 		var url = loginInfo.url;
 		var apiKey = loginInfo.apiKey;
-		
+
 
 		client.get(url + "/admin:accounts?pagesize=100&&sysorder=(name:asc_uc,name:desc)", {
 			headers: {
 				Authorization: "CALiveAPICreator " + apiKey + ":1",
-				"Content-Type" : "application/json"
+				"Content-Type": "application/json"
 			}
-		}, function(data) {
+		}, function (data) {
 			if (data.errorMessage) {
 				console.log(data.errorMessage.red);
 				return;
@@ -49,50 +48,69 @@ module.exports = {
 			printObject.printHeader('TeamSpace(s)');
 			var table = new Table();
 			var type = "";
-			_.each(data, function(p) {
+			_.each(data, function (p) {
 				table.cell("Ident", p.ident);
 				table.cell("Name", p.name);
 				var comments = p.comments;
-				if ( ! comments) {
+				if (!comments) {
 					comments = "";
 				}
-				else if (comments.length > 50){
+				else if (comments.length > 50) {
 					//replace \n
 					comments = comments.substring(0, 47) + "...";
 				}
-				comments = comments.replace("\n"," ");
-				table.cell("Comments",comments);
+				comments = comments.replace("\n", " ");
+				table.cell("Comments", comments);
 				table.newRow();
 			});
 			table.sort(['Name']);
 			console.log(table.toString());
 			printObject.printHeader("# teamspace(s): " + data.length);
 		});
-			
+		if (cmd.verbose) {
+			client.get(url + "/projects" + "?pagesize=100&sysorder=(ident)", {
+				headers: {
+					Authorization: "CALiveAPICreator " + apiKey + ":1",
+					"Content-Type": "application/json"
+				}
+			}, function (projects) {
+				if (projects.errorMessage) {
+					console.log(projects.errorMessage.red);
+					return;
+				}
+				console.log("export directory=~/temp");
+				_.each(projects, function (p) {
+					console.log("#lacadmin api export --url_name " + p.url_name + " --format zip --file PROJECT_"+p.url_name +".zip");
+					console.log("#lacadmin api extract --file PROJECT_" + p.url_name + ".zip --directory ${directory}  --synchronize true" );
+					console.log("#lacadmin api import --file PROJECT_" + p.url_name + ".zip --namecollsion replace_existing" );
+				});
+			});
+		}
+
 	},
-	exportRepos: function(cmd) {
+	exportRepos: function (cmd) {
 		var client = new Client();
 		//console.log(api.list(cmd));
 		var loginInfo = login.login(cmd);
-		if ( ! loginInfo)
+		if (!loginInfo)
 			return;
 		var url = loginInfo.url;
 		var apiKey = loginInfo.apiKey;
 		var filter = "";
 		var dir = "";
-		if(cmd.directory){
+		if (cmd.directory) {
 			dir = cmd.directory;
 		}
 		var format = cmd.format || "zip";
 		var passwordStyle = cmd.passwordstyle || "skip";
 		var authTokenStyle = cmd.authTokenstyle || "skip_auto";
-		var apiOptionsStyle = cmd.apioptionsstyle ||  "emit_all";
+		var apiOptionsStyle = cmd.apioptionsstyle || "emit_all";
 		var libraryStyle = cmd.librarystyle || "emit_all";
 		var filename = cmd.file || "ALL_REPOS." + format;
 
-		function exportAPIPromisified(cmd){
-			return new Promise(function (resolve, reject){
-				api.exportToFile(cmd , function (err, res){
+		function exportAPIPromisified(cmd) {
+			return new Promise(function (resolve, reject) {
+				api.exportToFile(cmd, function (err, res) {
 					if (err) {
 						reject(err);
 					}
@@ -102,19 +120,20 @@ module.exports = {
 				});
 			});
 		}
-		client.get(url + "/projects"+"?pagesize=100&sysorder=(ident)", {
+
+		client.get(url + "/projects" + "?pagesize=100&sysorder=(ident)", {
 			headers: {
 				Authorization: "CALiveAPICreator " + apiKey + ":1",
-				"Content-Type" : "application/json"
+				"Content-Type": "application/json"
 			}
-		}, function(projects) {
+		}, function (projects) {
 			if (projects.errorMessage) {
 				console.log(projects.errorMessage.red);
 				return;
 			}
 			var listOfUrls = "";
 			var sep = "";
-			_.each(projects, function(p) {
+			_.each(projects, function (p) {
 				cmd.ident = p.ident;
 				listOfUrls += sep + p.url_name;
 				sep = ",";
@@ -123,9 +142,9 @@ module.exports = {
 			cmd.format = format;
 			cmd.directory = dir;
 			cmd.url_name += listOfUrls;
-			cmd.file =  filename;
+			cmd.file = filename;
 			cmd.passwordstyle = passwordStyle;
-			cmd.authTokenstyle =   authTokenStyle;
+			cmd.authTokenstyle = authTokenStyle;
 			cmd.apioptionsstyle = apiOptionsStyle;
 			cmd.librarystyle = libraryStyle;
 
@@ -133,45 +152,45 @@ module.exports = {
 		});
 		//printObject.printTrailer("# projects exported: " + projects.length);
 	},
-	export: function(cmd) {
+	export: function (cmd) {
 		var client = new Client();
-		
+
 		var loginInfo = login.login(cmd);
-		if ( ! loginInfo)
+		if (!loginInfo)
 			return;
 		var url = loginInfo.url;
 		var apiKey = loginInfo.apiKey;
-		
+
 		var filter = "";
-		if(cmd.teamspace_name) {
-			filter += "&sysfilter=equal(name:'"+cmd.teamspace_name + "')";
+		if (cmd.teamspace_name) {
+			filter += "&sysfilter=equal(name:'" + cmd.teamspace_name + "')";
 		}
 		var toStdout = false;
-		if ( ! cmd.file) {
+		if (!cmd.file) {
 			toStdout = true;
 		}
-		
-		client.get(loginInfo.url + "/admin:accounts?pagesize=1000"+filter, {
+
+		client.get(loginInfo.url + "/admin:accounts?pagesize=1000" + filter, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
-				"Content-Type" : "application/json"
+				"Content-Type": "application/json"
 			}
-		}, function(data) {
+		}, function (data) {
 			//console.log('get result: ' + JSON.stringify(data, null, 2));
 			if (data.errorMessage) {
 				console.log(("Error: " + data.errorMessage).red);
 				return;
 			}
 			if (data.length === 0) {
-				console.log(("TeamSpace not found "+filter).red);
+				console.log(("TeamSpace not found " + filter).red);
 				return;
 			}
-			for(var idx = 0; idx < data.length ; idx++){
+			for (var idx = 0; idx < data.length; idx++) {
 				delete data[idx].ident;
 				delete data[idx]['@metadata']
 				delete data[idx].ts;
 			}
-			
+
 			if (toStdout) {
 				console.log(JSON.stringify(data, null, 2));
 			}
@@ -182,56 +201,56 @@ module.exports = {
 			}
 		});
 	},
-	
-	import: function(cmd) {
+
+	import: function (cmd) {
 		var client = new Client();
 		var loginInfo = login.login(cmd);
-		if ( ! loginInfo) {
+		if (!loginInfo) {
 			return;
 		}
 
-		if ( ! cmd.file) {
+		if (!cmd.file) {
 			cmd.file = '/dev/stdin';
 		}
-		
+
 		var fileContent = JSON.parse(fs.readFileSync(cmd.file));
-		if(Array.isArray(fileContent) && fileContent.length > 0){
+		if (Array.isArray(fileContent) && fileContent.length > 0) {
 			//fileContent[0].project_ident = projIdent;
-			fileContent[0]["@metadata"] = {action:"MERGE_INSERT", key: ["account_ident","name"]} ;
+			fileContent[0]["@metadata"] = {action: "MERGE_INSERT", key: ["account_ident", "name"]};
 		} else {
 			//fileContent.project_ident = projIdent;
-			fileContent["@metadata"] = {action:"MERGE_INSERT", key: ["account_ident","name"]} ;
+			fileContent["@metadata"] = {action: "MERGE_INSERT", key: ["account_ident", "name"]};
 		}
-		
+
 		var startTime = new Date();
 		client.put(loginInfo.url + "/admin:accounts", {
 			data: fileContent,
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
-				"Content-Type" : "application/json"
+				"Content-Type": "application/json"
 			}
-		}, function(data) {
-		
+		}, function (data) {
+
 			var endTime = new Date();
 			if (data.errorMessage) {
 				console.log(data.errorMessage.red);
 				return;
 			}
 			printObject.printHeader('TeamSpace(s) created, including:');
-			if(data.statusCode == 200 ){
+			if (data.statusCode == 200) {
 				console.log("Request took: " + (endTime - startTime) + "ms");
 				return;
-			} 	
-	
-			var newAPIVersion = _.find( data.txsummary, function(p) {
+			}
+
+			var newAPIVersion = _.find(data.txsummary, function (p) {
 				return p['@metadata'].resource === 'admin:accounts';
 			});
-			if ( ! newAPIVersion) {
+			if (!newAPIVersion) {
 				console.log('ERROR: unable to find imported teamspace'.red);
 				return;
 			}
 			if (cmd.verbose) {
-				_.each(data.txsummary, function(obj) {
+				_.each(data.txsummary, function (obj) {
 					printObject.printObject(obj, obj['@metadata'].entity, 0, obj['@metadata'].verb);
 				});
 			}
@@ -239,7 +258,7 @@ module.exports = {
 				printObject.printObject(newAPIVersion, newAPIVersion['@metadata'].entity, 0, newAPIVersion['@metadata'].verb);
 				console.log(('and ' + (data.txsummary.length - 1) + ' other objects').grey);
 			}
-			
+
 			var trailer = "Request took: " + (endTime - startTime) + "ms";
 			trailer += " - # objects touched: ";
 			if (data.txsummary.length === 0) {

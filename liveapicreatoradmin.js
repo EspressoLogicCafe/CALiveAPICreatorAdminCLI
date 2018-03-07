@@ -57,7 +57,7 @@ program
 
 program
 	.command('login [url]')
-	.description('Login to an API server (e.g. lacadmin login -u admin -p secret http://localhost:8080 -a demo)')
+	.description('Login to a CA Live API Creator Server (e.g. lacadmin login -u admin -p secret http://localhost:8080 -a demo)')
 	.option('-u, --username <username>', 'API Server admin user name')
 	.option('-p, --password <password>', 'API Server admin password')
 	.option('-a, --serverAlias <serverAlias>', 'optional: Alias for a named connection')
@@ -65,24 +65,24 @@ program
 
 program
 	.command('logout [url] (lacadmin logout -a demo)')
-	.description('Logout from the current server, or a specific server')
-	.option('-a, --serverAlias <serverAlias>', 'optional: named connection alias to logout')
+	.description('Logout from the current server, or a specific named alias')
+	.option('-a, --serverAlias <serverAlias>', 'optional: named alias connection to logout')
 	.action(login.commandLogout);
 
 program
 	.command('use <alias> (lacadmin use demo)')
-	.description('Use the specified server by default')
+	.description('Use the specified server alias connection (if available)')
 	.action(login.commandUseAlias);
 
 program
 	.command('status')
-	.description('Show the current server, and any defined server aliases')
+	.description('Show the current server(s) connections and any defined server aliases')
 	.action(login.commandStatus);
 
 program
 	.command('license <list|import>')
-	.description('Administer server License for connected server.')
-	.option('-f, --file [fileName]', 'Name of file to import (if not provided stdin used for import)')
+	.description('Administer server License for connected API server.')
+	.option('-f, --file [fileName]', 'Name of the license file to import (if not provided stdin used for import)')
 	.action(license.doLicense);
 
 program
@@ -92,7 +92,7 @@ program
 
 program
 	.command('project <list|create|update|delete|use|import|export>')
-	.description('[Deprecated] Administer 4.0 and earlier projects. Actions are: list, create, update, delete, use, export')
+	.description('[Deprecated] Administer 4.0 and earlier project API. Actions are: list, create, update, delete, use, export')
 	.option('--ident [ident]', 'The ident of the specific project (see project list)')
 	.option('--project_name [name]', 'The name of the project')
 	.option('--url_name [name]', 'The name of the project')
@@ -105,8 +105,8 @@ program
 
 program
 	.command('api <list|create|update|delete|use|import|export|extract>')
-	.description('Administer API. Actions are: list, create, update, delete, use, import, export, extract')
-	.option('--ident [ident]', 'The ident of the specific project (use $lacadmin api list)')
+	.description('Administer an API for the current connection. Actions are: list, create, update, delete, use, import, export, extract')
+	.option('--ident [ident]', 'The ident of the specific API (use $lacadmin api list)')
 	.option('--api_name [name]', 'The name of the API')
 	.option('--url_name [name]', 'The url fragment name of the API')
 	.option('--status [status]', 'optional: create or update the status of the API, can be A (for Active) or I for (Inactive)')
@@ -119,9 +119,9 @@ program
 	.option('--section_filter [filter]', '(optional) The section filter of the API you wish to export (name=foo&version=v1)')
 	.option('--namecollision [fail|rename_new|replace_existing|disable_and_rename_existing]', 'optional: for import, determines how to handle existing API (default: rename_new)')
 	.option('--errorhandling [standard|fail_on_warning|best_efforts]', 'optional: for import, sets the error level response hanling (default: standard')
-	.option('--passwordstyle [skip|encrypted|plaintext]', 'optional: for export, sets the password style of exported API data sources (default: skip)')
-	.option('--librarystyle [emit_all|in_use_only]', 'optional: for export, sets the library style  (default: emit_all)')
-	.option('--apioptionsstyle [emit_all|skip_default]', 'optional: for export, sets the api options (default: emit_all)')
+	.option('--passwordstyle [skip|encrypted|plaintext]', 'optional: controls the password style of exported API data sources (default: skip)')
+	.option('--librarystyle [emit_all|in_use_only]', 'optional: controls the library content for export  (default: emit_all)')
+	.option('--apioptionsstyle [emit_all|skip_default]', 'optional: controls the api options for export (default: emit_all)')
 	.option('--synchronize [true|false]', 'optional: Used by extract & synchronize zip file with directory folder (default: false)')
 	.option('-v, --verbose', 'optional: whether to display detailed results, or just a summary')
 	.action(api.doAPI);
@@ -137,7 +137,7 @@ program
 	.option('--short_name [shortname]', 'Short Name')
 	.option('--docUrl [docurl]', 'optional: Documentation URL')
 	.option('--refUrl [refurl]', 'optional: Reference URL')
-	.option('--linkProject','optional: Link the imported library to the current project')
+	.option('--linkProject','optional: mark the imported library as used by the current API')
 	.option('--comments [comment]', 'optional: Comment on Library')
 	.option('-f, --file [fileName]', 'optional: Name of {JS} file to import/export (if not provided stdout used for export)')
 	.option('-v, --verbose', 'optional: display import/export during library list')
@@ -158,7 +158,7 @@ program
 
 program
 	.command('datasource <list|create|createDatabase|update|delete|import|reload|export>')
-	.description('Administer data sources within a project.')
+	.description('Administer data sources within a selected API.')
 	.option('--db_name [name]', 'The name of the data source connection')
 	.option('--ident [ident]', 'For delete or reload, the ident of the data source')
 	.option('--prefix [prefix]', 'The prefix of the data source connection')
@@ -220,7 +220,6 @@ program
 	.option('-v, --verbose', 'optional: whether to display list of rules in detailed format that can be used to recreate using command line')
 	.action(rule.doRule);
 
-
 program
 	.command('apioptions <list|update|import|export>')
 	.description('Administer API  options for a selected API.')
@@ -233,7 +232,7 @@ program
 
 program
 	.command('sort <list|create|update|delete|import|export>')
-	.description('Administer Sorts for the active API Project.')
+	.description('Administer Named Sorts for the active API.')
 	.option('--ident [ident]', 'The ident of the specific named sort object')
 	.option('--sort_name [name]', 'The Name of named sort')
 	.option('--sort_text [sorttext]', 'Sort Text to define named sort')
@@ -246,7 +245,7 @@ program
 
 program
 	.command('filter <list|create|delete|update|import|export>')
-	.description('Administer Filters for the active API Project.')
+	.description('Administer Named Filters for the active API.')
 	.option('--ident [ident]', 'The ident of the specific named filter object')
 	.option('--filter_name [name]', 'The Name of named filter')
 	.option('--filter_text [text]', 'Text to define named filter')
@@ -259,7 +258,7 @@ program
 
 program
 	.command('authtoken <list|import|export>')
-	.description('Administer Auth Tokens for current project.')
+	.description('Administer Auth Tokens for current API.')
 	.option('--token_name [name]','The name of the auth token')
 	.option('--project_ident [project_ident]','The project ident that will be marked as used' )
 	.option('--file [fileName]', 'optional: Name of file to import/export (if not provided stdin/stdout used for export)')
@@ -267,7 +266,7 @@ program
 
 program
 	.command('role <list|delete|import|export>')
-	.description('Administer Roles for current project.')
+	.description('Administer Security Roles for current API.')
 	.option('--ident [ident]', 'The ident of the specific role to delete')
 	.option('--role_name [name]', 'The name of the specific role to delete')
 	.option('--project_ident [project_ident]','The project ident that will be marked as used' )
@@ -277,7 +276,7 @@ program
 
 program
 	.command('user <list|delete|update|import|export>')
-	.description('Administer Users for current project.')
+	.description('Administer Users for current API. (not available if custom auth provider is used)')
 	.option('--project_ident [project_ident]','The project ident that will be marked as used' )
 	.option('--ident [ident]', 'The ident of the specific user')
 	.option('--user_name [name]', 'The name of the specific user')
@@ -293,7 +292,7 @@ program
 
 program
 	.command('npa <list|delete|export|import>')
-	.description('Administer Non Persistent Attributes for the active API Project.')
+	.description('Administer Non Persistent Attributes for the active API.')
 	.option('--ident [ident]', 'The ident of the specific named npa object')
     .option('--npa_name [name]', 'The name of the specific named npa object')
 	.option('--dbschema_ident [ident]', 'optional: The dbschema ident of the projects data source')
@@ -303,7 +302,7 @@ program
 
 program
 	.command('topic <list|delete|import|export>')
-	.description('Administer Topics for current project.')
+	.description('Administer Topics for current API (used by Rules).')
 	.option('--project_ident [project_ident]','The project ident that will be marked as used' )
 	.option('--topic_name [name]', 'Name of the topic')
 	.option('--ident [ident]', 'The ident of the specific topic to delete')
@@ -313,7 +312,7 @@ program
 
 program
 	.command('request_event <list|delete|export|import>')
-	.description('Administer Request, Response, & CORS Option events for current project.')
+	.description('Administer Request, Response, & CORS Option events for current API.')
 	.option('--event_name [name]', 'The request or response Name')
 	.option('--ident [ident]', 'The ident of the specific event')
 	.option('--project_ident [project_ident]','The project ident that will be used' )
@@ -323,7 +322,7 @@ program
 
 program
 	.command('custom_endpoints <list|delete|export|import>')
-	.description('Administer Custom Endpoints (Handlers) for current project.')
+	.description('Administer Custom Endpoints (aka Handlers) for current API.')
 	.option('--project_ident [project_ident]','The project ident that will be used' )
 	.option('--ident [ident]', 'The ident of the specific handler')
 	.option('--handler_name [name]', 'The name of the Custom Endpoint')
@@ -333,7 +332,7 @@ program
 
 program
 	.command('apiversion <list|export|import>')
-	.description('Administer API Versions for Resources for current project.')
+	.description('Administer API Versions for Resources for current API.')
 	.option('--version_name [name]', 'The API version name')
 	.option('--project_ident [project_ident]','The project ident that will be used' )
 	.option('-f, --file [fileName]', 'optional: Name of file to import/export (if not provided stdin/stdout used for export)')
@@ -341,7 +340,7 @@ program
 
 program
 	.command('relationship <list|delete|export|import>')
-	.description('Administer Relationships for current project.')
+	.description('Administer Relationships for current API.')
 	.option('--ident [ident]', 'This is the ident of the relationship')
 	.option('--relationship_name [name]', 'This is the name (hash) of the relationship')
 	.option('--project_ident [project_ident]','The project ident that will be used' )
@@ -351,7 +350,7 @@ program
 
 program
 	.command('gateway <list|create|delete|import|export|publish>')
-	.description('Publish Swagger document for current project to CA Gateway.')
+	.description('Publish Swagger document for selected API to CA Gateway.')
 	.option('--ident [ident]', 'The ident for the saved gateway definition')
 	.option('--gateway_name [name]', 'The name for the gateway definition')
 	.option('--username [name]', 'The username for the gateway')
@@ -366,7 +365,7 @@ program
 
 program
 	.command('managedserver <list|create|delete|update|import|export>')
-	.description('Administer a managed data server (used by @databases to create data sources).')
+	.description('Administer a managed data server (used by data_sources).')
 	.option('--server_name [name]', 'The name of the data source connection')
 	.option('--ident [ident]', 'For delete or reload, the ident of the managed data server')
 	.option('--dbasetype [dbasetype]', 'The type of the managed data server connection, can be mysql, derby, postgres, sqlserver, oracle')
@@ -383,8 +382,8 @@ program
 
 program
 	.command('migrate <exportRepos>')
-	.description('Migrate creates a export of all projects in a TeamSpace to a named directory')
-	.option('-d, --directory [directory]', 'Required for export, the name of a directory to save all exported json or zip files')
+	.description('Migrate a or export all API content for a TeamSpace to a named file')
+	.option('-d, --directory [directory]', 'Required for export, the name of a directory to save all exported files')
 	.option('-f, --file [file]', 'optional:: for source extract, the name of a file to read from/save to, if unspecified, use stdin/stdout')
 	.option('--format [json|zip]', 'optional: for import/export, this sets the output type of the export default: zip')
 	.option('--passwordstyle [skip|encrypted|plaintext]', 'optional: for export, sets the password style of exported API data sources (default: skip)')
@@ -394,7 +393,7 @@ program
 
 program
 	.command('schema <create>')
-	.description('Create new databse using @schema format and a managed data server data source.')
+	.description('Create new database table/columns using @schema format.')
 	.option('--project_ident [project_ident]','The project ident that will be marked as used' )
 	.option('--prefix [prefix]','The data source prefix used for export. Note for import, the prefix must be marked as schema isEditable' )
 	.option('--ignoredbcolumntype [true|false]','optional: The ignoredbcolumntype setting is used when moving between database vendors' )
@@ -407,7 +406,7 @@ program
 
 program
 	.command('function <list|delete|export|import>')
-	.description('Administer Functions for current project.')
+	.description('Administer Functions for current API.')
 	.option('--ident [ident]', 'This is the ident of the function')
 	.option('--function_name [name]', 'Name of the function')
 	.option('--project_ident [project_ident]','optional: The project ident that will be used' )
@@ -446,7 +445,7 @@ program
 
 program
 	.command('listener <list|delete|export|import>')
-	.description('Administer Listener Events for current project.')
+	.description('Administer Listener Events for current API.')
 	.option('--listener_name [name]', 'The Listener Name')
 	.option('--ident [ident]', 'The ident of the specific listener')
 	.option('--project_ident [project_ident]','The project ident that will be used' )
@@ -465,7 +464,7 @@ program
 	
 program
 	.command('connection <list|delete|export|import|stop|start>')
-	.description('Administer Connections for current project.')
+	.description('Administer Connections for current API.')
 	.option('--connection_name [name]', 'The connection name')
 	.option('--ident [ident]', 'The ident of the specific connection')
 	.option('--project_ident [project_ident]','The project ident that will be used' )
@@ -475,7 +474,7 @@ program
 
 program
 	.command('timer <list|delete|export|import>')
-	.description('Administer Timer definitions.')
+	.description('Administer Timer definitions for current API.')
 	.option('--timer_name [name]', 'The Timer Name')
 	.option('--ident [ident]', 'The ident of the specific timer')
 	.option('-v, --verbose', 'optional: Display list of timer in detailed export/import format')
@@ -494,14 +493,14 @@ program
 
 program
 	.command('teamspace <list|exportRepos>')
-	.description('List or Export TeamSpace content for current server.')
+	.description('List TeamSpace content for current server or exportRepos the entire API contents.')
 	.option('--teamspace_name [name]','The name of the TeamSpace')
-	.option('-d, --directory [directory]', 'Required for export, the name of a directory to save all exported json or zip files')
 	.option('-f, --file [file]', 'optional:: for source extract, the name of a file to read from/save to, if unspecified, use stdin/stdout')
 	.option('--format [json|zip]', 'optional: for import/export, this sets the output type of the export default: zip')
 	.option('--passwordstyle [skip|encrypted|plaintext]', 'optional: for export, sets the password style of exported API data sources (default: skip)')
 	.option('--librarystyle [emit_all|in_use_only]', 'optional: for export, sets the library style  (default: emit_all)')
 	.option('--apioptionsstyle [emit_all|skip_default]', 'optional: for export, sets the api options (default: emit_all)')
+	.option('-v, --verbose', 'optional: used by list to display each API in detailed export/import format')
 	.action(teampspace.doTeamSpace);
 
 program.parse(process.argv);
