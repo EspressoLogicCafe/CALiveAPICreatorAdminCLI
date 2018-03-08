@@ -207,8 +207,8 @@ module.exports = {
 		if (cmd.ident) {
 			filter += sep + "sysfilter=equal(ident:" + cmd.ident + ")";
 			sep = "&";
-		} else if (cmd.conection_name) {
-			filter += sep + "sysfilter=equal(name:'" + cmd.conection_name + "')";
+		} else if (cmd.connection_name) {
+			filter += sep + "sysfilter=equal(name:'" + cmd.connection_name + "')";
 			sep = "&";
 		} 
 	 	if (projIdent) {
@@ -218,6 +218,7 @@ module.exports = {
 		if ( ! cmd.file) {
 			toStdout = true;
 		}
+		console.log(filter);
 		client.get(loginInfo.url + "/ConnectionExport?pagesize=1000&"+filter, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",

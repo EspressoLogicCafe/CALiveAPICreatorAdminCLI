@@ -4,8 +4,8 @@
 
 ## Description
 
-This is a command-line tool to administer API Creator servers. It allows the creation,
-modification and deletion of many common objects, such as projects, database connection,
+This is a command-line tool to administer CA Live API Creator (LAC) servers. It allows the creation,
+modification and deletion of many common objects, such as apis, database connection,
 resources and rules.
 
 ## Installation
@@ -34,7 +34,7 @@ The URL will normally be the address of the server, such as:
     http://api.acme.com
 
 If you specify an alias, then you will be able to refer to that connection using that alias.
-This is useful if you plan to work with several LAC API servers at the same time.
+This is useful if you plan to work with several Live API Creator (LAC) API servers at the same time.
 
 Regardless, this command sets your *current server* -- see [the use command](/use/) below.
 
@@ -57,14 +57,14 @@ $ lacadmin --help
   
     Commands:
    
-       login [options] [url]                                                                 Login to a CA Live API Creator Server (e.g. lacadmin login -u admin -p secret http://localhost:8080 -a demo)
-       logout [options] [url]                                                                Logout from the current server, or a specific named alias
-       use <alias>                                                                           Use the specified server alias connection (if available)
+       login [options] [url]                                                                 Login to a CA Live API Creator (LAC) Server (e.g. lacadmin login -u admin -p secret http://localhost:8080 -a demo).
+       logout [options] [url]                                                                Logout from the current server, or a specific named alias.
+       use <alias>                                                                           Use the specified server alias connection (if available).
        status                                                                                Show the current server(s) connections and any defined server aliases
        license [options] <list|import>                                                       Administer server License for connected API server.
-       eula <accepted>                                                                       End user license agreement status (note: must be accepted before any script will run) returns true or false
-       project [options] <list|create|update|delete|use|import|export>                       [Deprecated] Administer 4.0 and earlier project API. Actions are: list, create, update, delete, use, export
-       api [options] <list|create|update|delete|use|import|export|extract>                   Administer an API for the current connection. Actions are: list, create, update, delete, use, import, export, extract
+       eula <accepted>                                                                       End user license agreement status (note: must be accepted before any script will run) returns true or false.
+       project [options] <list|create|update|delete|use|import|export>                       [Deprecated] Administer 4.0 and earlier project API. Actions are: list, create, update, delete, use, export.
+       api [options] <list|create|update|delete|use|import|export|extract>                   Administer an API for the current connection. Actions are: list, create, update, delete, use, import, export, extract.
        libraries [options] <list|create|update|delete|export|import>                         Administer javascript libraries for a specific API.
        authprovider [options] <list|create|linkProject|delete|export|import>                 Administer authentication providers for a TeamSpace.
        datasource [options] <list|create|createDatabase|update|delete|import|reload|export>  Administer data sources within a selected API.
@@ -75,7 +75,7 @@ $ lacadmin --help
        filter [options] <list|create|delete|update|import|export>                            Administer Named Filters for the active API.
        authtoken [options] <list|import|export>                                              Administer Auth Tokens for current API.
        role [options] <list|delete|import|export>                                            Administer Security Roles for current API.
-       user [options] <list|delete|update|import|export>                                     Administer Users for current API. (not available if custom auth provider is used)
+       user [options] <list|delete|update|import|export>                                     Administer Users for current API. (not available if custom auth provider is used).
        npa [options] <list|delete|export|import>                                             Administer Non Persistent Attributes for the active API.
        topic [options] <list|delete|import|export>                                           Administer Topics for current API (used by Rules).
        request_event [options] <list|delete|export|import>                                   Administer Request, Response, & CORS Option events for current API.
@@ -84,13 +84,12 @@ $ lacadmin --help
        relationship [options] <list|delete|export|import>                                    Administer Relationships for current API.
        gateway [options] <list|create|delete|import|export|publish>                          Publish Swagger document for selected API to CA Gateway.
        managedserver [options] <list|create|delete|update|import|export>                     Administer a managed data server (used by data_sources).
-       migrate [options] <exportRepos>                                                       Migrate a or export all API content for a TeamSpace to a named file
        schema [options] <create>                                                             Create new database table/columns using @schema format.
        function [options] <list|delete|export|import>                                        Administer Functions for current API.
        virtualkey [options] <list|create|update|delete|import|export>                        Manage a virtualkey to a table or view.
        sequence [options] <list|create|update|delete|import|export>                          Manage a database sequence on a key column for a table or view.
        listener [options] <list|delete|export|import>                                        Administer Listener Events for current API.
-       provider [options] <list|delete|export|import>                                        Administer Listener Provider definitions. (requires login as "sa")
+       provider [options] <list|delete|export|import>                                        Administer Listener Provider definitions. (requires login as "sa").
        connection [options] <list|delete|export|import|stop|start>                           Administer Connections for current API.
        timer [options] <list|delete|export|import>                                           Administer Timer definitions for current API.
        application [options] <list|delete|import|export>                                     Administer Data Explorer Applications (meta data).
@@ -104,7 +103,7 @@ $ lacadmin --help
 ```
 
 ## Login
-This will log you in to one or more LAC API Servers - the alias allows multiple connections to be used at the same time (see use command)
+This will log you in to one or more CA Live API Creator (LAC) API Servers - the alias allows multiple connections to be used at the same time (see use command)
 
 ```
     lacadmin login -u admin -p myAdminPassword http://localhost:8080 [-a <alias>]
@@ -121,7 +120,6 @@ in which case you will be logged out of that server.
 ```
     lacadmin logout [-a <alias>]
 ```
-
 
 ***
 ## Use
@@ -162,7 +160,6 @@ Prints which server is the current server (if any) and project, and what aliases
 
 ***
 
-
 ### Sample Export Script
 You can combine each command to export parts of your system into components that can later be used in source control and then promoted to different servers.
 ```
@@ -178,7 +175,7 @@ lacadmin use localnw
 # Projects
 lacadmin api list
 lacadmin api use --url_name nwind
-lacadmin api export --url_name nwind --file nw/project_nwind.json --format json
+lacadmin api export --url_name nwind --file nw/project_nwind.json --format json --passwordstyle skip
 
 #API Options
 lacadmin apioptions list
@@ -198,7 +195,7 @@ lacadmin authprovider export --ident 2100 --file nw/nw_authprovider.json
 
 #Rules
 lacadmin rule list --verbose
-lacadmin rule export --file nw/rules.json
+lacadmin rule export --file nw/rules.json 
 
 #Resources
 lacadmin resource list
@@ -220,9 +217,12 @@ lacadmin use localnw
 
 
 # Projects - this is the default NorthWind JSON project
-lacadmin api export --file project_nwind.json --format json
-#lacadmin api export --file project_nwind.zip --format zip
+lacadmin api export --file project_nwind.json --format json --passwordstyle plaintext
+#or export file as zip
+#lacadmin api export --file project_nwind.zip --format zip --passwordstyle encrypted
+
 lacadmin api import --file project_nwind.json --namecollision replace_existing
+#lacadmin api import --file projct_nwind.zip --namecollision rename_new
 lacadmin project list
 
 #API API Options [Optional]
@@ -287,6 +287,7 @@ lacadmin timer list
 lacadmin listener list
 lacadmin connection list
 lacadmin application list
+lacadmin teamspace list --verbose
 
 lacadmin logout -a local
 ```
@@ -310,4 +311,4 @@ Follow the links below for detailed documentation on specific administrator comm
 * [Connction](docs/connection.md)
 * [Listener](docs/listener.md)
 * [Applications](docs/application.md)
-
+* [teamspace](docs/teamspace.md)
