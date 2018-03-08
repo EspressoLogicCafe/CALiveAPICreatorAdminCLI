@@ -1,35 +1,37 @@
 # API 
 
-This suite of commands allows you to manipulate your CA Live API Creator API projects. See [Creating an API](https://docops.ca.com/ca-live-api-creator/4-1/en/creating-apis)
-## API Options
+This suite of commands allows you to manipulate your CA Live API Creator (LAC) APIs. See [Creating APIs](https://docops.ca.com/ca-live-api-creator/4-1/en/creating-apis)
+## API
 ```
+$lacadmin api -h
+
 Usage: API [options] <list|create|update|delete|use|import|export|extract>
 
   Administer API's. Actions are: list, create, update, delete, use, export
 
    -h, --help                                                                      output usage information
-      --ident [ident]                                                                 The ident of the specific API (see: lacadmin api list)
-      --api_name [name]                                                               The name of the API
-      --url_name [name]                                                               The url fragment name of the API
-      --status [status]                                                               optional: create or update the status of the API, can be A (for Active) or I for (Inactive)
-      --authprovider [ident]                                                          optional: create or update the ident of the authentication provider for the API
-      --comments [comments]                                                           optional: create or update a description of the API
-      --section [name]                                                                optional: The section of the API you wish to export (e.g. resources, functions, datasources)
-      --section_filter [filter]                                                       optional: The section filter of the API you wish to export (name=foo&version=v1)  
-      -d, --directory [directory]                                                     Required for extract, the name of a directory to extract ZIP files
-      -f, --file [file]                                                               optional: for import/export/extract, the name of a file to read from/save to, if unspecified, use stdin/stdout
-      --format [json|zip]                                                             optional: for import/export, this sets the output type of the export default: zip
-      --namecollision [fail|rename_new|replace_existing|disable_and_rename_existing]  optional: for import, determines how to handle existing API projects(default rename_new)
-      --errorhandling [standard|fail_on_warning|best_efforts]                         optional: for import, sets the error level response hanling (default: standard
-      --passwordstyle [skip|encrypted|plaintext]                                      optional: for export, sets the password style of exported API datasources (default: skip)
-      --librarystyle [emit_all|in_use_only]                                           optional: for export, sets the library style  (default: emit_all)
-      --apioptionsstyle [emit_all|skip_default]                                       optional: for export, sets the api options (default: emit_all)
-      --synchronize [true|false]                                                      optional: Used by extract & synchronize zip file with directory folder (default: false)
-      -v, --verbose                                                                   optional: whether to display detailed results, or just a summary
+      --ident [ident]                                                                 The ident of the specific API (see: lacadmin api list).
+      --api_name [name]                                                               The name of the API.
+      --url_name [name]                                                               The url fragment name of the API.
+      --status [status]                                                               optional: create or update the status of the API, can be A (for Active) or I for (Inactive).
+      --authprovider [ident]                                                          optional: create or update the ident of the authentication provider for the API.
+      --comments [comments]                                                           optional: create or update a description of the API.
+      --section [name]                                                                optional: The section of the API you wish to export (e.g. resources, functions, datasources).
+      --section_filter [filter]                                                       optional: The section filter of the API you wish to export (name=foo&version=v1).
+      -d, --directory [directory]                                                     Required for extract, the name of a directory to extract ZIP files.
+      -f, --file [file]                                                               optional: for import/export/extract, the name of a file to read from/save to, if unspecified, use stdin/stdout.
+      --format [json|zip]                                                             optional: for import/export, this sets the output type of the export default: zip.
+      --namecollision [fail|rename_new|replace_existing|disable_and_rename_existing]  optional: for import, determines how to handle existing API projects(default rename_new).
+      --errorhandling [standard|fail_on_warning|best_efforts]                         optional: for import, sets the error level response hanling (default: standard.
+      --passwordstyle [skip|encrypted|plaintext]                                      optional: for export, sets the password style of exported API datasources (default: skip).
+      --librarystyle [emit_all|in_use_only]                                           optional: for export, sets the library style  (default: emit_all).
+      --apioptionsstyle [emit_all|skip_default]                                       optional: for export, sets the api options (default: emit_all).
+      --synchronize [true|false]                                                      optional: Used by extract & synchronize zip file with directory folder (default: false).
+      -v, --verbose                                                                   optional: whether to display detailed results, or just a summary.
 ```
 ***
 ## List
-The `list` command shows all API's in the LAC connected server.
+The `list`command shows all APIs in the connected server TeamSpace.
 
 ```
     $lacadmin api list
@@ -58,7 +60,7 @@ Includes sample scripts which can be used by devops developers.
 #lacadmin api import --file API_admin.zip
 ```
 ## Create
-The create command creates a new project with the given values. Status is active by default, it can be specified
+The create command creates a new API with the given values. Status is active by default, it can be specified
 as A(ctive) or I(nactive).  The url_name (aka url fragement) is required.
 
 ```
@@ -76,21 +78,21 @@ If the `--verbose` option is specified, the output will include all created obje
 	Request took: 470ms - # objects touched: 21
 	Current project is now: My Project3 (1007)
 
-Note that creating an API also creates a number of other default objects.
-Once the project is created, it becomes the current API.
+Note that creating APIs also creates a number of other default objects.
+Once the API is created, it becomes the current API (lacadmin api use --url_name <urlfragname>).
 
 ***
 ## Update
-The update command updates one or more attribute of the specified project.
-The project can be specified either by its name or by its URL name.
+The update command updates one or more attribute of the specified API.
+The API can be specified either by its name or by its URL name.
 
 
     $lacadmin api update [--api_name <name> | --url_name <url_name>] 
         [--status <A-I>] [--authprovider <ident>] [--comments <comments>]
 ***
 ## Delete
-The delete command deletes the specified project and everything it contains.
-The project can be specified either by its name or by its URL name.
+The delete command deletes the specified API and everything it contains.
+The API can be specified either by its name or by its URL name.
 
 If the `--verbose` option is specified, the output will include all deleted objects instead of a summary.
 ```
@@ -98,7 +100,7 @@ If the `--verbose` option is specified, the output will include all deleted obje
 
 ```
 ## Use
-The use command will associate all future lacadmin calls with the selected API which can be selected by name or url_name.
+The use command will associate all future calls with the selected API which can be selected by name or url_name.
 
     $lacadmin api use [--api_name '<name>' | --url_name <url_name>]
 
@@ -108,7 +110,8 @@ The API can be specified either by its name or by its URL name.
 ***
 
 ## Export
-The export command exports the specified API into a JSON or ZIP file (use format flag).  The format flag will default to ZIP if not supplied.
+The export command exports the specified API into a JSON or ZIP file (use format flag).  
+The format flag will default to ZIP if not supplied.
 If the `filename` parameter is not specified, stdout is used.
 
 The API can be specified either by its name or by its URL name. The JSON output is in an
@@ -121,40 +124,42 @@ If the `--verbose` option is specified, the output will include all created obje
     $lacadmin api export  
          [ --api_name <name> | --url_name <url_name>] 
          [ --file <filename> ]
-         [ --format [zip|json] ] 
-         [ --passwordstytle [skip|encrypted|plaintext] ] 
-         [ --librarystyle [emit_all|in_use_only]  ]
-         [ --apioptionsstyle [emit_all|skip_default] ] 
+         [ --format [zip|json] ] default zip
+         [ --passwordstytle [skip|encrypted|plaintext] ] default - skip
+         [ --librarystyle [emit_all|in_use_only]  ] default - emit_all
+         [ --apioptionsstyle [emit_all|skip_default] ] default - emit_all
          [ --verbose] 
  
+note: passwordstyle applies only to data sources that have passwords.
 ```
 
 ## Import
-Import an existing API to LAC server.  File type may be either a zip or json file.
+Import an existing API to the connected TeamSpace.  The file type may be either a zip or json file.
 The import command imports a API from the specified JSON export file.
 If the `filename` parameter is not specified, stdin is used. This allows you to pipe in content from another command.
-
-You can optionally give the new API a different name or URL name.
 
 If the `--verbose` option is specified, the output will include all created objects instead of a summary.
 Note: The json format can either be the new 4.1 style or the original API export type.
 ```
     $lacadmin api import --file <filename[.json|.zip]> 
-        [ --namecollision [fail|rename_new|replace_existing|disable_and_rename_existing] ]
+        [ --namecollision [fail|rename_new|replace_existing|disable_and_rename_existing] ] default rename_existing
         [ --errorhandling standard ] 
         [ --verbose]
+        
+note: namecollision rename_existing is the default and will only rename if the url already exists.
 ```
 
 ## Extract
 This will take the content of a downloaded ZIP file and compare it with the selected directory.  
-If the directory does not exist, the zip file will be exploded into this directory.  If the directory exist and the synchronize flag is set to true (default is false) 
+If the directory does not exist, the zip file will be exploded into this directory.  
+If the directory exist and the synchronize flag is set to true (default is false) 
 the system will remove any files found in the directory that were not found in the ZIP file.
 
 ```
     $lacadmin api extract 
         --file <filename.zip> 
         --directory </tmp/path/>  
-        --synchronize [true|false]
+        --synchronize [true|false] default false
 
 ```
 ## Section 

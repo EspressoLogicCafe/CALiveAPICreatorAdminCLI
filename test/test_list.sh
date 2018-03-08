@@ -2,7 +2,7 @@
 # Generate the contents of an existing repository
 #SERVER=http://localhost:8080/APIServer
 SERVER=http://localhost:8080
-PROJECT=test
+PROJECT=demo
 
 ## Connect to a local server $SERVER and use API Project $PROEJCT
 node ../liveapicreatoradmin.js logout -a local
@@ -44,6 +44,7 @@ node ../liveapicreatoradmin.js provider list
 ECHO 'is user license accepted'
 node ../liveapicreatoradmin.js eula accepted
 node ../liveapicreatoradmin.js license list
+node ../liveapicreatoradmin.js teamspace list --verbose
 
 node ../liveapicreatoradmin.js logout -a $PROJECT
 
