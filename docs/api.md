@@ -22,7 +22,7 @@ Usage: API [options] <list|create|update|delete|use|import|export|extract>
       -f, --file [file]                                                               optional: for import/export/extract, the name of a file to read from/save to, if unspecified, use stdin/stdout.
       --format [json|zip]                                                             optional: for import/export, this sets the output type of the export default: zip.
       --namecollision [fail|rename_new|replace_existing|disable_and_rename_existing]  optional: for import, determines how to handle existing API projects(default rename_new).
-      --errorhandling [standard|fail_on_warning|best_efforts]                         optional: for import, sets the error level response hanling (default: standard.
+      --errorhandling [standard|fail_on_warning|best_efforts]                         optional: for import, sets the error level response handling (default: standard.
       --passwordstyle [skip|encrypted|plaintext]                                      optional: for export, sets the password style of exported API datasources (default: skip).
       --librarystyle [emit_all|in_use_only]                                           optional: for export, sets the library style  (default: emit_all).
       --apioptionsstyle [emit_all|skip_default]                                       optional: for export, sets the api options (default: emit_all).

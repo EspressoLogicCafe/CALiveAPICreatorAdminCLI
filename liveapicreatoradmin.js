@@ -118,7 +118,7 @@ program
 	.option('--section [name]', '(optional) The section of the API you wish to export (e.g. resources, functions, data sources)')
 	.option('--section_filter [filter]', '(optional) The section filter of the API you wish to export (name=foo&version=v1)')
 	.option('--namecollision [fail|rename_new|replace_existing|disable_and_rename_existing]', 'optional: for import, determines how to handle existing API (default: rename_new)')
-	.option('--errorhandling [standard|fail_on_warning|best_efforts]', 'optional: for import, sets the error level response hanling (default: standard')
+	.option('--errorhandling [standard|fail_on_warning|best_efforts]', 'optional: for import, sets the error level response handling (default: standard')
 	.option('--passwordstyle [skip|encrypted|plaintext]', 'optional: controls the password style of exported API data sources (default: skip)')
 	.option('--librarystyle [emit_all|in_use_only]', 'optional: controls the library content for export  (default: emit_all)')
 	.option('--apioptionsstyle [emit_all|skip_default]', 'optional: controls the api options for export (default: emit_all)')
