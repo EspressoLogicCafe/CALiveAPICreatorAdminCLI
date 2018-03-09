@@ -481,12 +481,15 @@ module.exports = {
 				console.log("Connection not found using filter "+filter);
 				return;
 			 }
-			 if(cmd.connection_name) {
-			    filter = "/" + content[0].ident;
+			 filter = "projectIdent="+projIdent
+					+"&providerIdent="+content[0].provider_ident
+					+"&connectionIdent=" + content[0].ident;
+			 if(!content[0].is_active) {
+			 	console.log(("Conneciton "+content[0].name +" is not active and cannot be started").red);
+			 	return;
 			 }
-			 content[0].is_active = true;
-			 client.put(loginInfo.url + "/admin:connections"+ filter, {
-				 data: content,
+		 	 //console.log(filter);
+			 client.get(loginInfo.url + "/reconnectConnection?"+ filter, {
 				 headers: {
 					 Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
 					 "Content-Type" : "application/json"
@@ -502,30 +505,19 @@ module.exports = {
 				 if(data.statusCode == 200 ){
 					 console.log("Request took: " + (endTime - startTime) + "ms");
 					 return;
-				 } 	
-				 var newConnection = _.find( data.txsummary, function(p) {
-					 return p['@metadata'].resource === 'admin:connections';
-				 });
-				 if ( ! newConnection) {
-					 console.log('ERROR: unable to find connections'.red);
+				 }
+				 console.log("connection start: " + data);
+				 if ( ! data) {
+					 console.log('ERROR: unable to start connections'.red);
 					 return;
-				 }
-				 if (cmd.verbose) {
-					 _.each(data.txsummary, function(obj) {
-						 printObject.printObject(obj, obj['@metadata'].entity, 0, obj['@metadata'].verb);
-					 });
-				 }
-				 else {
-					 printObject.printObject(newConnection, newConnection['@metadata'].entity, 0, newHandler['@metadata'].verb);
-					 console.log(('and ' + (data.txsummary.length - 1) + ' other objects').grey);
 				 }
 				 var trailer = "Request took: " + (endTime - startTime) + "ms";
 				 trailer += " - # objects touched: ";
-				 if (data.txsummary.length === 0) {
+				 if (data.length === 0) {
 					 console.log('No data returned'.yellow);
 				 }
 				 else {
-					 trailer += data.txsummary.length;
+					 trailer += data;
 				 }
 				 printObject.printTrailer(trailer);
 			 });
