@@ -287,7 +287,6 @@ module.exports = {
 					for(var i = 0 ; i < fileContent.length; i++){
 						fileContent[i].project_ident = projIdent;
 						delete fileContent[i].ts;
-						fileContent[i].is_active = false;
 						delete fileContent[i].ident;
 						fileContent[i]["@metadata"] = {action:"MERGE_INSERT", key:  ["project_ident","name"]};
 						for(var j =0; j < fileContent[i].ConnectionParameters.length ; j++) {
