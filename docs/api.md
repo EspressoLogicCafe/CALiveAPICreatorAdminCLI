@@ -7,7 +7,7 @@ $lacadmin api -h
 
 Usage: API [options] <list|create|update|delete|use|import|export|extract>
 
-  Administer API's. Actions are: list, create, update, delete, use, export
+  Administer APIs. Actions are: list, create, update, delete, use, export
 
    -h, --help                                                                      output usage information
       --ident [ident]                                                                 The ident of the specific API (see: lacadmin api list).
@@ -39,7 +39,7 @@ The `list`command shows all APIs in the connected server TeamSpace.
 
 
 #### Output
-    All API's
+    All APIs
     Ident  Name                  Enabled  URL      Comments
     -----  --------------------- ------  -------  --------
     1000   Logic Demo             true   demo
@@ -47,7 +47,7 @@ The `list`command shows all APIs in the connected server TeamSpace.
     1003   My Project             true   myproj
     1005   My Project2            true   myproj2
     
-    # API's: 4
+    # APIs: 4
 
 ***
 ### adding the --verbose flag to project list 
