@@ -9,7 +9,6 @@ This feature is for TeamSpace management. For details see [Manage TeamSpace](htt
   
     Options:
   
-      --teamspace_name [name]                     The name of the TeamSpace
       -f, --file [file]                           optional:: for source extract, the name of a file to read from/save to, if unspecified, use stdin/stdout
       --format [json|zip]                         optional: for import/export, this sets the output type of the export default: zip
       --passwordstyle [skip|encrypted|plaintext]  optional: for export, sets the password style of exported API data sources (default: skip)
@@ -44,8 +43,9 @@ Ident  Name               Comments
 
 ## ExportRepos
 This will export all of the APIs (lacadmin api list) found in the connected TeamSpace.  This can be useful
-if you need to move the current repository to another TeamSpace (lacadmin api import --file [filename]) or move
-from development to test or production.
+if you need to move the current TeamSpace to another TeamSpace (lacadmin api import --file [filename]) or move
+from development to test or production.  You must be logged in as a TeamSpace user (not sa) to be able to export 
+the entire repository content.
 If [--file] is not provided output will be sent to ALL_REPOS.zip file in the current directory.
 ```
     $lacadmin teampspace exportRepos --file ALL_REPOS.zip --format zip --passwordstyle encrypted

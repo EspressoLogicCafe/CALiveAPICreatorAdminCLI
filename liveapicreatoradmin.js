@@ -494,7 +494,6 @@ program
 program
 	.command('teamspace <list|exportRepos>')
 	.description('List TeamSpace content for current server or exportRepos the entire API contents.')
-	.option('--teamspace_name [name]','The name of the TeamSpace')
 	.option('-f, --file [file]', 'optional:: for source extract, the name of a file to read from/save to, if unspecified, use stdin/stdout')
 	.option('--format [json|zip]', 'optional: for import/export, this sets the output type of the export default: zip')
 	.option('--passwordstyle [skip|encrypted|plaintext]', 'optional: for export, sets the password style of exported API data sources (default: skip)')

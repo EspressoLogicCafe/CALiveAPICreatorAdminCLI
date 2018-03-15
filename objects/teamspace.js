@@ -67,6 +67,7 @@ module.exports = {
 			console.log(table.toString());
 			printObject.printHeader("# teamspace(s): " + data.length);
 		});
+		api.list(cmd);
 		if (cmd.verbose) {
 			client.get(url + "/projects" + "?pagesize=100&sysorder=(ident)", {
 				headers: {

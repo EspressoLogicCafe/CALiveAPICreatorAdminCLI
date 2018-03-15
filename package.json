@@ -1,6 +1,6 @@
 {
   "name": "liveapicreator-admin-cli",
-  "version": "4.1.26",
+  "version": "4.1.27",
   "description": "The NodeJS command line utility for 'CA Live API Creator' DevOps Administration from CA Technologies",
   "main": "liveapicreatoradmin.js",
   "scripts": {
@@ -57,6 +57,7 @@
     "easy-table": "0.3.0",
     "form-data": "^2.3.1",
     "https": "^1.0.0",
+    "node-dir": "^0.1.17",
     "node-rest-client": "^1.4.1",
     "osenv": "^0.1.0",
     "request": "^2.83.0",
