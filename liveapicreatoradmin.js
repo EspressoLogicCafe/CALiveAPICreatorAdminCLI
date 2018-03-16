@@ -122,7 +122,7 @@ program
 	.option('--passwordstyle [skip|encrypted|plaintext]', 'optional: controls the password style of exported API data sources (default: skip)')
 	.option('--librarystyle [emit_all|in_use_only]', 'optional: controls the library content for export  (default: emit_all)')
 	.option('--apioptionsstyle [emit_all|skip_default]', 'optional: controls the api options for export (default: emit_all)')
-	.option('--synchronize [true|false]', 'optional: Used by extract & synchronize zip file with directory folder (default: false)')
+	.option('--synchronize [true|false]', 'optional: Used only by extract to synchronize zip file with directory folder (default: false) true will remove root directory contents and replace with zip')
 	.option('-v, --verbose', 'optional: whether to display detailed results, or just a summary')
 	.action(api.doAPI);
 

@@ -153,7 +153,7 @@ note: namecollision rename_existing is the default and will only rename if the u
 This will take the content of a downloaded ZIP file and compare it with the selected directory.  
 If the directory does not exist, the zip file will be exploded into this directory.  
 If the directory exist and the synchronize flag is set to true (default is false) 
-the system will remove any files found in the directory that were not found in the ZIP file.
+the system will remove All files and directories first using the root directory  and replace with the ZIP file contents.
 
 ```
     $lacadmin api extract 
@@ -166,6 +166,8 @@ the system will remove any files found in the directory that were not found in t
 The export of an api can be reduced to a single section within a section using the section argument.
 Note: The output of the file can be either in JSON or ZIP and will use the new enhanced format.  This
 means that these values cannot be used with other lacadmin import commands.
+
+NOTE: The formats use the new enhanced team development style and cannot be mixed with other lacadmin commands.
 ```
 EXPORT PROJECT=demo
 mkdir temp
@@ -195,6 +197,8 @@ $lacadmin api export --section apioptions --file temp/apioptions.json
 
 ## Section Filter
 You can further refine the section by using a specific section filter. 
+
+NOTE: The formats use the new enhanced team development style and cannot be mixed with other lacadmin commands.
 ```
 EXPORT PROJECT=demo
 mkdir temp2
