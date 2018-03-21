@@ -12,7 +12,7 @@ resources and rules.
 
     npm install liveapicreator-admin-cli -g
     
-    note: MAC users may need to use $sudo npm install liveapicreator-admin-cli -g.
+    note: MAC users may need to use $sudo npm install liveapicreator-admin-cli -g
 
 Please note that, on Windows (and sometimes Mac), `npm install` will create an executable 
 called `lacadmin` (or `liveapicreatoradmin`) in your
