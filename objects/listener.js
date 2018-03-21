@@ -300,7 +300,7 @@ module.exports = {
 				return;
 			}
 			json = data;
-
+			//console.log("before: "+json);
 			fileContent = JSON.parse(json);
 			if (Array.isArray(fileContent) && fileContent.length > 0) {
 				for (var i = 0; i < fileContent.length; i++) {
@@ -317,6 +317,7 @@ module.exports = {
 						delete fileContent[i].ListenerParameters[j].ident;
 						delete fileContent[i].ListenerParameters[j].ts;
 						delete fileContent[i].ListenerParameters[j].listener_ident;
+						delete fileContent[i].ListenerParameters[j]["@metadata"];
 					}
 				}
 			} else {
@@ -326,14 +327,20 @@ module.exports = {
 				if (fileContent.connection !== null) {
 					fileContent.connection["@metadata"] = {action: "LOOKUP", key: ["project_ident", "name"]};
 				}
-				delete fileContent.ListenerParameters.ident;
-				delete fileContent.ListenerParameters.ts;
-				delete fileContent.connection_ident;
-				delete fileContent.ListenerParameters.listener_ident;
+				if (fileContent.connection !== null) {
+					fileContent.connection["project_ident"] = projIdent;
+					fileContent.connection["@metadata"] = {action: "LOOKUP", key: ["project_ident", "name"]};
+				}
+				for (var j = 0; j < fileContent.ListenerParameters.length; j++) {
+					delete fileContent.ListenerParameters[j].ident;
+					delete fileContent.ListenerParameters[j].ts;
+					delete fileContent.ListenerParameters[j].listener_ident;
+					delete fileContent.ListenerParameters[j]["@metadata"];
+				}
 			}
 
 			var startTime = new Date();
-			console.log(fileContent);
+			//console.log("after:"+JSON.stringify(fileContent,null,2));
 			client.put(loginInfo.url + "/ListenerExport", {
 				data: fileContent,
 				headers: {
