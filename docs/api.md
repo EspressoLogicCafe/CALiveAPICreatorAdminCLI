@@ -205,7 +205,6 @@ mkdir temp2
 $lacadmin api export --section connections --section_filter "name=MQTTConn" --file temp2/connections.json
 $lacadmin api export --section custom_endpoints --section_filter "name=endpoint" --file temp2/custom_endpoints.json
 $lacadmin api export --section listeners --section_filter "name=START" --file temp2/listeners.json
-$lacadmin api export --section relationships --section_filter "parent_entity=demo:customer" --file temp2/relationships.json
 $lacadmin api export --section data_sources --section_filter "prefix=demo" --file temp2/datasources.json
 $lacadmin api export --section filters --section_filter "name=UserFilter" --file temp2/filters.json
 $lacadmin api export --section functions --section_filter "name=testFunction" --file temp2/functions.json
