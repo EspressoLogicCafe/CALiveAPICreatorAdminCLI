@@ -704,7 +704,7 @@ module.exports = {
 			synchronize = cmd.synchronize == "replace"?true:false;
 		}
 		//var fileContent = fs.readFileSync(cmd.file);//JSON.parse(fs.readFileSync(cmd.file)
-		console.log("extract zip file " + cmd.file + " to directory " + path + " synchronize: " + (synchronize?"replace":"merge");
+		console.log("extract zip file " + cmd.file + " to directory " + path + " synchronize: " + (synchronize?"replace":"merge"));
 		//does this target directory exist - if not - we can skip this next part.
 		var filesToDelete = [];
 		var dirsToDelete = [];
