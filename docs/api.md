@@ -16,8 +16,8 @@ Usage: API [options] <list|create|update|delete|use|import|export|extract>
       --status [status]                                                               optional: create or update the status of the API, can be A (for Active) or I for (Inactive).
       --authprovider [ident]                                                          optional: create or update the ident of the authentication provider for the API.
       --comments [comments]                                                           optional: create or update a description of the API.
-      --section [name]                                                                optional: The section of the API you wish to export (e.g. resources, functions, datasources).
-      --section_filter [filter]                                                       optional: The section filter of the API you wish to export (name=foo&version=v1).
+      --section [name]                                                                optional: Export Only -The named section of the API you wish to export (e.g. resources, functions, datasources).
+      --section_filter [filter]                                                       optional: Export Only -The section filter of the API you wish to export (name=foo&version=v1).
       -d, --directory [directory]                                                     Required for extract, the name of a directory to extract ZIP files.
       -f, --file [file]                                                               optional: for import/export/extract, the name of a file to read from/save to, if unspecified, use stdin/stdout.
       --format [json|zip]                                                             optional: for import/export, this sets the output type of the export default: zip.
@@ -26,7 +26,7 @@ Usage: API [options] <list|create|update|delete|use|import|export|extract>
       --passwordstyle [skip|encrypted|plaintext]                                      optional: for export, sets the password style of exported API datasources (default: skip).
       --librarystyle [emit_all|in_use_only]                                           optional: for export, sets the library style  (default: emit_all).
       --apioptionsstyle [emit_all|skip_default]                                       optional: for export, sets the api options (default: emit_all).
-      --synchronize [true|false]                                                      optional: Used by extract & synchronize zip file with directory folder (default: false).
+      --synchronize [replace|merge]                                                   optional: Export only- Used only by extract to synchronize zip file with directory folder (default: merge) replace will remove root directory contents and replace with zip contents.
       -v, --verbose                                                                   optional: whether to display detailed results, or just a summary.
 ```
 ***
@@ -172,7 +172,7 @@ NOTE: The formats use the new enhanced team development style and cannot be mixe
 EXPORT PROJECT=demo
 mkdir temp
 $lacadmin api export --section api --file temp/api.json --format json
-$lacadmin api export --file temp/API.zip --format zip
+$lacadmin api export --section api --file temp/API.zip --format zip
 $lacadmin api export --section connections --file temp/connections.json
 $lacadmin api export --section custom_endpoints --file temp/custom_endpoints.json
 $lacadmin api export --section listeners --file temp/listeners.json
@@ -202,7 +202,6 @@ NOTE: The formats use the new enhanced team development style and cannot be mixe
 ```
 EXPORT PROJECT=demo
 mkdir temp2
-$lacadmin api export -section api --file temp2/api.json --format json --url_name $PROJECT
 $lacadmin api export --section connections --section_filter "name=MQTTConn" --file temp2/connections.json
 $lacadmin api export --section custom_endpoints --section_filter "name=endpoint" --file temp2/custom_endpoints.json
 $lacadmin api export --section listeners --section_filter "name=START" --file temp2/listeners.json
@@ -220,5 +219,6 @@ $lacadmin api export --section security.roles --section_filter "name=Read only" 
 $lacadmin api export --section security.users --section_filter "name=guest" --file temp2/users.json
 $lacadmin api export --section resources --section_filter "name=AllCustomers&version=v1" --file temp2/resources.json
 $lacadmin api export --section rules --section_filter "name=sum_balance&prefix=demo"  --file temp2/rules.json
-$lacadmin api export --section apioptions --section_filter "name=Force Binary Data as an Object" --file temp2/apioptions.json
 ```
+You can combine each section into a single zip file (the only requirement for import 
+is that there is an api.json file at the root).

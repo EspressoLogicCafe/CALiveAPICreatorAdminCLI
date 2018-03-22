@@ -698,13 +698,13 @@ module.exports = {
 			path = cmd.directory;
 		}
 
-		var synchronize = false;
+		var synchronize = false; //merge [default]
 		if (cmd.synchronize) {
 			console.log("synchronize: "+ cmd.synchronize);
-			synchronize = cmd.synchronize == "true"?true:false;
+			synchronize = cmd.synchronize == "replace"?true:false;
 		}
 		//var fileContent = fs.readFileSync(cmd.file);//JSON.parse(fs.readFileSync(cmd.file)
-		console.log("extract zip file " + cmd.file + " to directory " + path + " synchronize: " + synchronize);
+		console.log("extract zip file " + cmd.file + " to directory " + path + " synchronize: " + (synchronize?"replace":"merge");
 		//does this target directory exist - if not - we can skip this next part.
 		var filesToDelete = [];
 		var dirsToDelete = [];
