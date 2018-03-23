@@ -274,6 +274,7 @@ module.exports = {
 			cmd.file = '/dev/stdin';
 		}
 		var fileContent  = null;
+		var origFileContent = null;
 		var json = null;
 		fs.readFile(cmd.file, function read(err,data){
 			if(err) {
@@ -283,9 +284,12 @@ module.exports = {
 			json = data;
 		
 			fileContent = JSON.parse(json);
+			origFileContent = JSON.parse(json);
+			//Cleanup the JSON and import as inactive (bug in function that tries to restart)
 			if(Array.isArray(fileContent) && fileContent.length > 0){
 					for(var i = 0 ; i < fileContent.length; i++){
 						fileContent[i].project_ident = projIdent;
+						fileContent[i].is_active = false;
 						delete fileContent[i].ts;
 						delete fileContent[i].ident;
 						fileContent[i]["@metadata"] = {action:"MERGE_INSERT", key:  ["project_ident","name"]};
@@ -298,6 +302,7 @@ module.exports = {
 					} 
 			} else {
 				fileContent.project_ident = projIdent;
+				fileContent.is_active = false;
 				delete fileContent.ts;
 				delete fileContent.ident;
 				fileContent["@metadata"] = {action:"MERGE_INSERT", key: ["project_ident","name"]};
@@ -311,7 +316,6 @@ module.exports = {
 				"Content-Type" : "application/json"
 			}
 		}, function(data) {
-		
 			   var endTime = new Date();
 			   if (data.errorMessage) {
 				   console.log(data.errorMessage.red);
@@ -320,40 +324,93 @@ module.exports = {
 			   printObject.printHeader('Connection(s) created, including:');
 			   if(data.statusCode == 200 ){
 				   console.log("Request took: " + (endTime - startTime) + "ms");
-				   return;
+				  // return;
 			   }
 			   var newConnection = _.find( data.txsummary, function(p) {
 				   return p['@metadata'].resource === 'ConnectionExport';
 			   });
-			   if ( ! newConnection) {
-			   var newHandler = _.find( data.txsummary, function(p) {
-				   return p['@metadata'].resource === 'ConnectionExport';
-			   });
-			   if ( ! newHandler) {
-				   console.log('ERROR: unable to find imported connections'.red);
-				   return;
-			   }
-			   if (cmd.verbose) {
-				   _.each(data.txsummary, function(obj) {
-					   printObject.printObject(obj, obj['@metadata'].entity, 0, obj['@metadata'].verb);
-				   });
-			   }
-			   else {
-				   printObject.printObject(newConnection, newConnection['@metadata'].entity, 0, newHandler['@metadata'].verb);
-				   console.log(('and ' + (data.txsummary.length - 1) + ' other objects').grey);
-			   }
-			   var trailer = "Request took: " + (endTime - startTime) + "ms";
-			   trailer += " - # objects touched: ";
-			   if (data.txsummary.length === 0) {
-				   console.log('No data returned'.yellow);
-			   }
-			   else {
-				   trailer += data.txsummary.length;
-			   }
-			   printObject.printTrailer(trailer);
-			};
-		});
-	  });
+			   console.log(">>>newConnection " + JSON.stringify(newConnection));
+			   if (newConnection) {
+				   if (cmd.verbose) {
+					   _.each(data.txsummary, function (obj) {
+						   printObject.printObject(obj, obj['@metadata'].entity, 0, obj['@metadata'].verb);
+					   });
+				   }
+				   else {
+					   printObject.printObject(newConnection, newConnection['@metadata'].entity, 0, newConnection['@metadata'].verb);
+					   console.log(('and ' + (data.txsummary.length - 1) + ' other objects').grey);
+				   }
+				   var trailer = ">Request took: " + (endTime - startTime) + "ms";
+				   trailer += " - # objects touched: ";
+				   if (data.txsummary.length === 0) {
+					   console.log('No data returned'.yellow);
+				   }
+				   else {
+					   trailer += data.txsummary.length;
+				   }
+
+				   //ok - lets try to restart each conneciton
+				   fileContent = origFileContent;
+				   console.log(">>> " + JSON.stringify(fileContent));
+				   var payload = [];
+				   var connection = {};
+				   if (Array.isArray(fileContent) && fileContent.length > 0) {
+					   for (var i = 0; i < fileContent.length; i++) {
+						   connection.project_ident = projIdent;
+						   if (fileContent[i].is_active) {
+						   		console.log("Connection "+fileContent[i].name + " needs activation");
+						   		connection.name = fileContent[i].name;
+						   		connection.is_active = true;
+							   _.each(data.txsummary, function (obj) {
+							   		if(obj.name == fileContent[i].name) {
+							   			connection.ident = obj.ident;
+										connection["@metadata"] = obj["@metadata"];
+									}
+							   });
+							   	payload.push(connection);
+						   }
+					   }
+				   } else {
+					   if (fileContent.is_active) {
+						   console.log("Connection "+fileContent[i].name + " needs activation");
+						   connection.name = fileContent.name;
+						   connection.is_active = true;
+						   _.each(data.txsummary, function (obj) {
+							   if(obj.name == fileContent.name) {
+								   connection.ident = obj.ident;
+								   connection["@metadata"] = obj["@metadata"];
+							   }
+						   });
+						   payload.push(connection);
+					   }
+				   }
+				   //do we have anything left to process
+				   if (payload.length > 0) {
+					   //console.log("Payload "+JSON.stringify(payload));
+					   client.put(loginInfo.url + "/ConnectionExport", {
+						   data: payload,
+						   headers: {
+							   Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+							   "Content-Type": "application/json"
+						   }
+					   }, function (data2) {
+						   //console.log(data2);
+						   if (data2.errorMessage) {
+							   console.log(data2.errorMessage.red);
+							   return;
+						   }
+						   //console.log('Connection(s) activated: ' + JSON.stringify(data2));
+						   if (data2.statusCode == 200) {
+							   _.each(data2.txsummary, function (obj) {
+								   console.log("Connection activated "+ obj.name);
+							   });
+						   }
+					   });
+				   }
+				   printObject.printTrailer(trailer);
+			   } //new connection response
+		}); //first client put
+	  }); //readfile
 	},
 	stop: function(cmd) {
 		var client = new Client();
@@ -484,6 +541,7 @@ module.exports = {
 					+"&providerIdent="+content[0].provider_ident
 					+"&connectionIdent=" + content[0].ident;
 			 if(!content[0].is_active) {
+			 	//content[0].is_active = true;
 			 	console.log(("Conneciton "+content[0].name +" is not active and cannot be started").red);
 			 	return;
 			 }
