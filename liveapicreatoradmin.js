@@ -9,8 +9,7 @@ var path = require('path');
 var pkg = require( path.join(__dirname, 'package.json') );
 
 var login = require('./objects/login.js');
-var api = require('./objects/api.js');
-var project = require('./objects/project.js');
+var project = require('./objects/project.js'); //deprecated in 4.1 -replaced with API
 var dbase = require('./objects/dbase.js');
 var resource = require('./objects/resource.js');
 var rule = require('./objects/rule.js');
@@ -51,6 +50,7 @@ var provider = require('./objects/provider.js');
 var application = require('./objects/application.js');
 //4.1 features - changes to project import/export as zip
 var teampspace = require('./objects/teamspace.js');
+var api = require('./objects/api.js');
 
 program
 	.version(pkg.version);
