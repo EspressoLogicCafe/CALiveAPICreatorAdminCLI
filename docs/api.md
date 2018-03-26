@@ -177,7 +177,6 @@ $lacadmin api export --section connections --file temp/connections.json
 $lacadmin api export --section custom_endpoints --file temp/custom_endpoints.json
 $lacadmin api export --section listeners --file temp/listeners.json
 $lacadmin api export --section relationships --file temp/relationships.json
-$lacadmin api export --section relationships --file temp/relationships.json
 $lacadmin api export --section data_sources --file temp/datasources.json
 $lacadmin api export --section filters --file temp/filters.json
 $lacadmin api export --section functions --file temp/functions.json
