@@ -433,7 +433,7 @@ module.exports = {
 		if ( ! cmd.file) {
 			toStdout = true;
 		}
-
+		console.log("Deprecated in 4.1 - use lacadmin api export".red);
 		client.get(loginInfo.url + "/ProjectExport?sysfilter=" + filter, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
@@ -479,7 +479,7 @@ module.exports = {
 		if (cmd.url_name) {
 			fileContent[0].url_name = cmd.url_name;
 		}
-
+		console.log("Deprecated in 4.1 - use lacadmin api import".red);
 		var startTime = new Date();
 		client.post(loginInfo.url + "/ProjectExport", {
 			data: fileContent,
