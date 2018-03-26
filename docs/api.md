@@ -55,7 +55,7 @@ Includes sample scripts which can be used by devops developers.
 ```
 #lacadmin api export --url_name admin  --file API_admin.json --format json
 #lacadmin api export --url_name admin  --file API_admin.zip --format zip
-#lacadmin api extract --file API_admin.zip --directory /temp/ --synchronize true
+#lacadmin api extract --file API_admin.zip --directory /temp/ --synchronize replace
 #lacadmin api import --file API_admin.json
 #lacadmin api import --file API_admin.zip
 ```
@@ -152,14 +152,14 @@ note: namecollision rename_existing is the default and will only rename if the u
 ## Extract
 This will take the content of a downloaded ZIP file and compare it with the selected directory.  
 If the directory does not exist, the zip file will be exploded into this directory.  
-If the directory exist and the synchronize flag is set to true (default is false) 
+If the directory exist and the synchronize flag is set to replace (default is merge) 
 the system will remove All files and directories first using the root directory  and replace with the ZIP file contents.
 
 ```
     $lacadmin api extract 
         --file <filename.zip> 
         --directory </tmp/path/>  
-        --synchronize [true|false] default false
+        --synchronize [replace|merge] default merge
 
 ```
 ## Section 
