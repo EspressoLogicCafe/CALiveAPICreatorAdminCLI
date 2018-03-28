@@ -311,4 +311,4 @@ Follow the links below for detailed documentation on specific administrator comm
 * [Connction](docs/connection.md)
 * [Listener](docs/listener.md)
 * [Applications](docs/application.md)
-* [teamspace](docs/teamspace.md)
+* [TeamSpace](docs/teamspace.md)
