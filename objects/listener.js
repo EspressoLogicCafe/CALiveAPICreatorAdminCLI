@@ -357,13 +357,13 @@ module.exports = {
 				printObject.printHeader('Listener(s) created, including:');
 				if (data.statusCode == 200) {
 					console.log("Request took: " + (endTime - startTime) + "ms");
-					return;
+					//return;
 				}
 				var newHandler = _.find(data.txsummary, function (p) {
 					return p['@metadata'].resource === 'ListenerExport';
 				});
 				if (!newHandler) {
-					console.log('ERROR: unable to find imported listeners'.red);
+					console.log('No transaction summary. Unable to overwrite existing listener(s)'.red);
 					return;
 				}
 				if (cmd.verbose) {
@@ -383,6 +383,79 @@ module.exports = {
 				}
 				else {
 					trailer += data.txsummary.length;
+				}
+				//ok - lets try to restart each conneciton
+				//fileContent = origFileContent;
+				//console.log(">>> " + JSON.stringify(fileContent));
+				var payload = [];
+				var listener = {};
+				if (Array.isArray(fileContent) && fileContent.length > 0) {
+					for (var i = 0; i < fileContent.length; i++) {
+						listener = {};
+						listener.project_ident = projIdent;
+						if (fileContent[i].is_active && fileContent[i].connection) {
+							console.log("Listener "+fileContent[i].name + " needs restart");
+							listener.name = fileContent[i].name;
+							listener.is_active = true;
+							listener.restart = true;
+							listener.showRestartAlert = false;
+							_.each(data.txsummary, function (obj) {
+								if(obj.name == fileContent[i].name) {
+									listener.ident = obj.ident;
+									listener.provider_ident = obj.provider_ident;
+									var metadata = {};
+									metadata.verb = "UPDATE";
+									metadata.checksum = obj["@metadata"].checksum;
+									listener["@metadata"] = metadata;
+								}
+							});
+							payload.push(listener);
+						}
+					}
+				} else {
+					if (fileContent.is_active && fileContent.connection) {
+						console.log("Listener "+fileContent.name + " needs restart");
+						listener = {};
+						listener.name = fileContent.name;
+						listener.is_active = true;
+						listener.restart = true;
+						listener.showRestartAlert = false;
+						_.each(data.txsummary, function (obj) {
+							if(obj.name == fileContent.name) {
+								listener.ident = obj.ident;
+								listener.provider_ident = obj.provider_ident;
+								var metadata = {};
+								metadata.verb = "UPDATE";
+								metadata.checksum = obj["@metadata"].checksum;
+								listener["@metadata"] = metadata;
+							}
+						});
+						payload.push(listener);
+					}
+				}
+				//do we have anything left to process
+				if (payload.length > 0) {
+					_.each(payload, function (content) {
+						console.log("Listener  "+JSON.stringify(content));
+						client.put(loginInfo.url + "/admin:listeners/" + content.ident, {
+							data: content,
+							headers: {
+								Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+								"Content-Type": "application/json"
+							}
+						}, function (data2) {
+							//console.log(data2);
+							if (data2.errorMessage) {
+								console.log(data2.errorMessage.red);
+								return;
+							}
+							if (data2.statusCode == 200) {
+								_.each(data2.txsummary, function (obj) {
+									console.log("Listener  "+ obj.name + " restarted");
+								});
+							}
+						});
+					});
 				}
 				printObject.printTrailer(trailer);
 			});
