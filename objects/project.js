@@ -434,7 +434,7 @@ module.exports = {
 			toStdout = true;
 		}
 		console.log("Deprecated in 4.1 - use lacadmin api export".red);
-		client.get(loginInfo.url + "/ProjectExport?sysfilter=" + filter, {
+		client.get(loginInfo.url + "/ProjectExport?pagesize=10000&sysfilter=" + filter, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
 				"Content-Type" : "application/json"
