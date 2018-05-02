@@ -73,35 +73,48 @@ module.exports = {
 						console.log(("Login failed: " + data.errorMessage).red);
 						return;
 					}
-					var fullData = {
-						url: url,
-						userName: cmd.username,
-						alias: cmd.serverAlias,
-						loginInfo: data
-					};
-					
-					dotfile.writeToDotFile(url, fullData)
-					.then(
-						// Log completion of login process.
-						function(val){		
-							console.log(('Login successful, API key will expire on: ' + data.expiration).green);
+					client.get(url + "/server_properties?sysfilter=equal(ident:1)" , {
+						headers: {
+							Authorization: "CALiveAPICreator " + data.apikey + ":1",
+							"Content-Type": "application/json"
 						}
-						)
-					.catch(
-						// Login fails if that file cannot be written. 
-						function(reason){
-							console.log(('Login failed, Reason : ' + reason).green);
-							throw "Error logging in";
+					}, function (data2) {
+						if (data2.errorMessage) {
+							console.log(data2.errorMessage.red);
+							return;
 						}
-						);
-					dotfile.setCurrentServer(url, fullData);
-				}).on('error', function(err) {
-					console.log(('ERROR: ' + err).red);
-					throw "Error logging in: " + err;
-				}
+						console.log(data2[0].prop_value);
+						var fullData = {
+							url: url,
+							userName: cmd.username,
+							alias: cmd.serverAlias,
+							serverVersion: data2[0].prop_value,
+							loginInfo: data
+						};
+
+						dotfile.writeToDotFile(url, fullData)
+							.then(
+								// Log completion of login process.
+								function (val) {
+									console.log(('Login successful, API key will expire on: ' + data.expiration).green);
+								}
+							)
+							.catch(
+								// Login fails if that file cannot be written.
+								function (reason) {
+									console.log(('Login failed, Reason : ' + reason).green);
+									throw "Error logging in";
+								}
+							);
+						dotfile.setCurrentServer(url, fullData);
+					});
+					}).on('error', function(err) {
+						console.log(('ERROR: ' + err).red);
+						throw "Error logging in: " + err;
+					}
+
 			);
 		});
-		
 	},
 	
 	commandLogout: function(url, cmd) {

@@ -14,14 +14,17 @@ module.exports = {
 		if (action === 'list') {
 			module.exports.list(cmd);
 		}
-		else if (action === 'exportRepos') {
-			module.exports.exportRepos(cmd);
+		else if (action === 'export') {
+			module.exports.export(cmd);
 		}
 		else if (action === 'import') {
 			module.exports.import(cmd);
 		}
+		else if (action === 'delete') {
+			module.exports.del(cmd);
+		}
 		else {
-			console.log('You must specify an action: list or exportRepos');
+			console.log('You must specify an action: list, import, export, or delete');
 			//program.help();
 		}
 	},
@@ -35,7 +38,7 @@ module.exports = {
 		var apiKey = loginInfo.apiKey;
 
 
-		client.get(url + "/admin:accounts?pagesize=100&&sysorder=(name:asc_uc,name:desc)", {
+		client.get(url + "/admin:account_users?pagesize=100&&sysorder=(name:asc_uc,name:desc)", {
 			headers: {
 				Authorization: "CALiveAPICreator " + apiKey + ":1",
 				"Content-Type": "application/json"
@@ -45,14 +48,15 @@ module.exports = {
 				console.log(data.errorMessage.red);
 				return;
 			}
-			printObject.printHeader('TeamSpace(s)');
+			printObject.printHeader('TeamSpace Users(s)');
 			var table = new Table();
 			var type = "";
 			_.each(data, function (p) {
 				table.cell("Ident", p.ident);
 				table.cell("Name", p.name);
-				table.cell("UrlFragment", p.url_name);
+				table.cell("Full Name", p.fullname);
 				table.cell("Status", p.status);
+				table.cell("Roles", p.roles);
 				var comments = p.comments;
 				if (!comments) {
 					comments = "";
@@ -63,97 +67,14 @@ module.exports = {
 				}
 				comments = comments.replace("\n", " ");
 				table.cell("Comments", comments);
+				table.cell("AccountIdent", p.account_ident);
 				table.newRow();
 			});
 			table.sort(['Name']);
 			console.log(table.toString());
-			printObject.printHeader("# teamspace(s): " + data.length);
+			printObject.printHeader("# teamspace users(s): " + data.length);
 		});
-		api.list(cmd);
-		if (cmd.verbose) {
-			client.get(url + "/projects" + "?pagesize=100&sysorder=(ident)", {
-				headers: {
-					Authorization: "CALiveAPICreator " + apiKey + ":1",
-					"Content-Type": "application/json"
-				}
-			}, function (projects) {
-				if (projects.errorMessage) {
-					console.log(projects.errorMessage.red);
-					return;
-				}
-				console.log("export directory=~/temp");
-				_.each(projects, function (p) {
-					console.log("#lacadmin api export --url_name " + p.url_name + " --format zip --file PROJECT_"+p.url_name +".zip");
-					console.log("#lacadmin api extract --file PROJECT_" + p.url_name + ".zip --directory ${directory}  --synchronize true" );
-					console.log("#lacadmin api import --file PROJECT_" + p.url_name + ".zip --namecollsion replace_existing" );
-				});
-			});
-		}
 
-	},
-	exportRepos: function (cmd) {
-		var client = new Client();
-		//console.log(api.list(cmd));
-		var loginInfo = login.login(cmd);
-		if (!loginInfo)
-			return;
-		var url = loginInfo.url;
-		var apiKey = loginInfo.apiKey;
-		var filter = "";
-		var dir = "";
-		if (cmd.directory) {
-			dir = cmd.directory;
-		}
-		var format = cmd.format || "zip";
-		var passwordStyle = cmd.passwordstyle || "skip";
-		var authTokenStyle = cmd.authTokenstyle || "skip_auto";
-		var apiOptionsStyle = cmd.apioptionsstyle || "emit_all";
-		var libraryStyle = cmd.librarystyle || "emit_all";
-		var filename = cmd.file || "ALL_REPOS." + format;
-
-		function exportAPIPromisified(cmd) {
-			return new Promise(function (resolve, reject) {
-				api.exportToFile(cmd, function (err, res) {
-					if (err) {
-						reject(err);
-					}
-					else {
-						resolve(res);
-					}
-				});
-			});
-		}
-
-		client.get(url + "/projects" + "?pagesize=100&sysorder=(ident)", {
-			headers: {
-				Authorization: "CALiveAPICreator " + apiKey + ":1",
-				"Content-Type": "application/json"
-			}
-		}, function (projects) {
-			if (projects.errorMessage) {
-				console.log(projects.errorMessage.red);
-				return;
-			}
-			var listOfUrls = "";
-			var sep = "";
-			_.each(projects, function (p) {
-				cmd.ident = p.ident;
-				listOfUrls += sep + p.url_name;
-				sep = ",";
-			});
-			// setup the defaults for export
-			cmd.format = format;
-			cmd.directory = dir;
-			cmd.url_name = listOfUrls;
-			cmd.file = filename;
-			cmd.passwordstyle = passwordStyle;
-			cmd.authTokenstyle = authTokenStyle;
-			cmd.apioptionsstyle = apiOptionsStyle;
-			cmd.librarystyle = libraryStyle;
-
-			exportAPIPromisified(cmd);
-		});
-		//printObject.printTrailer("# projects exported: " + projects.length);
 	},
 	export: function (cmd) {
 		var client = new Client();
@@ -165,15 +86,18 @@ module.exports = {
 		var apiKey = loginInfo.apiKey;
 
 		var filter = "";
-		if (cmd.teamspace_name) {
-			filter += "&sysfilter=equal(name:'" + cmd.teamspace_name + "')";
+		if(cmd.ident) {
+			filter = "&sysfilter=equal(ident:" + cmd.ident +")";
+		} else  if (cmd.teampspace_username) {
+			filter += "&sysfilter=equal(name:'" + cmd.teampspace_username + "')";
 		}
+
 		var toStdout = false;
 		if (!cmd.file) {
 			toStdout = true;
 		}
 
-		client.get(loginInfo.url + "/admin:accounts?pagesize=1000" + filter, {
+		client.get(loginInfo.url + "/admin:account_users?pagesize=1000" + filter, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
 				"Content-Type": "application/json"
@@ -185,7 +109,7 @@ module.exports = {
 				return;
 			}
 			if (data.length === 0) {
-				console.log(("TeamSpace not found " + filter).red);
+				console.log(("TeamSpace user not found " + filter).red);
 				return;
 			}
 			for (var idx = 0; idx < data.length; idx++) {
@@ -200,7 +124,7 @@ module.exports = {
 			else {
 				var exportFile = fs.openSync(cmd.file, 'w+', 0600);
 				fs.writeSync(exportFile, JSON.stringify(data, null, 2));
-				console.log(('TeamSpace have been exported to file: ' + cmd.file).green);
+				console.log(('TeamSpace user(s) have been exported to file: ' + cmd.file).green);
 			}
 		});
 	},
@@ -226,7 +150,7 @@ module.exports = {
 		}
 
 		var startTime = new Date();
-		client.put(loginInfo.url + "/admin:accounts", {
+		client.put(loginInfo.url + "/admin:account_users", {
 			data: fileContent,
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
@@ -239,17 +163,17 @@ module.exports = {
 				console.log(data.errorMessage.red);
 				return;
 			}
-			printObject.printHeader('TeamSpace(s) created, including:');
+			printObject.printHeader('TeamSpace user(s) imported, including:');
 			if (data.statusCode == 200) {
 				console.log("Request took: " + (endTime - startTime) + "ms");
 				return;
 			}
 
 			var newAPIVersion = _.find(data.txsummary, function (p) {
-				return p['@metadata'].resource === 'admin:accounts';
+				return p['@metadata'].resource === 'admin:account_users';
 			});
 			if (!newAPIVersion) {
-				console.log('ERROR: unable to find imported teamspace'.red);
+				console.log('ERROR: unable to find imported teamspace user'.red);
 				return;
 			}
 			if (cmd.verbose) {
@@ -271,6 +195,71 @@ module.exports = {
 				trailer += data.txsummary.length;
 			}
 			printObject.printHeader(trailer);
+		});
+	},
+	del : function(cmd) {
+		var client = new Client();
+		var loginInfo = login.login(cmd);
+		if ( ! loginInfo) {
+			console.log('You are not currently logged into any API Creator server.'.red);
+			return;
+		}
+		var filt ="equal(";
+		if(cmd.ident) {
+			filt += "ident:" + cmd.ident +")";
+		} else if (cmd.teampspace_username) {
+			filt += "name:'" + cmd.teampspace_username + "')";
+		} else {
+			console.log('Missing parameter: please specify either --teampspace_username or --ident'.red);
+			return;
+		}
+
+		client.get(loginInfo.url + "/admin:account_users?sysfilter=" + filt, {
+			headers: {
+				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+				"Content-Type" : "application/json"
+			}
+		}, function(data) {
+			//console.log('get result: ' + JSON.stringify(data, null, 2));
+			if (data.errorMessage) {
+				console.log(("Error: " + data.errorMessage).red);
+				return;
+			}
+			if (data.length === 0) {
+				console.log(("Error: no such teamspace user using teampspace_username or ident").red);
+				return;
+			}
+			if (data.length > 1) {
+				console.log(("Error: more than one teamspace user for the given condition: " + filt).red);
+				return;
+			}
+			var db = data[0];
+			var startTime = new Date();
+			client['delete'](db['@metadata'].href + "?checksum=" + db['@metadata'].checksum, {
+				headers: {
+					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+					"Content-Type" : "application/json"
+				}
+			}, function(data2) {
+				var endTime = new Date();
+				if (data2.errorMessage) {
+					console.log(data2.errorMessage.red);
+					return;
+				}
+				printObject.printHeader('TeamSpace user was deleted, including the following objects:');
+				_.each(data2.txsummary, function(obj) {
+					printObject.printObject(obj, obj['@metadata'].entity, 0, obj['@metadata'].verb);
+				});
+				var trailer = "Request took: " + (endTime - startTime) + "ms";
+				trailer += " - # objects touched: ";
+				if (data2.txsummary.length == 0) {
+					console.log('No data returned'.yellow);
+				}
+				else {
+					trailer += data2.txsummary.length;
+				}
+				printObject.printHeader(trailer);
+			});
 		});
 	}
 };

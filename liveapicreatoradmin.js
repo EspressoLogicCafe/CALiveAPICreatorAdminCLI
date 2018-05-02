@@ -51,6 +51,8 @@ var application = require('./objects/application.js');
 //4.1 features - changes to project import/export as zip
 var teampspace = require('./objects/teamspace.js');
 var api = require('./objects/api.js');
+//5.0 features
+var teampspace_user = require('./objects/teamspace_user.js');
 
 program
 	.version(pkg.version);
@@ -501,6 +503,15 @@ program
 	.option('--apioptionsstyle [emit_all|skip_default]', 'optional: for export, sets the api options (default: emit_all)')
 	.option('-v, --verbose', 'optional: used by list to display each API in detailed export/import format')
 	.action(teampspace.doTeamSpace);
+
+program
+	.command('teamspace_user <list|delete|export|import>')
+	.description('Administer TeamSpace Users definitions.')
+	.option('--teampspace_username [name]', 'The TeamSpace User Name')
+	.option('--ident [ident]', 'The ident of the specific TeamSpace user')
+	.option('-v, --verbose', 'optional: Display list of timer in detailed export/import format')
+	.option('--file [fileName]', 'optional: Name of file to import/export (if not provided stdin/stdout used for export)')
+	.action(teampspace_user.doTeamSpace);
 
 program.parse(process.argv);
 
