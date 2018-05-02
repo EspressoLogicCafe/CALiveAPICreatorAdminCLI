@@ -57,7 +57,7 @@ module.exports = {
 						}
 						
 					var table = new Table();
-					client.get(url + "/AllApiKeys?pagesize=1000&sysfilter=equal(project_ident:" + projIdent+")&sysfilter=equal(origin:null)", {
+					client.get(url + "/AllApiKeys?pagesize=1000&sysfilter=equal(project_ident:" + projIdent+")", {
 						headers: {
 							Authorization: "CALiveAPICreator " + apiKey + ":1",
 							"Content-Type" : "application/json"
@@ -74,6 +74,9 @@ module.exports = {
 							table.cell("Name", p.name);
 							table.cell("APKey", p.apikey);
 							table.cell("Active", p.status);
+							table.cell("Data", p.data || "");
+							table.cell("Logging", p.logging);
+							table.cell("Expiration", p.expiration);
 							var comments = p.description;
 							if ( ! comments) {
 								comments = "";
@@ -82,24 +85,24 @@ module.exports = {
 								comments = comments.substring(0, 47) + "...";
 							}
 				
-							var roles = "";
+							var displayRoles = "";
 							var sep = "";
 						//calling roles here does not hold the roles
-						//console.log(Array.isArray(roles) && roles.length > 0);
-						//if(roles !== null && Array.isArray(roles)) {
+						//console.log(Array.isArray(roles));
+						if(roles !== null && Array.isArray(roles)) {
 							_.each(p.ApiKeyRoles, function(r) {
-							//console.log(r.apikey_ident);
+							//console.log("APIKEY IDENT "+r.apikey_ident);
 							//console.log(roles.length);
-								//for(var i = 0; i < roles.length ; i++ ){
-								//console.log(roles[i].ident);
-									//if(roles[i].ident == r.apikey_ident){
-										roles +=  sep + r.ident; //r.name
+								for(var i = 0; i < roles.length ; i++ ){
+								//console.log("ROLES IDENT " + roles[i].ident);
+									if(roles[i].ident == r.role_ident){
+										displayRoles +=  sep + roles[i].name
 										sep = ",";
-									//}
-								//}
+									}
+								}
 							});
-						//}
-				table.cell("Roles" , roles);
+						}
+				table.cell("Roles" , displayRoles);
 				table.cell("Description", comments);
 				table.newRow();
 			});
