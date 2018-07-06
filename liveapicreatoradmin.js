@@ -53,6 +53,7 @@ var teampspace = require('./objects/teamspace.js');
 var api = require('./objects/api.js');
 //5.0 features
 var teampspace_user = require('./objects/teamspace_user.js');
+var dataprovider = require('./objects/dataprovider.js');
 
 program
 	.version(pkg.version);
@@ -463,7 +464,16 @@ program
 	.option('-v, --verbose', 'optional: Display list of providers in detailed export/import format')
 	.option('--file [fileName]', 'optional: Name of file to import/export (if not provided stdin/stdout used for export)')
 	.action(provider.doProvider);
-	
+
+program
+	.command('dataprovider <list|delete|export|import>')
+	.description('Administer Datasource Provider definitions.')
+	.option('--provider_name [name]', 'The Datasource Provider Name')
+	.option('--ident [ident]', 'The ident of the specific provider')
+	.option('-v, --verbose', 'optional: Display list of providers in detailed export/import format')
+	.option('--file [fileName]', 'optional: Name of file to import/export (if not provided stdin/stdout used for export)')
+	.action(dataprovider.doProvider);
+
 program
 	.command('connection <list|delete|export|import|stop|start>')
 	.description('Administer Connections for current API.')

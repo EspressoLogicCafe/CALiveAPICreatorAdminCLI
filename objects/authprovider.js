@@ -154,6 +154,7 @@ module.exports = {
 				table.cell("Ident", p.ident);
 				table.cell("Name", p.name);
 				table.cell("createFunction", p.bootstrap_config_value);
+				table.cell("class", p.class_name);
 				table.cell("ParamMap", p.param_map);
 				var comments = p.comments;
 				if ( ! comments) {
