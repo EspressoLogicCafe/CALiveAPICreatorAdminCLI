@@ -14,14 +14,13 @@ node ../liveapicreatoradmin.js use $PROJECT
 node ../liveapicreatoradmin.js status
 
 ## clean up first - ignore if does not exist
-node ../liveapicreatoradmin.js project delete --project_name $PROJECT_NEW
-node ../liveapicreatoradmin.js project create --project_name $PROJECT_NEW --url_name test --authprovider 1000
+node ../liveapicreatoradmin.js api delete --api_name $PROJECT_NEW
+node ../liveapicreatoradmin.js api create --api_name $PROJECT_NEW --url_name test --authprovider 2005
 
 # Select a Project
-node ../liveapicreatoradmin.js project use --url_name $PROJECT_NEW
+node ../liveapicreatoradmin.js api use --url_name $PROJECT_NEW
 
-
-//node ../liveapicreatoradmin.js project import --file $PROJECT/$PROJECT.json
+#node ../liveapicreatoradmin.js api import --file $PROJECT/$PROJECT.json
 node ../liveapicreatoradmin.js apioptions import --file $PROJECT/apioptions.json
 node ../liveapicreatoradmin.js datasource import --file $PROJECT/datasource.json
 node ../liveapicreatoradmin.js libraries import --file $PROJECT/libraries.json

@@ -9,7 +9,7 @@ var printObject = require('../util/printObject.js');
 var dotfile = require('../util/dotfile.js');
 
 module.exports = {
-	doToken: function(action, cmd) {
+	doToken: function (action, cmd) {
 		if (action === 'list') {
 			module.exports.list(cmd);
 		}
@@ -27,83 +27,65 @@ module.exports = {
 			//program.help();
 		}
 	},
-	
+
 	list: function (cmd) {
 		var client = new Client();
-		
+
 		var loginInfo = login.login(cmd);
-		if ( ! loginInfo)
+		if (!loginInfo)
 			return;
 		var url = loginInfo.url;
 		var apiKey = loginInfo.apiKey;
-		
+
 		var projIdent = cmd.project_ident;
-		if ( ! projIdent) {
+		if (!projIdent) {
 			projIdent = dotfile.getCurrentProject();
-			if ( ! projIdent) {
+			var currentProjectUrl = dotfile.getCurrentProjectUrl();
+			if (!projIdent) {
 				console.log('There is no current project.'.yellow);
 				return;
 			}
 		}
-		client.get(url + "/admin:roles?sysfilter=equal(project_ident:" + projIdent+")&pagesize=100", {
-						headers: {
-							Authorization: "CALiveAPICreator " + apiKey + ":1",
-							"Content-Type" : "application/json"
-						}
-					}, function(roles) {
-						if (roles.errorMessage) {
-							console.log(roles.errorMessage.red);
-							return;
-						}
-						
-					var table = new Table();
-					client.get(url + "/AllApiKeys?pagesize=1000&sysfilter=equal(project_ident:" + projIdent+")", {
-						headers: {
-							Authorization: "CALiveAPICreator " + apiKey + ":1",
-							"Content-Type" : "application/json"
-						}
-					}, function(data) {
-						if (data.errorMessage) {
-							console.log(data.errorMessage.red);
-							return;
-						}
-						printObject.printHeader('Auth Tokens');
-						
-						_.each(data, function(p) {
-							table.cell("Ident", p.ident);
-							table.cell("Name", p.name);
-							table.cell("APKey", p.apikey);
-							table.cell("Active", p.status);
-							table.cell("Data", p.data || "");
-							table.cell("Logging", p.logging);
-							table.cell("Expiration", p.expiration);
-							var comments = p.description;
-							if ( ! comments) {
-								comments = "";
-							}
-							else if (comments.length > 50){
-								comments = comments.substring(0, 47) + "...";
-							}
-				
-							var displayRoles = "";
-							var sep = "";
-						//calling roles here does not hold the roles
-						//console.log(Array.isArray(roles));
-						if(roles !== null && Array.isArray(roles)) {
-							_.each(p.ApiKeyRoles, function(r) {
-							//console.log("APIKEY IDENT "+r.apikey_ident);
-							//console.log(roles.length);
-								for(var i = 0; i < roles.length ; i++ ){
-								//console.log("ROLES IDENT " + roles[i].ident);
-									if(roles[i].ident == r.role_ident){
-										displayRoles +=  sep + roles[i].name
-										sep = ",";
-									}
-								}
-							});
-						}
-				table.cell("Roles" , displayRoles);
-				table.cell("Description", comments);
+
+
+		var table = new Table();
+		client.get(url + "/apikeys?pagesize=1000&sysfilter=equal(project_url_name:'" + currentProjectUrl + "')", {
+			headers: {
+				Authorization: "CALiveAPICreator " + apiKey + ":1",
+				"Content-Type": "application/json"
+			}
+		}, function (data) {
+			if (data.errorMessage) {
+				console.log(data.errorMessage.red);
+				return;
+			}
+			printObject.printHeader('Auth Tokens');
+
+			_.each(data, function (p) {
+				table.cell("Ident", p.ident);
+				table.cell("Name", p.name);
+				table.cell("Account URL", p.account_url_name);
+				table.cell("Project URL", p.project_url_name);
+				table.cell("APKey", p.apikey);
+				table.cell("Active", p.is_active);
+				table.cell("Data", p.data || "");
+				//table.cell("Logging", p.logging);
+				table.cell("Roles", p.roles);
+				table.cell("Expiration", p.expiration);
+				var comments = p.description;
+				if (!comments) {
+					comments = "";
+				}
+				else if (comments.length > 50) {
+					comments = comments.substring(0, 47) + "...";
+				}
+
+				var displayRoles = "";
+				var sep = "";
+				//calling roles here does not hold the roles
+				//console.log(Array.isArray(roles));
+
+				//table.cell("Description", comments);
 				table.newRow();
 			});
 			table.sort(['Name', 'name']);
@@ -113,48 +95,49 @@ module.exports = {
 			else {
 				console.log(table.toString());
 			}
-			
+
 			printObject.printHeader("# auth tokens: " + data.length);
-			});
 		});
+
 	},
-	export: function(cmd) {
+	export: function (cmd) {
 		var client = new Client();
-		
+
 		var loginInfo = login.login(cmd);
-		if ( ! loginInfo)
+		if (!loginInfo)
 			return;
 		var url = loginInfo.url;
 		var apiKey = loginInfo.apiKey;
 		var projIdent = cmd.project_ident;
-		if ( ! projIdent) {
+		var currentProjectUrl = dotfile.getCurrentProjectUrl();
+		if (!projIdent) {
 			projIdent = dotfile.getCurrentProject();
-			if ( ! projIdent) {
+			if (!projIdent) {
 				console.log('There is no current project.'.yellow);
 				return;
 			}
 		}
-		
+
 		var filter = null;
 		if (projIdent) {
-			filter = "sysfilter=equal(project_ident:" + projIdent + ")";
+			filter = "sysfilter=equal(project_url_name:'" + currentProjectUrl + "')";
 		} else {
 			console.log('Missing parameter: please specify project settings (use list) project_ident '.red);
 			return;
 		}
-		
-	
+
+
 		var toStdout = false;
-		if ( ! cmd.file) {
+		if (!cmd.file) {
 			toStdout = true;
 		}
-		
-		client.get(loginInfo.url + "/AllApiKeys?pagesize=1000&"+filter+"&sysfilter=equal(origin:null)", {
+
+		client.get(loginInfo.url + "/apikeys?pagesize=1000&" + filter + "&sysfilter=equal(is_created_by_auth_service:false)", {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
-				"Content-Type" : "application/json"
+				"Content-Type": "application/json"
 			}
-		}, function(data) {
+		}, function (data) {
 			//console.log('get result: ' + JSON.stringify(data, null, 2));
 			if (data.errorMessage) {
 				console.log(("Error: " + data.errorMessage).red);
@@ -164,11 +147,11 @@ module.exports = {
 				console.log(("Token not found").red);
 				return;
 			}
-			for(var idx = 0; idx < data.length ; idx++){
+			for (var idx = 0; idx < data.length; idx++) {
 				delete data[idx].ident;
 				delete data[idx]['@metadata']
 			}
-			
+
 			if (toStdout) {
 				console.log(JSON.stringify(data, null, 2));
 			}
@@ -179,35 +162,35 @@ module.exports = {
 			}
 		});
 	},
-	del: function(cmd) {
+	del: function (cmd) {
 		var client = new Client();
 		var loginInfo = login.login(cmd);
-		if ( ! loginInfo) {
+		if (!loginInfo) {
 			console.log('You are not currently logged into a CA Live API Creator server.'.red);
 			return;
 		}
 		var projIdent = cmd.project_ident;
-		if ( ! projIdent) {
+		if (!projIdent) {
 			projIdent = dotfile.getCurrentProject();
-			if ( ! projIdent) {
+			if (!projIdent) {
 				console.log('There is no current project.'.yellow);
 				return;
 			}
-		}		
-		var filt = "equal(project_ident:"+projIdent ;
+		}
+		var filt = "equal(project_ident:" + projIdent;
 		if (cmd.ident) {
 			filt += ",ident:" + cmd.ident + ")";
 		} else {
 			console.log('Missing parameter: please specify ident'.red);
 			return;
 		}
-		
+
 		client.get(loginInfo.url + "/admin:apikeys?sysfilter=" + filt, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
-				"Content-Type" : "application/json"
+				"Content-Type": "application/json"
 			}
-		}, function(data) {
+		}, function (data) {
 			//console.log('get result: ' + JSON.stringify(data, null, 2));
 			if (data.errorMessage) {
 				console.log(("Error: " + data.errorMessage).red);
@@ -226,16 +209,16 @@ module.exports = {
 			client['delete'](db['@metadata'].href + "?checksum=" + db['@metadata'].checksum, {
 				headers: {
 					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
-					"Content-Type" : "application/json"
+					"Content-Type": "application/json"
 				}
-			}, function(data2) {
+			}, function (data2) {
 				var endTime = new Date();
 				if (data2.errorMessage) {
 					console.log(data2.errorMessage.red);
 					return;
 				}
 				printObject.printHeader('APIKey was deleted, including the following objects:');
-				_.each(data2.txsummary, function(obj) {
+				_.each(data2.txsummary, function (obj) {
 					printObject.printObject(obj, obj['@metadata'].entity, 0, obj['@metadata'].verb);
 				});
 				var trailer = "Request took: " + (endTime - startTime) + "ms";
@@ -250,66 +233,66 @@ module.exports = {
 			});
 		});
 	},
-	import: function(cmd) {
+	import: function (cmd) {
 		var client = new Client();
 		var loginInfo = login.login(cmd);
-		if ( ! loginInfo) {
+		if (!loginInfo) {
 			return;
 		}
 
 		var projIdent = cmd.project_ident;
-		if ( ! projIdent) {
+		if (!projIdent) {
 			projIdent = dotfile.getCurrentProject();
-			if ( ! projIdent) {
+			if (!projIdent) {
 				console.log('There is no current project.'.yellow);
 				return;
 			}
 		}
-		if ( ! cmd.file) {
+		if (!cmd.file) {
 			cmd.file = '/dev/stdin';
 		}
-		
+
 		var fileContent = JSON.parse(fs.readFileSync(cmd.file));
-		if(Array.isArray(fileContent) && fileContent.length > 0){
-			for(var i = 0 ; i < fileContent.length ; i++ ){
+		if (Array.isArray(fileContent) && fileContent.length > 0) {
+			for (var i = 0; i < fileContent.length; i++) {
 				fileContent[i].project_ident = projIdent;
 				delete fileContent[i].ts;
-				fileContent[i]["@metadata"] = {action:"MERGE_INSERT", key: ["name","project_ident"]} ;
+				fileContent[i]["@metadata"] = {action: "MERGE_INSERT", key: ["name", "project_ident"]};
 			}
 		} else {
 			fileContent.project_ident = projIdent;
 			delete fileContent.ts;
-			fileContent["@metadata"] = {action:"MERGE_INSERT", key: ["project_ident","name"]} ;
+			fileContent["@metadata"] = {action: "MERGE_INSERT", key: ["project_ident", "name"]};
 		}
-		
+
 		var startTime = new Date();
-		client.put(loginInfo.url + "/AllApiKeys", {
+		client.put(loginInfo.url + "/apikeys", {
 			data: fileContent,
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
-				"Content-Type" : "application/json"
+				"Content-Type": "application/json"
 			}
-		}, function(data) {
-		
+		}, function (data) {
+
 			var endTime = new Date();
 			if (data.errorMessage) {
 				console.log(data.errorMessage.red);
 				return;
 			}
 			printObject.printHeader('Authentication Token(s) created, including:');
-			if(data.statusCode == 200 ){
+			if (data.statusCode == 200) {
 				console.log("Request took: " + (endTime - startTime) + "ms");
 				return;
-			} 	
-			var newTokens = _.find( data.txsummary, function(p) {
-				return p['@metadata'].resource === 'AllApiKeys';
+			}
+			var newTokens = _.find(data.txsummary, function (p) {
+				return p['@metadata'].resource === 'apikeys';
 			});
-			if ( ! newTokens) {
+			if (!newTokens) {
 				console.log('ERROR: unable to find imported auth tokens'.red);
 				return;
 			}
 			if (cmd.verbose) {
-				_.each(data.txsummary, function(obj) {
+				_.each(data.txsummary, function (obj) {
 					printObject.printObject(obj, obj['@metadata'].entity, 0, obj['@metadata'].verb);
 				});
 			}
@@ -317,7 +300,7 @@ module.exports = {
 				printObject.printObject(newTokens, newTokens['@metadata'].entity, 0, newTokens['@metadata'].verb);
 				console.log(('and ' + (data.txsummary.length - 1) + ' other objects').grey);
 			}
-			
+
 			var trailer = "Request took: " + (endTime - startTime) + "ms";
 			trailer += " - # objects touched: ";
 			if (data.txsummary.length === 0) {

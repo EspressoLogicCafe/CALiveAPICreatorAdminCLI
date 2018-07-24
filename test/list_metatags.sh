@@ -12,6 +12,8 @@ SERVER=http://localhost:8080/rest/default/demo/v1
 lac login -u demo -p Password1 $SERVER -a demo
 lac use demo
 
+lac get -h
+
 #Show the current license info (add --format json) for full EULA
 lac get @license
 
@@ -19,29 +21,25 @@ lac get @license
 lac get @heartbeat
 
 # Show All Tables and columns for selected table
-lac get @tables
-lac get @tables/Customers
+lac get @tables --format json
+lac get @tables/*
 
 # Show All views and columns for selected view
-lac get @views
-lac get @views/ßCurrent%20Product%20List
+lac get @views --format json
+lac get @views/*
 
 # Show All Resoures and attribute for selected resources (using ident)
-lac get @resources
-lac get @resources/2961
+lac get @resources --format json
+lac get @resources/*
 
 # Show All Store Proc and attribute for sele
 
 
 #show stored procs (using ident)
-lac get @procedures
+lac get @procedures --format json
+lac get @procedures/*
 #lac get @procedures/somename
 
-#Show the performance metrics for sql, rules, and admin SQL (add --format json) for detailed view
-lac get @perf --format json
-lac get @perf/sql?projectId=2047
-lac get @perf/rules?projectId=2047  
-lac get @perf/adminSql?projectId=2047 
 
 #List of Rules
 lac get @rules
@@ -50,11 +48,11 @@ lac get @rules
 lac get @apioptions
 
 #Information on the default auth provider
-lac get @auth_provider_info/1000
-
-# Swagger 2.0 doc format
-lac get @docs
+lac get @auth_provider_info/2002
 
 
 #Information from the Auth Provider
 lac get @login_info
+
+# Swagger 2.0 doc format
+#lac get @docs

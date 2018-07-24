@@ -73,22 +73,10 @@ module.exports = {
 						console.log(("Login failed: " + data.errorMessage).red);
 						return;
 					}
-					client.get(url + "/server_properties?sysfilter=equal(ident:1)" , {
-						headers: {
-							Authorization: "CALiveAPICreator " + data.apikey + ":1",
-							"Content-Type": "application/json"
-						}
-					}, function (data2) {
-						if (data2.errorMessage) {
-							console.log(data2.errorMessage.red);
-							return;
-						}
-						console.log(data2[0].prop_value);
 						var fullData = {
 							url: url,
 							userName: cmd.username,
 							alias: cmd.serverAlias,
-							serverVersion: data2[0].prop_value,
 							loginInfo: data
 						};
 
@@ -107,14 +95,13 @@ module.exports = {
 								}
 							);
 						dotfile.setCurrentServer(url, fullData);
-					});
 					}).on('error', function(err) {
 						console.log(('ERROR: ' + err).red);
 						throw "Error logging in: " + err;
 					}
-
 			);
 		});
+
 	},
 	
 	commandLogout: function(url, cmd) {
@@ -122,6 +109,7 @@ module.exports = {
 			dotfile.deleteDotFile(url);
 		}
 		else if (cmd.serverAlias) {
+			console.log(cmd.serverAlias);
 			if (dotfile.deleteDotFileForAlias(cmd.serverAlias)) {
 				console.log(('Logout successful for alias ' + cmd.serverAlias).green);
 			}

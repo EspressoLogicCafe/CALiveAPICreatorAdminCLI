@@ -65,8 +65,8 @@ module.exports = {
 			printObject.printHeader('Virtual Primary Key');
 			var table = new Table();
 			_.each(data, function(p) {
-				console.log(JSON.stringify(p.TableInfos));
-				console.log(JSON.stringify(p.ViewInfos));
+				//console.log(JSON.stringify(p.TableInfos));
+				//console.log(JSON.stringify(p.ViewInfos));
 				//table.cell("Ident", p.ident);
 				table.cell("prefix", p.prefix);
 				table.cell("Active", p.active);

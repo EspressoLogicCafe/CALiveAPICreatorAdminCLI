@@ -67,8 +67,8 @@ program
 	.action(login.commandLogin);
 
 program
-	.command('logout [url] (lacadmin logout -a demo)')
-	.description('Logout from the current server, or a specific named alias')
+	.command('logout [url] [serverAlias]')
+	.description('Logout from the current server, or a named server alias [$lacadmin logout -a demo]')
 	.option('-a, --serverAlias <serverAlias>', 'optional: named alias connection to logout')
 	.action(login.commandLogout);
 
@@ -95,7 +95,7 @@ program
 
 program
 	.command('project <list|create|update|delete|use|import|export>')
-	.description('[Deprecated] Administer 4.0 and earlier project API. Actions are: list, create, update, delete, use, export')
+	.description('[Deprecated - replaced by api] Administer 4.0 and earlier project API. Actions are: list, create, update, delete, use, export')
 	.option('--ident [ident]', 'The ident of the specific project (see project list)')
 	.option('--project_name [name]', 'The name of the project')
 	.option('--url_name [name]', 'The name of the project')
@@ -519,6 +519,7 @@ program
 	.description('Administer TeamSpace Users definitions.')
 	.option('--teampspace_username [name]', 'The TeamSpace User Name')
 	.option('--ident [ident]', 'The ident of the specific TeamSpace user')
+	.option('--account_ident [account_ident]', 'The ident of the specific TeamSpace user')
 	.option('-v, --verbose', 'optional: Display list of timer in detailed export/import format')
 	.option('--file [fileName]', 'optional: Name of file to import/export (if not provided stdin/stdout used for export)')
 	.action(teampspace_user.doTeamSpace);

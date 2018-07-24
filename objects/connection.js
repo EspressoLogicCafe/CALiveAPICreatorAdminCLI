@@ -111,7 +111,7 @@ module.exports = {
 				   }
 				});
 			table.sort(['Name']);
-			console.log(table.toString());
+			//console.log(table.toString());
 			printObject.printTrailer("# connection: " + data.length);
 			if(cmd.verbose) {
 				console.log(verboseDisplay); 
@@ -218,7 +218,7 @@ module.exports = {
 		if ( ! cmd.file) {
 			toStdout = true;
 		}
-		console.log(filter);
+		//console.log(filter);
 		client.get(loginInfo.url + "/ConnectionExport?pagesize=1000&"+filter, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",

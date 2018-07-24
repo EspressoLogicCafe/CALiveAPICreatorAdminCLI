@@ -1,6 +1,6 @@
 {
   "name": "liveapicreator-admin-cli",
-  "version": "5.0.1",
+  "version": "5.0.2",
   "description": "The NodeJS command line utility for 'CA Live API Creator' DevOps Administration from CA Technologies",
   "main": "liveapicreatoradmin.js",
   "scripts": {
@@ -39,7 +39,8 @@
     "MQ",
     "sqlserver",
     "mobile",
-    "reactive"
+    "reactive",
+    "devops"
   ],
   "preferGlobal": "true",
   "bin": {

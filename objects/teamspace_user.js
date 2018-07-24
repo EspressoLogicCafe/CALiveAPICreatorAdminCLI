@@ -36,9 +36,14 @@ module.exports = {
 			return;
 		var url = loginInfo.url;
 		var apiKey = loginInfo.apiKey;
-
-
-		client.get(url + "/admin:account_users?pagesize=100&&sysorder=(name:asc_uc,name:desc)", {
+		var filter = "";
+		if(cmd.ident) {
+			filter = "&sysfilter=equal(ident:" + cmd.ident +")";
+		} else if (cmd.account_ident) {
+			filter += "&sysfilter=equal(account_ident:'" + cmd.account_ident + "')";
+		}
+		//console.log(url + "/admin:account_users?pagesize=100&&sysorder=(name:asc_uc,name:desc)" + filter);
+		client.get(url + "/admin:account_users?pagesize=100&&sysorder=(name:asc_uc,name:desc)"+filter, {
 			headers: {
 				Authorization: "CALiveAPICreator " + apiKey + ":1",
 				"Content-Type": "application/json"
@@ -90,6 +95,8 @@ module.exports = {
 			filter = "&sysfilter=equal(ident:" + cmd.ident +")";
 		} else  if (cmd.teampspace_username) {
 			filter += "&sysfilter=equal(name:'" + cmd.teampspace_username + "')";
+		} else if (cmd.account_ident) {
+			filter += "&sysfilter=equal(account_ident:'" + cmd.account_ident + "')";
 		}
 
 		var toStdout = false;

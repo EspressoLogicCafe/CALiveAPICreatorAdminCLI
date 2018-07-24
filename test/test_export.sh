@@ -3,7 +3,7 @@ LACSERVER=http://localhost:8080
 #LACSERVER=http://localhost:8080/APIServer
 USERNAME=admin
 PW=Password1
-PROJECT=demo
+PROJECT=test
 
 ## Connect to a local server
 node ../liveapicreatoradmin.js logout -a $PROJECT
@@ -12,7 +12,7 @@ node ../liveapicreatoradmin.js use $PROJECT
 node ../liveapicreatoradmin.js status
 
 # Select a Project
-node ../liveapicreatoradmin.js project use --url_name $PROJECT
+node ../liveapicreatoradmin.js api use --url_name $PROJECT
 
 ## Export everything
 mkdir -p $PROJECT
@@ -23,7 +23,7 @@ node ../liveapicreatoradmin.js datasource export --file $PROJECT/datasource.json
 node ../liveapicreatoradmin.js libraries export --file $PROJECT/libraries.json
 node ../liveapicreatoradmin.js authprovider export --file $PROJECT/authprovider.json
 node ../liveapicreatoradmin.js rule export --file $PROJECT/rules.json
-node ../liveapicreatoradmin.js resource export --ident 2022 --file $PROJECT/resources.json
+node ../liveapicreatoradmin.js resource export --file $PROJECT/resources.json
 node ../liveapicreatoradmin.js relationship export --file $PROJECT/relationships.json
 node ../liveapicreatoradmin.js token export --file $PROJECT/tokens.json
 node ../liveapicreatoradmin.js role export --file $PROJECT/roles.json

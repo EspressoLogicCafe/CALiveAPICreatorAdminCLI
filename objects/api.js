@@ -837,9 +837,9 @@ module.exports = {
 		if (!loginInfo)
 			return;
 		var exportEndpoint = "@export";
-		var filter = null;
+		var filter = "?";
 		var projIdent = cmd.ident;
-		filter = "?";
+
 		if (cmd.url_name) {
 			var sep = "";
 			var urlfrags = cmd.url_name.split(",")
