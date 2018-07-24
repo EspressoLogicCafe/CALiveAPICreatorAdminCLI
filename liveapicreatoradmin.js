@@ -67,7 +67,7 @@ program
 	.action(login.commandLogin);
 
 program
-	.command('logout [url] [serverAlias]')
+	.command('logout [url]')
 	.description('Logout from the current server, or a named server alias [$lacadmin logout -a demo]')
 	.option('-a, --serverAlias <serverAlias>', 'optional: named alias connection to logout')
 	.action(login.commandLogout);
