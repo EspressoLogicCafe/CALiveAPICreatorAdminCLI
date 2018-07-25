@@ -329,6 +329,7 @@ module.exports = {
 				fileContent[i].logic_type = "javascript";
 				fileContent[i].project_ident = projIdent;
 				delete fileContent[i].ts;
+				delete fileContent[i].account_ident;
 				fileContent[i]["@metadata"] = {action:"MERGE_INSERT", key: ["name","project_ident"]} ;
 			}
 			var startTime = new Date();
@@ -449,6 +450,7 @@ module.exports = {
 			for(var i = 0; i < data.length ; i++){
 				select_ident = data[i].ident;
 				delete data[i].ident;
+				delete data[i].account_ident;
 				data[i].project_ident = null;
 			}
 
