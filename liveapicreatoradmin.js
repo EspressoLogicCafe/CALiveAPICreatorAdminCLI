@@ -147,7 +147,7 @@ program
 	.action(library.doLibrary);
 
 program
-	.command('authprovider <list|create|linkProject|delete|export|import>')
+	.command('authprovider <list|create|linkProject|insertJSCode|delete|export|import>')
 	.description('Administer authentication providers for a TeamSpace.')
 	.option('--ident [ident]','The ident of the auth provider')
 	.option('--project_ident [ident]','The project ident used to link this auth provider')

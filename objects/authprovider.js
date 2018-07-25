@@ -11,7 +11,7 @@ var printObject = require('../util/printObject.js');
 var dotfile = require('../util/dotfile.js');
 
 module.exports = {
-	doAuthProvider: function(action, cmd) {
+	doAuthProvider: function (action, cmd) {
 		if (action === 'list') {
 			module.exports.list(cmd);
 		}
@@ -30,66 +30,70 @@ module.exports = {
 		else if (action === 'export') {
 			module.exports.export(cmd);
 		}
+		else if (action === 'insertJSCode') {
+			module.exports.insertJSCode(cmd);
+		}
 		else {
 			console.log('You must specify an action: list, create, delete, import, or export');
 			//program.help();
 		}
 	},
-	linkProject: function(cmd){
+
+	linkProject: function (cmd) {
 
 		var client = new Client();
 
 		var loginInfo = login.login(cmd);
-		if ( ! loginInfo)
+		if (!loginInfo)
 			return;
 		var url = loginInfo.url;
 		var apiKey = loginInfo.apiKey;
 
-		context.getContext(cmd, function() {
-		var filter = null;
-		if ( cmd.ident) {
-		   filter = 'sysfilter=equal(ident:'+cmd.ident+')';
-		} else if(cmd.auth_name){
-			filter = "sysfilter=equal(name:'"+cmd.auth_name+"')";
-		} else {
-			console.log('Missing parameter: ident or auht_name'.red);
-			return;
-		}
-		var projIdent = cmd.project_ident;
-		if ( ! projIdent) {
-			projIdent = dotfile.getCurrentProject();
-			if ( ! projIdent) {
-				console.log('There is no current project selected.'.yellow);
+		context.getContext(cmd, function () {
+			var filter = null;
+			if (cmd.ident) {
+				filter = 'sysfilter=equal(ident:' + cmd.ident + ')';
+			} else if (cmd.auth_name) {
+				filter = "sysfilter=equal(name:'" + cmd.auth_name + "')";
+			} else {
+				console.log('Missing parameter: ident or auht_name'.red);
 				return;
 			}
-		}
+			var projIdent = cmd.project_ident;
+			if (!projIdent) {
+				projIdent = dotfile.getCurrentProject();
+				if (!projIdent) {
+					console.log('There is no current project selected.'.yellow);
+					return;
+				}
+			}
 
 			//var filter = 'sysfilter=equal(ident:'+cmd.ident+')';
-			client.get(url + "/authproviders?"+filter, {
+			client.get(url + "/authproviders?" + filter, {
 				headers: {
 					Authorization: "CALiveAPICreator " + apiKey + ":1",
-					"Content-Type" : "application/json"
+					"Content-Type": "application/json"
 				}
-			}, function(data_auth) {
-				if (data_auth.errorMessage ) {
+			}, function (data_auth) {
+				if (data_auth.errorMessage) {
 					console.log(data_auth.errorMessage.red);
 					return;
-				} else if (data_auth.length === 0){
-					console.log("Ident or name not found for auth provider" .red);
+				} else if (data_auth.length === 0) {
+					console.log("Ident or name not found for auth provider".red);
 					return;
 				}
 
-				client.get(url + '/AllProjects/'+projIdent, {
+				client.get(url + '/AllProjects/' + projIdent, {
 					headers: {
 						Authorization: "CALiveAPICreator " + apiKey + ":1",
-						"Content-Type" : "application/json"
+						"Content-Type": "application/json"
 					}
-				}, function(data) {
-					if (data.errorMessage ) {
+				}, function (data) {
+					if (data.errorMessage) {
 						console.log(data.errorMessage.red);
 						return;
-					} else if (data.length === 0){
-						console.log("Auth Provider not found for project_ident ="+projIdent.red);
+					} else if (data.length === 0) {
+						console.log("Auth Provider not found for project_ident =" + projIdent.red);
 						return;
 					}
 
@@ -97,20 +101,20 @@ module.exports = {
 					var startTime = new Date();
 					//auth.ident = data[0].ident;
 					auth.authprovider_ident = data_auth[0].ident;
-					client.put(url + '/AllProjects/'+projIdent, {
+					client.put(url + '/AllProjects/' + projIdent, {
 						data: auth,
 						headers: {
 							Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
-							"Content-Type" : "application/json"
-					 	}
-					}, function(data2) {
+							"Content-Type": "application/json"
+						}
+					}, function (data2) {
 						var endTime = new Date();
 						if (data2.errorMessage) {
 							console.log(data2.errorMessage.red);
 							return;
 						}
 						printObject.printHeader('Auth Provider was updated, including the following objects:');
-						_.each(data2.txsummary, function(obj) {
+						_.each(data2.txsummary, function (obj) {
 							printObject.printObject(obj, obj['@metadata'].entity, 0, obj['@metadata'].verb);
 						});
 						var trailer = "Request took: " + (endTime - startTime) + "ms";
@@ -126,13 +130,14 @@ module.exports = {
 					printObject.printHeader("Link authentication provider to current project ");
 				});
 			});
-	  });
+		});
 	},
-	list: function(cmd) {
+
+	list: function (cmd) {
 		var client = new Client();
 
 		var loginInfo = login.login(cmd);
-		if ( ! loginInfo)
+		if (!loginInfo)
 			return;
 		var url = loginInfo.url;
 		var apiKey = loginInfo.apiKey;
@@ -140,9 +145,9 @@ module.exports = {
 		client.get(url + "/authproviders", {
 			headers: {
 				Authorization: "CALiveAPICreator " + apiKey + ":1",
-				"Content-Type" : "application/json"
+				"Content-Type": "application/json"
 			}
-		}, function(data) {
+		}, function (data) {
 			if (data.errorMessage) {
 				console.log(data.errorMessage.red);
 				return;
@@ -150,91 +155,92 @@ module.exports = {
 			printObject.printHeader('All authentication providers');
 			var table = new Table();
 			var verboseDisplay = "";
-			_.each(data, function(p) {
+			_.each(data, function (p) {
 				table.cell("Ident", p.ident);
 				table.cell("Name", p.name);
 				table.cell("createFunction", p.bootstrap_config_value);
 				table.cell("class", p.class_name);
 				table.cell("ParamMap", p.param_map);
 				var comments = p.comments;
-				if ( ! comments) {
+				if (!comments) {
 					comments = "";
 				}
-				else if (comments.length > 50){
+				else if (comments.length > 50) {
 					comments = comments.substring(0, 47) + "...";
 				}
 				table.cell("Comments", comments);
 				table.newRow();
-				if(cmd.verbose && p.ident > 1000) {
+				if (cmd.verbose && p.ident > 1000) {
 					verboseDisplay += "\n";
-					verboseDisplay += "lacadmin authprovider create cmd.auth_name '"+p.name+"'";
-					verboseDisplay += " --createFunction '"+p.bootstrap_config_value+"'";
-					verboseDisplay += " --paramMap '"+p.param_map+"'";
-					if(comments){
-						verboseDisplay += " --comments '"+comments+"'";
+					verboseDisplay += "lacadmin authprovider create cmd.auth_name '" + p.name + "'";
+					verboseDisplay += " --createFunction '" + p.bootstrap_config_value + "'";
+					verboseDisplay += " --paramMap '" + p.param_map + "'";
+					if (comments) {
+						verboseDisplay += " --comments '" + comments + "'";
 					}
 				}
 			});
 			table.sort(['Name']);
 			console.log(table.toString());
 			printObject.printHeader("# authentication providers: " + data.length);
-			if(cmd.verbose) {
+			if (cmd.verbose) {
 				console.log(verboseDisplay);
 			}
 		});
 	},
-	create: function(cmd) {
+
+	create: function (cmd) {
 		var client = new Client();
 
 		var loginInfo = login.login(cmd);
-		if ( ! loginInfo)
+		if (!loginInfo)
 			return;
 		var url = loginInfo.url;
 		var apiKey = loginInfo.apiKey;
 
-		if ( ! cmd.auth_name) {
+		if (!cmd.auth_name) {
 			console.log('Missing parameter: auth_name'.red);
 			return;
 		}
 
-		if ( ! cmd.createFunction) {
+		if (!cmd.createFunction) {
 			console.log('Missing parameter: createFunction'.red);
 			return;
 		}
-		if ( ! cmd.paramMap) {
+		if (!cmd.paramMap) {
 			console.log('Missing parameter: paramMap'.red);
 			return;
 		}
 
-		context.getContext(cmd, function() {
+		context.getContext(cmd, function () {
 			var authProvider = {
 				name: cmd.auth_name,
 				bootstrap_config_value: cmd.createFunction,
 				param_map: cmd.paramMap,
-				auth_type_ident:2,
-				class_name:"com.kahuna.server.auth.JavaScriptAuthProvider",
+				auth_type_ident: 2,
+				class_name: "com.kahuna.server.auth.JavaScriptAuthProvider",
 				account_ident: context.account.ident,
 				comments: cmd.comments
 			};
-			authProvider["@metadata"] = {action:"MERGE_INSERT", key: "name"} ;
+			authProvider["@metadata"] = {action: "MERGE_INSERT", key: "name"};
 			var startTime = new Date();
 			client.put(loginInfo.url + "/admin:authproviders", {
 				data: authProvider,
 				headers: {
 					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
-					"Content-Type" : "application/json"
+					"Content-Type": "application/json"
 				}
-			}, function(data) {
+			}, function (data) {
 				var endTime = new Date();
 				if (data.errorMessage) {
 					console.log(data.errorMessage.red);
 					return;
 				}
 				printObject.printHeader('Auth Provider was created, including:');
-				var newAuth = _.find(data.txsummary, function(p) {
+				var newAuth = _.find(data.txsummary, function (p) {
 					return p['@metadata'].resource === 'admin:authproviders';
 				});
-				if ( data.txsummary.length > 0 && ! newAuth) {
+				if (data.txsummary.length > 0 && !newAuth) {
 					console.log('ERROR: unable to find newly created auth provider'.red);
 					return;
 				}
@@ -251,12 +257,13 @@ module.exports = {
 			});
 		});
 	},
-	delete: function(cmd) {
+
+	delete: function (cmd) {
 
 		var client = new Client();
 
 		var loginInfo = login.login(cmd);
-		if ( ! loginInfo)
+		if (!loginInfo)
 			return;
 		var url = loginInfo.url;
 		var apiKey = loginInfo.apiKey;
@@ -274,9 +281,9 @@ module.exports = {
 		client.get(loginInfo.url + "/authproviders?sysfilter=" + filt, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
-				"Content-Type" : "application/json"
+				"Content-Type": "application/json"
 			}
-		}, function(data) {
+		}, function (data) {
 			if (data.errorMessage) {
 				console.log(("Error: " + data.errorMessage).red);
 				return;
@@ -294,26 +301,26 @@ module.exports = {
 			client['delete'](provider['@metadata'].href + "?checksum=" + provider['@metadata'].checksum, {
 				headers: {
 					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
-					"Content-Type" : "application/json"
+					"Content-Type": "application/json"
 				}
-			}, function(data2) {
+			}, function (data2) {
 				var endTime = new Date();
 				if (data2.errorMessage) {
 					console.log(data2.errorMessage.red);
 					return;
 				}
-				printObject.printHeader('Auth Provider was deleted: '+data2.txsummary);
+				printObject.printHeader('Auth Provider was deleted: ' + data2.txsummary);
 
 
-				var delProj = _.find(data2.txsummary, function(p) {
+				var delProj = _.find(data2.txsummary, function (p) {
 					return p['@metadata'].resource === 'admin:authproviders';
 				});
-				if ( ! delProj) {
+				if (!delProj) {
 					console.log('ERROR: unable to find deleted auth provider'.red);
 					return;
 				}
 				if (cmd.verbose) {
-					_.each(data2.txsummary, function(obj) {
+					_.each(data2.txsummary, function (obj) {
 						printObject.printObject(obj, obj['@metadata'].entity, 0, obj['@metadata'].verb);
 					});
 				}
@@ -334,11 +341,12 @@ module.exports = {
 			});
 		});
 	},
-	export: function(cmd) {
+
+	export: function (cmd) {
 		var client = new Client();
 
 		var loginInfo = login.login(cmd);
-		if ( ! loginInfo)
+		if (!loginInfo)
 			return;
 		var url = loginInfo.url;
 		var apiKey = loginInfo.apiKey;
@@ -350,26 +358,26 @@ module.exports = {
 		}
 
 		var toStdout = false;
-		if ( ! cmd.file) {
+		if (!cmd.file) {
 			toStdout = true;
 		}
 
 		client.get(loginInfo.url + "/authproviders?" + filter, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
-				"Content-Type" : "application/json"
+				"Content-Type": "application/json"
 			}
-		}, function(data) {
+		}, function (data) {
 			//console.log('get result: ' + JSON.stringify(data, null, 2));
 			if (data.errorMessage) {
 				console.log(("Error: " + data.errorMessage).red);
 				return;
 			}
 			if (data.length === 0) {
-				console.log(("Auth provider(s) not found filter: " +filter).red);
+				console.log(("Auth provider(s) not found filter: " + filter).red);
 				return;
 			}
-			for(var i = 0; i < data.length ; i++){
+			for (var i = 0; i < data.length; i++) {
 				delete data[i].ident;
 				delete data[i].ts;
 				data[i].account_ident = null;
@@ -384,36 +392,130 @@ module.exports = {
 			}
 		});
 	},
-	import: function(cmd) {
+	insertJSCode: function (cmd) {
 		var client = new Client();
 
 		var loginInfo = login.login(cmd);
-		if ( ! loginInfo)
+		if (!loginInfo)
 			return;
 		var url = loginInfo.url;
 		var apiKey = loginInfo.apiKey;
 
-		if ( ! cmd.file) {
+		//first we try to get the auth provider
+		var filter = "";
+		if (cmd.ident) {
+			filter = "sysfilter=equal(ident:" + cmd.ident + ")";
+		} else if (cmd.auth_name) {
+			filter = "sysfilter=equal(name:'" + cmd.auth_name + "')";
+		} else {
+			console.log("You must provide ident or auth_name for a specific authprovider");
+			return;
+		}
+
+		client.get(url + "/authproviders?" + filter, {
+			headers: {
+				Authorization: "CALiveAPICreator " + apiKey + ":1",
+				"Content-Type": "application/json"
+			}
+		}, function (authprovider) {
+			if (authprovider.errorMessage) {
+				console.log(authprovider.errorMessage.red);
+				return;
+			}
+			if (authprovider.length == 0) {
+				console.log("The authprovider not found using: " + filter);
+				return;
+			}
+
+			if (!cmd.file) {
+				cmd.file = '/dev/stdin';
+			}
+			var fileContent = fs.readFileSync(cmd.file,'utf-8');
+			//console.log("File Content "+ fileContent);
+			//var authproviderJSON = JSON.parse(authprovider);
+			authprovider[0].javascript_authprovider_code = fileContent;
+			//console.log(authprovider);
+
+			var startTime = new Date();
+			client.put(loginInfo.url + "/admin:authproviders", {
+				data: authprovider,
+				headers: {
+					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+					"Content-Type": "application/json"
+				}
+			}, function (data) {
+				var endTime = new Date();
+				if (data.errorMessage) {
+					console.log(data.errorMessage.red);
+					return;
+				}
+				printObject.printHeader('Auth Provider was JavaScript code imported:');
+
+				var trailer = "Request took: " + (endTime - startTime) + "ms";
+				if (data.statusCode == 200) {
+					console.log("Summary " + JSON.stringify(data));
+
+				} else {
+					var newAuth = _.find(data.txsummary, function (p) {
+						return p['@metadata'].resource === 'admin:authproviders';
+					});
+					if (!newAuth) {
+						console.log('ERROR: unable to find authprovider'.red);
+						return;
+					}
+					if (cmd.verbose) {
+						_.each(data.txsummary, function (obj) {
+							printObject.printObject(obj, obj['@metadata'].entity, 0, obj['@metadata'].verb);
+						});
+					}
+					else {
+						printObject.printObject(newAuth, newAuth['@metadata'].entity, 0, newAuth['@metadata'].verb);
+						console.log(('and ' + (data.txsummary.length - 1) + ' other objects').grey);
+					}
+
+					trailer += " - # objects touched: ";
+					if (data.txsummary.length === 0) {
+						console.log('No data returned'.yellow);
+					}
+					else {
+						trailer += data.txsummary.length;
+					}
+				}
+				printObject.printTrailer(trailer);
+			});
+		});
+	},
+
+	import: function (cmd) {
+		var client = new Client();
+
+		var loginInfo = login.login(cmd);
+		if (!loginInfo)
+			return;
+		var url = loginInfo.url;
+		var apiKey = loginInfo.apiKey;
+
+		if (!cmd.file) {
 			cmd.file = '/dev/stdin';
 		}
 
-		context.getContext(cmd, function() {
+		context.getContext(cmd, function () {
 			var fileContent = JSON.parse(fs.readFileSync(cmd.file));
-			if(Array.isArray(fileContent)){
-				for(var i = 0 ; i < fileContent.length; i++){
+			if (Array.isArray(fileContent)) {
+				for (var i = 0; i < fileContent.length; i++) {
 					fileContent[i].account_ident = context.account.ident;
 					delete fileContent[i].ident;
-					fileContent[i]["@metadata"] = {action:"MERGE_INSERT", key: ["account_ident","name"]} ;
+					fileContent[i]["@metadata"] = {action: "MERGE_INSERT", key: ["account_ident", "name"]};
 				}
 			}
 			var startTime = new Date();
 			client.put(loginInfo.url + "/admin:authproviders", {
 				data: fileContent,
 				headers: {
-						Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
-						"Content-Type" : "application/json"
-					}
-				}, function(data) {
+					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+					"Content-Type": "application/json"
+				}
+			}, function (data) {
 				var endTime = new Date();
 				if (data.errorMessage) {
 					console.log(data.errorMessage.red);
@@ -422,18 +524,18 @@ module.exports = {
 				printObject.printHeader('Auth Provider was imported:');
 
 				var trailer = "Request took: " + (endTime - startTime) + "ms";
-				if(data.statusCode == 200 ){
+				if (data.statusCode == 200) {
 
 				} else {
-					var newAuth = _.find(data.txsummary, function(p) {
+					var newAuth = _.find(data.txsummary, function (p) {
 						return p['@metadata'].resource === 'admin:authproviders';
 					});
-					if ( ! newAuth) {
+					if (!newAuth) {
 						console.log('ERROR: unable to find imported auth provider'.red);
 						return;
 					}
 					if (cmd.verbose) {
-						_.each(data.txsummary, function(obj) {
+						_.each(data.txsummary, function (obj) {
 							printObject.printObject(obj, obj['@metadata'].entity, 0, obj['@metadata'].verb);
 						});
 					}
