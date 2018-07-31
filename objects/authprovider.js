@@ -452,8 +452,8 @@ module.exports = {
 				printObject.printHeader('Auth Provider was JavaScript code imported:');
 
 				var trailer = "Request took: " + (endTime - startTime) + "ms";
-				if (data.statusCode == 200) {
-					console.log("Summary " + JSON.stringify(data));
+				if (data.statusCode !== 200) {
+					console.log("Error Summary " + JSON.stringify(data));
 
 				} else {
 					var newAuth = _.find(data.txsummary, function (p) {

@@ -26,8 +26,11 @@ module.exports = {
 		else if (action === 'export') {
 			module.exports.export(cmd);
 		}
+		else if (action === 'exportJavascript') {
+			module.exports.exportJavascript(cmd);
+		}
 		else {
-			console.log('You must specify an action: list, create, delete, import, or export');
+			console.log('You must specify an action: list, create, delete, import, exportJavascript,or export');
 			//program.help();
 		}
 	},
@@ -404,6 +407,59 @@ module.exports = {
 				  });
 				}
 			})
+		});
+	},
+	exportJavascript: function(cmd) {
+		var client = new Client();
+		var loginInfo = login.login(cmd);
+		if ( ! loginInfo)
+			return;
+
+		var url = loginInfo.url;
+		var apiKey = loginInfo.apiKey;
+
+		var filter = null;
+
+		filter = "sysfilter=greater(ident:999)&sysfilter=equal(logic_type:'javascript')";
+
+		if (!cmd.ident) {
+			console.log("Missing parameter --ident - use lacadmin libraries list");
+			return;
+		}
+
+		var toStdout = false;
+		if ( ! cmd.file) {
+			toStdout = true;
+		}
+		filter = "/" + cmd.ident + "/code?" + filter;
+		var dataUrl = loginInfo.url;
+		dataUrl = dataUrl.replace("rest","data");
+		//console.log(dataUrl);
+		client.get(dataUrl + "/admin:logic_libraries" + filter, {
+			headers: {
+				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+				"Content-Type" : "application/json"
+			}
+		}, function(data) {
+			//console.log('get result: ' + JSON.stringify(data, null, 2));
+			if (data.errorMessage) {
+				console.log(("Error: " + data.errorMessage).red);
+				return;
+			}
+			if (data.length === 0) {
+				console.log(("Error: no libraries found using filter "+filter).red);
+				return;
+			}
+			var fileAsString = new Buffer(data).toString('utf8');
+			//console.log( "javascript code :" + fileAsString);
+
+			if (toStdout) {
+				console.log(JSON.stringify(fileAsString, null, 2));
+			} else {
+				var exportFile = fs.openSync(cmd.file, 'w+', 0600);
+				fs.writeSync(exportFile, JSON.stringify(fileAsString, null, 2));
+				console.log(('Logic Library as JSON has been exported to file: ' + cmd.file).green);
+			}
 		});
 	},
 	export: function(cmd) {

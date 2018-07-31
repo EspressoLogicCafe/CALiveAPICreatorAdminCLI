@@ -130,11 +130,11 @@ program
 	.action(api.doAPI);
 
 program
-	.command('libraries <list|create|update|delete|export|import>')
+	.command('libraries <list|create|update|delete|export|import|exportJavascript>')
 	.description('Administer javascript libraries for a specific API.')
-	.option('--ident [ident]','The ident of the library - used by update, delete, export')
-	.option('--project_ident [projectId]','The project ident that this library will be marked as used' )
-	.option('--library_name [name]', 'Name of library')
+	.option('--ident [ident]','The ident of the library - used by update, delete, export, or exportJavascript')
+	.option('--project_ident [project_ident]','The project ident that this library will be marked as used (lacadmin api list)' )
+	.option('--library_name [name]', 'Name of library used by update, delete, export')
 	.option('--libtype [type]', 'optional: Type of Library javascript (as of 3.0.x)')
 	.option('--ver [version]', 'optional: Version # of Library')
 	.option('--short_name [shortname]', 'Short Name')
