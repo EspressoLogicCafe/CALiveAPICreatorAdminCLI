@@ -1,5 +1,5 @@
 # TeamSpace
-This feature is for TeamSpace management. For details see [Manage TeamSpaces](https://docops.ca.com/ca-live-api-creator/4-1/en/configuring/manage-teamspaces).
+This feature is for TeamSpace management. For details see [Manage TeamSpaces](https://docops.ca.com/ca-live-api-creator/5-0/en/configuring/manage-teamspaces).
 
 ```
    Usage: teamspace [options] <list|exportRepos>

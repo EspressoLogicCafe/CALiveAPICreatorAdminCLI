@@ -1,6 +1,6 @@
 # Virtual Primary Key
 This suite of commands allows you to manage virtual primary keys on tables or view within an API project.
-Visit the Documentation page on [Manage Virtual Primary Keys in Tables or Views](https://docops.ca.com/ca-live-api-creator/4-1/en/creating-apis/database-creation/manage-existing-schemas#ManageExistingSchemas-ManageVirtualPrimaryKeysinTables)
+Visit the Documentation page on [Manage Virtual Primary Keys in Tables or Views](https://docops.ca.com/ca-live-api-creator/5-0/en/creating-apis/database-creation/manage-existing-schemas#ManageExistingSchemas-ManageVirtualPrimaryKeysinTables)
 ```
 $lacadmin virtualkey --help
 

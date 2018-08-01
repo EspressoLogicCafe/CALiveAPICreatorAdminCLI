@@ -1,5 +1,5 @@
 # Project
-
+##DEPRECATED IN 4.1 see Customize your [API](https://docops.ca.com/ca-live-api-creator/5-0/en/creating-apis/customize-your-api)
 This suite of commands allows you to manipulate your CA Live API Creator API projects.
 ## Project Options
 

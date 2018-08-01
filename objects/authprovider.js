@@ -172,12 +172,7 @@ module.exports = {
 				table.newRow();
 				if (cmd.verbose && p.ident > 1000) {
 					verboseDisplay += "\n";
-					verboseDisplay += "lacadmin authprovider create cmd.auth_name '" + p.name + "'";
-					verboseDisplay += " --createFunction '" + p.bootstrap_config_value + "'";
-					verboseDisplay += " --paramMap '" + p.param_map + "'";
-					if (comments) {
-						verboseDisplay += " --comments '" + comments + "'";
-					}
+					verboseDisplay += "lacadmin authprovider export --auth_name '" + p.name + "' --file AUHTPROVIDER_"+p.name +".json";
 				}
 			});
 			table.sort(['Name']);

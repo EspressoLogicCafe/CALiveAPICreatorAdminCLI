@@ -1,6 +1,6 @@
 # Project API Settings
 
-See [API Properties](https://docops.ca.com/ca-live-api-creator/4-1/en/managing-apis/api-properties)
+See [API Properties](https://docops.ca.com/ca-live-api-creator/5-0/en/managing-apis/api-properties)
 ```
  Usage: apioptions [options] <list|update|delete|export|import>
 

@@ -1,5 +1,5 @@
 # Structured Filter
-For details on named filters see [Structured Filters](https://docops.ca.com/ca-live-api-creator/4-1/en/invoking-apis/get/structured-filters)
+For details on named filters see [Structured Filters](https://docops.ca.com/ca-live-api-creator/5-0/en/invoking-apis/get/structured-filters)
 
 ```
   Usage: namedfilter [options] <list|create|delete|update|import|export>

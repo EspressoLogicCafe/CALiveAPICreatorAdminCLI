@@ -1,6 +1,6 @@
 l# Publish to CA Gateway
 This suite of commands allows you to manage and publish project API Swagger documentation to the CA Gateway.
-See documentation to [Publish an API to CA API Gateway](https://docops.ca.com/ca-live-api-creator/4-1/en/managing-apis/integrate-with-ca-api-gateway/publish-an-api-to-api-gateway) 
+See documentation to [Publish an API to CA API Gateway](https://docops.ca.com/ca-live-api-creator/5-0/en/configuring/integrate-with-ca-api-gateway/publish-an-api-to-api-gateway) 
 
 ```
  Usage: gateway [options] <list|create|import|export|publish>

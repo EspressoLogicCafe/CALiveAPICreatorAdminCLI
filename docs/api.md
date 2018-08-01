@@ -1,6 +1,6 @@
 # API 
 
-This suite of commands allows you to manipulate your CA Live API Creator (LAC) APIs. See [Creating APIs](https://docops.ca.com/ca-live-api-creator/4-1/en/creating-apis).
+This suite of commands allows you to manipulate your CA Live API Creator (LAC) APIs. See [Creating APIs](https://docops.ca.com/ca-live-api-creator/5-0/en/creating-apis).
 ## API
 ```
 $lacadmin api -h

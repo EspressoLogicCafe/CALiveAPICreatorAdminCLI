@@ -1,6 +1,6 @@
 # Listener
-Listener to message service providers like MQTT and Kafak.
-See [Create Listeners](https://docops.ca.com/ca-live-api-creator/4-1/en/creating-listeners)
+Startup or Shutdown Listeners, and Listeners attached to connections to message services providers like MQTT and Kafak.
+See [Creating Listeners](https://docops.ca.com/ca-live-api-creator/5-0/en/creating-listeners)
 ```
  $lacadmin listener --help
  Usage: listener [options] <list|delete|export|import>
