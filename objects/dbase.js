@@ -406,7 +406,7 @@ module.exports = {
 		}
 		
 		//console.log(filter);
-		client.get(loginInfo.url + "/DbSchemas?sysfilter=" + filter, {
+		client.get(loginInfo.url + "/admin:dbaseschemas?sysfilter=" + filter, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
 				"Content-Type" : "application/json"
