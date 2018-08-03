@@ -433,6 +433,9 @@ module.exports = {
 				db.password = cmd.password;
 				delete db.salt;
 			}
+			if( cmd.salt){
+				db.salt = cmd.salt;
+			}
 			if( cmd.user_name){
 				db.user_name = cmd.user_name;
 			}

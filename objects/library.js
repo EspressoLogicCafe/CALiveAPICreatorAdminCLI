@@ -29,6 +29,9 @@ module.exports = {
 		else if (action === 'exportJavascript') {
 			module.exports.exportJavascript(cmd);
 		}
+		else if (action === 'importJavascript') {
+			module.exports.importJavascript(cmd);
+		}
 		else {
 			console.log('You must specify an action: list, create, delete, import, exportJavascript,or export');
 			//program.help();
@@ -303,6 +306,109 @@ module.exports = {
 			});
 		});
 	},
+	importJavascript: function(cmd) {
+		var client = new Client();
+		var loginInfo = login.login(cmd);
+		if ( ! loginInfo)
+			return;
+		var projIdent = cmd.project_ident;
+		if ( ! projIdent) {
+			projIdent = dotfile.getCurrentProject();
+		}
+		if(!projIdent) {
+			console.log("No current project selected".red);
+			return;
+		}
+		var filt = null;
+		if (cmd.library_name) {
+			filt = "equal(name:'" + cmd.library_name + "'";
+		} else if (cmd.ident) {
+			filt = "equal(ident:" + cmd.ident;
+		}
+		if(!cmd.file) {
+			console.log('Missing parameter: please specify JavaScript file using --file'.red);
+			return;
+		}
+		if(filt === null) {
+			console.log('Missing parameter: please specify library --name or --ident'.red);
+			return;
+		}
+		filt += ",project_ident:"+ projIdent +")";
+		client.get(loginInfo.url + "/logic_libraries?sysfilter=" + filt, {
+			headers: {
+				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+				"Content-Type" : "application/json"
+			}
+		}, function(data) {
+			console.log('get result: ' + JSON.stringify(data, null, 2));
+			if (data.errorMessage) {
+				console.log(("Error: " + data.errorMessage).red);
+				return;
+			}
+			if (data.length === 0) {
+				console.log(("Library not found").red);
+				return;
+			}
+			if (data.length > 1) {
+				console.log(("Error: more than one libraries for the given condition: " + filt).red);
+				return;
+			}
+			var library = data[0];
+			var content = fs.readFileSync(cmd.file,'utf-8');
+
+			var fileContent = content;
+			var libcodehex = fileContent.toString('base64');//hex
+			library.code = "b64:" + libcodehex;
+			var metadata = library["@metadata"];
+			metadata.action ="MERGE_INSERT";
+			//console.log(metadata);
+			library["@metadata"] = metadata;
+			//console.log(library);
+			var startTime = new Date();
+			client.put(loginInfo.url + "/logic_libraries", {
+				data: library,
+				headers: {
+					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+					"Content-Type" : "application/json"
+				}
+			}, function(data2) {
+				var endTime = new Date();
+				if (data2.errorMessage) {
+					console.log(data2.errorMessage.red);
+					return;
+				}
+				printObject.printHeader('Library was updated, including the following objects:');
+
+
+				var putlib = _.find(data2.txsummary, function(p) {
+					return p['@metadata'].resource === 'admin:logic_libraries';
+				});
+				if ( ! putlib) {
+					console.log('ERROR: unable to find updated library'.red);
+					return;
+				}
+				if (cmd.verbose) {
+					_.each(data2.txsummary, function(obj) {
+						printObject.printObject(obj, obj['@metadata'].entity, 0, obj['@metadata'].verb);
+					});
+				}
+				else {
+					printObject.printObject(putlib, putlib['@metadata'].entity, 0, putlib['@metadata'].verb);
+					console.log(('and ' + (data2.txsummary.length - 1) + ' other objects').grey);
+				}
+
+				var trailer = "Request took: " + (endTime - startTime) + "ms";
+				trailer += " - # objects touched: ";
+				if (data2.txsummary.length == 0) {
+					console.log('No data returned'.yellow);
+				}
+				else {
+					trailer += data2.txsummary.length;
+				}
+				printObject.printHeader(trailer);
+			});
+		});
+	},
 	import: function(cmd) {
 		var client = new Client();
 		var loginInfo = login.login(cmd);
@@ -457,7 +563,7 @@ module.exports = {
 				console.log(JSON.stringify(fileAsString, null, 2));
 			} else {
 				var exportFile = fs.openSync(cmd.file, 'w+', 0600);
-				fs.writeSync(exportFile, JSON.stringify(fileAsString, null, 2));
+				fs.writeSync(exportFile, fileAsString);
 				console.log(('Logic Library as JSON has been exported to file: ' + cmd.file).green);
 			}
 		});

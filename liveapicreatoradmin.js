@@ -130,7 +130,7 @@ program
 	.action(api.doAPI);
 
 program
-	.command('libraries <list|create|update|delete|export|import|exportJavascript>')
+	.command('libraries <list|create|update|delete|export|import|exportJavascript|importJavascript>')
 	.description('Administer javascript libraries for a specific API.')
 	.option('--ident [ident]','The ident of the library - used by update, delete, export, or exportJavascript')
 	.option('--project_ident [project_ident]','The project ident that this library will be marked as used (lacadmin api list)' )
@@ -167,10 +167,11 @@ program
 	.option('--prefix [prefix]', 'The prefix of the data source connection')
 	.option('--jndi_name [jndiname]', 'The JNDI name of the data source connection')
 	.option('--dbasetype [dbasetype]', 'The type of the data source: mysql, oracle, sqlserver, derby, postgresql, db2luw, db2zos, csv, hbase, sap, salesforce, sqlserverazure, teradata')
-	.option('--catalog_name [catalog_name]', 'The catalog in the data source')
-	.option('--schema_name [schema_name]', 'The schema in the data source')
-	.option('--user_name [user_name]', 'The name of the data source user')
-	.option('--password [password]', 'The password of the data source user')
+	.option('--catalog_name [catalog_name]', 'The catalog name of the data source')
+	.option('--schema_name [schema_name]', 'The schema name of the data source')
+	.option('--user_name [user_name]', 'The user name of the data source')
+	.option('--password [password]', 'The password of the data source')
+	.option('--salt [salt]', 'The password salt of the data source')
 	.option('--schema_editable [boolean]', 'Is this data source marked as editable (i.e. managed data source) - default: false')
 	.option('--url [url]', 'The JDBC URL for the data source')
 	.option('--active [true|false]', 'This marks the data source active or inactive')
@@ -384,14 +385,16 @@ program
 	.action(managedserver.doDbase);
 
 program
-	.command('migrate <exportRepos>')
+	.command('migrate <list|plan|script|exportRepos>')
 	.description('Migrate a or export all API content for a TeamSpace to a named file')
 	.option('-d, --directory [directory]', 'Required for export, the name of a directory to save all exported files')
 	.option('-f, --file [file]', 'optional:: for source extract, the name of a file to read from/save to, if unspecified, use stdin/stdout')
-	.option('--format [json|zip]', 'optional: for import/export, this sets the output type of the export default: zip')
-	.option('--passwordstyle [skip|encrypted|plaintext]', 'optional: for export, sets the password style of exported API data sources (default: skip)')
-	.option('--librarystyle [emit_all|in_use_only]', 'optional: for export, sets the library style  (default: emit_all)')
-	.option('--apioptionsstyle [emit_all|skip_default]', 'optional: for export, sets the api options (default: emit_all)')
+	.option('--from [version]', 'required: for script, version number 3.1, 3.2, 4.0, 4.1')
+	.option('--to [to]', 'required: for script, version number 3.2, 4.0, 4.1, 5.0')
+	.option('--format [json|zip]', 'optional: for import/export  4.1 or 5.0, this sets the output type of the export default: zip')
+	.option('--passwordstyle [skip|encrypted|plaintext]', 'optional: for export 4.1 or 5.0, sets the password style of exported API data sources (default: skip)')
+	.option('--librarystyle [emit_all|in_use_only]', 'optional: for export  4.1 or 5.0, sets the library style  (default: emit_all)')
+	.option('--apioptionsstyle [emit_all|skip_default]', 'optional: for export  4.1 or 5.0, sets the api options (default: emit_all)')
 	.action(migrate.doMigrate);
 
 program
