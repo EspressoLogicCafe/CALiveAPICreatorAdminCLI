@@ -153,9 +153,13 @@ module.exports = {
 		var dotDirName = this.getDotDirectory();
 		var dotFileName = dotDirName + "/currentServer.txt";
 		if (dotDirName) {
-			try {
-				fs.unlinkSync(dotFileName);
-			} catch(e) {}
+			if ( ! fs.existsSync(dotFileName)) {
+				 //console.log("not logged into a server");
+				 return null;
+			}
+			fs.unlinkSync(dotFileName,function(err){
+				if(err) {console.log("not logged into a server")};
+			});
 		}
 	},
 	
