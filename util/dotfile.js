@@ -152,7 +152,11 @@ module.exports = {
 	unsetCurrentServer: function() {
 		var dotDirName = this.getDotDirectory();
 		var dotFileName = dotDirName + "/currentServer.txt";
-		fs.unlinkSync(dotFileName);
+		if (dotDirName) {
+			try {
+				fs.unlinkSync(dotFileName);
+			} catch(e) {}
+		}
 	},
 	
 	setCurrentProject: function(projectIdent, projName,url) {
