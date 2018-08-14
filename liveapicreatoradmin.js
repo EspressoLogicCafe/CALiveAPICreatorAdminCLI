@@ -6,8 +6,7 @@
 
 var program = require('commander');
 var path = require('path');
-var pkg = require( path.join(__dirname, 'package.json') );
-
+var pkg = require('./package.json');
 var login = require('./objects/login.js');
 var project = require('./objects/project.js'); //deprecated in 4.1 -replaced with API
 var dbase = require('./objects/dbase.js');

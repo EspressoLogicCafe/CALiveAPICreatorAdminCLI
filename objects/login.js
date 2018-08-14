@@ -19,11 +19,11 @@ module.exports = {
 			return;
 		}
 		if ( ! cmd.username) {
-			console.log('You must specify a user name'.red);
+			console.log('You must specify a -u or --username'.red);
 			return;
 		}
 		if ( ! cmd.password) {
-			console.log('You must specify a password'.red);
+			console.log('You must specify a -p or --password'.red);
 			return;
 		}
 		

@@ -12,7 +12,10 @@ var api = require("./api.js");
 module.exports = {
 	doMigrate: function(action, cmd) {
 	    if (action === 'list') {
-			module.exports.list(cmd);
+			module.exports.list2(cmd);
+		}
+		if (action === 'plan') {
+			module.exports.plan(cmd);
 		}
 		else if (action === 'exportRepos') {
 			module.exports.exportProjects(cmd);
@@ -29,6 +32,44 @@ module.exports = {
 		else {
 			console.log('You must specify an action: exportRepos');
 		}
+	},
+	plan: function(cmd) {
+		var client = new Client();
+		var loginInfo = login.login(cmd);
+		if ( ! loginInfo)
+			return;
+		var url = loginInfo.url;
+		var apiKey = loginInfo.apiKey;
+		if(!cmd.from) {
+			console.log("Missing --from parameter (e.g. 3.1, 3.2, 4.0, 4.1, 5.0".red);
+			return;
+		}
+		console.log('Migration Inventory');
+		var table = "";
+		var accountCommands = [ "authproviders","gateways", "managed_data_servers","projects"];
+		var projectCommands =	[ "logic_libraries", "dbaseschemas", "functions", "handlers", "eventhandlers","named_sorts","named_filters", "resources","topics", "roles", "rules" ];
+
+		for(var i in accountCommands) {
+			var endpoint = accountCommands[i];
+			client.get(url + "/"+ endpoint+"?pagesize=1000", {
+				headers: {
+					Authorization: "CALiveAPICreator " + apiKey + ":1",
+					"Content-Type" : "application/json"
+				}
+			}, function(data) {
+				if (data.errorMessage) {
+					console.log(data.errorMessage.red);
+					return;
+				}
+				//console.log(data);
+				if(data.length > 0) {
+					var href = data[0]["@metadata"].href;
+					console.log(href);
+					console.log(data.length);
+				}
+			});
+		}
+		console.log(table);
 	},
 	list: function (cmd) {
 		var client = new Client();

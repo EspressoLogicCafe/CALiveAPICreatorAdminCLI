@@ -457,8 +457,9 @@ module.exports = {
 					fileContent[i]["@metadata"] = { action: "MERGE_INSERT", key:["name","account_ident"] };
 				}
 			}
+			//console.log(JSON.stringify(fileContent,null,2));
 			var startTime = new Date();
-			client.post(loginInfo.url + "/admin:managed_data_servers", {
+			client.put(loginInfo.url + "/admin:managed_data_servers", {
 				data: fileContent,
 				headers: {
 						Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
