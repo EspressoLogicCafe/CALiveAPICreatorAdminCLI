@@ -141,7 +141,7 @@ module.exports = {
 		
 		var numAliases = 0;
 		var tbl = new Table({
-			head: ['Alias', 'Server', 'User']
+			head: ['Alias', 'LAC Server', 'User']
 		});
 		var dotDirName = dotfile.getDotDirectory(false);
 		if (dotDirName) {
@@ -168,7 +168,7 @@ module.exports = {
 			console.log('No aliases currently defined'.yellow);
 		}
 		else {
-			console.log("Defined aliases:");
+			console.log("Defined " +((numAliases === 1)?"alias:":"aliases:"));
 			console.log(tbl.toString());
 		}
 

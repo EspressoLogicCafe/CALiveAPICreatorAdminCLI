@@ -15,10 +15,14 @@ module.exports = {
 		}
 		else {
 			var loginInfo = dotfile.getCurrentServer();
+			if(! loginInfo) {
+				console.log('Login failed)'.red);
+				return;
+			}
 			url = loginInfo.url;
 			apiKey = dotfile.getApiKey(loginInfo.url, loginInfo.userName);
 			if ( ! apiKey) {
-				console.log('You cannot run this command because you are not currently logged in.(lacadmin login --help)'.red);
+				console.log('You cannot run this command because you are not currently logged in.(lacadmin login -h)'.red);
 				return;
 			}
 		}

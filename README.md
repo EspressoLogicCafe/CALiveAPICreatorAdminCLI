@@ -9,16 +9,14 @@ modification and deletion of many common objects, such as apis, database connect
 resources and rules.
 
 ## Installation
-
-    npm install liveapicreator-admin-cli -g
+```aidl
+    git clone https://github.com/EspressoLogicCafe/liveapicreator-devops.git
+    cd liveapicreator-devops
     
-    note: MAC users may need to use $sudo npm install liveapicreator-admin-cli -g
+    There are 3 directories (platform: windows, linux, and macos) copy the 'lac' and 'lacadmin' to your
+    path where you intend to run your devops scripts.
 
-Please note that, on Windows (and sometimes Mac), `npm install` will create an executable 
-called `lacadmin` (or `liveapicreatoradmin`) in your
-{userhome}/`<node_modules>/.bin` directory. If this directory is not in your `PATH`, you will probably
-want to fix that, otherwise you'll have to specify the full path to the executable.  You can also try 
-npm install liveapicreator-admin-cli -g
+```
 
 ***
 ## Login
@@ -32,8 +30,9 @@ The URL will normally be the address of the server, such as:
     http://localhost:8080
     http://localhost:8080/APIServer
     http://api.acme.com
+    https://196.198.1.1:8137
 
-If you specify an alias, then you will be able to refer to that connection using that alias.
+If you specify an alias (-a), then you will be able to refer to that connection using that alias (lacadmin use <alias>).
 This is useful if you plan to work with several Live API Creator (LAC) API servers at the same time.
 
 Regardless, this command sets your *current server* -- see [the use command](/use/) below.
@@ -52,7 +51,7 @@ Regardless, this command sets your *current server* -- see [the use command](/us
 ```
 $ lacadmin --help
 
-  Usage: liveapicreatoradmin [options] [command]
+  Usage: lacadmin [options] [command]
   
   
     Commands:
@@ -149,7 +148,7 @@ Prints which server is the current server (if any) and project, and what aliases
 
 ### Status Output
 
-    Defined aliases:
+    Defined alias:
     ┌───────┬───────────────────────────────────────────────────────┬───────┐
     │ Alias │ Server                                                │ User  │
     ├───────┼───────────────────────────────────────────────────────┼───────┤
@@ -162,6 +161,7 @@ Prints which server is the current server (if any) and project, and what aliases
 
 ### Sample Export Script
 You can combine each command to export parts of your system into components that can later be used in source control and then promoted to different servers.
+This is a small sampling of the export and list commands.
 ```
 #! /bin/bash
 # Export Script for Northwind Jetty

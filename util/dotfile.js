@@ -52,7 +52,7 @@ module.exports = {
 		}
 		var allFiles = fs.readdirSync(dotDirName);
 		_.each(allFiles, function(f) {
-			if (f === 'currentServer.txt') {
+			if (f === 'currentServer.txt' || f === '.DS_Store') {
 				return;
 			}
 			var fileContent = JSON.parse(fs.readFileSync(dotDirName + "/" + f));
@@ -84,8 +84,10 @@ module.exports = {
 			if (f === 'currentServer.txt') {
 				return false;
 			}
-			var fileContent = JSON.parse(fs.readFileSync(dotDirName + "/" + f));
-			return fileContent.alias === alias;
+			try {
+				var fileContent = JSON.parse(fs.readFileSync(dotDirName + "/" + f));
+				return fileContent.alias === alias;
+			} catch(e) {}
 		});
 		if ( ! dotFile) {
 			return null;
@@ -145,7 +147,12 @@ module.exports = {
 		if ( ! fs.existsSync(dotDirName)) {
 			return null;
 		}
-		var objStr = fs.readFileSync(dotFileName);
+		var objStr = null;
+		try {
+			objStr = fs.readFileSync(dotFileName);
+		}catch(e) {
+			console.log(e.message);
+		}
 		return JSON.parse(objStr);
 	},
 	
