@@ -5,16 +5,16 @@
 ## Description
 
 This is a command-line tool to administer CA Live API Creator (LAC) servers. It allows the creation,
-modification and deletion of many common objects, such as apis, database connection,
-resources and rules.
+modification and removal of many common repository objects, such as apis, database connection,
+resources and rules.  
 
 ## Installation
 ```aidl
     git clone https://github.com/EspressoLogicCafe/liveapicreator-devops.git
     cd liveapicreator-devops
     
-    There are 3 directories (platform: windows, linux, and macos) copy the 'lac' and 'lacadmin' to your
-    path where you intend to run your devops scripts.
+    Select one of three directories (platform: windows, linux, and macos) and copy the 'lac' and 'lacadmin' to your
+    path where you intend to run your scripts.
 
 ```
 
