@@ -165,7 +165,7 @@ program
 	.option('--ident [ident]', 'For delete or reload, the ident of the data source')
 	.option('--prefix [prefix]', 'The prefix of the data source connection')
 	.option('--jndi_name [jndiname]', 'The JNDI name of the data source connection')
-	.option('--dbasetype [dbasetype]', 'The type of the data source: mysql, oracle, sqlserver, derby, postgresql, db2luw, db2zos, csv, hbase, sap, salesforce, sqlserverazure, teradata')
+	.option('--dbasetype [dbasetype]', 'The type of the data source: mysql, oracle, sqlserver, derby, postgresql, db2luw, db2zos, csv, hbase, sap, salesforce, sqlserverazure, teradata, informix, db2ios')
 	.option('--catalog_name [catalog_name]', 'The catalog name of the data source')
 	.option('--schema_name [schema_name]', 'The schema name of the data source')
 	.option('--user_name [user_name]', 'The user name of the data source')

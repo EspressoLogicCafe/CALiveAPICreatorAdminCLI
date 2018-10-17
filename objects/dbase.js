@@ -87,11 +87,13 @@ module.exports = {
 					case 17: type = "derby"; break;
 					case 18: type = "db2zos"; break;
 					case 19: type = "db2luw"; break;
+					case 20: type = "db2ios"; break;
 					case 21: type = "hbase"; break;
 					case 22: type = "sap"; break;
 					case 23: type = "csv"; break;
 					case 24: type = "cassandra"; break;
 					case 25: type = "teradata"; break;
+					case 26: type = "informix"; break;
 					default: type = "unknown";
 				}
 				var isJndi = p.datasource_name != null;
@@ -208,12 +210,14 @@ module.exports = {
 			case "salesforce": dbasetype = 16; break;
 			case "derby": dbasetype = 17; break;
 			case "db2luw": dbasetype = 19; break;
+			case "db2ios": dbasetype = 20; break;
 			case "db2zos": dbasetype = 18; break;
 			case "hbase": dbasetype = 21; break;
 			case "sap": dbasetype = 22; break;
 			case "csv": dbasetype = 23; break;
 			case "cassandra": dbasetype = 24; break;
 			case "teradata": dbasetype = 25; break;
+			case "informix": dbasetype = 26; break;
 			default : console.log('Unknown data source type: --dbasetype ' + dbasetype); return;
 		}
 
