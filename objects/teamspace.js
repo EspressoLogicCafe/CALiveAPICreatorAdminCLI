@@ -85,7 +85,7 @@ module.exports = {
 				_.each(projects, function (p) {
 					console.log("#lacadmin api export --url_name " + p.url_name + " --format zip --file PROJECT_"+p.url_name +".zip");
 					console.log("#lacadmin api extract --file PROJECT_" + p.url_name + ".zip --directory ${directory}  --synchronize true" );
-					console.log("#lacadmin api import --file PROJECT_" + p.url_name + ".zip --namecollsion replace_existing" );
+					console.log("#lacadmin api import --file PROJECT_" + p.url_name + ".zip --namecollision replace_existing" );
 				});
 			});
 		}
