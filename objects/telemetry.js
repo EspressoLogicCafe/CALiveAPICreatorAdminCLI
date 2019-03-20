@@ -9,21 +9,13 @@ var printObject = require('../util/printObject.js');
 var dotfile = require('../util/dotfile.js');
 
 module.exports = {
-	doTimer: function(action, cmd) {
+	doTelemetry: function (action, cmd) {
 		if (action === 'list') {
 			module.exports.list(cmd);
-		}
-		else if (action === 'export') {
-			module.exports.export(cmd);
-		}
-		else if (action === 'import') {
-			module.exports.import(cmd);
-		}
-		else if (action === 'delete') {
-			module.exports.del(cmd);
-		}
-		else {
-			console.log('You must specify an action: list, delete, import, or  export');
+		} else if (action === 'update') {
+			module.exports.update(cmd);
+		} else {
+			console.log('You must specify an action: list or update');
 			//program.help();
 		}
 	},
@@ -32,294 +24,155 @@ module.exports = {
 		var client = new Client();
 
 		var loginInfo = login.login(cmd);
-		if ( ! loginInfo)
+		if (!loginInfo)
 			return;
 		var url = loginInfo.url;
 		var apiKey = loginInfo.apiKey;
 
-		var projIdent = cmd.project_ident;
-		if ( ! projIdent) {
-			projIdent = dotfile.getCurrentProject();
-			if ( ! projIdent) {
-				console.log('There is no current project.'.yellow);
+		client.get(url + "/admin:server_properties?sysfilter=like(prop_name:'telemetry%')&pagesize=100&&sysorder=(prop_name:asc_uc,prop_name:desc)", {
+			headers: {
+				Authorization: "CALiveAPICreator " + apiKey + ":1",
+				"Content-Type": "application/json"
+			}
+		}, function (raw) {
+			if (raw.errorMessage) {
+				console.log(raw.errorMessage.red);
 				return;
 			}
-		}
-		client.get(url + "/admin:schedule_items?sysfilter=equal(project_ident:" + projIdent+")&pagesize=100&&sysorder=(name:asc_uc,name:desc)", {
-						headers: {
-							Authorization: "CALiveAPICreator " + apiKey + ":1",
-							"Content-Type" : "application/json"
-						}
-					}, function(data) {
-						if (data.errorMessage) {
-							console.log(data.errorMessage.red);
-							return;
-						}
-						printObject.printHeader('Timer');
-						var table = new Table();
-						var verboseDisplay = "";
-						var scheduleType;
-						_.each(data, function(p) {
-							scheduleType = p.schedule_type_ident == 2? "Repeating":"Once";
-							table.cell("Ident", p.ident);
-							table.cell("Name", p.name);
-							table.cell("Active", p.is_active);
-							table.cell("Start Time", p.start_time);
-							table.cell("End Time", p.end_time);
-							table.cell("# Servers", p.num_servers);
-							table.cell("Crontab", p.crontab);
-							table.cell("Schedule Type", scheduleType);
-							var comments = p.comments;
-							if ( ! comments) {
-								comments = "";
-							}
-							else if (comments.length > 50){
-								comments = comments.substring(0, 47) + "...";
-							}
+			//Flatten the data object
+			var table = new Table();
+			var verboseDisplay = "";
+			var data = [];
+			var row = {};
+			_.each(raw, function (r) {
+				row[r.prop_name] = r.prop_value;
+			});
+			data.push(row);
 
-				comments = comments.replace("\n"," ");
-				comments = comments.replace("\n"," ");
-				table.cell("Description", comments);
+			printObject.printHeader('Telemetry');
+			_.each(data, function (p) {
+
+				table.cell("ChargeBack", p.telemetry_chargeback_id);
+				table.cell("DomainName", p.telemetry_domain_name);
+				table.cell("PLA Enabled", p.telemetry_pla_enabled);
+				table.cell("Send Telemetry", p.telemetry_send_enabled);
+				table.cell("Site ID", p.telemetry_site_id);
+				table.cell("Proxy URL", p.telemetry_proxy_url);
+				table.cell("Proxy Port", p.telemetry_proxy_port);
+				table.cell("Proxy UserName", p.telemetry_proxy_username);
+				table.cell("Proxy PW", "<hidden>");
 				table.newRow();
-				if(cmd.verbose) {
+				if (cmd.verbose) {
 					verboseDisplay += "\n";
-					verboseDisplay += "lacadmin timer export --timer_name '"+p.name+"' --file 'TIMER_"+p.name + ".json'\n";
-					verboseDisplay += "#lacadmin timer import --file 'TIMER_"+p.name + ".json'\n";
+					verboseDisplay += "lacadmin telemetry update "
+						+ " --chargebackID " + (p.telemetry_chargeback_id || 'id')
+						+ " --domainName '" + (p.telemetry_domain_name || 'name')
+						+ "' --plaEnabled " + (p.telemetry_pla_enabled || false)
+						+ " --sendEnabled " + (p.telemetry_send_enabled || false)
+						+ " --siteID " + (p.telemetry_site_id || 12345)
+						+ " --proxyURL " + (p.telemetry_proxy_url || 'http://localhost')
+						+ " --proxyPort " + (p.telemetry_proxy_port || 9999)
+						+ " --proxyUsername '" + (p.telemetry_proxy_username || 'usernmae')
+						+ "' --proxyPassword '<password>"
+					"'\n";
+
 				}
 			});
-			table.sort(['Name']);
+
 			console.log(table.toString());
-			printObject.printHeader("# timer: " + data.length);
-			if(cmd.verbose) {
+			printObject.printHeader("# telemtry: " + data.length);
+			if (cmd.verbose) {
 				console.log(verboseDisplay);
 			}
 		});
 
 	},
-	del: function(cmd) {
-		var client = new Client();
-		var loginInfo = login.login(cmd);
-		if ( ! loginInfo) {
-			console.log('You are not currently logged into a CA Live API Creator server.'.red);
-			return;
-		}
-		var projIdent = cmd.project_ident;
-		if ( ! projIdent) {
-			projIdent = dotfile.getCurrentProject();
-			if ( ! projIdent) {
-				console.log('There is no current project.'.yellow);
-				return;
-			}
-		}
-		var filt = "sysfilter=equal(project_ident:" + projIdent;
-		if (cmd.ident) {
-			filt += ",ident:" + cmd.ident + ")";
-		} else if (cmd.timer_name) {
-			filt += ",name:'" + cmd.timer_name + "')";
-		} else {
-			console.log("Please enter missing timer_name or ident.".red);
-			return;
-		}
-
-		client.get(loginInfo.url + "/admin:schedule_items?" + filt, {
-			headers: {
-				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
-				"Content-Type" : "application/json"
-			}
-		}, function(data) {
-			if (data.errorMessage) {
-				console.log(("Error: " + data.errorMessage).red);
-				return;
-			}
-			if (data.length === 0) {
-				console.log(("Error: no such timer using name or ident").red);
-				return;
-			}
-			if (data.length > 1) {
-				console.log(("Error: more than one timer for the given condition: " + filt).red);
-				return;
-			}
-			var db = data[0];
-			var startTime = new Date();
-			client['delete'](db['@metadata'].href + "?checksum=" + db['@metadata'].checksum, {
-				headers: {
-					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
-					"Content-Type" : "application/json"
-				}
-			}, function(data2) {
-				var endTime = new Date();
-				if (data2.errorMessage) {
-					console.log(data2.errorMessage.red);
-					return;
-				}
-				printObject.printHeader('Timer was deleted, including the following objects:');
-				_.each(data2.txsummary, function(obj) {
-					printObject.printObject(obj, obj['@metadata'].entity, 0, obj['@metadata'].verb);
-				});
-				var trailer = "Request took: " + (endTime - startTime) + "ms";
-				trailer += " - # objects touched: ";
-				if (data2.txsummary.length == 0) {
-					console.log('No data returned'.yellow);
-				}
-				else {
-					trailer += data2.txsummary.length;
-				}
-				printObject.printHeader(trailer);
-			});
-		});
-	},
-	export: function(cmd) {
+	update: function (cmd) {
 		var client = new Client();
 
 		var loginInfo = login.login(cmd);
-		if ( ! loginInfo)
+		if (!loginInfo)
 			return;
 		var url = loginInfo.url;
 		var apiKey = loginInfo.apiKey;
-		var projIdent = cmd.project_ident;
-		if ( ! projIdent) {
-			projIdent = dotfile.getCurrentProject();
-			if ( ! projIdent) {
-				console.log('There is no current project.'.yellow);
-				return;
+
+		function update(title, propvalue, propname, json) {
+			if (propvalue) {
+				var found = false;
+				console.log(title + " prop_value =" + propvalue + " for prop_name = " + propname);
+				for (var i in json) {
+					if (json[i].prop_name === propname) {
+						found = true;
+						delete json[i].ts;
+						json[i].prop_value = propvalue;
+						json[i]["@metadata"] = {action: "MERGE_INSERT", key: "prop_name"};
+					}
+				}
+				if (!found) {
+					var row = {
+						"prop_name": propname,
+						"prop_value": propvalue,
+						"@metadata": {action: "MERGE_INSERT", key: "prop_name"}
+					};
+					json.push(row);
+				}
 			}
-		}
+		};
 
 		var filter = null;
-		if (projIdent) {
-			filter = "sysfilter=equal(project_ident:" + projIdent + ")";
-		} else {
-			console.log('Missing parameter: please specify project settings (use list) project_ident '.red);
-			return;
-		}
-		if(cmd.ident) {
-			filter += "&sysfilter=equal(ident: "+ cmd.ident +")";
-		} else if(cmd.timer_name) {
-			filter += "&sysfilter=equal(name: '"+ cmd.timer_name +"')";
-		}
+
 
 		var toStdout = false;
-		if ( ! cmd.file) {
+		if (!cmd.file) {
 			toStdout = true;
 		}
-		client.get(loginInfo.url + "/admin:schedule_items?pagesize=1000&"+filter, {
+		client.get(loginInfo.url + "/admin:server_properties?sysfilter=like(prop_name:'telemetry%')&pagesize=100", {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
-				"Content-Type" : "application/json"
+				"Content-Type": "application/json"
 			}
-		}, function(data) {
+		}, function (data) {
 			//console.log('get result: ' + JSON.stringify(data, null, 2));
 			if (data.errorMessage) {
 				console.log(("Error: " + data.errorMessage).red);
 				return;
 			}
 			if (data.length === 0) {
-				console.log(("Project not found").red);
-				return;
-			}
-			for(var idx = 0; idx < data.length ; idx++){
-				delete data[idx].ident;
-				delete data[idx]['@metadata']
-				delete data[idx].project_ident;
+				console.log(("Telemetry properties not found").red);
+				//return;
 			}
 
-			if (toStdout) {
-				console.log(JSON.stringify(data, null, 2));
-			}
-			else {
-				var exportFile = fs.openSync(cmd.file, 'w+', 0600);
-				fs.writeSync(exportFile, JSON.stringify(data, null, 2));
-				console.log(('Timers have been exported to file: ' + cmd.file).green);
-			}
-		});
-	},
+			update("chargebackID", cmd.chargebackID, "telemetry_chargeback_id", data);
+			update("DomainName", cmd.domainName, "telemetry_domain_name", data);
+			update("PLA Enabled", cmd.plaEnabled, "telemetry_pla_enabled", data);
+			update("Send Telemetry", cmd.sendEnabled, "telemetry_send_enabled", data);
+			update("Site ID", cmd.siteID, "telemetry_site_id", data);
+			update("Proxy URL", cmd.proxyURL, "telemetry_proxy_url", data);
+			update("Proxy Port", cmd.proxyPort, "telemetry_proxy_port", data);
+			update("Proxy UserName", cmd.proxyUsername, "telemetry_proxy_username", data);
+			update("Proxy PW", cmd.proxyPassword, "telemetry_proxy_password_plaintext", data);
+			//console.log(data);
 
-	import: function(cmd) {
-		var client = new Client();
-		var loginInfo = login.login(cmd);
-		if ( ! loginInfo) {
-			return;
-		}
-
-		var projIdent = cmd.project_ident;
-		if ( ! projIdent) {
-			projIdent = dotfile.getCurrentProject();
-			if ( ! projIdent) {
-				console.log('There is no current project.'.yellow);
-				return;
-			}
-		}
-		if ( ! cmd.file) {
-			cmd.file = '/dev/stdin';
-		}
-
-		var fileContent  = null;
-		var json = null;
-		fs.readFile(cmd.file, function read(err,data){
-			if(err) {
-				console.log("Unable to read file");
-				return;
-			}
-		json = data;
-
-		fileContent = JSON.parse(json);
-		if(Array.isArray(fileContent) && fileContent.length > 0){
-			for(var i = 0 ; i < fileContent.length ; i++ ){
-				fileContent[i].project_ident = projIdent;
-				delete fileContent.ts;
-				fileContent[i]["@metadata"] = {action:"MERGE_INSERT", key: ["name","project_ident"]} ;
-			}
-		} else {
-			fileContent.project_ident = projIdent;
-			fileContent["@metadata"] = {action:"MERGE_INSERT", key: ["name","project_ident"]} ;
-		}
-
-		var startTime = new Date();
-		client.put(loginInfo.url + "/admin:schedule_items", {
-			data: fileContent,
-			headers: {
-				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
-				"Content-Type" : "application/json"
-			}
-		}, function(data) {
-
-			var endTime = new Date();
-			if (data.errorMessage) {
-				console.log(data.errorMessage.red);
-				return;
-			}
-			printObject.printHeader('Timer(s) created, including:');
-			if(data.statusCode == 200 ){
-				console.log("Request took: " + (endTime - startTime) + "ms");
-				return;
-			}
-			var newTopic = _.find( data.txsummary, function(p) {
-				return p['@metadata'].resource === 'admin:schedule_items';
+			client.put(loginInfo.url + "/admin:server_properties", {
+				data: data,
+				headers: {
+					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+					"Content-Type": "application/json"
+				}
+			}, function (data) {
+				if (data.errorMessage) {
+					console.log(data.errorMessage.red);
+					return;
+				}
+				printObject.printHeader('Telemetry(s) values updated:');
+				if (data.statusCode == 200) {
+					//console.log("Request took: " + (endTime - startTime) + "ms");
+					console.log("Changes to Telemetery require a server restart");
+					 return;
+				}
 			});
-			if ( ! newTopic) {
-				console.log('ERROR: unable to find imported Timer'.red);
-				return;
-			}
-			if (cmd.verbose) {
-				_.each(data.txsummary, function(obj) {
-					printObject.printObject(obj, obj['@metadata'].entity, 0, obj['@metadata'].verb);
-				});
-			}
-			else {
-				printObject.printObject(newTopic, newTopic['@metadata'].entity, 0, newTopic['@metadata'].verb);
-				console.log(('and ' + (data.txsummary.length - 1) + ' other objects').grey);
-			}
 
-			var trailer = "Request took: " + (endTime - startTime) + "ms";
-			trailer += " - # objects touched: ";
-			if (data.txsummary.length === 0) {
-				console.log('No data returned'.yellow);
-			}
-			else {
-				trailer += data.txsummary.length;
-			}
-			printObject.printHeader(trailer);
+
 		});
-	  });
 	}
 };

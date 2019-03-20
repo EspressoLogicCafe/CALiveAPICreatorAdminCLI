@@ -53,6 +53,8 @@ var api = require('./objects/api.js');
 //5.0 features
 var teampspace_user = require('./objects/teamspace_user.js');
 var dataprovider = require('./objects/dataprovider.js');
+//5.2
+var telemetry = require('.//objects/telemetry.js');
 
 program
 	.version(pkg.version);
@@ -525,6 +527,20 @@ program
 	.option('-v, --verbose', 'optional: Display list of timer in detailed export/import format')
 	.option('--file [fileName]', 'optional: Name of file to import/export (if not provided stdin/stdout used for export)')
 	.action(teampspace_user.doTeamSpace);
+
+program
+	.command('telemetry <list|export|import>')
+	.description('Administer Telemetry PLA information (requires sa logon).')
+	.option('--chargebackID [value]','Chargeback ID')
+	.option('--domainName [value]','Domain Name')
+	.option('--plaEnabled [true|false]','Enable PLA.')
+	.option('--sendEnabled [true|false]','Enable sending telemetry data.')
+	.option('--siteID [value]','Site ID.')
+	.option('--proxyURL [value]','Proxy URL.')
+	.option('--proxyPort [value]','Proxy Port.')
+	.option('--proxyUsername [value]','Proxy UserName.')
+	.option('--proxyPassword [value]','Proxy Plaintext Password.')
+	.option('-v, --verbose', 'optional: used by list to display all telemetry options.')	.action(telemetry.doTelemetry);
 
 program.parse(process.argv);
 
