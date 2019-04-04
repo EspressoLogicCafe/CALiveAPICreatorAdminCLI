@@ -93,6 +93,7 @@ $ lacadmin --help
        timer [options] <list|delete|export|import>                                           Administer Timer definitions for current API.
        application [options] <list|delete|import|export>                                     Administer Data Explorer Applications (meta data).
        teamspace [options] <list|exportRepos>                                                List TeamSpace content for current server or exportRepos the entire API contents.
+       telemetry [options] <list|export|import>                                              Administer Telemetry PLA information (requires sa logon).
    
   Options:
 
