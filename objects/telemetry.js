@@ -150,7 +150,7 @@ module.exports = {
 			update("Proxy URL", cmd.proxyURL, "telemetry_proxy_url", data);
 			update("Proxy Port", cmd.proxyPort, "telemetry_proxy_port", data);
 			update("Proxy UserName", cmd.proxyUsername, "telemetry_proxy_username", data);
-			update("Proxy PW", cmd.proxyPassword, "telemetry_proxy_password_plaintext", data);
+			update("Proxy PW", cmd.proxyPassword, "telemetry_proxy_plain_password", data);
 			//console.log(data);
 
 			client.put(loginInfo.url + "/admin:server_properties", {
