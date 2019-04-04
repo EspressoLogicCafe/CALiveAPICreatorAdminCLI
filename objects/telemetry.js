@@ -82,7 +82,7 @@ module.exports = {
 			});
 
 			console.log(table.toString());
-			printObject.printHeader("# telemtry: " + data.length);
+			printObject.printHeader("# telemetry: " + data.length);
 			if (cmd.verbose) {
 				console.log(verboseDisplay);
 			}
@@ -98,10 +98,28 @@ module.exports = {
 		var url = loginInfo.url;
 		var apiKey = loginInfo.apiKey;
 
-		function update(title, propvalue, propname, json) {
+		function update(title, propvalue, propname, datatype, json) {
 			if (propvalue) {
 				var found = false;
-				console.log(title + " prop_value =" + propvalue + " for prop_name = " + propname);
+				switch (datatype) {
+					default:
+						break;
+					case "string":
+						break;
+					case "number":
+						if (isNaN(propvalue)) {
+							console.log(("Property " + title + " must be a number " + propvalue).red);
+							return;
+						}
+						break;
+					case "boolean":
+						if (String(propvalue) !== 'true' && String(propvalue) !== 'false') {
+							console.log(("Property " + title + " must be true or false " + propvalue).red);
+							return;
+						}
+						break;
+				}
+				console.log(title + "Set prop_value = " + propvalue + " for prop_name = " + propname);
 				for (var i in json) {
 					if (json[i].prop_name === propname) {
 						found = true;
@@ -118,6 +136,9 @@ module.exports = {
 					};
 					json.push(row);
 				}
+			} else {
+				console.log(("property name " + title + " property value not set").yellow);
+				return;
 			}
 		};
 
@@ -144,15 +165,15 @@ module.exports = {
 				//return;
 			}
 
-			update("chargebackID", cmd.chargebackID, "telemetry_chargeback_id", data);
-			update("DomainName", cmd.domainName, "telemetry_domain_name", data);
-			update("PLA Enabled", cmd.plaEnabled, "telemetry_pla_enabled", data);
-			update("Send Telemetry", cmd.sendEnabled, "telemetry_send_enabled", data);
-			update("Site ID", cmd.siteID, "telemetry_site_id", data);
-			update("Proxy URL", cmd.proxyURL, "telemetry_proxy_url", data);
-			update("Proxy Port", cmd.proxyPort, "telemetry_proxy_port", data);
-			update("Proxy UserName", cmd.proxyUsername, "telemetry_proxy_username", data);
-			update("Proxy PW", cmd.proxyPassword, "telemetry_proxy_plain_password", data);
+			update("--chargebackID", cmd.chargebackID, "telemetry_chargeback_id", "string", data);
+			update("--domainName (CDmain Name)", cmd.domainName, "telemetry_domain_name", "string", data);
+			update("--plaEnabled (PLA Enabled)", cmd.plaEnabled, "telemetry_pla_enabled", "boolean", data);
+			update("--sendEnabled (Send Telemetry)", cmd.sendEnabled, "telemetry_send_enabled", "boolean", data);
+			update("--siteID (Site ID)", cmd.siteID, "telemetry_site_id", "string", data);
+			update("--proxyURL (Proxy UR)L", cmd.proxyURL, "telemetry_proxy_url", "string", data);
+			update("--proxyPort (Proxy Port)", cmd.proxyPort, "telemetry_proxy_port", "number", data);
+			update("--proxyUsername (Proxy Username)", cmd.proxyUsername, "telemetry_proxy_username", "string", data);
+			update("--proxyPassword (Proxy Password plaintext)", cmd.proxyPassword, "telemetry_proxy_plain_password", "string", data);
 			//console.log(data);
 
 			client.put(loginInfo.url + "/admin:server_properties", {
@@ -170,7 +191,7 @@ module.exports = {
 				if (data.statusCode == 200) {
 					//console.log("Request took: " + (endTime - startTime) + "ms");
 					console.log("Changes to Telemetery require a server restart");
-					 return;
+					return;
 				}
 			});
 
