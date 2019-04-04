@@ -529,7 +529,7 @@ program
 	.action(teampspace_user.doTeamSpace);
 
 program
-	.command('telemetry <list|export|import>')
+	.command('telemetry <list|update>')
 	.description('Administer Telemetry PLA information (requires sa logon).')
 	.option('--chargebackID [value]','Chargeback ID')
 	.option('--domainName [value]','Domain Name')

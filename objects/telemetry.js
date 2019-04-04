@@ -73,9 +73,11 @@ module.exports = {
 						+ " --proxyURL " + (p.telemetry_proxy_url || 'http://localhost')
 						+ " --proxyPort " + (p.telemetry_proxy_port || 9999)
 						+ " --proxyUsername '" + (p.telemetry_proxy_username || 'usernmae')
-						+ "' --proxyPassword '<password>"
+						+ "' --proxyPassword '<password>'"
 					"'\n";
 
+				} else {
+					console.log("  use the --verbose flag to see a detail update string.");
 				}
 			});
 
