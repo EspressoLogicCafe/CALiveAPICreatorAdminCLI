@@ -313,3 +313,4 @@ Follow the links below for detailed documentation on specific administrator comm
 * [Listener](docs/listener.md)
 * [Applications](docs/application.md)
 * [TeamSpace](docs/teamspace.md)
+* [Telemetry (PLA Usage Data)](docs/telemetry.md)
