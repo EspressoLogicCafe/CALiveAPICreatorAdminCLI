@@ -1,5 +1,6 @@
 # Telemetry
 This feature is for Telemetry PLA management. For details see [Activate and Configure Usage Data](https://docops.ca.com/ca-live-api-creator/5-2/en/configuring/activate-and-configure-to-send-usage-data).
+Note: You must use the 'sa' login to access these values.
 
 ```
    Usage: telemetry [options] <list|update>
@@ -18,6 +19,8 @@ This feature is for Telemetry PLA management. For details see [Activate and Conf
      --proxyPassword [value]     Proxy Plaintext Password.
      -v, --verbose               optional: used by list to display all telemetry options.
      -h, --help                  output usage information
+     
+     
 
 ```
 
@@ -44,10 +47,11 @@ ChargeBack              DomainName            PLA Enabled  Send Telemetry  Site 
 
 
 ## update
-You can change one or more values by passing in an argument and value.
+You can change one or more values by passing in an argument and value.  
+Note: A server restart is required for these properties to take effect.
 ```
    lacadmin telemetry update  
-        --chargebackID <_CHARGEBACK_ID_HERE_> 
+        --chargebackID '<_CHARGEBACK_ID_HERE_> '
         --domainName '<_DOMAIN_NAME_HERE_>' 
         --plaEnabled false 
         --sendEnabled false 
@@ -57,6 +61,17 @@ You can change one or more values by passing in an argument and value.
         --proxyUsername 'usernmae' 
         --proxyPassword '<password>'
     
+chargebackID prop_value =<_CHARGEBACK_ID_HERE_> for prop_name = telemetry_chargeback_id
+DomainName prop_value =<_DOMAIN_NAME_HERE_> for prop_name = telemetry_domain_name
+PLA Enabled prop_value =false for prop_name = telemetry_pla_enabled
+Send Telemetry prop_value =false for prop_name = telemetry_send_enabled
+Site ID prop_value =12345 for prop_name = telemetry_site_id
+Proxy URL prop_value =http://localhost for prop_name = telemetry_proxy_url
+Proxy Port prop_value =1234 for prop_name = telemetry_proxy_port
+Proxy UserName prop_value =usernmae for prop_name = telemetry_proxy_username
+Proxy PW prop_value =<password> for prop_name = telemetry_proxy_plain_password
+Telemetry(s) values updated:                                                                                                                                                                
+Changes to Telemetery require a server restart    
 ```
 
 
