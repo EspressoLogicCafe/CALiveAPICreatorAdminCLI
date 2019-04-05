@@ -513,15 +513,15 @@ module.exports = {
 				return;
 			}
 		}
-		var sysfilter = 'equal_or(ident:' + rootIdent + ', root_ident:' + rootIdent+ ')';
-		var sysorder = 'sysorder=(root_ident:null_first, prefix:asc_uc, table_name:asc_uc)';
+		var sysfilter = 'equal_or(ident:' + rootIdent + ')';
+		var sysorder = 'sysorder=(table_name:asc_uc)';
 		client.get(url + "/AllResources?sysfilter="+sysfilter+"&pagesize=1"+sysorder, {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
 				"Content-Type" : "application/json"
 			}
 		}, function(data) {
-			//console.log('get result: ' + JSON.stringify(data, null, 2));
+			console.log('get result: ' + JSON.stringify(data, null, 2));
 			if (data.errorMessage) {
 				console.log(("Error: " + data.errorMessage).red);
 				return;
@@ -574,6 +574,59 @@ module.exports = {
 				return;
 			}
 		}
+
+		var importResourceLevel = function(cmd, res, newRootIdent, newResIdent, containerIdent, originalResource) {
+			console.log("function importResourceLevel \n" + JSON.stringify(res,null,0));
+			var client = new Client();
+			var loginInfo = login.login(cmd);
+			if ( ! loginInfo) {
+				return;
+			}
+			var url = loginInfo.url;
+			var originalIdent = res.ident;
+			delete res['@metadata'];
+			delete res.ident;
+			res.container_ident = newResIdent;
+			delete res.entity_name;
+			_.each(res.Attributes, function (a) {
+				delete a.ident;
+				delete a['@metadata'];
+				delete a.resource_ident;
+			});
+			//console.log("newRootIdent: "+newRootIdent);
+			//console.log("originalIdent: " + originalIdent);
+			//console.log("containerIdent: "+containerIdent);
+			client.post(loginInfo.url + "/AllResources", {
+				data: res,
+				headers: {
+					Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
+					"Content-Type" : "application/json"
+				}
+			}, function(data) {
+
+				if (data.errorMessage) {
+					console.log(data.errorMessage.red);
+					return;
+				}
+				var newRes = _.find(data.txsummary, function (b) {
+					return b['@metadata'].resource === 'AllResources';
+				});
+				if ( ! newRes) {
+					throw "Unable to find newly created resource";
+				}
+				newResIdent =newRes.ident;
+				// If this is the top resource
+				if ( ! newRootIdent) {
+					newRootIdent = newRes.ident;
+				}
+				var children = _.filter(originalResource, function (r) {
+					return r.container_ident === originalIdent;
+				});
+				_.each(children, function (c) {
+					importResourceLevel(cmd, c, newRootIdent ,newRes.ident,  originalIdent, originalResource);
+				});
+			});
+		}
 		client.get(url + "/admin:apiversions?sysfilter=equal(project_ident:" + projIdent +")&sysfilter=equal(name:'" + apiversion +"')&pagesize=1", {
 			headers: {
 				Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
@@ -597,87 +650,30 @@ module.exports = {
 			}
 		context.getContext(cmd, function() {
 			var fileContent = JSON.parse(fs.readFileSync(cmd.file));
-			var root;
 			var resourceCnt = 0;
+			var rootRes = null;
 			var parent_ident = null;
 			if(Array.isArray(fileContent)){
 				for(var i = 0 ; i < fileContent.length; i++){
 					delete fileContent[i]["@metadata"];
 					delete fileContent[i].ts;
+					delete fileContent.root_ident;
 					fileContent[i].apiversion_ident = apiversion_ident;
-					//fileContent[i].container_ident = null;// this is set for each child level
-					if(fileContent[i].root_ident == null) {
-						root = fileContent[i];
-						//root["@metadata"] = {action:"MERGE_INSERT", key: ["apiversion_ident","name"]} ;
-						resourceCnt += 1;
-						parent_ident = root.ident;
+					if(fileContent[i].container_ident === null) {
+						resourceCnt++;
+						rootRes = fileContent[i];
 					}
 				} 
-			}	
-			delete root.entity_name;
+			}
 
 			if(resourceCnt > 1){
 				console.log("You can only import a single resource - use project import for multiple resources".red);
 				return;
 			}
-			//console.log(root);
 			
-			module.exports.importResourceLevel(cmd, root , null, null , null ,fileContent);
-			printObject.printHeader('Import Resource ' + root.name + ':');
+			importResourceLevel(cmd, rootRes , null, null , null ,fileContent);
+			printObject.printHeader('Import Resource ' + rootRes.name + ':');
 			});
 		});
-	},
-    importResourceLevel: function(cmd, res, newRootIdent, newResIdent, containerIdent, originalResource) {
-    //console.log(res);
-    	var client = new Client();
-		var loginInfo = login.login(cmd);
-		if ( ! loginInfo) {
-			return;
-		}
-			var url = loginInfo.url;
-		   	var originalIdent = res.ident;
-		   	delete res['@metadata'];
-		   	delete res.ident;
-		   	res.root_ident = newRootIdent;
-		   	res.container_ident = newResIdent;
-		   	delete res.entity_name;
-		   	_.each(res.Attributes, function (a) {
-			   delete a.ident;
-			   delete a['@metadata'];
-			   delete a.resource_ident;
-		   	});    
-		   	//console.log("newRootIdent: "+newRootIdent);
-		   	//console.log("originalIdent: " + originalIdent);
-		   	//console.log("containerIdent: "+containerIdent);
-			client.post(loginInfo.url + "/AllResources", {
-			   data: res,
-			   headers: {
-				   Authorization: "CALiveAPICreator " + loginInfo.apiKey + ":1",
-				   "Content-Type" : "application/json" 
-				   }
-			   }, function(data) {
-			   
-				  if (data.errorMessage) {
-					  console.log(data.errorMessage.red);
-					  return;
-				  }
-				 var newRes = _.find(data.txsummary, function (b) {
-					 return b['@metadata'].resource === 'AllResources';
-				 });
-				 if ( ! newRes) {
-					 throw "Unable to find newly created resource";
-				 }
-			  	newResIdent =newRes.ident;
-				 // If this is the top resource
-				 if ( ! newRootIdent) {
-					 newRootIdent = newRes.ident;
-				 }
-				 var children = _.filter(originalResource, function (r) {
-					 return r.container_ident === originalIdent;
-				 });
-				 _.each(children, function (c) {
-					 module.exports.importResourceLevel(cmd, c, newRootIdent ,newRes.ident,  originalIdent, originalResource);
-				 });
-			});
-	   }
+	}
 };
