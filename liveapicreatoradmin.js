@@ -60,11 +60,11 @@ program
 	.version(pkg.version);
 
 program
-	.command('login [url]')
-	.description('Login to a CA Live API Creator Server (e.g. lacadmin login -u admin -p secret http://localhost:8080 -a demo)')
-	.option('-u, --username <username>', 'API Server admin user name')
-	.option('-p, --password <password>', 'API Server admin password')
-	.option('-a, --serverAlias <serverAlias>', 'optional: Alias for a named connection')
+	.command('login  [url]')
+	.description('Login to a CA Live API Creator Server [login -u admin -p pw http://localhost:8080')
+	.option('-u, --username <username>', 'Required: API Server admin user name')
+	.option('-p, --password <password>', 'Required: API Server admin password')
+	.option('-a, --serverAlias <serverAlias>', 'Optional: Alias for a named connection')
 	.action(login.commandLogin);
 
 program
@@ -91,25 +91,12 @@ program
 
 program
 	.command('eula <accepted>')
-	.description('End user license agreement status (note: must be accepted before any script will run) returns true or false')
+	.description('End user license agreement status accepted (returns true or false)')
 	.action(eula.doStatus);
 
 program
-	.command('project <list|create|update|delete|use|import|export>')
-	.description('[Deprecated in 4.1 - replaced by api] Administer 4.0 and earlier project API. Actions are: list, create, update, delete, use, export')
-	.option('--ident [ident]', 'The ident of the specific project (see project list)')
-	.option('--project_name [name]', 'The name of the project')
-	.option('--url_name [name]', 'The name of the project')
-	.option('--status [status]', 'optional: the status of the project, can be A (for Active) or I for (Inactive)')
-	.option('--authprovider [ident]', 'optional: the ident of the authentication provider for the project')
-	.option('--comments [comments]', 'optional: a description of the project')
-	.option('--file [file]', 'optional: for import/export, the name of a file to read from/save to, if unspecified, use stdin/stdout')
-	.option('--verbose', 'optional: whether to display detailed results, or just a summary')
-	.action(project.doProject);
-
-program
 	.command('api <list|create|update|delete|use|import|export|extract>')
-	.description('Administer an API for the current connection. Actions are: list, create, update, delete, use, import, export, extract')
+	.description('Administer an API for the current connection.')
 	.option('--ident [ident]', 'The ident of the specific API (use $lacadmin api list)')
 	.option('--api_name [name]', 'The name of the API')
 	.option('--url_name [name]', 'The url fragment name of the API')
@@ -131,21 +118,39 @@ program
 	.action(api.doAPI);
 
 program
-	.command('libraries <list|create|update|delete|export|import|exportJavascript|importJavascript>')
-	.description('Administer javascript libraries for a specific API.')
-	.option('--ident [ident]','The ident of the library - used by update, delete, export, or exportJavascript')
-	.option('--project_ident [project_ident]','The project ident that this library will be marked as used (lacadmin api list)' )
-	.option('--library_name [name]', 'Name of library used by update, delete, export')
-	.option('--libtype [type]', 'optional: Type of Library javascript (as of 3.0.x)')
-	.option('--ver [version]', 'optional: Version # of Library')
-	.option('--short_name [shortname]', 'Short Name')
-	.option('--docUrl [docurl]', 'optional: Documentation URL')
-	.option('--refUrl [refurl]', 'optional: Reference URL')
-	.option('--linkProject','optional: mark the imported library as used by the current API')
-	.option('--comments [comment]', 'optional: Comment on Library')
-	.option('-f, --file [fileName]', 'optional: Name of {JS} file to import/export (if not provided stdout used for export)')
-	.option('-v, --verbose', 'optional: display import/export during library list')
-	.action(library.doLibrary);
+	.command('apioptions <list|update|import|export>')
+	.description('Administer API  options for a selected API.')
+	.option('--ident [ident]','The ident of the specific project settings object')
+	.option('--option_value [value]','This is the value for the specific setting for the ident')
+	.option('--project_ident [project_ident]','The project ident that will be marked as used' )
+	.option('-f, --file [fileName]', 'optional: Name of file to settings for import/export (if not provided stdout used for export)')
+	.action(apioptions.doSettings);
+
+program
+	.command('apiversion <list|export|import>')
+	.description('Administer API Versions for Resources for current API.')
+	.option('--version_name [name]', 'The API version name')
+	.option('--project_ident [project_ident]','The project ident that will be used' )
+	.option('-f, --file [fileName]', 'optional: Name of file to import/export (if not provided stdin/stdout used for export)')
+	.action(apiversion.doVersion);
+
+program
+	.command('application <list|delete|import|export>')
+	.description('Administer Data Explorer Applications (meta data).')
+	.option('--ident [ident]', 'The ident of the specific project (use $lacadmin api list)')
+	.option('--project_name [name]', 'The name of the project')
+	.option('--url_name [name]', 'The name of the project')
+	.option('--application_name [name]', 'The name of the application')
+	.option('--file [file]', 'optional: for import/export, the name of a file to read from/save to, if unspecified, use stdin/stdout')
+	.action(application.doApplication);
+
+program
+	.command('authtoken <list|import|export>')
+	.description('Administer Auth Tokens for current API.')
+	.option('--token_name [name]','The name of the auth token')
+	.option('--project_ident [project_ident]','The project ident that will be marked as used' )
+	.option('--file [fileName]', 'optional: Name of file to import/export (if not provided stdin/stdout used for export)')
+	.action(token.doToken);
 
 program
 	.command('authprovider <list|create|linkProject|insertJSCode|delete|export|import>')
@@ -159,6 +164,35 @@ program
 	.option('-v, --verbose', 'optional: Display authprovider with create statements')
 	.option('-f, --file [fileName]', 'optional: Name of file to Import/Export auth provider (if not provided stdout used for export)')
 	.action(authprovider.doAuthProvider);
+
+program
+	.command('connection <list|delete|export|import|stop|start>')
+	.description('Administer Connections for current API.')
+	.option('--connection_name [name]', 'The connection name')
+	.option('--ident [ident]', 'The ident of the specific connection')
+	.option('--project_ident [project_ident]','The project ident that will be used' )
+	.option('-v, --verbose', 'optional: Display list of connection in detailed export/import format')
+	.option('--file [fileName]', 'optional: Name of file to import/export (if not provided stdin/stdout used for export)')
+	.action(connection.doConnection);
+
+program
+	.command('custom_endpoints <list|delete|export|import>')
+	.description('Administer Custom Endpoints (aka Handlers) for current API.')
+	.option('--project_ident [project_ident]','The project ident that will be used' )
+	.option('--ident [ident]', 'The ident of the specific handler')
+	.option('--handler_name [name]', 'The name of the Custom Endpoint')
+	.option('-v, --verbose', 'optional: Display Custom Endpoints with import/export statements')
+	.option('--file [fileName]', 'optional: Name of file to import/export (if not provided stdin/stdout used for export)')
+	.action(handler.doHandler);
+
+program
+	.command('dataprovider <list|delete|export|import>')
+	.description('Administer Data Source Provider Framework definitions. (requires login as "sa")')
+	.option('--provider_name [name]', 'The Datasource Provider Name')
+	.option('--ident [ident]', 'The ident of the specific provider')
+	.option('-v, --verbose', 'optional: Display list of providers in detailed export/import format')
+	.option('--file [fileName]', 'optional: Name of file to import/export (if not provided stdin/stdout used for export)')
+	.action(dataprovider.doProvider);
 
 program
 	.command('datasource <list|create|createDatabase|update|delete|import|reload|export>')
@@ -184,71 +218,6 @@ program
 	.action(dbase.doDbase);
 
 program
-	.command('resource <list|delete|update|export|import>')
-	.description('Administer resources within a project.')
-	.option('--ident [ident]', 'For update, the ident of the resource (use resource list)')
-	.option('--prop1 [value]', 'For update, the server name of the mongo resource')
-	.option('--prop2 [value]', 'For update, the database name of the mongo resource')
-	.option('--prop3 [value]', 'For update, the user name of the mongo resource')
-	.option('--prop4 [value]', 'For update, the password name of the mongo resource')
-	.option('--table_name [tablename]', 'For update, the table name of the normal or mongo resource')
-	.option('--resource_name [resourcename]', 'The name of the resource')
-	.option('--type [type]', 'The type of the resource: normal, sql, javascript, storedproc, mongo')
-	.option('--prefix [prefix]', 'The prefix of the table')
-	.option('--apiversion [apiversion]', 'The name of an API version, if there is more than one - default v1')
-	.option('--project_ident [ident]', 'The ident of a project, (if other than the current project')
-	.option('-v, --verbose', 'Include export/import script for resource list')
-	.option('-f, --file [file]', 'optional: for import/export, the name of a file to read from/save to, if unspecified, use stdin/stdout')
-	.action(resource.doResource);
-
-program
-	.command('rule <list|create|delete|import|export>')
-	.description('Administer rules within a project.')
-	.option('--ruletype [type]', 'The type of the rule, can be: sum,formula,validation,parentcopy')
-	.option('--rule_name [name]', 'The name of the rule used for export,create, or delete')
-	.option('--entity_name [prefix:table]', 'The table, qualified with a prefix, for the rule')
-	.option('--attribute_name [name]', 'The name of the attribute whose value is computed by the rule. Required for sum, count, formula, minimum, maximum.')
-	.option('--role_name [name]', 'The role name - required for sum, count, minimum, maximum')
-	.option('--clause [clause]', 'The clause - required for sum, count, minimum, maximum')
-	.option('--child_attribute [name]', 'The name of the child attribute - required for sum, minimum, maximum')
-	.option('--parent_attribute [name]', 'The name of the parent attribute - required for parent copy')
-	.option('--expression [code]', 'The code for the rule - required for formula, events and validations')
-	.option('--error_message [message]', 'The error mesaage for the rule - required for validations')
-	.option('--rule_name [name]', 'optional: a name for the rule. If not specified, a name will be generated.')
-	.option('--comments [comments]', 'optional: a comment for the rule')
-	.option('--active [true|false]', 'optional: whether the rule should be active, true by default')
-	.option('--project_ident [ident]', 'The ident of a project, if other than the current project')
-	.option('--ident [ident]', 'For delete, the ident of the rule to delete')
-	.option('--jit [true|false]', 'Just in time flag (default false)')
-	.option('--sqlable [true|false]', 'Sqlable flag (default false) - optimize using SQL instead of JavaScript (default false)')
-	.option('-f, --file [file]', 'optional: for import/export, the name of a file to read from/save to, if unspecified, use stdin/stdout')
-	.option('-v, --verbose', 'optional: whether to display list of rules in detailed format that can be used to recreate using command line')
-	.action(rule.doRule);
-
-program
-	.command('apioptions <list|update|import|export>')
-	.description('Administer API  options for a selected API.')
-	.option('--ident [ident]','The ident of the specific project settings object')
-	.option('--option_value [value]','This is the value for the specific setting for the ident')
-	.option('--project_ident [project_ident]','The project ident that will be marked as used' )
-	.option('-f, --file [fileName]', 'optional: Name of file to settings for import/export (if not provided stdout used for export)')
-	.action(apioptions.doSettings);
-
-
-program
-	.command('sort <list|create|update|delete|import|export>')
-	.description('Administer Named Sorts for the active API.')
-	.option('--ident [ident]', 'The ident of the specific named sort object')
-	.option('--sort_name [name]', 'The Name of named sort')
-	.option('--sort_text [sorttext]', 'Sort Text to define named sort')
-	.option('--resource_names [name]', 'optional: Comma seperated list of Resource Names in quotes')
-	.option('--comments [comment]', 'optional: Comment on named sort')
-	.option('--project_ident [project_ident]', 'optional: The project ident if not the active project')
-	.option('-f, --file [fileName]', 'optional: Name of file for import/export (if not provided stdout used for export)')
-	.option('-v, --verbose', '{optional)  whether to display list of named sorts in detailed format')
-	.action(sorts.doSort);
-
-program
 	.command('filter <list|create|delete|update|import|export>')
 	.description('Administer Named Filters for the active API.')
 	.option('--ident [ident]', 'The ident of the specific named filter object')
@@ -262,96 +231,14 @@ program
 	.action(filters.doFilter);
 
 program
-	.command('authtoken <list|import|export>')
-	.description('Administer Auth Tokens for current API.')
-	.option('--token_name [name]','The name of the auth token')
-	.option('--project_ident [project_ident]','The project ident that will be marked as used' )
+	.command('function <list|delete|export|import>')
+	.description('Administer Functions for current API.')
+	.option('--ident [ident]', 'This is the ident of the function')
+	.option('--function_name [name]', 'Name of the function')
+	.option('--project_ident [project_ident]','optional: The project ident that will be used' )
+	.option('-v, --verbose', 'optional: display list of functions in detailed create format')
 	.option('--file [fileName]', 'optional: Name of file to import/export (if not provided stdin/stdout used for export)')
-	.action(token.doToken);
-
-program
-	.command('role <list|delete|import|export>')
-	.description('Administer Security Roles for current API.')
-	.option('--ident [ident]', 'The ident of the specific role to delete')
-	.option('--role_name [name]', 'The name of the specific role to delete')
-	.option('--project_ident [project_ident]','The project ident that will be marked as used' )
-	.option('-v, --verbose', 'optional: Display list of roles in detailed export/import format')
-	.option('--file [fileName]', 'optional: Name of file to import/export (if not provided stdin/stdout used for export)')
-	.action(role.doRole);
-
-program
-	.command('user <list|delete|update|import|export>')
-	.description('Administer Users for current API. (not available if custom auth provider is used)')
-	.option('--project_ident [project_ident]','The project ident that will be marked as used' )
-	.option('--ident [ident]', 'The ident of the specific user')
-	.option('--user_name [name]', 'The name of the specific user')
-	.option('-f, --file [fileName]', 'optional: Name of file to import/export (if not provided stdin/stdout used for export)')
-	.option('--password [password]','The password for this user' )
-	.option('--fullname [fullname]','User fullname' )
-	.option('--user_name [name]','User name (only if using default auth provider)' )
-	.option('--status [status]','Status active A or inactive I' )
-	.option('--roles [roles]','Comma separated list of role names' )
-	.option('--comments [comments]','User comments' )
-	.action(user.doUser);
-
-
-program
-	.command('npa <list|delete|export|import>')
-	.description('Administer Non Persistent Attributes for the active API.')
-	.option('--ident [ident]', 'The ident of the specific named npa object')
-    .option('--npa_name [name]', 'The name of the specific named npa object')
-	.option('--dbschema_ident [ident]', 'optional: The dbschema ident of the projects data source')
-	.option('-f, --file [fileName]', 'optional: Name of file for import/export (if not provided stdin/stdout used for export)')
-	.option('-v, --verbose', 'optional: Display non persistent attribute in import/export format')
-	.action(npa.doNPAttr);
-
-program
-	.command('topic <list|delete|import|export>')
-	.description('Administer Topics for current API (used by Rules).')
-	.option('--project_ident [project_ident]','The project ident that will be marked as used' )
-	.option('--topic_name [name]', 'Name of the topic')
-	.option('--ident [ident]', 'The ident of the specific topic to delete')
-	.option('-v, --verbose', 'optional: Display list of topics in an import/export format')
-	.option('-f, --file [fileName]', 'optional: Name of file to import/export (if not provided stdin/stdout used for export)')
-	.action(topic.doTopic);
-
-program
-	.command('request_event <list|delete|export|import>')
-	.description('Administer Request, Response, & CORS Option events for current API.')
-	.option('--event_name [name]', 'The request or response Name')
-	.option('--ident [ident]', 'The ident of the specific event')
-	.option('--project_ident [project_ident]','The project ident that will be used' )
-	.option('-v, --verbose', 'optional: Display list of events in detailed export/import format')
-	.option('-f, --file [fileName]', 'optional: Name of file to import/export (if not provided stdin/stdout used for export)')
-	.action(event.doListener);
-
-program
-	.command('custom_endpoints <list|delete|export|import>')
-	.description('Administer Custom Endpoints (aka Handlers) for current API.')
-	.option('--project_ident [project_ident]','The project ident that will be used' )
-	.option('--ident [ident]', 'The ident of the specific handler')
-	.option('--handler_name [name]', 'The name of the Custom Endpoint')
-	.option('-v, --verbose', 'optional: Display Custom Endpoints with import/export statements')
-	.option('--file [fileName]', 'optional: Name of file to import/export (if not provided stdin/stdout used for export)')
-	.action(handler.doHandler);
-
-program
-	.command('apiversion <list|export|import>')
-	.description('Administer API Versions for Resources for current API.')
-	.option('--version_name [name]', 'The API version name')
-	.option('--project_ident [project_ident]','The project ident that will be used' )
-	.option('-f, --file [fileName]', 'optional: Name of file to import/export (if not provided stdin/stdout used for export)')
-	.action(apiversion.doVersion);
-
-program
-	.command('relationship <list|delete|export|import>')
-	.description('Administer Relationships for current API.')
-	.option('--ident [ident]', 'This is the ident of the relationship')
-	.option('--relationship_name [name]', 'This is the name (hash) of the relationship')
-	.option('--project_ident [project_ident]','The project ident that will be used' )
-	.option('-v, --verbose', 'optional: Display list of relationships in import/export format')
-	.option('-f, --file [fileName]', 'optional: Name of file to import/export (if not provided stdin/stdout used for export)')
-	.action(reln.doReln);
+	.action(fnction.doFunction);
 
 program
 	.command('gateway <list|create|delete|import|export|publish>')
@@ -369,8 +256,35 @@ program
 	.action(gateway.doGateway);
 
 program
+	.command('libraries <list|create|update|delete|export|import|exportJavascript|importJavascript>')
+	.description('Administer javascript libraries for a specific API.')
+	.option('--ident [ident]','The ident of the library - used by update, delete, export, or exportJavascript')
+	.option('--project_ident [project_ident]','The project ident that this library will be marked as used (lacadmin api list)' )
+	.option('--library_name [name]', 'Name of library used by update, delete, export')
+	.option('--libtype [type]', 'optional: Type of Library javascript (as of 3.0.x)')
+	.option('--ver [version]', 'optional: Version # of Library')
+	.option('--short_name [shortname]', 'Short Name')
+	.option('--docUrl [docurl]', 'optional: Documentation URL')
+	.option('--refUrl [refurl]', 'optional: Reference URL')
+	.option('--linkProject','optional: mark the imported library as used by the current API')
+	.option('--comments [comment]', 'optional: Comment on Library')
+	.option('-f, --file [fileName]', 'optional: Name of {JS} file to import/export (if not provided stdout used for export)')
+	.option('-v, --verbose', 'optional: display import/export during library list')
+	.action(library.doLibrary);
+
+program
+	.command('listener <list|delete|export|import>')
+	.description('Administer Listener Events for current API.')
+	.option('--listener_name [name]', 'The Listener Name')
+	.option('--ident [ident]', 'The ident of the specific listener')
+	.option('--project_ident [project_ident]','The project ident that will be used' )
+	.option('-v, --verbose', 'optional: Display list of listeners in detailed export/import format')
+	.option('--file [fileName]', 'optional: Name of file to import/export (if not provided stdin/stdout used for export)')
+	.action(listener.doListener);
+
+program
 	.command('managedserver <list|create|delete|update|import|export>')
-	.description('Administer a managed data server (used by data_sources).')
+	.description('Administer a managed data server (used to create SQL data_sources).')
 	.option('--server_name [name]', 'The name of the data source connection')
 	.option('--ident [ident]', 'For delete or reload, the ident of the managed data server')
 	.option('--dbasetype [dbasetype]', 'The type of the managed data server connection, can be mysql, derby, postgres, sqlserver, oracle')
@@ -399,6 +313,110 @@ program
 	.action(migrate.doMigrate);
 
 program
+	.command('npa <list|delete|export|import>')
+	.description('Administer Non Persistent Attributes for the active API.')
+	.option('--ident [ident]', 'The ident of the specific named npa object')
+	.option('--npa_name [name]', 'The name of the specific named npa object')
+	.option('--dbschema_ident [ident]', 'optional: The dbschema ident of the projects data source')
+	.option('-f, --file [fileName]', 'optional: Name of file for import/export (if not provided stdin/stdout used for export)')
+	.option('-v, --verbose', 'optional: Display non persistent attribute in import/export format')
+	.action(npa.doNPAttr);
+
+program
+	.command('project <list|create|update|delete|use|import|export>')
+	.description('[Deprecated in 4.1 - replaced by lacadmin api] Administer 4.0 and earlier.')
+	.option('--ident [ident]', 'The ident of the specific project (see project list)')
+	.option('--project_name [name]', 'The name of the project')
+	.option('--url_name [name]', 'The name of the project')
+	.option('--status [status]', 'optional: the status of the project, can be A (for Active) or I for (Inactive)')
+	.option('--authprovider [ident]', 'optional: the ident of the authentication provider for the project')
+	.option('--comments [comments]', 'optional: a description of the project')
+	.option('--file [file]', 'optional: for import/export, the name of a file to read from/save to, if unspecified, use stdin/stdout')
+	.option('--verbose', 'optional: whether to display detailed results, or just a summary')
+	.action(project.doProject);
+
+program
+	.command('provider <list|delete|export|import>')
+	.description('Administer Listener Provider Framework definitions. (requires login as "sa")')
+	.option('--provider_name [name]', 'The Provider Name')
+	.option('--ident [ident]', 'The ident of the specific provider')
+	.option('-v, --verbose', 'optional: Display list of providers in detailed export/import format')
+	.option('--file [fileName]', 'optional: Name of file to import/export (if not provided stdin/stdout used for export)')
+	.action(provider.doProvider);
+
+program
+	.command('relationship <list|delete|export|import>')
+	.description('Administer Relationships for current API.')
+	.option('--ident [ident]', 'This is the ident of the relationship')
+	.option('--relationship_name [name]', 'This is the name (hash) of the relationship')
+	.option('--project_ident [project_ident]','The project ident that will be used' )
+	.option('-v, --verbose', 'optional: Display list of relationships in import/export format')
+	.option('-f, --file [fileName]', 'optional: Name of file to import/export (if not provided stdin/stdout used for export)')
+	.action(reln.doReln);
+
+program
+	.command('request_event <list|delete|export|import>')
+	.description('Administer Request, Response, & CORS Option events for current API.')
+	.option('--event_name [name]', 'The request or response Name')
+	.option('--ident [ident]', 'The ident of the specific event')
+	.option('--project_ident [project_ident]','The project ident that will be used' )
+	.option('-v, --verbose', 'optional: Display list of events in detailed export/import format')
+	.option('-f, --file [fileName]', 'optional: Name of file to import/export (if not provided stdin/stdout used for export)')
+	.action(event.doListener);
+
+program
+	.command('resource <list|delete|update|export|import>')
+	.description('Administer resources within a project.')
+	.option('--ident [ident]', 'For update, the ident of the resource (use resource list)')
+	.option('--prop1 [value]', 'For update, the server name of the mongo resource')
+	.option('--prop2 [value]', 'For update, the database name of the mongo resource')
+	.option('--prop3 [value]', 'For update, the user name of the mongo resource')
+	.option('--prop4 [value]', 'For update, the password name of the mongo resource')
+	.option('--table_name [tablename]', 'For update, the table name of the normal or mongo resource')
+	.option('--resource_name [resourcename]', 'The name of the resource')
+	.option('--type [type]', 'The type of the resource: normal, sql, javascript, storedproc, mongo')
+	.option('--prefix [prefix]', 'The prefix of the table')
+	.option('--apiversion [apiversion]', 'The name of an API version, if there is more than one - default v1')
+	.option('--project_ident [ident]', 'The ident of a project, (if other than the current project')
+	.option('-v, --verbose', 'Include export/import script for resource list')
+	.option('-f, --file [file]', 'optional: for import/export, the name of a file to read from/save to, if unspecified, use stdin/stdout')
+	.action(resource.doResource);
+
+program
+	.command('role <list|delete|import|export>')
+	.description('Administer Security Roles for current API.')
+	.option('--ident [ident]', 'The ident of the specific role to delete')
+	.option('--role_name [name]', 'The name of the specific role to delete')
+	.option('--project_ident [project_ident]','The project ident that will be marked as used' )
+	.option('-v, --verbose', 'optional: Display list of roles in detailed export/import format')
+	.option('--file [fileName]', 'optional: Name of file to import/export (if not provided stdin/stdout used for export)')
+	.action(role.doRole);
+
+program
+	.command('rule <list|create|delete|import|export>')
+	.description('Administer rules within a project.')
+	.option('--ruletype [type]', 'The type of the rule, can be: sum,formula,validation,parentcopy')
+	.option('--rule_name [name]', 'The name of the rule used for export,create, or delete')
+	.option('--entity_name [prefix:table]', 'The table, qualified with a prefix, for the rule')
+	.option('--attribute_name [name]', 'The name of the attribute whose value is computed by the rule. Required for sum, count, formula, minimum, maximum.')
+	.option('--role_name [name]', 'The role name - required for sum, count, minimum, maximum')
+	.option('--clause [clause]', 'The clause - required for sum, count, minimum, maximum')
+	.option('--child_attribute [name]', 'The name of the child attribute - required for sum, minimum, maximum')
+	.option('--parent_attribute [name]', 'The name of the parent attribute - required for parent copy')
+	.option('--expression [code]', 'The code for the rule - required for formula, events and validations')
+	.option('--error_message [message]', 'The error mesaage for the rule - required for validations')
+	.option('--rule_name [name]', 'optional: a name for the rule. If not specified, a name will be generated.')
+	.option('--comments [comments]', 'optional: a comment for the rule')
+	.option('--active [true|false]', 'optional: whether the rule should be active, true by default')
+	.option('--project_ident [ident]', 'The ident of a project, if other than the current project')
+	.option('--ident [ident]', 'For delete, the ident of the rule to delete')
+	.option('--jit [true|false]', 'Just in time flag (default false)')
+	.option('--sqlable [true|false]', 'Sqlable flag (default false) - optimize using SQL instead of JavaScript (default false)')
+	.option('-f, --file [file]', 'optional: for import/export, the name of a file to read from/save to, if unspecified, use stdin/stdout')
+	.option('-v, --verbose', 'optional: whether to display list of rules in detailed format that can be used to recreate using command line')
+	.action(rule.doRule);
+
+program
 	.command('schema <create>')
 	.description('Create new database table/columns using @schema format.')
 	.option('--project_ident [project_ident]','The project ident that will be marked as used' )
@@ -410,31 +428,6 @@ program
 	.option('--skiptablecreation [true|false]','optional: If true, tables will not be created - default: false')
 	.option('--file [fileName]', 'optional: Name of file to import/export (if not provided stdin/stdout used)')
 	.action(schema.doSchema);
-
-program
-	.command('function <list|delete|export|import>')
-	.description('Administer Functions for current API.')
-	.option('--ident [ident]', 'This is the ident of the function')
-	.option('--function_name [name]', 'Name of the function')
-	.option('--project_ident [project_ident]','optional: The project ident that will be used' )
-	.option('-v, --verbose', 'optional: display list of functions in detailed create format')
-	.option('--file [fileName]', 'optional: Name of file to import/export (if not provided stdin/stdout used for export)')
-	.action(fnction.doFunction);
-
-program
-	.command('virtualkey <list|create|update|delete|import|export>')
-	.description('Manage a virtualkey to a table or view.')
-	.option('--table_ident [ident]', 'For delete or update, the ident of the listed table')
-	.option('--view_ident [ident]', 'For delete or update, the ident of the listed view')
-	.option('--project_ident [project_ident]','The project ident that will be used to list all data sources' )
-	.option('--prefix [prefix]','The data source prefix for this table or view virtual primary key' )
-	.option('--table_name [name]','The name of the table to attach a virtual primary key' )
-	.option('--view_name [name]','The name of the view to attach a virtual primary key' )
-	.option('--keyname [colnamelist]','The comma separated list of column names' )
-	.option('--is_autonum [true|false]','If the keyname of a view column that is an autonum - default false' )
-	.option('-v, --verbose', 'optional: display list of virtual keys in detailed create format')
-	.option('--file [fileName]', 'optional: Name of file to import/export (if not provided stdin/stdout used for export)')
-	.action(vkey.doVirtualKey);
 
 program
 	.command('sequence <list|create|update|delete|import|export>')
@@ -451,61 +444,17 @@ program
 	.action(seq.doSequence);
 
 program
-	.command('listener <list|delete|export|import>')
-	.description('Administer Listener Events for current API.')
-	.option('--listener_name [name]', 'The Listener Name')
-	.option('--ident [ident]', 'The ident of the specific listener')
-	.option('--project_ident [project_ident]','The project ident that will be used' )
-	.option('-v, --verbose', 'optional: Display list of listeners in detailed export/import format')
-	.option('--file [fileName]', 'optional: Name of file to import/export (if not provided stdin/stdout used for export)')
-	.action(listener.doListener);
-
-program
-	.command('provider <list|delete|export|import>')
-	.description('Administer Listener Provider definitions. (requires login as "sa")')
-	.option('--provider_name [name]', 'The Provider Name')
-	.option('--ident [ident]', 'The ident of the specific provider')
-	.option('-v, --verbose', 'optional: Display list of providers in detailed export/import format')
-	.option('--file [fileName]', 'optional: Name of file to import/export (if not provided stdin/stdout used for export)')
-	.action(provider.doProvider);
-
-program
-	.command('dataprovider <list|delete|export|import>')
-	.description('Administer Datasource Provider definitions.')
-	.option('--provider_name [name]', 'The Datasource Provider Name')
-	.option('--ident [ident]', 'The ident of the specific provider')
-	.option('-v, --verbose', 'optional: Display list of providers in detailed export/import format')
-	.option('--file [fileName]', 'optional: Name of file to import/export (if not provided stdin/stdout used for export)')
-	.action(dataprovider.doProvider);
-
-program
-	.command('connection <list|delete|export|import|stop|start>')
-	.description('Administer Connections for current API.')
-	.option('--connection_name [name]', 'The connection name')
-	.option('--ident [ident]', 'The ident of the specific connection')
-	.option('--project_ident [project_ident]','The project ident that will be used' )
-	.option('-v, --verbose', 'optional: Display list of connection in detailed export/import format')
-	.option('--file [fileName]', 'optional: Name of file to import/export (if not provided stdin/stdout used for export)')
-	.action(connection.doConnection);
-
-program
-	.command('timer <list|delete|export|import>')
-	.description('Administer Timer definitions for current API.')
-	.option('--timer_name [name]', 'The Timer Name')
-	.option('--ident [ident]', 'The ident of the specific timer')
-	.option('-v, --verbose', 'optional: Display list of timer in detailed export/import format')
-	.option('--file [fileName]', 'optional: Name of file to import/export (if not provided stdin/stdout used for export)')
-	.action(timer.doTimer);
-
-program
-	.command('application <list|delete|import|export>')
-	.description('Administer Data Explorer Applications (meta data).')
-	.option('--ident [ident]', 'The ident of the specific project (use $lacadmin api list)')
-	.option('--project_name [name]', 'The name of the project')
-	.option('--url_name [name]', 'The name of the project')
-	.option('--application_name [name]', 'The name of the application')
-	.option('--file [file]', 'optional: for import/export, the name of a file to read from/save to, if unspecified, use stdin/stdout')
-	.action(application.doApplication);
+	.command('sort <list|create|update|delete|import|export>')
+	.description('Administer Named Sorts for the active API.')
+	.option('--ident [ident]', 'The ident of the specific named sort object')
+	.option('--sort_name [name]', 'The Name of named sort')
+	.option('--sort_text [sorttext]', 'Sort Text to define named sort')
+	.option('--resource_names [name]', 'optional: Comma seperated list of Resource Names in quotes')
+	.option('--comments [comment]', 'optional: Comment on named sort')
+	.option('--project_ident [project_ident]', 'optional: The project ident if not the active project')
+	.option('-f, --file [fileName]', 'optional: Name of file for import/export (if not provided stdout used for export)')
+	.option('-v, --verbose', '{optional)  whether to display list of named sorts in detailed format')
+	.action(sorts.doSort);
 
 program
 	.command('teamspace <list|exportRepos>')
@@ -541,6 +490,56 @@ program
 	.option('--proxyUsername [value]','Proxy UserName.')
 	.option('--proxyPassword [value]','Proxy Plaintext Password.')
 	.option('-v, --verbose', 'optional: used by list to display all telemetry options.')	.action(telemetry.doTelemetry);
+
+program
+	.command('timer <list|delete|export|import>')
+	.description('Administer Timer definitions for current API.')
+	.option('--timer_name [name]', 'The Timer Name')
+	.option('--ident [ident]', 'The ident of the specific timer')
+	.option('-v, --verbose', 'optional: Display list of timer in detailed export/import format')
+	.option('--file [fileName]', 'optional: Name of file to import/export (if not provided stdin/stdout used for export)')
+	.action(timer.doTimer);
+
+
+program
+	.command('topic <list|delete|import|export>')
+	.description('Administer Topics for current API (used by Rules).')
+	.option('--project_ident [project_ident]','The project ident that will be marked as used' )
+	.option('--topic_name [name]', 'Name of the topic')
+	.option('--ident [ident]', 'The ident of the specific topic to delete')
+	.option('-v, --verbose', 'optional: Display list of topics in an import/export format')
+	.option('-f, --file [fileName]', 'optional: Name of file to import/export (if not provided stdin/stdout used for export)')
+	.action(topic.doTopic);
+
+program
+	.command('user <list|delete|update|import|export>')
+	.description('Administer Users for current API. (not available if custom auth provider is used)')
+	.option('--project_ident [project_ident]','The project ident that will be marked as used' )
+	.option('--ident [ident]', 'The ident of the specific user')
+	.option('--user_name [name]', 'The name of the specific user')
+	.option('-f, --file [fileName]', 'optional: Name of file to import/export (if not provided stdin/stdout used for export)')
+	.option('--password [password]','The password for this user' )
+	.option('--fullname [fullname]','User fullname' )
+	.option('--user_name [name]','User name (only if using default auth provider)' )
+	.option('--status [status]','Status active A or inactive I' )
+	.option('--roles [roles]','Comma separated list of role names' )
+	.option('--comments [comments]','User comments' )
+	.action(user.doUser);
+
+program
+	.command('virtualkey <list|create|update|delete|import|export>')
+	.description('Manage a virtualkey to a table or view.')
+	.option('--table_ident [ident]', 'For delete or update, the ident of the listed table')
+	.option('--view_ident [ident]', 'For delete or update, the ident of the listed view')
+	.option('--project_ident [project_ident]','The project ident that will be used to list all data sources' )
+	.option('--prefix [prefix]','The data source prefix for this table or view virtual primary key' )
+	.option('--table_name [name]','The name of the table to attach a virtual primary key' )
+	.option('--view_name [name]','The name of the view to attach a virtual primary key' )
+	.option('--keyname [colnamelist]','The comma separated list of column names' )
+	.option('--is_autonum [true|false]','If the keyname of a view column that is an autonum - default false' )
+	.option('-v, --verbose', 'optional: display list of virtual keys in detailed create format')
+	.option('--file [fileName]', 'optional: Name of file to import/export (if not provided stdin/stdout used for export)')
+	.action(vkey.doVirtualKey);
 
 program.parse(process.argv);
 
