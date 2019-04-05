@@ -6,7 +6,8 @@
 
 This is a command-line tool to administer CA Live API Creator (LAC) servers. It allows the creation,
 modification and removal of many common repository objects, such as apis, database connection,
-resources and rules.  
+resources and rules. As of release 5.0, all repository objects are written to the file system (LAC_REPOSITORY_ROOT).
+The command line will export/import using the internal database format and is not compatible with the file system style.
 
 ## Installation
 ```aidl
@@ -56,44 +57,48 @@ $ lacadmin --help
   
     Commands:
    
-       login [options] [url]                                                                 Login to a CA Live API Creator (LAC) Server (e.g. lacadmin login -u admin -p secret http://localhost:8080 -a demo).
-       logout [options] [url]                                                                Logout from the current server, or a specific named alias.
-       use <alias>                                                                           Use the specified server alias connection (if available).
-       status                                                                                Show the current server(s) connections and any defined server aliases
-       license [options] <list|import>                                                       Administer server License for connected API server.
-       eula <accepted>                                                                       End user license agreement status (note: must be accepted before any script will run) returns true or false.
-       project [options] <list|create|update|delete|use|import|export>                       [Deprecated] Administer 4.0 and earlier project API. Actions are: list, create, update, delete, use, export.
-       api [options] <list|create|update|delete|use|import|export|extract>                   Administer an API for the current connection. Actions are: list, create, update, delete, use, import, export, extract.
-       libraries [options] <list|create|update|delete|export|import>                         Administer javascript libraries for a specific API.
-       authprovider [options] <list|create|linkProject|delete|export|import>                 Administer authentication providers for a TeamSpace.
-       datasource [options] <list|create|createDatabase|update|delete|import|reload|export>  Administer data sources within a selected API.
-       resource [options] <list|delete|update|export|import>                                 Administer resources within a project.
-       rule [options] <list|create|delete|import|export>                                     Administer rules within a project.
-       apioptions [options] <list|update|import|export>                                      Administer API  options for a selected API.
-       sort [options] <list|create|update|delete|import|export>                              Administer Named Sorts for the active API.
-       filter [options] <list|create|delete|update|import|export>                            Administer Named Filters for the active API.
-       authtoken [options] <list|import|export>                                              Administer Auth Tokens for current API.
-       role [options] <list|delete|import|export>                                            Administer Security Roles for current API.
-       user [options] <list|delete|update|import|export>                                     Administer Users for current API. (not available if custom auth provider is used).
-       npa [options] <list|delete|export|import>                                             Administer Non Persistent Attributes for the active API.
-       topic [options] <list|delete|import|export>                                           Administer Topics for current API (used by Rules).
-       request_event [options] <list|delete|export|import>                                   Administer Request, Response, & CORS Option events for current API.
-       custom_endpoints [options] <list|delete|export|import>                                Administer Custom Endpoints (aka Handlers) for current API.
-       apiversion [options] <list|export|import>                                             Administer API Versions for Resources for current API.
-       relationship [options] <list|delete|export|import>                                    Administer Relationships for current API.
-       gateway [options] <list|create|delete|import|export|publish>                          Publish Swagger document for selected API to CA Gateway.
-       managedserver [options] <list|create|delete|update|import|export>                     Administer a managed data server (used by data_sources).
-       schema [options] <create>                                                             Create new database table/columns using @schema format.
-       function [options] <list|delete|export|import>                                        Administer Functions for current API.
-       virtualkey [options] <list|create|update|delete|import|export>                        Manage a virtualkey to a table or view.
-       sequence [options] <list|create|update|delete|import|export>                          Manage a database sequence on a key column for a table or view.
-       listener [options] <list|delete|export|import>                                        Administer Listener Events for current API.
-       provider [options] <list|delete|export|import>                                        Administer Listener Provider definitions. (requires login as "sa").
-       connection [options] <list|delete|export|import|stop|start>                           Administer Connections for current API.
-       timer [options] <list|delete|export|import>                                           Administer Timer definitions for current API.
-       application [options] <list|delete|import|export>                                     Administer Data Explorer Applications (meta data).
-       teamspace [options] <list|exportRepos>                                                List TeamSpace content for current server or exportRepos the entire API contents.
-       telemetry [options] <list|update>                                                     Administer Telemetry PLA information (requires sa logon).
+      login [options] [url]                                                                            Login to a CA Live API Creator Server [login -u admin -p pw http://localhost:8080
+      logout [options] [url]                                                                           Logout from the current server, or a named server alias [$lacadmin logout -a demo]
+      use <alias>                                                                                      Use the specified server alias connection (if available)
+      status                                                                                           Show the current server(s) connections and any defined server aliases
+      license [options] <list|import>                                                                  Administer server License for connected API server.
+      eula <accepted>                                                                                  End user license agreement status accepted (returns true or false)
+      api [options] <list|create|update|delete|use|import|export|extract>                              Administer an API for the current connection.
+      apioptions [options] <list|update|import|export>                                                 Administer API  options for a selected API.
+      apiversion [options] <list|export|import>                                                        Administer API Versions for Resources for current API.
+      application [options] <list|delete|import|export>                                                Administer Data Explorer Applications (meta data).
+      authtoken [options] <list|import|export>                                                         Administer Auth Tokens for current API.
+      authprovider [options] <list|create|linkProject|insertJSCode|delete|export|import>               Administer authentication providers for a TeamSpace.
+      connection [options] <list|delete|export|import|stop|start>                                      Administer Connections for current API.
+      custom_endpoints [options] <list|delete|export|import>                                           Administer Custom Endpoints (aka Handlers) for current API.
+      dataprovider [options] <list|delete|export|import>                                               Administer Data Source Provider Framework definitions. (requires login as "sa")
+      datasource [options] <list|create|createDatabase|update|delete|import|reload|export>             Administer data sources within a selected API.
+      filter [options] <list|create|delete|update|import|export>                                       Administer Named Filters for the active API.
+      function [options] <list|delete|export|import>                                                   Administer Functions for current API.
+      gateway [options] <list|create|delete|import|export|publish>                                     Publish Swagger document for selected API to CA Gateway.
+      libraries [options] <list|create|update|delete|export|import|exportJavascript|importJavascript>  Administer javascript libraries for a specific API.
+      listener [options] <list|delete|export|import>                                                   Administer Listener Events for current API.
+      managedserver [options] <list|create|delete|update|import|export>                                Administer a managed data server (used to create SQL data_sources).
+      migrate [options] <list|plan|script|exportRepos>                                                 Migrate a or export all API content for a TeamSpace to a named file
+      npa [options] <list|delete|export|import>                                                        Administer Non Persistent Attributes for the active API.
+      project [options] <list|create|update|delete|use|import|export>                                  [Deprecated in 4.1 - replaced by lacadmin api] Administer 4.0 and earlier.
+      provider [options] <list|delete|export|import>                                                   Administer Listener Provider Framework definitions. (requires login as "sa")
+      relationship [options] <list|delete|export|import>                                               Administer Relationships for current API.
+      request_event [options] <list|delete|export|import>                                              Administer Request, Response, & CORS Option events for current API.
+      resource [options] <list|delete|update|export|import>                                            Administer resources within a project.
+      role [options] <list|delete|import|export>                                                       Administer Security Roles for current API.
+      rule [options] <list|create|delete|import|export>                                                Administer rules within a project.
+      schema [options] <create>                                                                        Create new database table/columns using @schema format.
+      sequence [options] <list|create|update|delete|import|export>                                     Manage a database sequence on a key column for a table or view.
+      sort [options] <list|create|update|delete|import|export>                                         Administer Named Sorts for the active API.
+      teamspace [options] <list|exportRepos>                                                           List TeamSpace content for current server or exportRepos the entire API contents.
+      teamspace_user [options] <list|delete|export|import>                                             Administer TeamSpace Users definitions.
+      telemetry [options] <list|update>                                                                Administer Telemetry PLA information (requires sa logon).
+      timer [options] <list|delete|export|import>                                                      Administer Timer definitions for current API.
+      topic [options] <list|delete|import|export>                                                      Administer Topics for current API (used by Rules).
+      user [options] <list|delete|update|import|export>                                                Administer Users for current API. (not available if custom auth provider is used)
+      virtualkey [options] <list|create|update|delete|import|export>                                   Manage a virtualkey to a table or view.
+
    
   Options:
 
@@ -162,7 +167,8 @@ Prints which server is the current server (if any) and project, and what aliases
 
 ### Sample Export Script
 You can combine each command to export parts of your system into components that can later be used in source control and then promoted to different servers.
-This is a small sampling of the export and list commands.
+This is a small sampling of the export and list commands.  The command specific export will be in a format that is not compatible 
+with the file system repository.  These formats may be used by devops automation tools.
 ```
 #! /bin/bash
 # Export Script for Northwind Jetty
@@ -205,7 +211,60 @@ lacadmin resource export --file nw/resources.json
 #lacadmin logout -a localnw
 
 ```
+## Section API Export
+The api section and section_filter can be used to export portions of your api in the new 5.x style.  The export can be formatted as 
+either json or zip.  The api section can be easily merged and compared with the file system repository.
 
+```
+$lacadmin api use --url_name demo
+$mkdir temp
+$lacadmin api export --section api --file temp/api.json --format json
+$lacadmin api export --section api --file temp/API.zip --format zip
+$lacadmin api export --section connections --file temp/connections.json
+$lacadmin api export --section custom_endpoints --file temp/custom_endpoints.json
+$lacadmin api export --section listeners --file temp/listeners.json
+$lacadmin api export --section relationships --file temp/relationships.json
+$lacadmin api export --section data_sources --file temp/datasources.json
+$lacadmin api export --section filters --file temp/filters.json
+$lacadmin api export --section functions --file temp/functions.json
+$lacadmin api export --section libraries --file temp/libraries.json
+$lacadmin api export --section request_events --file temp/request_events.json
+$lacadmin api export --section sorts --file temp/sorts.json
+$lacadmin api export --section timers --file temp/timers.json
+$lacadmin api export --section topics --file temp/topics.json
+$lacadmin api export --section security  --file temp/security.json
+$lacadmin api export --section security.authtokens  --file temp/authtokens.json
+$lacadmin api export --section security.roles --file temp/roles.json
+$lacadmin api export --section security.users --file temp/users.json
+$lacadmin api export --section resources --file temp/resources.json
+$lacadmin api export --section rules --file temp/rules.json
+$lacadmin api export --section apioptions --file temp/apioptions.json
+```
+## Section API Export with filter
+You can further refine the section by using a specific section filter. 
+
+```
+mkdir temp2
+$lacadmin api export --section connections --section_filter "name=MQTTConn" --file temp2/connections.json --format json
+$lacadmin api export --section connections --section_filter "name=MQTTConn" --file temp2/connections.zip --format zip
+$lacadmin api export --section custom_endpoints --section_filter "name=myendpoint" --file temp2/custom_endpoints.json
+$lacadmin api export --section listeners --section_filter "name=START" --file temp2/listeners.json
+$lacadmin api export --section data_sources --section_filter "prefix=demo" --file temp2/datasources.json
+$lacadmin api export --section filters --section_filter "name=UserFilter" --file temp2/filters.json
+$lacadmin api export --section functions --section_filter "name=testFunction" --file temp2/functions.json
+$lacadmin api export --section libraries --section_filter "name=b2bB2B" --file temp2/libraries.json
+$lacadmin api export --section request_events --section_filter "name=ResponseEvent"  --file temp2/request_events.json
+$lacadmin api export --section sorts --section_filter "name=UserSort" --file temp2/sorts.json
+$lacadmin api export --section timers --section_filter "name=New Timer" --file temp2/timers.json
+$lacadmin api export --section topics --section_filter "name=Audit Orders"  --file temp2/topics.json
+$lacadmin api export --section security.authtokens  --section_filter "name=Admin key" --file temp2/authtokens.json
+$lacadmin api export --section security.roles --section_filter "name=Read only" --file temp2/roles.json
+$lacadmin api export --section security.users --section_filter "name=guest" --file temp2/users.json
+$lacadmin api export --section resources --section_filter "name=AllCustomers&version=v1" --file temp2/resources.json
+$lacadmin api export --section rules --section_filter "name=sum_balance&prefix=demo"  --file temp2/rules.json
+
+
+```
 ## Sample Import Script
 ```
 #! /bin/bash
@@ -262,7 +321,7 @@ lacadmin status
 # Select An API using url fragment name
 lacadmin api use --url_name demo
 
-lacadmin api list
+lacadmin api list --verbose
 lacadmin apioptions list
 lacadmin datasource list
 lacadmin libraries list
@@ -296,21 +355,21 @@ lacadmin logout -a local
 ## Object-specific commands
 Follow the links below for detailed documentation on specific administrator commands.
 * [API](docs/api.md)
-* [Libraries](docs/libraries.md)
-* [Rules](docs/rule.md)
-* [Authentication Providers](docs/authprovider.md)
-* [Datasources](docs/dbase.md)
-* [Resources](docs/resource.md)
 * [API Options](docs/apioptions.md)
-* [Auth Tokens](docs/token.md)
-* [Named Sorts](docs/sort.md)
-* [Named Filter](docs/filter.md)
-* [Publish to Gateway](docs/gateway.md)
-* [License files](docs/license.md)
-* [Virtual Primary Keys](docs/virtualkey.md)
-* [Managed Server](docs/managedserver.md)
-* [Connction](docs/connection.md)
-* [Listener](docs/listener.md)
+* [Authentication Providers](docs/authprovider.md)
 * [Applications](docs/application.md)
+* [Auth Tokens](docs/token.md)
+* [Connction](docs/connection.md)
+* [Datasources](docs/dbase.md)
+* [Libraries](docs/libraries.md)
+* [License files](docs/license.md)
+* [Listener](docs/listener.md)
+* [Managed Server](docs/managedserver.md)
+* [Named Filter](docs/filter.md)
+* [Named Sorts](docs/sort.md)
+* [Publish to Gateway](docs/gateway.md)
+* [Resources](docs/resource.md)
+* [Rules](docs/rule.md)
 * [TeamSpace](docs/teamspace.md)
 * [Telemetry (PLA Usage Data)](docs/telemetry.md)
+* [Virtual Primary Keys](docs/virtualkey.md)
