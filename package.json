@@ -1,6 +1,6 @@
 {
   "name": "liveapicreator-admin-cli",
-  "version": "5.2.04",
+  "version": "5.2.06",
   "description": "The NodeJS command line utility for 'CA Live API Creator' DevOps Administration from CA Technologies",
   "main": "liveapicreatoradmin.js",
   "scripts": {
