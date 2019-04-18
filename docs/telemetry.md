@@ -1,5 +1,5 @@
 # Telemetry
-This feature is for Telemetry PLA management. For details see [Activate and Configure Usage Data](https://docops.ca.com/ca-live-api-creator/5-2/en/configuring/activate-and-configure-to-send-usage-data).
+This option is for configuring Live API Creator to collect and send usage data. For details see [Activate and Configure Usage Data](https://docops.ca.com/ca-live-api-creator/5-2/en/configuring/activate-and-configure-to-send-usage-data).
 Note: You must use the 'sa' login to access these values.
 
 ```
@@ -27,7 +27,7 @@ Note: You must use the 'sa' login to access these values.
 
 ***
 ## telemetry list
-List of commands allows you to list your CA Live API Creator defined TeamSpaces. 
+List of commands allows you to list your CA Live API Creator defined telemetery settings. 
 
 ```
     $lacadmin telemetry list [--verbose]
@@ -42,7 +42,7 @@ ChargeBack              DomainName            PLA Enabled  Send Telemetry  Site 
 ----------------------  --------------------  -----------  --------------  -------  ---------  ----------  --------------  --------
 <_CHARGEBACK_ID_HERE_>  <_DOMAIN_NAME_HERE_>  false        false                                                           <hidden>
 
-# telemtry: 1                                                                                                                                                   
+# telemetry: 1                                                                                                                                                   
 ```
 
 
