@@ -4,9 +4,9 @@
 
 ## Description
 
-This is a command-line tool to administer CA Live API Creator (LAC) servers. It allows the creation,
+This is a command-line tool to administer Layer7 Live API Creator (LAC) servers. It allows the creation,
 modification and removal of many common repository objects, such as apis, database connection,
-resources and rules. As of release 5.0, all repository objects are written to the file system (LAC_REPOSITORY_ROOT).
+resources, rules, etc. As of release 5.0, all repository objects are written to the file system (LAC_REPOSITORY_ROOT).
 The command line will export/import using the internal database format and is not compatible with the file system style.
 
 ## Installation
