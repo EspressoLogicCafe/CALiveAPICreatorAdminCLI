@@ -31,7 +31,6 @@ var apiversion = require('./objects/version.js');
 var npa = require('./objects/npattrs.js');
 var gateway = require('./objects/gateway.js');
 //3.0 features
-var managedserver = require('./objects/managedserver.js');
 var migrate = require('./objects/migrate.js');
 var eula = require('./objects/eula.js');
 //3.1 features
@@ -201,17 +200,16 @@ program
 	.option('--ident [ident]', 'For delete or reload, the ident of the data source')
 	.option('--prefix [prefix]', 'The prefix of the data source connection')
 	.option('--jndi_name [jndiname]', 'The JNDI name of the data source connection')
-	.option('--dbasetype [dbasetype]', 'The type of the data source: mysql, oracle, sqlserver, derby, postgresql, db2luw, db2zos, csv, hbase, sap, salesforce, sqlserverazure, teradata, informix, db2ios')
+	.option('--dbasetype [dbasetype]', 'The type of the data source: mysql, oracle, sqlserver, derby, postgresql, db2luw, db2zos, sqlserverazure, teradata, informix, db2ios')
 	.option('--catalog_name [catalog_name]', 'The catalog name of the data source')
 	.option('--schema_name [schema_name]', 'The schema name of the data source')
 	.option('--user_name [user_name]', 'The user name of the data source')
 	.option('--password [password]', 'The password of the data source')
 	.option('--salt [salt]', 'The password salt of the data source')
-	.option('--schema_editable [boolean]', 'Is this data source marked as editable (i.e. managed data source) - default: false')
+	.option('--schema_editable [boolean]', 'Is this data source marked as editable - default: false')
 	.option('--url [url]', 'The JDBC URL for the data source')
 	.option('--active [true|false]', 'This marks the data source active or inactive')
 	.option('--project_ident [ident]', 'The ident of a project, (if other than the current project')
-	.option('--managedserver_ident [managedserver_ident]', 'The managed server ident used with command createDatabase (creates both database and data source)')
 	.option('--comments [comment]', 'Comment on data source')
 	.option('-v, --verbose', 'optional: display list of data sources in detailed create format')
 	.option('-f, --file [file]', 'optional: for import/export, the name of a file to read from/save to, if unspecified, use stdin/stdout')
@@ -281,23 +279,6 @@ program
 	.option('-v, --verbose', 'optional: Display list of listeners in detailed export/import format')
 	.option('--file [fileName]', 'optional: Name of file to import/export (if not provided stdin/stdout used for export)')
 	.action(listener.doListener);
-
-program
-	.command('managedserver <list|create|delete|update|import|export>')
-	.description('Administer a managed data server (used to create SQL data_sources).')
-	.option('--server_name [name]', 'The name of the data source connection')
-	.option('--ident [ident]', 'For delete or reload, the ident of the managed data server')
-	.option('--dbasetype [dbasetype]', 'The type of the managed data server connection, can be mysql, derby, postgres, sqlserver, oracle')
-	.option('--catalog_name [catalog_name]', 'The catalog in the managed data server')
-	.option('--user_name [user_name]', 'The name of the managed data server user')
-	.option('--password [password]', 'The password of the managed data server user')
-	.option('--url [url]', 'The JDBC URL for the managed data server')
-	.option('--comments [comment]', 'This is the comment for this managed data server')
-	.option('--active [true|false]', 'This marks the managed data server active or inactive')
-	.option('--comments [comment]', 'Comment on data source')
-	.option('-v, --verbose', 'optional: Display list of data sources in detailed create format')
-	.option('-f, --file [file]', 'optional:: for import/export, the name of a file to read from/save to, if unspecified, use stdin/stdout')
-	.action(managedserver.doDbase);
 
 program
 	.command('migrate <list|plan|script|exportRepos>')

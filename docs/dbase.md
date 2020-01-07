@@ -13,7 +13,7 @@ Usage: datasource [options] <list|create|update|delete|import|export>
     --db_name [name]                             The name of the data source connection
     --ident [ident]                              For delete or reload, the ident of the data source
     --prefix [prefix]                            The prefix of the data source connection
-    --dbasetype [dbasetype]                      The type of the data source connection, can be mysql, oracle, sqlserver, derby, postgresql, db2luw, csv, hbase, sap, salesforce, db2zos, sqlserverazure
+    --dbasetype [dbasetype]                      The type of the data source connection, can be mysql, oracle, sqlserver, derby, postgresql, db2luw, db2zos, sqlserverazure
     --catalog_name [catalog_name]                The catalog in the data source
     --schema_name [schema_name]                  The schema in the data source
     --user_name [user_name]                      The name of the data source user
@@ -46,7 +46,7 @@ The `list` command shows all data source connections for the current project.
     	--user_name <db-user-name> 
     	--password <db-password>
     	--url <db-url> 
-    	--dbasetype <type> can be: mysql, oracle, sqlserver, derby, postgresql, db2luw, csv, hbase, sap, salesforce, db2zos, sqlserverazure
+    	--dbasetype <type> can be: mysql, oracle, sqlserver, derby, postgresql, db2luw, db2zos, sqlserverazure
     	--prefix <prefix>
     	[--catalog_name <catalog>] 
     	[--schema_name <schema>] 
@@ -78,12 +78,8 @@ The `type` parameter must have one of the following values:
 * `postgres`
 * `derby`
 * `teradata`
-* `csv`
-* `sap`
-* `salesforce`
 * `db2luw`
 * `db2zos`
-* `cassandra`
 
 If the `prefix` parameter is not specified, it will default to "main".
 

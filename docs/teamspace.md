@@ -49,7 +49,7 @@ the entire repository content.
 If [--file] is not provided output will be sent to ALL_REPOS.zip file in the current directory.
 ```
     $lacadmin teampspace exportRepos --file ALL_REPOS.zip --format zip --passwordstyle encrypted
-    http://localhost:8080/rest/abl/admin/v2/@export?urlfragment=csv&urlfragment=demo&urlfragment=sample&urlfragment=hbase&urlfragment=cassandra&urlfragment=sap&responseformat=zip&passwordstyle=skip&authtokenstyle=skip_auto&apioptionsstyle=emit_all&librarystyle=emit_all
+    http://localhost:8080/rest/abl/admin/v2/@export?urlfragment=csv&urlfragment=demo&urlfragment=sample&responseformat=zip&passwordstyle=skip&authtokenstyle=skip_auto&apioptionsstyle=emit_all&librarystyle=emit_all
     API has been exported to file: ALL_REPOS.zip using format zip
     
 ```
