@@ -548,6 +548,7 @@ module.exports = {
 				return;
 			}
 			var db = data[0];
+			db.status = "R";
 			delete db.ident;
 			var startTime = new Date();
 			var request = {statusRequest: projIdent };
